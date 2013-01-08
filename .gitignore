@@ -1,0 +1,7 @@
+tmp
+build/
+*.txt
+*.m
+*.h
+*.pyc
+*.pyo
