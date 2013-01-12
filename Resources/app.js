@@ -8,4 +8,5 @@ var tabGroup = null;
 
 // タブ作成
 tabGroup = appWindow.createTabGroup();
+
 tabGroup.open();
