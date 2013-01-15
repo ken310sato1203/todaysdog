@@ -19,6 +19,8 @@ exports.createWindow = function(style, model, util) {
 	var offset = 0;
 
 	var win = Ti.UI.createWindow(style.todayWin);
+	var titleLabel = Ti.UI.createLabel(style.todayTitleLabel);	
+	win.titleControl = titleLabel;
 	var todayTableView = Ti.UI.createTableView(style.todayTableView);
 	win.add(todayTableView);
 
@@ -31,27 +33,27 @@ exports.createWindow = function(style, model, util) {
 	var pullLabel = Ti.UI.createLabel(style.todayPullLabel);
 	tableHeader.add(pullLabel);
 	var lastUpdatedLabel = Ti.UI.createLabel(style.todayLastUpdatedLabel);
-	lastUpdatedLabel.text = 'Last Updated: ' + util.getFormattedDate();
+	lastUpdatedLabel.text = 'Last Updated: ' + util.getFormattedNowDateTime();
 	tableHeader.add(lastUpdatedLabel);
 	var updateIndicator = Ti.UI.createActivityIndicator(style.todayUpdateIndicator);
 	tableHeader.add(updateIndicator);
 	todayTableView.headerPullView = tableHeader;
 
 	// 記事の行の追加
-	var getArticleTableRow = function(_articleData) {
+	var getArticleTableRow = function(_articleList) {
 		Ti.API.debug('[func]getArticleTableRow:');
 		var articleTableRow = Ti.UI.createTableViewRow(style.todayArticleTableRow);
 		var articleListView = Ti.UI.createView(style.todayArticleListView);
 		articleTableRow.add(articleListView);
 		
-		for (var i=0; i<_articleData.length; i++) {	
+		for (var i=0; i<_articleList.length; i++) {	
 			var articleView = Ti.UI.createView(style.todayArticleView);
 			var photoImage = Ti.UI.createImageView(style.todayPhotoImage);
-			photoImage.image = 'images/photo/' + _articleData[i].no + '.jpg';
-			// カスタムプロパティに記事情報を格納
-			photoImage.articleData = _articleData[i];
+			photoImage.image = 'images/photo/' + _articleList[i].no + '.jpg';
+			// カスタムプロパティに記事データを格納
+			photoImage.articleData = _articleList[i];
 			var textLabel = Ti.UI.createLabel(style.todayTextLabel);
-			textLabel.text = '@' + _articleData[i].loc;
+			textLabel.text = '@' + _articleList[i].loc;
 					
 			articleView.add(photoImage);
 			articleView.add(textLabel);
@@ -103,7 +105,7 @@ exports.createWindow = function(style, model, util) {
 	}	
 
 	// 記事の追加
-	var appendArticle = function(_articleData) {
+	var appendArticle = function(_articleList) {
 		Ti.API.debug('[func]appendArticle:');
 		// 「続きを読む」ボタンを押した場合、削除するボタンのインデックスを取得
 		var deleteRowIndex = null;
@@ -112,9 +114,9 @@ exports.createWindow = function(style, model, util) {
 		}
 
 		// 取得した記事が表示件数以下の場合
-		if (_articleData.length < articleCount + 1) {
+		if (_articleList.length < articleCount + 1) {
 			// 取得した記事をテーブルに追加
-			todayTableView.appendRow(getArticleTableRow(_articleData));
+			todayTableView.appendRow(getArticleTableRow(_articleList));
 			// 「続きを読む」ボタンをタップした場合、ボタンを削除
 			if (nextArticleFlag) {
 				todayTableView.deleteRow(deleteRowIndex);
@@ -125,9 +127,9 @@ exports.createWindow = function(style, model, util) {
 		// 取得した記事が表示件数より1件多い場合、「続きを読む」ボタンを表示
 		} else {
 			// 多く取得した1件のデータを削除
-			_articleData.pop();
+			_articleList.pop();
 			// 取得した記事をテーブルに追加
-			todayTableView.appendRow(getArticleTableRow(_articleData), {animated:true});
+			todayTableView.appendRow(getArticleTableRow(_articleList), {animated:true});
 			// 「続きを読む」ボタンを追加
 			appendNextButton();
 			// 「続きを読む」ボタンをタップした場合、ボタンを削除
@@ -144,16 +146,16 @@ exports.createWindow = function(style, model, util) {
 		Ti.API.debug('[func]updateArticle:');
 		// 前回取得した最後のインデックス以降を取得
 		// 「続きを読む」ボタンの表示判定のため、表示件数より1件多い条件で取得
-		var articleData = model.getArticleData(null, lastArticleIndex, articleCount + 1);
-		if (articleData == null) {
+		var articleList = model.getArticleList(null, lastArticleIndex, articleCount + 1);
+		if (articleList == null) {
 			// 1件も取得できなかった場合
 			appendNoDataLabel();		
 			// 次回更新用に続きの記事がないフラグを設定
 			nextArticleFlag = false;
 		} else {
-			appendArticle(articleData);
+			appendArticle(articleList);
 			// 次回更新用に取得した最後のインデックスを設定
-			lastArticleIndex = articleData[articleData.length-1].no;
+			lastArticleIndex = articleList[articleList.length-1].no;
 		}
 	}
 	// 初回読み込み時に、記事を更新
@@ -163,7 +165,7 @@ exports.createWindow = function(style, model, util) {
 	var resetPullHeader = function(){
         Ti.API.debug('[func]resetPullHeader:');
 	    reloading = false;
-	    lastUpdatedLabel.text = 'Last Updated: ' + util.getFormattedDate();
+	    lastUpdatedLabel.text = 'Last Updated: ' + util.getFormattedNowDateTime();
 	    updateIndicator.hide();
 	    updateArrowImage.transform=Ti.UI.create2DMatrix();
 	    updateArrowImage.show();
