@@ -195,6 +195,20 @@ exports.model = {
 		return targetUserData;
 	},
 
+	// ユーザデータの登録
+	setUserData:function(_userData){
+		Ti.API.debug('[func]setUserData:');
+		var updateFlag = false;
+		for (var i=0; i<userList.length; i++) {
+			if (userList[i].user == _userData.user) {
+				userList[i] = _userData;
+				updateFlag = true;
+			}
+		}
+		if (! updateFlag) {
+			userList.push(_userData);
+		}
+	},
 	// ユーザデータの取得
 	getUserData:function(_userId){
 		Ti.API.debug('[func]getUserData:');

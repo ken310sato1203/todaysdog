@@ -20,7 +20,38 @@ exports.createWindow = function(style, model, util){
 	
 	if (userId == userData.user) {
 		// 「保存」自分のプロフィールを編集するボタン
-		win.rightNavButton = Titanium.UI.createButton(style.profileSaveButton);		
+		var saveButton = Titanium.UI.createButton(style.profileSaveButton);
+		win.rightNavButton = saveButton;
+
+		saveButton.addEventListener('click', function(e){
+			Ti.API.debug('[func]rightNavButton.click:');
+			var actInd = Ti.UI.createActivityIndicator({
+				backgroundColor: 'black',
+				opacity: 0.7,
+				height: '100%',
+				width: '100%',
+				style: Titanium.UI.iPhone.ActivityIndicatorStyle.PLAIN,
+				font: {fontSize:14, fontWeight:'bold'},
+				color: 'white',
+				message: 'Loading...',
+			});
+			actInd.show();
+			tabGroup.add(actInd);
+
+			userData.name = nameField.value;
+			userData.breed = breedField.value;
+			userData.sex = sexField.value;
+			userData.birth = birthField.value;
+			userData.location = locationField.value;
+			userData.feature = featureField.value;
+			userData.character = characterField.value;
+			model.setUserData(userData);
+
+			setTimeout(function(){
+				actInd.hide();
+			},2000);
+		});
+
 	} else if (model.checkFollowUser(userId, userData.user)) {
 		// 「フォロー中」フォローユーザを解除するボタン
 		win.rightNavButton = Titanium.UI.createButton(style.profileUnfollowButton);
