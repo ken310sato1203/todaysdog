@@ -195,18 +195,31 @@ exports.model = {
 		return targetUserData;
 	},
 
-	// ユーザデータの登録
-	setUserData:function(_userData){
-		Ti.API.debug('[func]setUserData:');
-		var updateFlag = false;
+	// ユーザデータの追加
+	addUserData:function(_userData){
+		Ti.API.debug('[func]addUserData:');
+		var existFlag = false;
 		for (var i=0; i<userList.length; i++) {
 			if (userList[i].user == _userData.user) {
 				userList[i] = _userData;
-				updateFlag = true;
+				existFlag = true;
 			}
 		}
-		if (! updateFlag) {
+		if (! existFlag) {
 			userList.push(_userData);
+		}
+	},
+	// ユーザデータの更新
+	updateUserData:function(_userData){
+		Ti.API.debug('[func]updateUserData:');
+		for (var i=0; i<userList.length; i++) {
+			if (userList[i].user == _userData.user) {
+				userList[i] = _userData;
+				Ti.API.debug('userList[i].user:' + userList[i].user);
+				Ti.API.debug('_userData.user:' + _userData.user);
+				Ti.API.debug('userList[i].name:' + userList[i].name);
+				Ti.API.debug('_userData.name:' + _userData.name);
+			}
 		}
 	},
 	// ユーザデータの取得

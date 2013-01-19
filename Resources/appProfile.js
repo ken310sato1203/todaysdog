@@ -25,16 +25,7 @@ exports.createWindow = function(style, model, util){
 
 		saveButton.addEventListener('click', function(e){
 			Ti.API.debug('[func]rightNavButton.click:');
-			var actInd = Ti.UI.createActivityIndicator({
-				backgroundColor: 'black',
-				opacity: 0.7,
-				height: '100%',
-				width: '100%',
-				style: Titanium.UI.iPhone.ActivityIndicatorStyle.PLAIN,
-				font: {fontSize:14, fontWeight:'bold'},
-				color: 'white',
-				message: 'Loading...',
-			});
+			var actInd = Ti.UI.createActivityIndicator(style.profileActivityIndicator);
 			actInd.show();
 			tabGroup.add(actInd);
 
@@ -45,7 +36,9 @@ exports.createWindow = function(style, model, util){
 			userData.location = locationField.value;
 			userData.feature = featureField.value;
 			userData.character = characterField.value;
-			model.setUserData(userData);
+			Ti.API.debug('userData.name:' + userData.name);
+			model.updateUserData(userData);
+			model.setTargetUserData(userData);
 
 			setTimeout(function(){
 				actInd.hide();
