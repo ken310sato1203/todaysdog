@@ -203,8 +203,6 @@ exports.style = {
 		width: '28dp',
 		height: '28dp',
 		backgroundColor: 'black',
-		// カスタムプロパティ
-		userData: null,
 	},
 	photoTitleNameLabel:{
 		left: '33dp',
@@ -448,6 +446,17 @@ exports.style = {
 		title: '保存する',
 	},
 
+	profileActivityIndicator:{
+		backgroundColor: 'black',
+		opacity: 0.7,
+		width: '100%',
+		height: '100%',
+		style: Titanium.UI.iPhone.ActivityIndicatorStyle.PLAIN,
+		font: {fontSize:14, fontWeight:'bold'},
+		color: 'white',
+		message: 'Loading...',
+	},
+				
 	profileCountView:{
 		layout: 'absolute',
 		top: '0dp',
