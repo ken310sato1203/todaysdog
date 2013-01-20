@@ -1,57 +1,99 @@
 // プロフィール
 
-exports.createWindow = function(style, model, util){
-	Ti.API.debug('[func]appProfile.createWindow:');
+exports.createWindow = function(){
+	Ti.API.debug('[func]winProfile.createWindow:');
 
 	// ログインユーザの取得
-	var userId = model.getLoginId();
-	// 記事データの取得
-	var articleData = model.getTargetArticleData();
+	var loginId = model.getLoginId();
 	// ユーザデータの取得
 	var userData = model.getTargetUserData();
-
+	Ti.API.debug('userData:' + userData);
+	if (userData == null) {
+		userData = model.getUserData(loginId);
+	}
+	
 	var win = Ti.UI.createWindow(style.profileWin);
-
 	// タイトルの表示
 	var titleView = Ti.UI.createView(style.profileTitleView);
 	var titleLabel = Ti.UI.createLabel(style.profileTitleLabel);	
 	titleView.add(titleLabel);
 	win.titleControl = titleView;
-	
-	if (userId == userData.user) {
-		// 「保存」自分のプロフィールを編集するボタン
-		var saveButton = Titanium.UI.createButton(style.profileSaveButton);
+
+	// 「保存」自分のプロフィールを編集するボタン
+	var saveButton = Titanium.UI.createButton(style.profileSaveButton);
+	// 「フォロー中」フォローユーザを解除するボタン
+	var unfollowButton = Titanium.UI.createButton(style.profileUnfollowButton);
+	// 「フォローする」未フォローユーザをフォローするボタン
+	var followButton = Titanium.UI.createButton(style.profileFollowButton);
+	// ロード用画面
+	var actInd = Ti.UI.createActivityIndicator(style.profileActivityIndicator);
+
+	if (loginId == userData.user) {
 		win.rightNavButton = saveButton;
-
-		saveButton.addEventListener('click', function(e){
-			Ti.API.debug('[func]rightNavButton.click:');
-			var actInd = Ti.UI.createActivityIndicator(style.profileActivityIndicator);
-			actInd.show();
-			tabGroup.add(actInd);
-
-			userData.name = nameField.value;
-			userData.breed = breedField.value;
-			userData.sex = sexField.value;
-			userData.birth = birthField.value;
-			userData.location = locationField.value;
-			userData.feature = featureField.value;
-			userData.character = characterField.value;
-			Ti.API.debug('userData.name:' + userData.name);
-			model.updateUserData(userData);
-			model.setTargetUserData(userData);
-
-			setTimeout(function(){
-				actInd.hide();
-			},2000);
-		});
-
-	} else if (model.checkFollowUser(userId, userData.user)) {
-		// 「フォロー中」フォローユーザを解除するボタン
-		win.rightNavButton = Titanium.UI.createButton(style.profileUnfollowButton);
+	} else if (model.checkFollowUser(loginId, userData.user)) {
+		win.rightNavButton = unfollowButton;
 	} else {
-		// 「フォローする」未フォローユーザをフォローするボタン
-		win.rightNavButton = Titanium.UI.createButton(style.profileFollowButton);		
+		win.rightNavButton = followButton;
 	}
+
+	// 「保存」ボタン
+	saveButton.addEventListener('click', function(e){
+		Ti.API.debug('[func]saveButton.click:');
+		actInd.show();
+		tabGroup.add(actInd);
+		userData.name = nameField.value;
+		userData.breed = breedField.value;
+		userData.sex = sexField.value;
+		userData.birth = birthField.value;
+		userData.location = locationField.value;
+		userData.feature = featureField.value;
+		userData.character = characterField.value;
+		Ti.API.debug('userData.name:' + userData.name);
+		model.updateUserData(userData);
+		model.setTargetUserData(userData);
+
+		setTimeout(function(){
+			actInd.hide();
+		},2000);
+	});
+
+	// 「フォロー中」ボタン
+	unfollowButton.addEventListener('click', function(e){
+		Ti.API.debug('[func]unfollowButton.click:');
+		var alertDialog = Titanium.UI.createAlertDialog({
+		    title: 'フォローを解除しますか？',
+//		    message: 'フォローを解除しますか？',
+		    buttonNames: ['OK','キャンセル'],
+		    cancel: 1
+		});
+		alertDialog.addEventListener('click',function(event){
+		    // OKの場合
+		    if(event.index == 0){
+				actInd.show();
+				tabGroup.add(actInd);
+				model.deleteFollowUser(loginId, userData.user);
+		
+				setTimeout(function(){
+					win.rightNavButton = followButton;
+					actInd.hide();
+				},2000);		        
+		    }
+		});
+		alertDialog.show();
+	});
+
+	// 「フォローする」ボタン
+	followButton.addEventListener('click', function(e){
+		Ti.API.debug('[func]followButton.click:');
+		actInd.show();
+		tabGroup.add(actInd);	
+		model.addFollowUser(loginId, userData.user);
+
+		setTimeout(function(){
+			win.rightNavButton = unfollowButton;
+			actInd.hide();
+		},2000);
+	});
 	
 	var profileTableView = Ti.UI.createTableView(style.profileTableView);
 //	win.add(profileTableView);
@@ -71,7 +113,7 @@ exports.createWindow = function(style, model, util){
 	var iconView = Ti.UI.createView(style.profileIconView);
 	countView.add(iconView);
 	var iconImage = Ti.UI.createImageView(style.profileIconImage);
-	iconImage.image = 'images/icon/' + articleData.user + '.jpg';
+	iconImage.image = 'images/icon/' + userData.user + '.jpg';
 	iconView.add(iconImage);
 
 	var countPhotoView = Ti.UI.createView(style.profileCountPhotoView);
@@ -277,7 +319,7 @@ exports.createWindow = function(style, model, util){
 	profileTableView.addEventListener('click', function(e){
 		Ti.API.debug('[func]profileTableView.click:');
 		// 自分のプロフィールは編集できる
-		if (userId == userData.user) {
+		if (loginId == userData.user) {
 			var targetName = e.rowData.className;
 			Ti.API.debug('targetName:' + targetName);
 			Ti.API.debug('selectedName:' + selectedName);
@@ -332,6 +374,19 @@ exports.createWindow = function(style, model, util){
 			selectedName = targetName;
 		}
 
+	});
+
+
+	// フォト数をクリックでフォト一覧を表示
+	countPhotoView.addEventListener('click', function(e){
+		Ti.API.debug('[func]countPhotoView.click:');		
+		// プロフィールタブの場合
+		if (tabGroup.activeTab == tabGroup.tabs[4]) {
+			userData = model.getUserData(loginId);			
+		}
+		var photoListWin = window.createPhotoListWindow(userData);
+		// グローバル変数tabGroupを参照してWindowオープン
+		tabGroup.activeTab.open(photoListWin,{animated:true});
 	});
 
 	return win;

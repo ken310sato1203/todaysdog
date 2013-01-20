@@ -1,9 +1,7 @@
 // 今日のわんこ
 
-var photoWin = require('appPhoto');
-
-exports.createWindow = function(style, model, util) {
-	Ti.API.debug('[func]appToday.createWindow:');
+exports.createWindow = function() {
+	Ti.API.debug('[func]winToday.createWindow:');
 
 	// 記事リストの表示件数
 	var articleCount = 9;
@@ -19,8 +17,10 @@ exports.createWindow = function(style, model, util) {
 	var offset = 0;
 
 	var win = Ti.UI.createWindow(style.todayWin);
+	// タイトルの表示
 	var titleLabel = Ti.UI.createLabel(style.todayTitleLabel);	
 	win.titleControl = titleLabel;
+
 	var todayTableView = Ti.UI.createTableView(style.todayTableView);
 	win.add(todayTableView);
 
@@ -63,9 +63,9 @@ exports.createWindow = function(style, model, util) {
 			photoImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]articleView.click:');
 				model.setTargetArticleData(e.source.articleData);
-				var win = photoWin.createWindow(style, model, util);
+				var photoWin = window.createPhotoWindow();
 				// グローバル変数tabGroupを参照してWindowオープン
-				tabGroup.tabs[0].open(win,{animated:true});
+				tabGroup.activeTab.open(photoWin,{animated:true});
 			});
 		}
 		

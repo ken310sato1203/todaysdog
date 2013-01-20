@@ -1,9 +1,7 @@
 // フォト
 
-var profileWin = require('appProfile');
-
-exports.createWindow = function(style, model, util){
-	Ti.API.debug('[func]appPhoto.createWindow:');
+exports.createWindow = function(){
+	Ti.API.debug('[func]winPhoto.createWindow:');
 
 	// ライクリストの表示件数
 	var likeCount = 10;
@@ -177,9 +175,10 @@ exports.createWindow = function(style, model, util){
 	// タイトルアイコンのクリックでプロフィールを表示
 	titleIconImage.addEventListener('click',function(e){
 		Ti.API.debug('[event]titleIconImage.click:');
-		var win = profileWin.createWindow(style, model, util);
+		var profileWin = window.createProfileWindow();
+
 		// グローバル変数tabGroupを参照してWindowオープン
-		tabGroup.tabs[0].open(win,{animated:true});
+		tabGroup.activeTab.open(profileWin,{animated:true});
 	});
 
 	return win;

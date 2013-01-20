@@ -1,7 +1,7 @@
 // スタイル
 
 exports.style = {
-// appWindow -------------------------------------------------------
+// tab -------------------------------------------------------
 	todayTab:function(win){
 		return {
 			window: win,
@@ -33,7 +33,7 @@ exports.style = {
 		};
 	},
 
-// appToday -------------------------------------------------------
+// winToday -------------------------------------------------------
 	todayWin:{
 		backgroundColor: '#dedede',
 		barColor: '#a9a9a9',
@@ -146,7 +146,7 @@ exports.style = {
 	    left: '55dp', 
 	    bottom: '30dp',
 	    width: '200dp',
-	    color:'#576c89',
+	    color:'white',
 	    font: {fontSize:13, fontWeight:'bold'},
 	    text: 'Pull down to refresh...',
 	    textAlign: 'center',
@@ -155,7 +155,7 @@ exports.style = {
 	    left: '55dp',
 	    bottom: '15dp',
 	    width: '200dp',
-	    color: '#576c89',
+	    color: 'white',
 	    font: {fontSize:12},
 	    textAlign: 'center',
 	},
@@ -171,7 +171,7 @@ exports.style = {
 	    height: '60dp',
 	},	    
 
-// appPhoto -------------------------------------------------------
+// winPhoto -------------------------------------------------------
 	photoWin:{
 		backgroundColor: '#dedede',
 		barColor: '#a9a9a9',
@@ -367,7 +367,7 @@ exports.style = {
 		backgroundColor: 'black',
 	},
 
-// appProfile -------------------------------------------------------
+// winProfile -------------------------------------------------------
 	profileWin:{
 		backgroundColor: '#dedede',
 		barColor: '#a9a9a9',
@@ -636,22 +636,171 @@ exports.style = {
 		value: null,
 	},
 
+// winPhotoList -------------------------------------------------------
+	photoListWin:{
+		backgroundColor: '#dedede',
+		barColor: '#a9a9a9',
+	},
 
-// appFriends -------------------------------------------------------
+	photoListTitleView:{
+		layout: 'absolute',
+		top: '0dp',
+		left: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+	},
+
+	photoListTitleLabel:{
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:18,fontFamily:'Helvetica Neue',fontWeight:"bold"}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+		text: 'フォト', 
+	},
+
+	photoListTableView:{ 
+		backgroundColor: '#dedede',
+		separatorColor: 'transparent',
+		data: [],
+	},
+	photoListArticleTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
+	photoListNextTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
+
+	photoListArticleListView:{
+		layout: 'horizontal',
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	photoListArticleView:{
+		layout: 'vertical',
+		top: '5dp',
+		left: '5dp',
+		width: '100dp',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+	},
+	photoListPhotoImage:{
+		top: '5dp',
+		width: '90dp',
+		height: '90dp',
+		backgroundColor: 'black',
+		// カスタムプロパティ
+		articleData: null,
+	},
+	photoListTextLabel:{
+		top: '2dp',
+	    bottom: '2dp',
+		width: '90dp',
+		height: '15dp',
+		textAlign: 'left',
+		font: {fontSize:10,fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+
+	photoListNextView:{
+		top: '0dp',
+		left: '0dp',
+		width: '100%',
+		height: '40dp',
+		backgroundColor: '#dedede',
+	},
+	photoListNextButton:{
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		textAlign: 'center',
+		font: {fontSize:10,fontFamily:'Helvetica Neue'},
+		color: '#000',
+		title: '続きを読む',
+	},
+	photoListNoDataLabel:{
+		top: '5dp',
+		width: '90dp',
+		height: '15dp',
+		backgroundColor: '#dedede',
+		textAlign: 'left',
+		font: {fontSize:10,fontFamily:'Helvetica Neue'},
+		color: '#000',
+		text: 'データがありません'
+	},
+	photoListTableHeader:{
+		width: '320dp',
+		height: '60dp',
+		backgroundColor: '#dedede',
+	},	    
+	photoListHeaderBorder:{
+	    bottom: '0dp',
+		height: '0dp',
+	},	    
+	photoListUpdateArrowImage:{
+	    image:'images/whiteArrow.png',
+	    left: '20dp',
+	    bottom: '10dp',
+	    width: '23dp',
+	    height: '60dp',
+	},
+	photoListPullLabel:{
+	    left: '55dp', 
+	    bottom: '30dp',
+	    width: '200dp',
+	    color:'white',
+	    font: {fontSize:13, fontWeight:'bold'},
+	    text: 'Pull down to refresh...',
+	    textAlign: 'center',
+	},
+	photoListLastUpdatedLabel:{
+	    left: '55dp',
+	    bottom: '15dp',
+	    width: '200dp',
+	    color: 'white',
+	    font: {fontSize:12},
+	    textAlign: 'center',
+	},
+	photoListUpdateIndicator:{
+	    left: '20dp',
+	    bottom: '13dp',
+	    width: '30dp',
+	    height: '30dp',
+	    image:'images/whiteArrow.png',
+	    left: '20dp',
+	    bottom: '10dp',
+	    width: '23dp',
+	    height: '60dp',
+	},	
+	
+// winFriends -------------------------------------------------------
 	friendsWin:{
 		backgroundColor: '#dedede',
 		barColor: '#a9a9a9',
 		title: '犬とも',
 	},
 
-// appMydog -------------------------------------------------------
+// winMydog -------------------------------------------------------
 	mydogWin:{
 		backgroundColor: '#dedede',
 		barColor: '#a9a9a9',
 		title: 'うちのわんこ',
 	},
 
-// appSchedule -------------------------------------------------------
+// winSchedule -------------------------------------------------------
 	scheduleWin:{
 		backgroundColor: '#dedede',
 		barColor: '#a9a9a9',

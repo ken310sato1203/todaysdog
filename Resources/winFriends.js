@@ -1,6 +1,6 @@
 // 犬とも
 
-exports.createWindow = function(style, model, util){
+exports.createWindow = function(){
 	var win = Ti.UI.createWindow(style.friendsWin);
 
 // Navbarの色を変えつつ...

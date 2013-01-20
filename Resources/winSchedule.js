@@ -1,6 +1,6 @@
 // スケジュール
 
-exports.createWindow = function(style, model, util){
+exports.createWindow = function(){
 	//タイトルに今の年月を表示
 	var now = new Date();
 	now.setHours(12);
