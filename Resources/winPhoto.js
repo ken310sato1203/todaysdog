@@ -16,7 +16,6 @@ exports.createWindow = function(){
 	var titleView = Ti.UI.createView(style.photoTitleView);
 	var titleIconImage = Ti.UI.createImageView(style.photoTitleIconImage);
 	titleIconImage.image = 'images/icon/' + articleData.user + '.jpg';
-	model.setTargetUserData(model.getUserData(articleData.user));
 
 
 	var titleNameLabel = Ti.UI.createLabel(style.photoTitleNameLabel);
@@ -175,6 +174,8 @@ exports.createWindow = function(){
 	// タイトルアイコンのクリックでプロフィールを表示
 	titleIconImage.addEventListener('click',function(e){
 		Ti.API.debug('[event]titleIconImage.click:');
+		model.setTargetUserData(model.getUserData(articleData.user));
+
 		var profileWin = window.createProfileWindow();
 
 		// グローバル変数tabGroupを参照してWindowオープン

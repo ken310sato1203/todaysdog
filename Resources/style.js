@@ -5,31 +5,36 @@ exports.style = {
 	todayTab:function(win){
 		return {
 			window: win,
-			icon: Ti.UI.iPhone.SystemIcon.FAVORITES
+			icon: Ti.UI.iPhone.SystemIcon.FAVORITES,
+			title: 'today'
 		};
 	},
 	friendsTab:function(win){
 		return {
 			window: win,
-			icon: Ti.UI.iPhone.SystemIcon.MOST_VIEWED
+			icon: Ti.UI.iPhone.SystemIcon.MOST_VIEWED,
+			title: 'friends'
 		};
 	},
 	mydogTab:function(win){
 		return {
 			window: win,
-			icon: Ti.UI.iPhone.SystemIcon.MOST_RECENT
+			icon: Ti.UI.iPhone.SystemIcon.MOST_RECENT,
+			title: 'mydog'
 		};
 	},
 	scheduleTab:function(win){
 		return {
 			window: win,
-			icon: Ti.UI.iPhone.SystemIcon.BOOKMARKS
+			icon: Ti.UI.iPhone.SystemIcon.BOOKMARKS,
+			title: 'schedule'
 		};
 	},
 	profileTab:function(win){
 		return {
 			window: win,
-			icon: Ti.UI.iPhone.SystemIcon.CONTACTS
+			icon: Ti.UI.iPhone.SystemIcon.CONTACTS,
+			title: 'profile'
 		};
 	},
 
@@ -650,7 +655,15 @@ exports.style = {
 		height: Ti.UI.SIZE,
 	},
 
-	photoListTitleLabel:{
+	photoListTodayTitleLabel:{
+		font: {fontSize:18,fontFamily:'Helvetica Neue',fontWeight:"bold"}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+		text: '今日のわんこ', 
+	},
+
+	photoListPhotoTitleLabel:{
 		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,

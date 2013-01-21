@@ -105,7 +105,7 @@ exports.model = {
 		articleList = _articleList;
 	},
 	// 記事リストの取得
-	getArticleList:function(_userId, _articleIndex, _articleCount){
+	getArticleList:function(_userData, _articleIndex, _articleCount){
 		Ti.API.debug('[func]getArticleList:');
 		var target = [];
 /*
@@ -113,11 +113,11 @@ exports.model = {
 			articleList[i].user = 'sakura';
 		}
 */
-		if (_userId == null) {
+		if (_userData == null) {
 			target = articleList;
 		} else {
 			for (var i=0; i<articleList.length; i++) {
-				if (articleList[i].user == _userId) {
+				if (articleList[i].user == _userData.user) {
 					target.push(articleList[i]);
 				}
 			}			

@@ -11,6 +11,7 @@ exports.createWindow = function(){
 	if (userData == null) {
 		userData = model.getUserData(loginId);
 	}
+	Ti.API.debug('userData.name:' + userData.name);
 	
 	var win = Ti.UI.createWindow(style.profileWin);
 	// タイトルの表示
@@ -51,6 +52,13 @@ exports.createWindow = function(){
 		Ti.API.debug('userData.name:' + userData.name);
 		model.updateUserData(userData);
 		model.setTargetUserData(userData);
+
+		// プロフィールタブでない場合
+		if (tabGroup.activeTab != window.getTab('profile')) {
+			// プロフィール画面への反映
+			var profileTab = window.getTab('profile');
+			profileTab.window.fireEvent('refresh');
+		}
 
 		setTimeout(function(){
 			actInd.hide();
@@ -379,14 +387,27 @@ exports.createWindow = function(){
 
 	// フォト数をクリックでフォト一覧を表示
 	countPhotoView.addEventListener('click', function(e){
-		Ti.API.debug('[func]countPhotoView.click:');		
+		Ti.API.debug('[func]countPhotoView.click:');
 		// プロフィールタブの場合
-		if (tabGroup.activeTab == tabGroup.tabs[4]) {
-			userData = model.getUserData(loginId);			
+		if (tabGroup.activeTab == window.getTab('profile')) {
+			userData = model.getUserData(loginId);
 		}
 		var photoListWin = window.createPhotoListWindow(userData);
 		// グローバル変数tabGroupを参照してWindowオープン
 		tabGroup.activeTab.open(photoListWin,{animated:true});
+	});
+
+	// プロフィール編集を反映
+	win.addEventListener('refresh', function(e){
+		Ti.API.debug('[func]win.refresh:');
+		var refreshData = model.getTargetUserData();
+		nameField.value = refreshData.name;
+		breedField.value = refreshData.breed;
+		sexField.value = refreshData.sex;
+		birthField.value = refreshData.birth;
+		locationField.value = refreshData.location;
+		featureField.value = refreshData.feature;
+		characterField.value = refreshData.character;
 	});
 
 	return win;

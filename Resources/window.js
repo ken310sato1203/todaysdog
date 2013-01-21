@@ -39,5 +39,15 @@ exports.window = {
 		return photoListWin.createWindow(_userData);
 	},
 
+	// 指定タブを取得
+	getTab:function(_title) {
+		for (i=0; i<tabGroup.tabs.length; i++) {
+			if (tabGroup.tabs[i].title == _title){
+				return tabGroup.tabs[i];
+			}
+		}
+		return null;
+	},
+	
 }
 

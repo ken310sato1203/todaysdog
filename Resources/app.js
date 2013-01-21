@@ -9,7 +9,8 @@ var util = require('util').util;
 // タブ作成
 var tabGroup = Ti.UI.createTabGroup();
 
-var win1 = window.createTodayWindow();
+//var win1 = window.createTodayWindow();
+var win1 = window.createPhotoListWindow();
 var win2 = window.createFriendsWindow();
 var win3 = window.createMydogWindow();
 var win4 = window.createScheduleWindow();

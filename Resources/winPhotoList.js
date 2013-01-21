@@ -2,7 +2,6 @@
 
 exports.createWindow = function(_userData) {
 	Ti.API.debug('[func]winPhotoList.createWindow:');
-	Ti.API.debug('_userData.user:' + _userData.user);
 
 	// 記事リストの表示件数
 	var articleCount = 9;
@@ -10,16 +9,47 @@ exports.createWindow = function(_userData) {
 	var lastArticleIndex = null;
 	// 次回更新時に読み込むべき記事があるかどうかのフラグ
 	var nextArticleFlag = false;
+	// 下スクロールで上部ヘッダがすべて表示するまでひっぱったかどうかのフラグ
+	var pulling = false;
+	// スクロール終了時に更新をしてよいかどうかのフラグ
+	var reloading = false;
+	// 表示部分の最上位置からのオフセット
+	var offset = 0;
 
 	var win = Ti.UI.createWindow(style.photoListWin);
+
 	// タイトルの表示
-	var titleView = Ti.UI.createView(style.photoListTitleView);
-	var titleLabel = Ti.UI.createLabel(style.photoListTitleLabel);	
-	titleView.add(titleLabel);
-	win.titleControl = titleView;
+	// 全ユーザのフォト一覧を表示する場合、
+	if (_userData == null) {
+		var titleLabel = Ti.UI.createLabel(style.photoListTodayTitleLabel);	
+		win.titleControl = titleLabel;
+	} else {
+		var titleView = Ti.UI.createView(style.photoListTitleView);
+		var titleLabel = Ti.UI.createLabel(style.photoListPhotoTitleLabel);	
+		titleView.add(titleLabel);		
+		win.titleControl = titleView;
+	}
 
 	var photoListTableView = Ti.UI.createTableView(style.photoListTableView);
 	win.add(photoListTableView);
+
+	// 全ユーザのフォト一覧を表示する場合、スクロールで更新
+	if (_userData == null) {
+		// 最上部から下スクロールで最新データを更新する用のヘッダを作成
+		var tableHeader = Ti.UI.createView(style.tableHeader);
+		var headerBorder = Ti.UI.createView(style.photoListHeaderBorder);
+		tableHeader.add(headerBorder);
+		var updateArrowImage = Ti.UI.createImageView(style.photoListUpdateArrowImage);
+		tableHeader.add(updateArrowImage);
+		var pullLabel = Ti.UI.createLabel(style.photoListPullLabel);
+		tableHeader.add(pullLabel);
+		var lastUpdatedLabel = Ti.UI.createLabel(style.photoListLastUpdatedLabel);
+		lastUpdatedLabel.text = 'Last Updated: ' + util.getFormattedNowDateTime();
+		tableHeader.add(lastUpdatedLabel);
+		var updateIndicator = Ti.UI.createActivityIndicator(style.photoListUpdateIndicator);
+		tableHeader.add(updateIndicator);
+		photoListTableView.headerPullView = tableHeader;		
+	}
 
 	// 記事の行の追加
 	var getArticleTableRow = function(_articleList) {
@@ -128,7 +158,7 @@ exports.createWindow = function(_userData) {
 		Ti.API.debug('[func]updateArticle:');
 		// 前回取得した最後のインデックス以降を取得
 		// 「続きを読む」ボタンの表示判定のため、表示件数より1件多い条件で取得
-		var articleList = model.getArticleList(_userData.user, lastArticleIndex, articleCount + 1);
+		var articleList = model.getArticleList(_userData, lastArticleIndex, articleCount + 1);
 		if (articleList == null) {
 			// 1件も取得できなかった場合
 			appendNoDataLabel();		
@@ -143,5 +173,62 @@ exports.createWindow = function(_userData) {
 	// 初回読み込み時に、記事を更新
 	updateArticle();
 
+	// 全ユーザのフォト一覧を表示する場合、スクロールで更新
+	if (_userData == null) {
+		// ヘッダの表示をもとに戻す
+		var resetPullHeader = function(){
+	        Ti.API.debug('[func]resetPullHeader:');
+		    reloading = false;
+		    lastUpdatedLabel.text = 'Last Updated: ' + util.getFormattedNowDateTime();
+		    updateIndicator.hide();
+		    updateArrowImage.transform=Ti.UI.create2DMatrix();
+		    updateArrowImage.show();
+		    pullLabel.text = 'Pull down to refresh...';
+		    photoListTableView.setContentInsets({top:0}, {animated:true});
+		}
+		 
+		// スクロールで発生するイベント
+		photoListTableView.addEventListener('scroll',function(e){
+//        	Ti.API.debug('[event]scroll:');
+			// 表示部分の最上位置からのオフセット
+		    offset = e.contentOffset.y;
+			// 下スクロールで、上部のヘッダが一部表示している場合
+		    if (pulling && !reloading && offset > -80 && offset < 0){
+		        pulling = false;
+		        var unrotate = Ti.UI.create2DMatrix();
+		        updateArrowImage.animate({transform:unrotate, duration:180});
+		        pullLabel.text = 'Pull down to refresh...';
+	
+			// 下スクロールで、上部のヘッダがすべて表示している場合
+		    } else if (!pulling && !reloading && offset < -80){
+		        pulling = true;
+		        var rotate = Ti.UI.create2DMatrix().rotate(180);
+		        updateArrowImage.animate({transform:rotate, duration:180});
+		        pullLabel.text = 'Release to refresh...';
+		    }
+		});
+			
+		// スクロールの終了時に発生するイベント
+		photoListTableView.addEventListener('dragEnd',function(e){
+//	        Ti.API.debug('[event]dragEnd:');
+			// 下スクロールで、上部のヘッダがすべて表示されたらを最新データを更新
+		    if (pulling && !reloading && offset < -80){
+		        pulling = false;
+		        reloading = true;
+		        pullLabel.text = 'Updating...';
+		        updateArrowImage.hide();
+		        updateIndicator.show();
+		        e.source.setContentInsets({top:80}, {animated:true});
+		        setTimeout(function(){
+		        	resetPullHeader();
+			    	photoListTableView.data = [];
+			    	lastArticleIndex = null;
+			    	nextArticleFlag = false;
+		        	updateArticle();
+		        }, 2000);
+		    }
+		});
+	}
+	
 	return win;
 }
