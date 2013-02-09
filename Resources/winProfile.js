@@ -1,24 +1,14 @@
 // プロフィール
 
-exports.createWindow = function(){
-	Ti.API.debug('[func]winProfile.createWindow:');
+exports.createWindow = function(_userData){
+	Ti.API.debug('[func]profileWinProfile.createWindow:');
 
-	// ログインユーザの取得
-	var loginId = model.getLoginId();
-	// ユーザデータの取得
-	var userData = model.getTargetUserData();
-	Ti.API.debug('userData:' + userData);
-	if (userData == null) {
-		userData = model.getUserData(loginId);
-	}
-	Ti.API.debug('userData.name:' + userData.name);
-	
-	var win = Ti.UI.createWindow(style.profileWin);
+	var profileWin = Ti.UI.createWindow(style.profileWin);
 	// タイトルの表示
 	var titleView = Ti.UI.createView(style.profileTitleView);
 	var titleLabel = Ti.UI.createLabel(style.profileTitleLabel);	
 	titleView.add(titleLabel);
-	win.titleControl = titleView;
+	profileWin.titleControl = titleView;
 
 	// 「保存」自分のプロフィールを編集するボタン
 	var saveButton = Titanium.UI.createButton(style.profileSaveButton);
@@ -29,36 +19,30 @@ exports.createWindow = function(){
 	// ロード用画面
 	var actInd = Ti.UI.createActivityIndicator(style.profileActivityIndicator);
 
-	if (loginId == userData.user) {
-		win.rightNavButton = saveButton;
-	} else if (model.checkFollowUser(loginId, userData.user)) {
-		win.rightNavButton = unfollowButton;
+	if (loginId == _userData.user) {
+		profileWin.rightNavButton = saveButton;
+	} else if (model.checkFollowList(loginId, _userData.user)) {
+		profileWin.rightNavButton = unfollowButton;
 	} else {
-		win.rightNavButton = followButton;
+		profileWin.rightNavButton = followButton;
 	}
 
 	// 「保存」ボタン
 	saveButton.addEventListener('click', function(e){
-		Ti.API.debug('[func]saveButton.click:');
+		Ti.API.debug('[event]saveButton.click:');
 		actInd.show();
 		tabGroup.add(actInd);
-		userData.name = nameField.value;
-		userData.breed = breedField.value;
-		userData.sex = sexField.value;
-		userData.birth = birthField.value;
-		userData.location = locationField.value;
-		userData.feature = featureField.value;
-		userData.character = characterField.value;
-		Ti.API.debug('userData.name:' + userData.name);
-		model.updateUserData(userData);
-		model.setTargetUserData(userData);
+		
+		_userData.name = nameField.value;
+		_userData.breed = breedField.value;
+		_userData.sex = sexField.value;
+		_userData.birth = birthField.value;
+		_userData.location = locationField.value;
+		_userData.feature = featureField.value;
+		_userData.character = characterField.value;
 
-		// プロフィールタブでない場合
-		if (tabGroup.activeTab != window.getTab('profile')) {
-			// プロフィール画面への反映
-			var profileTab = window.getTab('profile');
-			profileTab.window.fireEvent('refresh');
-		}
+		// _userDataは、modelのuserListの参照なので上記の値セットで反映される。下記はDBに反映するようの処理。
+		model.updateUserList(_userData);
 
 		setTimeout(function(){
 			actInd.hide();
@@ -67,7 +51,7 @@ exports.createWindow = function(){
 
 	// 「フォロー中」ボタン
 	unfollowButton.addEventListener('click', function(e){
-		Ti.API.debug('[func]unfollowButton.click:');
+		Ti.API.debug('[event]unfollowButton.click:');
 		var alertDialog = Titanium.UI.createAlertDialog({
 		    title: 'フォローを解除しますか？',
 //		    message: 'フォローを解除しますか？',
@@ -79,10 +63,14 @@ exports.createWindow = function(){
 		    if(event.index == 0){
 				actInd.show();
 				tabGroup.add(actInd);
-				model.deleteFollowUser(loginId, userData.user);
+				// プロフィールのフォロー数を更新
+				var loginData = model.getUser(loginId);
+				loginData.follow--;
+
+				model.removeFollowList(loginId, _userData.user);
 		
 				setTimeout(function(){
-					win.rightNavButton = followButton;
+					profileWin.rightNavButton = followButton;
 					actInd.hide();
 				},2000);		        
 		    }
@@ -92,23 +80,24 @@ exports.createWindow = function(){
 
 	// 「フォローする」ボタン
 	followButton.addEventListener('click', function(e){
-		Ti.API.debug('[func]followButton.click:');
+		Ti.API.debug('[event]followButton.click:');
 		actInd.show();
-		tabGroup.add(actInd);	
-		model.addFollowUser(loginId, userData.user);
+		tabGroup.add(actInd);
+		// プロフィールのフォロー数を更新
+		var loginData = model.getUser(loginId);
+		loginData.follow++;
+		model.addFollowList(loginId, _userData.user);
 
 		setTimeout(function(){
-			win.rightNavButton = unfollowButton;
+			profileWin.rightNavButton = unfollowButton;
 			actInd.hide();
 		},2000);
 	});
 	
-	var profileTableView = Ti.UI.createTableView(style.profileTableView);
-//	win.add(profileTableView);
-
 	var profileScrollView = Ti.UI.createScrollView(style.profileScrollView);
+	var profileTableView = Ti.UI.createTableView(style.profileTableView);
 	profileScrollView.add(profileTableView);
-	win.add(profileScrollView);
+	profileWin.add(profileScrollView);
 
 	var profileRowList = [];
 	
@@ -121,13 +110,13 @@ exports.createWindow = function(){
 	var iconView = Ti.UI.createView(style.profileIconView);
 	countView.add(iconView);
 	var iconImage = Ti.UI.createImageView(style.profileIconImage);
-	iconImage.image = 'images/icon/' + userData.user + '.jpg';
+	iconImage.image = 'images/icon/' + _userData.user + '.jpg';
 	iconView.add(iconImage);
 
 	var countPhotoView = Ti.UI.createView(style.profileCountPhotoView);
 	countView.add(countPhotoView);
 	var countPhotoLabel = Ti.UI.createLabel(style.profileCountPhotoLabel);
-	countPhotoLabel.text = userData.photo;
+	countPhotoLabel.text = _userData.photo;
 	var countPhotoUnitLabel = Ti.UI.createLabel(style.profileCountPhotoUnitLabel);
 	countPhotoView.add(countPhotoLabel);
 	countPhotoView.add(countPhotoUnitLabel);
@@ -135,7 +124,7 @@ exports.createWindow = function(){
 	var countLikeView = Ti.UI.createView(style.profileCountLikeView);
 	countView.add(countLikeView);
 	var countLikeLabel = Ti.UI.createLabel(style.profileCountLikeLabel);
-	countLikeLabel.text = userData.like;
+	countLikeLabel.text = _userData.like;
 	var countLikeUnitLabel = Ti.UI.createLabel(style.profileCountLikeUnitLabel);
 	countLikeView.add(countLikeLabel);
 	countLikeView.add(countLikeUnitLabel);
@@ -143,7 +132,7 @@ exports.createWindow = function(){
 	var countFollowerView = Ti.UI.createView(style.profileCountFollowerView);
 	countView.add(countFollowerView);
 	var countFollowerLabel = Ti.UI.createLabel(style.profileCountFollowerLabel);
-	countFollowerLabel.text = userData.follower;
+	countFollowerLabel.text = _userData.follower;
 	var countFollowerUnitLabel = Ti.UI.createLabel(style.profileCountFollowerUnitLabel);
 	countFollowerView.add(countFollowerLabel);
 	countFollowerView.add(countFollowerUnitLabel);
@@ -151,7 +140,7 @@ exports.createWindow = function(){
 	var countFollowView = Ti.UI.createView(style.profileCountFollowView);
 	countView.add(countFollowView);
 	var countFollowLabel = Ti.UI.createLabel(style.profileCountFollowLabel);
-	countFollowLabel.text = userData.follow;
+	countFollowLabel.text = _userData.follow;
 	var countFollowUnitLabel = Ti.UI.createLabel(style.profileCountFollowUnitLabel);
 	countFollowView.add(countFollowLabel);
 	countFollowView.add(countFollowUnitLabel);
@@ -165,7 +154,7 @@ exports.createWindow = function(){
 	var userLabel = Ti.UI.createLabel(style.profileListItemLabel);
 	userLabel.text = 'ユーザID';
 	var userField = Ti.UI.createTextField(style.profileListValueField);
-	userField.value = userData.user;
+	userField.value = _userData.user;
 	userView.add(userLabel);
 	userView.add(userField);
 
@@ -178,7 +167,7 @@ exports.createWindow = function(){
 	var nameLabel = Ti.UI.createLabel(style.profileListItemLabel);
 	nameLabel.text = '名前';
 	var nameField = Ti.UI.createTextField(style.profileListValueField);
-	nameField.value = userData.name;
+	nameField.value = _userData.name;
 	nameView.add(nameLabel);
 	nameView.add(nameField);
 
@@ -191,7 +180,7 @@ exports.createWindow = function(){
 	var breedLabel = Ti.UI.createLabel(style.profileListItemLabel);
 	breedLabel.text = '犬種';
 	var breedField = Ti.UI.createTextField(style.profileListValueField);
-	breedField.value = userData.breed;
+	breedField.value = _userData.breed;
 	breedView.add(breedLabel);
 	breedView.add(breedField);
 
@@ -204,7 +193,7 @@ exports.createWindow = function(){
 	var sexLabel = Ti.UI.createLabel(style.profileListItemLabel);
 	sexLabel.text = '性別';
 	var sexField = Ti.UI.createTextField(style.profileListValueField);
-	sexField.value = userData.sex;
+	sexField.value = _userData.sex;
 	sexField.enabled = false;
 	sexView.add(sexLabel);
 	sexView.add(sexField);
@@ -218,7 +207,7 @@ exports.createWindow = function(){
 	var birthLabel = Ti.UI.createLabel(style.profileListItemLabel);
 	birthLabel.text = '誕生日';
 	var birthField = Ti.UI.createTextField(style.profileListValueField);
-	birthField.value = userData.birth;
+	birthField.value = _userData.birth;
 	birthField.enabled = false;
 	birthView.add(birthLabel);
 	birthView.add(birthField);
@@ -232,7 +221,7 @@ exports.createWindow = function(){
 	var locationLabel = Ti.UI.createLabel(style.profileListItemLabel);
 	locationLabel.text = '居住地';
 	var locationField = Ti.UI.createTextField(style.profileListValueField);
-	locationField.value = userData.location;
+	locationField.value = _userData.location;
 	locationView.add(locationLabel);
 	locationView.add(locationField);
 
@@ -245,7 +234,7 @@ exports.createWindow = function(){
 	var featureLabel = Ti.UI.createLabel(style.profileListItemLabel);
 	featureLabel.text = '特徴';
 	var featureField = Ti.UI.createTextField(style.profileListValueField);
-	featureField.value = userData.feature;
+	featureField.value = _userData.feature;
 	featureView.add(featureLabel);
 	featureView.add(featureField);
 
@@ -258,7 +247,7 @@ exports.createWindow = function(){
 	var characterLabel = Ti.UI.createLabel(style.profileListItemLabel);
 	characterLabel.text = '性格';
 	var characterField = Ti.UI.createTextField(style.profileListValueField);
-	characterField.value = userData.character;
+	characterField.value = _userData.character;
 	characterView.add(characterLabel);
 	characterView.add(characterField);
 
@@ -271,7 +260,7 @@ exports.createWindow = function(){
 
 	// 性別の選択ビューを表示
 	var sexPickerView = Titanium.UI.createView(style.profileListPickerView);
-	win.add(sexPickerView);
+	profileWin.add(sexPickerView);
 
 	var sexPickerToolbar =  Titanium.UI.iOS.createToolbar(style.profileListPickerToolbar);
 	sexPickerView.add(sexPickerToolbar);
@@ -297,7 +286,7 @@ exports.createWindow = function(){
 
 	// 誕生日の選択ビューを表示
 	var birthPickerView = Titanium.UI.createView(style.profileListPickerView);
-	win.add(birthPickerView);
+	profileWin.add(birthPickerView);
 	var birthPicker = Ti.UI.createPicker(style.profileListDatePicker);
 	birthPicker.value = new Date();
 	birthPickerView.add(birthPicker);
@@ -325,9 +314,9 @@ exports.createWindow = function(){
 	var selectedName = null;
 	// フィールドをクリックで入力フィールド・選択ビューを表示
 	profileTableView.addEventListener('click', function(e){
-		Ti.API.debug('[func]profileTableView.click:');
+		Ti.API.debug('[event]profileTableView.click:');
 		// 自分のプロフィールは編集できる
-		if (loginId == userData.user) {
+		if (loginId == _userData.user) {
 			var targetName = e.rowData.className;
 			Ti.API.debug('targetName:' + targetName);
 			Ti.API.debug('selectedName:' + selectedName);
@@ -387,28 +376,37 @@ exports.createWindow = function(){
 
 	// フォト数をクリックでフォト一覧を表示
 	countPhotoView.addEventListener('click', function(e){
-		Ti.API.debug('[func]countPhotoView.click:');
-		// プロフィールタブの場合
-		if (tabGroup.activeTab == window.getTab('profile')) {
-			userData = model.getUserData(loginId);
-		}
-		var photoListWin = window.createPhotoListWindow(userData);
+		Ti.API.debug('[event]countPhotoView.click:');
+		countPhotoView.backgroundColor = '#dcdcdc';
+		var photoListWin = win.createPhotoListWindow(_userData);
 		// グローバル変数tabGroupを参照してWindowオープン
 		tabGroup.activeTab.open(photoListWin,{animated:true});
+		countPhotoView.backgroundColor = 'white';
 	});
 
 	// プロフィール編集を反映
-	win.addEventListener('refresh', function(e){
-		Ti.API.debug('[func]win.refresh:');
-		var refreshData = model.getTargetUserData();
-		nameField.value = refreshData.name;
-		breedField.value = refreshData.breed;
-		sexField.value = refreshData.sex;
-		birthField.value = refreshData.birth;
-		locationField.value = refreshData.location;
-		featureField.value = refreshData.feature;
-		characterField.value = refreshData.character;
+	profileWin.addEventListener('refresh', function(e){
+		Ti.API.debug('[event]profileWin.refresh:');
+		// _userDataは、modelのuserListの参照なので値セットで反映される
+		countLikeLabel.text = _userData.like;
+		countFollowerLabel.text = _userData.follower;
+		countFollowLabel.text = _userData.follow;
+		nameField.value = _userData.name;
+		breedField.value = _userData.breed;
+		sexField.value = _userData.sex;
+		birthField.value = _userData.birth;
+		locationField.value = _userData.location;
+		featureField.value = _userData.feature;
+		characterField.value = _userData.character;
 	});
 
-	return win;
+	// 右スワイプで前の画面に戻る
+	profileWin.addEventListener('swipe',function(e){
+		Ti.API.debug('[event]profileWin.swipe:');
+		if (e.direction == 'right') {
+			tabGroup.activeTab.close(profileWin);
+		}
+	});
+
+	return profileWin;
 }

@@ -16,13 +16,13 @@ exports.createWindow = function() {
 	// 表示部分の最上位置からのオフセット
 	var offset = 0;
 
-	var win = Ti.UI.createWindow(style.todayWin);
+	var todayWin = Ti.UI.createWindow(style.todayWin);
 	// タイトルの表示
-	var titleLabel = Ti.UI.createLabel(style.todayTitleLabel);	
-	win.titleControl = titleLabel;
+	var titleLabel = Ti.UI.createLabel(style.todayTitleLabel);
+	todayWin.titleControl = titleLabel;
 
 	var todayTableView = Ti.UI.createTableView(style.todayTableView);
-	win.add(todayTableView);
+	todayWin.add(todayTableView);
 
 	// 最上部から下スクロールで最新データを更新する用のヘッダを作成
 	var tableHeader = Ti.UI.createView(style.tableHeader);
@@ -62,8 +62,7 @@ exports.createWindow = function() {
 			// 各記事のタップでフォト画面へ遷移
 			photoImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]articleView.click:');
-				model.setTargetArticleData(e.source.articleData);
-				var photoWin = window.createPhotoWindow();
+				var photoWin = win.createPhotoWindow(e.source.articleData);
 				// グローバル変数tabGroupを参照してWindowオープン
 				tabGroup.activeTab.open(photoWin,{animated:true});
 			});
@@ -216,5 +215,5 @@ exports.createWindow = function() {
 	});
 
 	
-	return win;
+	return todayWin;
 }

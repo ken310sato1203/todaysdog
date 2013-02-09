@@ -3,10 +3,8 @@
 var loginId = null;
 
 var articleList = [];
-var targetArticleData = null;
 var likeList = [];
 var commentList = [];
-var targetUserData = null;
 var userList = [];
 var breedList = [];
 var sexList = [];
@@ -133,22 +131,20 @@ exports.model = {
 			return null;
 		}
 	},
-	
-	// 対象記事の登録
-	setTargetArticleData:function(_articleData){
-		Ti.API.debug('[func]setTargetArticleData:');
-		targetArticleData = _articleData;
-	},
-	// 対象記事の取得
-	getTargetArticleData:function(){
-		Ti.API.debug('[func]getTargetArticleData:');
-		return targetArticleData;
-	},
-	
+		
 	// ライクリストに追加
 	addLikeList:function(_likeList){
 		Ti.API.debug('[func]addLikeList:');
 		likeList.push(_likeList);
+	},
+	// ライクリストから削除
+	removeLikeList:function(_articleNo, _userId){
+		Ti.API.debug('[func]removeLikeList:');
+		for (var i=0; i<likeList.length; i++) {
+			if (likeList[i].no == _articleNo && likeList[i].user == _userId) {
+				likeList.splice(i, 1);
+			}
+		}
 	},
 	// ライクリストに追加されているかを確認
 	checkLikeList:function(_articleNo, _userId){
@@ -195,20 +191,9 @@ exports.model = {
 		return target;
 	},
 
-	// 対象ユーザの登録
-	setTargetUserData:function(_userData){
-		Ti.API.debug('[func]setTargetUserData:');
-		targetUserData = _userData;
-	},
-	// 対象ユーザの取得
-	getTargetUserData:function(){
-		Ti.API.debug('[func]getTargetUserData:');
-		return targetUserData;
-	},
-
 	// ユーザデータの追加
-	addUserData:function(_userData){
-		Ti.API.debug('[func]addUserData:');
+	addUserList:function(_userData){
+		Ti.API.debug('[func]addUserList:');
 		var existFlag = false;
 		for (var i=0; i<userList.length; i++) {
 			if (userList[i].user == _userData.user) {
@@ -220,8 +205,8 @@ exports.model = {
 		}
 	},
 	// ユーザデータの更新
-	updateUserData:function(_userData){
-		Ti.API.debug('[func]updateUserData:');
+	updateUserList:function(_userData){
+		Ti.API.debug('[func]updateUserList:');
 		for (var i=0; i<userList.length; i++) {
 			if (userList[i].user == _userData.user) {
 				userList[i] = _userData;
@@ -229,8 +214,8 @@ exports.model = {
 		}
 	},
 	// ユーザデータの取得
-	getUserData:function(_userId){
-		Ti.API.debug('[func]getUserData:');
+	getUser:function(_userId){
+		Ti.API.debug('[func]getUser:');
 		var target = null;
 		for (var i=0; i<userList.length; i++) {
 			if (userList[i].user == _userId) {
@@ -263,19 +248,19 @@ exports.model = {
 	},
 
 	// フォローしているユーザリストの取得
-	getFollowUserList:function(_userId){
-		Ti.API.debug('[func]getFollowUserList:');
+	getFollowList:function(_userId){
+		Ti.API.debug('[func]getFollowList:');
 		var target = [];
 		for (var i=0; i<followList.length; i++) {
 			if (followList[i].user == _userId) {
-				target.push(getUserData(followList[i].follow));
+				target.push(getUser(followList[i].follow));
 			}
 		}
 		return target;
 	},
 	// フォローしているかのチェック
-	checkFollowUser:function(_userId, _follow){
-		Ti.API.debug('[func]checkFollowUser:');
+	checkFollowList:function(_userId, _follow){
+		Ti.API.debug('[func]checkFollowList:');
 		for (var i=0; i<followList.length; i++) {
 			if (followList[i].user == _userId) {
 				if (followList[i].follow == _follow) {
@@ -286,14 +271,12 @@ exports.model = {
 		return false;
 	},
 	// フォローユーザの追加
-	addFollowUser:function(_userId, _follow){
-		Ti.API.debug('[func]addFollowUser:');
+	addFollowList:function(_userId, _follow){
+		Ti.API.debug('[func]addFollowList:');
 		var existFlag = false;
 		for (var i=0; i<followList.length; i++) {
-			if (followList[i].user == _userId) {
-				if (followList[i].follow == _follow) {
-					existFlag = true;
-				}
+			if (followList[i].user == _userId && followList[i].follow == _follow) {
+				existFlag = true;
 			}
 		}
 		if (! existFlag) {
@@ -301,13 +284,11 @@ exports.model = {
 		}
 	},
 	// フォローユーザの削除
-	deleteFollowUser:function(_userId, _follow){
-		Ti.API.debug('[func]deleteFollowUser:');
+	removeFollowList:function(_userId, _follow){
+		Ti.API.debug('[func]removeFollowList:');
 		for (var i=0; i<followList.length; i++) {
-			if (followList[i].user == _userId) {
-				if (followList[i].follow == _follow) {
-					followList.splice(i, 1);
-				}
+			if (followList[i].user == _userId && followList[i].follow == _follow) {
+				followList.splice(i, 1);
 			}
 		}
 	},

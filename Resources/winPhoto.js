@@ -1,31 +1,28 @@
 // フォト
 
-exports.createWindow = function(){
+exports.createWindow = function(_articleData){
 	Ti.API.debug('[func]winPhoto.createWindow:');
 
 	// ライクリストの表示件数
 	var likeCount = 10;
 	// コメントリストの表示件数
 	var commentCount = 10;
-	// 記事データの取得
-	var articleData = model.getTargetArticleData();
 
-	var win = Ti.UI.createWindow(style.photoWin);
+	var photoWin = Ti.UI.createWindow(style.photoWin);
 
 	// タイトルの表示
 	var titleView = Ti.UI.createView(style.photoTitleView);
 	var titleIconImage = Ti.UI.createImageView(style.photoTitleIconImage);
-	titleIconImage.image = 'images/icon/' + articleData.user + '.jpg';
-
+	titleIconImage.image = 'images/icon/' + _articleData.user + '.jpg';
 
 	var titleNameLabel = Ti.UI.createLabel(style.photoTitleNameLabel);
-	titleNameLabel.text = articleData.user + '\n@' + articleData.loc;
+	titleNameLabel.text = _articleData.user + '\n@' + _articleData.loc;
 	titleView.add(titleIconImage);
 	titleView.add(titleNameLabel);
-	win.titleControl = titleView;
+	photoWin.titleControl = titleView;
 
 	var photoTableView = Ti.UI.createTableView(style.photoTableView);
-	win.add(photoTableView);
+	photoWin.add(photoTableView);
 
 	// 記事の表示
 	var articleView = Ti.UI.createView(style.photoArticleView);
@@ -33,15 +30,15 @@ exports.createWindow = function(){
 	articleTableRow.add(articleView);
 	photoTableView.appendRow(articleTableRow);					
 	var photoImage = Ti.UI.createImageView(style.photoPhotoImage);
-	photoImage.image = 'images/photo/' + articleData.no + '.jpg';
+	photoImage.image = 'images/photo/' + _articleData.no + '.jpg';
 	var textLabel = Ti.UI.createLabel(style.photoTextLabel);
-	textLabel.text = articleData.date.substring(0,10) + '\n' + articleData.text;			
+	textLabel.text = _articleData.date.substring(0,10) + '\n' + _articleData.text;			
 	articleView.add(photoImage);
 	articleView.add(textLabel);
 
 	// ライクボタンの表示
 	var likeButton = Ti.UI.createButton(style.photoLikeButton);
-	if (model.checkLikeList(articleData.no, model.getLoginId())) {
+	if (model.checkLikeList(_articleData.no, model.getLoginId())) {
 		likeButton.enabled = false;
 		likeButton.backgroundColor = '#dedede';
 	}
@@ -58,7 +55,7 @@ exports.createWindow = function(){
 	// ライクリストの更新
 	var updateLike = function() {
 		Ti.API.debug('[func]updateLike:');
-		var likeList = model.getLikeList(articleData.no, likeCount);
+		var likeList = model.getLikeList(_articleData.no, likeCount);
 		Ti.API.debug('likeList:' + likeList);
 		if (likeList.length > 0) {
 			likeTableRow.height = Ti.UI.SIZE;		
@@ -83,7 +80,7 @@ exports.createWindow = function(){
 	// コメントリストの更新
 	var updateComment = function() {
 		Ti.API.debug('[func]updateComment:');
-		var commentList = model.getCommentList(articleData.no, commentCount);
+		var commentList = model.getCommentList(_articleData.no, commentCount);
 		Ti.API.debug('commentList:' + commentList);
 		if (commentList.length > 0) {
 			commentTableRow.height = Ti.UI.SIZE;		
@@ -118,7 +115,7 @@ exports.createWindow = function(){
 		Ti.API.debug('[event]photoImage.click:');
 		var photoFullWin = Titanium.UI.createWindow(style.photoPhotoFullWin);
 		var photoFullImage = Ti.UI.createImageView(style.photoPhotoFullImage);
-		photoFullImage.image = 'images/photo/' + articleData.no + '.jpg';
+		photoFullImage.image = 'images/photo/' + _articleData.no + '.jpg';
 		photoFullWin.add(photoFullImage);
 
 		photoFullWin.open({
@@ -131,15 +128,14 @@ exports.createWindow = function(){
 		// フォト拡大が面にタップで戻る
 		photoFullImage.addEventListener('click',function(e){
 			Ti.API.debug('[event]photoFullImage.click:');
-			photoFullWin.close();
+			photoFullWin.close();				
 		});
 	});
 
 	// ライクボタンのクリックでライクリストに追加
 	likeButton.addEventListener('click',function(e){
 		Ti.API.debug('[event]likeButton.click:');
-		var articleData = model.getTargetArticleData();
-		var no = articleData.no;
+		var no = _articleData.no;
 		var user = model.getLoginId();
 		var date = util.getFormattedNowDateTime();
 		
@@ -148,13 +144,15 @@ exports.createWindow = function(){
 		likeButton.enabled = false;
 		likeButton.backgroundColor = '#dedede';
 		updateLike();
+		// プロフィールのライク数を更新
+		var loginData = model.getUser(loginId);
+		loginData.like++;
 	});
 
 	// コメントフィールドでキーボード確定でコメントリストに追加
 	commentField.addEventListener('return',function(e){
 		Ti.API.debug('[event]commentField.return:');
-		var articleData = model.getTargetArticleData();
-		var no = articleData.no;
+		var no = _articleData.no;
 		var user = model.getLoginId();
 		var date = util.getFormattedNowDateTime();
 		var text = commentField.getValue();
@@ -174,13 +172,20 @@ exports.createWindow = function(){
 	// タイトルアイコンのクリックでプロフィールを表示
 	titleIconImage.addEventListener('click',function(e){
 		Ti.API.debug('[event]titleIconImage.click:');
-		model.setTargetUserData(model.getUserData(articleData.user));
-
-		var profileWin = window.createProfileWindow();
+		var userData = model.getUser(_articleData.user);
+		var profileWin = win.createProfileWindow(userData);
 
 		// グローバル変数tabGroupを参照してWindowオープン
 		tabGroup.activeTab.open(profileWin,{animated:true});
 	});
 
-	return win;
+	// 右スワイプで前の画面に戻る
+	photoWin.addEventListener('swipe',function(e){
+		Ti.API.debug('[event]photoWin.swipe:');
+		if (e.direction == 'right') {
+			tabGroup.activeTab.close(photoWin);
+		}
+	});
+
+	return photoWin;
 }

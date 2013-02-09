@@ -16,24 +16,23 @@ exports.createWindow = function(_userData) {
 	// 表示部分の最上位置からのオフセット
 	var offset = 0;
 
-	var win = Ti.UI.createWindow(style.photoListWin);
+	var photoListWin = Ti.UI.createWindow(style.photoListWin);
 
-	// タイトルの表示
-	// 全ユーザのフォト一覧を表示する場合、
+	// ユーザの指定がない場合、全ユーザのフォト一覧用タイトルを表示
 	if (_userData == null) {
 		var titleLabel = Ti.UI.createLabel(style.photoListTodayTitleLabel);	
-		win.titleControl = titleLabel;
+		photoListWin.titleControl = titleLabel;
 	} else {
 		var titleView = Ti.UI.createView(style.photoListTitleView);
 		var titleLabel = Ti.UI.createLabel(style.photoListPhotoTitleLabel);	
 		titleView.add(titleLabel);		
-		win.titleControl = titleView;
+		photoListWin.titleControl = titleView;
 	}
 
 	var photoListTableView = Ti.UI.createTableView(style.photoListTableView);
-	win.add(photoListTableView);
+	photoListWin.add(photoListTableView);
 
-	// 全ユーザのフォト一覧を表示する場合、スクロールで更新
+	// ユーザの指定がない場合、全ユーザのフォト一覧をスクロールで更新
 	if (_userData == null) {
 		// 最上部から下スクロールで最新データを更新する用のヘッダを作成
 		var tableHeader = Ti.UI.createView(style.tableHeader);
@@ -74,10 +73,11 @@ exports.createWindow = function(_userData) {
 			// 各記事のタップでフォト画面へ遷移
 			photoImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]articleView.click:');
-				model.setTargetArticleData(e.source.articleData);
-				var photoWin = window.createPhotoWindow();
+				e.source.opacity = 0.5;
+				var photoWin = win.createPhotoWindow(e.source.articleData);
 				// グローバル変数tabGroupを参照してWindowオープン
 				tabGroup.activeTab.open(photoWin,{animated:true});
+				e.source.opacity = 1.0;
 			});
 		}
 		
@@ -173,7 +173,7 @@ exports.createWindow = function(_userData) {
 	// 初回読み込み時に、記事を更新
 	updateArticle();
 
-	// 全ユーザのフォト一覧を表示する場合、スクロールで更新
+	// ユーザの指定がない場合、全ユーザのフォト一覧をスクロールで更新
 	if (_userData == null) {
 		// ヘッダの表示をもとに戻す
 		var resetPullHeader = function(){
@@ -229,6 +229,17 @@ exports.createWindow = function(_userData) {
 		    }
 		});
 	}
+
+	// 右スワイプで前の画面に戻る
+	photoListWin.addEventListener('swipe',function(e){
+		Ti.API.debug('[event]photoListWin.swipe:');
+		// ユーザの指定がない場合、全ユーザのフォト一覧用タイトルを表示
+		if (_userData != null) {
+			if (e.direction == 'right') {
+				tabGroup.activeTab.close(photoListWin);
+			}
+		}
+	});
 	
-	return win;
+	return photoListWin;
 }

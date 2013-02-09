@@ -8,7 +8,7 @@ var profileWin = require('winProfile');
 var photoWin = require('winPhoto');
 var photoListWin = require('winPhotoList');
 
-exports.window = {
+exports.win = {
 
 	createTodayWindow:function(){
 		Ti.API.debug('[func]createTodayWindow:');
@@ -26,13 +26,14 @@ exports.window = {
 		Ti.API.debug('[func]createScheduleWindow:');
 		return scheduleWin.createWindow();
 	},
-	createProfileWindow:function(){
+	createProfileWindow:function(_userData){
 		Ti.API.debug('[func]createProfileWindow:');
-		return profileWin.createWindow();
+		Ti.API.debug('_userData.name:' + _userData.name);
+		return profileWin.createWindow(_userData);
 	},
-	createPhotoWindow:function(){
+	createPhotoWindow:function(_articleData){
 		Ti.API.debug('[func]createPhotoWindow:');
-		return photoWin.createWindow();
+		return photoWin.createWindow(_articleData);
 	},
 	createPhotoListWindow:function(_userData){
 		Ti.API.debug('[func]createPhotoListWindow:');
