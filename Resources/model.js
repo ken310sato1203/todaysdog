@@ -46,21 +46,24 @@ commentList = [
 
 likeList = [
 	{no:"A0001", user:"sakura", date:"2013-01-01 08:14:27"},
-	{no:"A0001", user:"taro", date:"2013-01-02 09:23:45"},
+	{no:"A0001", user:"maki", date:"2013-01-02 09:23:45"},
 	{no:"A0002", user:"ichiro", date:"2013-01-03 13:37:02"},
+	{no:"A0003", user:"sakura", date:"2013-01-04 12:37:02"},
+	{no:"A0003", user:"taro", date:"2013-01-05 11:37:02"},
+	{no:"A0004", user:"sakura", date:"2013-01-06 10:37:02"},
 ];
 
 userList = [
-	{user:"sakura", photo:"56", like:"30", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"maki", photo:"86", like:"40", follow:"85", follower:"120", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"koro", photo:"56", like:"30", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"shiro", photo:"56", like:"30", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"pochi", photo:"56", like:"30", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"jiro", photo:"56", like:"30", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"gon", photo:"56", like:"30", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"kuro", photo:"56", like:"30", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"momo", photo:"56", like:"30", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"santa", photo:"56", like:"30", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"sakura", photo:"56", like:"3", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"maki", photo:"86", like:"1", follow:"85", follower:"120", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"koro", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"shiro", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"pochi", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"jiro", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"gon", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"kuro", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"momo", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"santa", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
 ];
 
 breedList = [
@@ -97,39 +100,82 @@ exports.model = {
 		return loginId;
 	},
 
+	// 記事の取得
+	getArticle:function(_articleNo){
+		Ti.API.debug('[func]getArticle:');
+		for (var i=0; i<articleList.length; i++) {
+			if (articleList[i].no == _articleNo) {
+				return articleList[i];
+			}
+		}
+	},
+
 	// 記事リストの登録
 	setArticleList:function(_articleList){
 		Ti.API.debug('[func]setArticleList:');
 		articleList = _articleList;
 	},
+
 	// 記事リストの取得
 	getArticleList:function(_listType, _userData, _articleIndex, _articleCount){
 		Ti.API.debug('[func]getArticleList:');
+		Ti.API.debug('_listType:' + _listType);
 		var target = [];
 /*
 		for (var i=0; i<articleList.length; i++) {
 			articleList[i].user = 'sakura';
 		}
 */
+		// 全ユーザのフォト一覧
 		if (_listType == "all") {
 			target = articleList;
+			if (_articleIndex == null) {
+				return target.slice(0, 10);			
+			} else if (_articleIndex == 'A0009'){
+				return target.slice(9, 19);
+			} else if (_articleIndex == 'A0018'){
+				return target.slice(19, 28);
+			} else if (_articleIndex == 'A0024'){
+				return null;
+			}
+
+		// 指定ユーザのフォト一覧
 		} else 	if (_listType == "user") {
 			for (var i=0; i<articleList.length; i++) {
 				if (articleList[i].user == _userData.user) {
 					target.push(articleList[i]);
 				}
-			}			
+			}
+			return target;		
+
+		// ライクなフォト一覧
+		} else 	if (_listType == "like") {
+			for (var i=0; i<articleList.length; i++) {
+				for (var j=0; j<likeList.length; j++) {
+					if (articleList[i].no == likeList[j].no && likeList[j].user == _userData.user) {
+						target.push(articleList[i]);
+					}
+				}
+			}
+			return target;		
+
+		} else 	if (_listType == "follow") {
+			for (var i=0; i<articleList.length; i++) {
+				if (articleList[i].user == _userData.user) {
+					target.push(articleList[i]);
+				} else {
+					for (var j=0; j<followList.length; j++) {
+						if (followList[j].user == _userData.user) {
+							if (articleList[i].user == followList[j].follow) {
+								target.push(articleList[i]);
+							}
+						}
+					}					
+				}
+			}
+			return target;		
 		}
 
-		if (_articleIndex == null) {
-			return target.slice(0, 10);			
-		} else if (_articleIndex == 'A0009'){
-			return target.slice(9, 19);
-		} else if (_articleIndex == 'A0018'){
-			return target.slice(19, 28);
-		} else if (_articleIndex == 'A0024'){
-			return null;
-		}
 	},
 		
 	// ライクリストに追加

@@ -19,11 +19,20 @@ exports.createWindow = function(_listType, _userData) {
 
 	var photoListWin = Ti.UI.createWindow(style.photoListWin);
 
-	// ユーザの指定がない場合、全ユーザのフォト一覧用タイトルを表示
+	// 全ユーザのフォト一覧
 	if (_listType == "all") {
 		var titleLabel = Ti.UI.createLabel(style.photoListTodayTitleLabel);	
 		photoListWin.titleControl = titleLabel;
+
+	// 指定ユーザのフォト一覧
 	} else 	if (_listType == "user") {
+		var titleView = Ti.UI.createView(style.photoListTitleView);
+		var titleLabel = Ti.UI.createLabel(style.photoListPhotoTitleLabel);	
+		titleView.add(titleLabel);		
+		photoListWin.titleControl = titleView;
+
+	// ライクなフォト一覧
+	} else 	if (_listType == "like") {
 		var titleView = Ti.UI.createView(style.photoListTitleView);
 		var titleLabel = Ti.UI.createLabel(style.photoListPhotoTitleLabel);	
 		titleView.add(titleLabel);		
@@ -33,7 +42,7 @@ exports.createWindow = function(_listType, _userData) {
 	var photoListTableView = Ti.UI.createTableView(style.photoListTableView);
 	photoListWin.add(photoListTableView);
 
-	// ユーザの指定がない場合、全ユーザのフォト一覧をスクロールで更新
+	// 全ユーザのフォト一覧
 	if (_listType == "all") {
 		// 最上部から下スクロールで最新データを更新する用のヘッダを作成
 		var tableHeader = Ti.UI.createView(style.tableHeader);
@@ -174,7 +183,7 @@ exports.createWindow = function(_listType, _userData) {
 	// 初回読み込み時に、記事を更新
 	updateArticle();
 
-	// ユーザの指定がない場合、全ユーザのフォト一覧をスクロールで更新
+	// 全ユーザのフォト一覧
 	if (_listType == "all") {
 		// ヘッダの表示をもとに戻す
 		var resetPullHeader = function(){
