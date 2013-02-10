@@ -1,7 +1,8 @@
 // フォト一覧
 
-exports.createWindow = function(_userData) {
+exports.createWindow = function(_listType, _userData) {
 	Ti.API.debug('[func]winPhotoList.createWindow:');
+	Ti.API.debug('_listType:' + _listType);
 
 	// 記事リストの表示件数
 	var articleCount = 9;
@@ -19,10 +20,10 @@ exports.createWindow = function(_userData) {
 	var photoListWin = Ti.UI.createWindow(style.photoListWin);
 
 	// ユーザの指定がない場合、全ユーザのフォト一覧用タイトルを表示
-	if (_userData == null) {
+	if (_listType == "all") {
 		var titleLabel = Ti.UI.createLabel(style.photoListTodayTitleLabel);	
 		photoListWin.titleControl = titleLabel;
-	} else {
+	} else 	if (_listType == "user") {
 		var titleView = Ti.UI.createView(style.photoListTitleView);
 		var titleLabel = Ti.UI.createLabel(style.photoListPhotoTitleLabel);	
 		titleView.add(titleLabel);		
@@ -33,7 +34,7 @@ exports.createWindow = function(_userData) {
 	photoListWin.add(photoListTableView);
 
 	// ユーザの指定がない場合、全ユーザのフォト一覧をスクロールで更新
-	if (_userData == null) {
+	if (_listType == "all") {
 		// 最上部から下スクロールで最新データを更新する用のヘッダを作成
 		var tableHeader = Ti.UI.createView(style.tableHeader);
 		var headerBorder = Ti.UI.createView(style.photoListHeaderBorder);
@@ -158,7 +159,7 @@ exports.createWindow = function(_userData) {
 		Ti.API.debug('[func]updateArticle:');
 		// 前回取得した最後のインデックス以降を取得
 		// 「続きを読む」ボタンの表示判定のため、表示件数より1件多い条件で取得
-		var articleList = model.getArticleList(_userData, lastArticleIndex, articleCount + 1);
+		var articleList = model.getArticleList(_listType, _userData, lastArticleIndex, articleCount + 1);
 		if (articleList == null) {
 			// 1件も取得できなかった場合
 			appendNoDataLabel();		
@@ -174,7 +175,7 @@ exports.createWindow = function(_userData) {
 	updateArticle();
 
 	// ユーザの指定がない場合、全ユーザのフォト一覧をスクロールで更新
-	if (_userData == null) {
+	if (_listType == "all") {
 		// ヘッダの表示をもとに戻す
 		var resetPullHeader = function(){
 	        Ti.API.debug('[func]resetPullHeader:');
@@ -233,11 +234,8 @@ exports.createWindow = function(_userData) {
 	// 右スワイプで前の画面に戻る
 	photoListWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]photoListWin.swipe:');
-		// ユーザの指定がない場合、全ユーザのフォト一覧用タイトルを表示
-		if (_userData != null) {
-			if (e.direction == 'right') {
-				tabGroup.activeTab.close(photoListWin);
-			}
+		if (e.direction == 'right') {
+			tabGroup.activeTab.close(photoListWin);
 		}
 	});
 	

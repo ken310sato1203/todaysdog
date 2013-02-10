@@ -303,7 +303,9 @@ exports.createWindow = function(_userData){
 		birthPickerView.animate(slideOut);
 	});
 	birthDone.addEventListener('click', function(e){
-		birthField.value = util.getFormattedDate(targetBirth);
+		if (targetBirth != null) {
+			birthField.value = util.getFormattedDate(targetBirth);
+		}
 		birthPickerView.animate(slideOut);
 	});
 	birthPicker.addEventListener('change',function(e){
@@ -315,60 +317,63 @@ exports.createWindow = function(_userData){
 	// フィールドをクリックで入力フィールド・選択ビューを表示
 	profileTableView.addEventListener('click', function(e){
 		Ti.API.debug('[event]profileTableView.click:');
+
 		// 自分のプロフィールは編集できる
 		if (loginId == _userData.user) {
-			var targetName = e.rowData.className;
-			Ti.API.debug('targetName:' + targetName);
-			Ti.API.debug('selectedName:' + selectedName);
-			if (targetName == "user"){
-				userField.focus();
-			} else if (targetName == "name"){
-				nameField.focus();
-			} else if (targetName == "breed"){
-				breedField.focus();
-			} else if (targetName == "sex"){
-				var sexList = model.getSexList();
-				var selectedIndex = null;
-				for (var i=0; i<sexList.length; i++) {
-					if (sexList[i].value == sexField.value){
-						selectedIndex = i;
+			if (typeof e.rowData.className != 'undefined'){
+				var targetName = e.rowData.className;
+				Ti.API.debug('targetName:' + targetName);
+				Ti.API.debug('selectedName:' + selectedName);
+				if (targetName == "user"){
+					userField.focus();
+				} else if (targetName == "name"){
+					nameField.focus();
+				} else if (targetName == "breed"){
+					breedField.focus();
+				} else if (targetName == "sex"){
+					var sexList = model.getSexList();
+					var selectedIndex = null;
+					for (var i=0; i<sexList.length; i++) {
+						if (sexList[i].value == sexField.value){
+							selectedIndex = i;
+						}
 					}
-				}
-				sexPicker.setSelectedRow(0, selectedIndex);
-				sexPickerView.animate(slideIn);
-	
-			} else if (targetName == "birth"){
-				Ti.API.debug('birthField.value:' + birthField.value);
-				birthPicker.value = util.getDate(birthField.value);
-				birthPickerView.animate(slideIn);
-			} else if (targetName == "location"){
-				locationField.focus();
-			} else if (targetName == "feature"){
-				featureField.focus();
-			} else if (targetName == "character"){
-				characterField.focus();
-			}				
-	
-			if (selectedName != targetName){
-				if (selectedName == "user"){
-					userField.blur();
-				} else if (selectedName == "name"){
-					nameField.blur();
-				} else if (selectedName == "breed"){
-					breedField.blur();
-				} else if (selectedName == "sex"){
-					sexPickerView.animate(slideOut);
-				} else if (selectedName == "birth"){
-					birthPickerView.animate(slideOut);
-				} else if (selectedName == "location"){
-					locationField.blur();
-				} else if (selectedName == "feature"){
-					featureField.blur();
-				} else if (selectedName == "character"){
-					characterField.blur();
+					sexPicker.setSelectedRow(0, selectedIndex);
+					sexPickerView.animate(slideIn);
+		
+				} else if (targetName == "birth"){
+					Ti.API.debug('birthField.value:' + birthField.value);
+					birthPicker.value = util.getDate(birthField.value);
+					birthPickerView.animate(slideIn);
+				} else if (targetName == "location"){
+					locationField.focus();
+				} else if (targetName == "feature"){
+					featureField.focus();
+				} else if (targetName == "character"){
+					characterField.focus();
 				}				
-			}				
-			selectedName = targetName;
+		
+				if (selectedName != targetName){
+					if (selectedName == "user"){
+						userField.blur();
+					} else if (selectedName == "name"){
+						nameField.blur();
+					} else if (selectedName == "breed"){
+						breedField.blur();
+					} else if (selectedName == "sex"){
+						sexPickerView.animate(slideOut);
+					} else if (selectedName == "birth"){
+						birthPickerView.animate(slideOut);
+					} else if (selectedName == "location"){
+						locationField.blur();
+					} else if (selectedName == "feature"){
+						featureField.blur();
+					} else if (selectedName == "character"){
+						characterField.blur();
+					}				
+				}				
+				selectedName = targetName;
+			}
 		}
 
 	});
@@ -378,7 +383,8 @@ exports.createWindow = function(_userData){
 	countPhotoView.addEventListener('click', function(e){
 		Ti.API.debug('[event]countPhotoView.click:');
 		countPhotoView.backgroundColor = '#dcdcdc';
-		var photoListWin = win.createPhotoListWindow(_userData);
+		var _listType = "user";
+		var photoListWin = win.createPhotoListWindow(_listType, _userData);
 		// グローバル変数tabGroupを参照してWindowオープン
 		tabGroup.activeTab.open(photoListWin,{animated:true});
 		countPhotoView.backgroundColor = 'white';

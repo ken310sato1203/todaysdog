@@ -1,6 +1,5 @@
 //ウィンドウ
 
-var todayWin = require('winToday');
 var friendsWin = require('winFriends');
 var mydogWin = require('winMydog');
 var scheduleWin = require('winSchedule');
@@ -10,10 +9,6 @@ var photoListWin = require('winPhotoList');
 
 exports.win = {
 
-	createTodayWindow:function(){
-		Ti.API.debug('[func]createTodayWindow:');
-		return todayWin.createWindow();
-	},
 	createFriendsWindow:function(){
 		Ti.API.debug('[func]createFriendsWindow:');
 		return friendsWin.createWindow();
@@ -35,9 +30,9 @@ exports.win = {
 		Ti.API.debug('[func]createPhotoWindow:');
 		return photoWin.createWindow(_articleData);
 	},
-	createPhotoListWindow:function(_userData){
+	createPhotoListWindow:function(_listType, _userData){
 		Ti.API.debug('[func]createPhotoListWindow:');
-		return photoListWin.createWindow(_userData);
+		return photoListWin.createWindow(_listType, _userData);
 	},
 
 	// 指定タブを取得

@@ -12,11 +12,14 @@ var loginId = model.getLoginId();
 // タブ作成
 var tabGroup = Ti.UI.createTabGroup();
 
-var win1 = win.createPhotoListWindow();
-var win2 = win.createFriendsWindow();
-var win3 = win.createMydogWindow();
-var win4 = win.createScheduleWindow();
-var win5 = win.createProfileWindow(model.getUser(loginId));
+var userData = model.getUser(loginId);
+var listType = "all";
+
+var win1 = win.createPhotoListWindow(listType, userData);
+var win2 = win.createFriendsWindow(userData);
+var win3 = win.createMydogWindow(userData);
+var win4 = win.createScheduleWindow(userData);
+var win5 = win.createProfileWindow(userData);
 
 var tab1 =  Ti.UI.createTab(style.todayTab(win1));
 var tab2 =  Ti.UI.createTab(style.friendsTab(win2));
