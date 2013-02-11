@@ -18,23 +18,25 @@ exports.createWindow = function(_listType, _userData) {
 	var offset = 0;
 
 	var photoListWin = Ti.UI.createWindow(style.photoListWin);
+	var titleView = null;
+	var titleLabel = null;
 
 	// 全ユーザのフォト一覧
 	if (_listType == "all") {
-		var titleLabel = Ti.UI.createLabel(style.photoListTodayTitleLabel);	
+		titleLabel = Ti.UI.createLabel(style.photoListTodayTitleLabel);	
 		photoListWin.titleControl = titleLabel;
 
 	// 指定ユーザのフォト一覧
 	} else 	if (_listType == "user") {
-		var titleView = Ti.UI.createView(style.photoListTitleView);
-		var titleLabel = Ti.UI.createLabel(style.photoListPhotoTitleLabel);	
+		titleView = Ti.UI.createView(style.photoListTitleView);
+		titleLabel = Ti.UI.createLabel(style.photoListPhotoTitleLabel);	
 		titleView.add(titleLabel);		
 		photoListWin.titleControl = titleView;
 
 	// ライクなフォト一覧
 	} else 	if (_listType == "like") {
-		var titleView = Ti.UI.createView(style.photoListTitleView);
-		var titleLabel = Ti.UI.createLabel(style.photoListPhotoTitleLabel);	
+		titleView = Ti.UI.createView(style.photoListTitleView);
+		titleLabel = Ti.UI.createLabel(style.photoListLikeTitleLabel);	
 		titleView.add(titleLabel);		
 		photoListWin.titleControl = titleView;
 	}
@@ -69,20 +71,20 @@ exports.createWindow = function(_listType, _userData) {
 		
 		for (var i=0; i<_articleList.length; i++) {	
 			var articleView = Ti.UI.createView(style.photoListArticleView);
+			articleListView.add(articleView);
 			var photoImage = Ti.UI.createImageView(style.photoListPhotoImage);
 			photoImage.image = 'images/photo/' + _articleList[i].no + '.jpg';
 			// カスタムプロパティに記事データを格納
 			photoImage.articleData = _articleList[i];
 			var textLabel = Ti.UI.createLabel(style.photoListTextLabel);
-			textLabel.text = '@' + _articleList[i].loc;
+			textLabel.text = '@' + _articleList[i].location;
 					
 			articleView.add(photoImage);
 			articleView.add(textLabel);
-			articleListView.add(articleView);
 			
 			// 各記事のタップでフォト画面へ遷移
 			photoImage.addEventListener('click',function(e){
-				Ti.API.debug('[event]articleView.click:');
+				Ti.API.debug('[event]photoImage.click:');
 				e.source.opacity = 0.5;
 				var photoWin = win.createPhotoWindow(e.source.articleData);
 				// グローバル変数tabGroupを参照してWindowオープン

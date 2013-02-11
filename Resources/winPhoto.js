@@ -16,7 +16,7 @@ exports.createWindow = function(_articleData){
 	titleIconImage.image = 'images/icon/' + _articleData.user + '.jpg';
 
 	var titleNameLabel = Ti.UI.createLabel(style.photoTitleNameLabel);
-	titleNameLabel.text = _articleData.user + '\n@' + _articleData.loc;
+	titleNameLabel.text = _articleData.user + '\n@' + _articleData.location;
 	titleView.add(titleIconImage);
 	titleView.add(titleNameLabel);
 	photoWin.titleControl = titleView;
@@ -103,12 +103,12 @@ exports.createWindow = function(_articleData){
 	// コメントフィールドの表示
 	var commentFieldTableRow = Ti.UI.createTableViewRow(style.photoCommentFieldTableRow);
 	photoTableView.appendRow(commentFieldTableRow);
-	var commentView = Ti.UI.createView(style.photoCommentView);
-	commentFieldTableRow.add(commentView);
+	var commentFieldView = Ti.UI.createView(style.photoCommentView);
+	commentFieldTableRow.add(commentFieldView);
 	var commentIconImage = Ti.UI.createImageView(style.photoCommentIconImage);
-	commentView.add(commentIconImage);
+	commentFieldView.add(commentIconImage);
 	var commentField = Ti.UI.createTextField(style.photoCommentField);
-	commentView.add(commentField);
+	commentFieldView.add(commentField);
 
 	// フォトにタップでフォト拡大画面を表示
 	photoImage.addEventListener('click',function(e){

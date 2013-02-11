@@ -6,6 +6,7 @@ var scheduleWin = require('winSchedule');
 var profileWin = require('winProfile');
 var photoWin = require('winPhoto');
 var photoListWin = require('winPhotoList');
+var userListWin = require('winUserList');
 
 exports.win = {
 
@@ -33,6 +34,10 @@ exports.win = {
 	createPhotoListWindow:function(_listType, _userData){
 		Ti.API.debug('[func]createPhotoListWindow:');
 		return photoListWin.createWindow(_listType, _userData);
+	},
+	createUserListWindow:function(_listType, _userData){
+		Ti.API.debug('[func]createUserListWindow:');
+		return userListWin.createWindow(_listType, _userData);
 	},
 
 	// 指定タブを取得

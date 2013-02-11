@@ -1,7 +1,9 @@
 // うちのわんこ
 
 exports.createWindow = function(_userData){
-	var win = Ti.UI.createWindow(style.mydogWin);
+	Ti.API.debug('[func]winMydog.createWindow:');
 
-	return win;
+	var mydogWin = Ti.UI.createWindow(style.mydogWin);
+
+	return mydogWin;
 }

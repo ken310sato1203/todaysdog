@@ -136,22 +136,28 @@ exports.style = {
 		text: 'わんポチ',
 	},
 
+	photoLikeTableRow:{ 
+		// ライクがない場合のため
+		height: '1dp',
+		backgroundColor: '#dedede',
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
 	photoLikeListView:{
 		top: '5dp',
-		left: '0dp',
-		width: Ti.UI.SIZE,
+		width: '284dp',
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
 	},
 	photoLikeListIconImage:{
 		top: '0dp',
-		left: '20dp',
+		left: '0dp',
 		width: '18dp',
 		height: '18dp',
 		image: 'images/icon/like.gif',
 	},
 	photoLikeListLabel:{
-		left: '40dp',
+		left: '20dp',
 		right: '20dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -160,46 +166,36 @@ exports.style = {
 		text: '',
 	},
 
-	photoLikeTableRow:{ 
-		width: Ti.UI.SIZE,
-		height: '1dp',
-		backgroundColor: '#dedede',
-		touchEnabled: false,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-	},
 	photoCommentTableRow:{ 
-		width: Ti.UI.SIZE,
+		// コメントがない場合のため
 		height: '1dp',
 		backgroundColor: '#dedede',
 		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
-
 	photoCommentListView:{
 		layout: 'vertical',
 		top: '5dp',
-		left: '0dp',
-		width: '100%',
+		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
 	},
 	photoCommentView:{
 		top: '0dp',
-		left: '0dp',
 	    bottom: '5dp',
-		width: '100%',
+		width: '284dp',
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
 	},
 	photoCommentIconImage:{
 		top: '0dp',
-		left: '20dp',
+		left: '0dp',
 		width: '15dp',
 		height: '15dp',
 		image: 'images/icon/comment.gif',
 	},
 	photoCommentLabel:{
-		left: '40dp',
+		left: '20dp',
 		right: '20dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -207,9 +203,14 @@ exports.style = {
 		color: '#000',
 		text: '',
 	},
+	photoCommentFieldTableRow:{ 
+		backgroundColor: '#dedede',
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
 	photoCommentField:{
 		top: '0dp',
-		left: '40dp',
+		left: '20dp',
 	    bottom: '10dp',
 		width: '240dp',
 		height: '22dp',
@@ -252,7 +253,6 @@ exports.style = {
 
 	profileTableView:{ 
 		top: '10dp',
-		left: '15dp',
 		width: '284dp',
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
@@ -537,6 +537,18 @@ exports.style = {
 		text: 'フォト', 
 	},
 
+	photoListLikeTitleLabel:{
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:18,fontFamily:'Helvetica Neue',fontWeight:"bold"}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+		text: 'わんポチ', 
+	},
+
 	photoListTableView:{ 
 		backgroundColor: '#dedede',
 		separatorColor: 'transparent',
@@ -560,8 +572,7 @@ exports.style = {
 	photoListArticleListView:{
 		layout: 'horizontal',
 		top: '0dp',
-		left: '0dp',
-		width: Ti.UI.SIZE,
+		width: '320dp',
 		height: Ti.UI.SIZE,
 	},
 	photoListArticleView:{
@@ -660,7 +671,160 @@ exports.style = {
 	    width: '23dp',
 	    height: '60dp',
 	},	
-	
+
+// winUserList -------------------------------------------------------
+	userListWin:{
+		backgroundColor: '#dedede',
+		barColor: '#a9a9a9',
+	},
+
+	userListTitleView:{
+		layout: 'absolute',
+		top: '0dp',
+		left: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+	},
+
+	userListFollowerTitleLabel:{
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:18,fontFamily:'Helvetica Neue',fontWeight:"bold"}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+		text: 'フォロワー', 
+	},
+
+	userListFollowTitleLabel:{
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:18,fontFamily:'Helvetica Neue',fontWeight:"bold"}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+		text: 'フォロー', 
+	},
+
+	userListTableView:{ 
+		top: '10dp',
+		backgroundColor: '#dedede',
+		separatorColor: 'transparent',
+		data: [],
+	},
+	userListUserTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
+	userListNextTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
+	userListUserListView:{
+		layout: 'vertical',
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	userListUserView:{
+		top: '0dp',
+		bottom: '1dp',
+		width: '284dp',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+	},
+	userListIconImage:{
+		top: '4dp',
+		bottom: '4dp',
+		left: '10dp',
+		width: '48dp',
+		height: '48dp',
+		backgroundColor: 'black',
+		// カスタムプロパティ
+		userData: null,
+	},
+	userListTextLabel:{
+		left: '65dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:10,fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+	userListNextView:{
+		top: '0dp',
+		left: '0dp',
+		width: '100%',
+		height: '40dp',
+		backgroundColor: '#dedede',
+	},
+	userListNextButton:{
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		textAlign: 'center',
+		font: {fontSize:10,fontFamily:'Helvetica Neue'},
+		color: '#000',
+		title: '続きを読む',
+	},
+	userListNoDataLabel:{
+		top: '5dp',
+		width: '90dp',
+		height: '15dp',
+		backgroundColor: '#dedede',
+		textAlign: 'left',
+		font: {fontSize:10,fontFamily:'Helvetica Neue'},
+		color: '#000',
+		text: 'データがありません'
+	},
+
+	userFollowButton:{
+		right: '10dp',
+		width: '80dp',
+		height: '22dp',
+		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+		borderColor: '#dedede',
+		borderWidth: 1.5,
+		borderRadius: 5,
+		// カスタムプロパティ
+		user: null,
+	},
+	userUnfollowButton:{
+		right: '10dp',
+		width: '80dp',
+		height: '22dp',
+		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+		borderColor: '#dedede',
+		borderWidth: 1.5,
+		borderRadius: 5,
+		// カスタムプロパティ
+		user: null,
+	},
+	userFollowButtonLabel:{
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		font: {fontSize:10,fontFamily:'Helvetica Neue'},
+		color: '#000',
+		text: 'フォローする',
+	},
+	userUnfollowButtonLabel:{
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		font: {fontSize:10,fontFamily:'Helvetica Neue'},
+		color: '#000',
+		text: 'フォロー中',
+	},
+
 // winFriends -------------------------------------------------------
 	friendsWin:{
 		backgroundColor: '#dedede',

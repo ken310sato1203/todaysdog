@@ -58,9 +58,9 @@ exports.createWindow = function(_userData){
 		    buttonNames: ['OK','キャンセル'],
 		    cancel: 1
 		});
-		alertDialog.addEventListener('click',function(event){
+		alertDialog.addEventListener('click',function(alert){
 		    // OKの場合
-		    if(event.index == 0){
+		    if(alert.index == 0){
 				actInd.show();
 				tabGroup.add(actInd);
 				// プロフィールのフォロー数を更新
@@ -405,6 +405,34 @@ exports.createWindow = function(_userData){
 			// グローバル変数tabGroupを参照してWindowオープン
 			tabGroup.activeTab.open(photoListWin,{animated:true});
 			countLikeView.backgroundColor = 'white';
+		}
+	});
+
+	// フォロワ数をクリックでユーザ一覧を表示
+	countFollowerView.addEventListener('click', function(e){
+		Ti.API.debug('[event]countFollowerView.click:');
+		Ti.API.debug('_userData.follower:' + _userData.follower);
+		if (_userData.follower > 0) {
+			countFollowerView.backgroundColor = '#dedede';
+			var _listType = "follower";
+			var userListWin = win.createUserListWindow(_listType, _userData);
+			// グローバル変数tabGroupを参照してWindowオープン
+			tabGroup.activeTab.open(userListWin,{animated:true});
+			countFollowerView.backgroundColor = 'white';
+		}
+	});
+
+	// フォロー数をクリックでユーザ一覧を表示
+	countFollowView.addEventListener('click', function(e){
+		Ti.API.debug('[event]countFollowView.click:');
+		Ti.API.debug('_userData.follow:' + _userData.follow);
+		if (_userData.follow > 0) {
+			countFollowView.backgroundColor = '#dedede';
+			var _listType = "follow";
+			var userListWin = win.createUserListWindow(_listType, _userData);
+			// グローバル変数tabGroupを参照してWindowオープン
+			tabGroup.activeTab.open(userListWin,{animated:true});
+			countFollowView.backgroundColor = 'white';
 		}
 	});
 

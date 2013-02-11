@@ -13,29 +13,29 @@ var followList = [];
 loginId = "sakura";
 
 articleList = [
-	{no:"A0001", user:"sakura", loc:"Tokyo", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0002", user:"maki", loc:"Kyoto", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0003", user:"koro", loc:"Nara", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0004", user:"shiro", loc:"Shiga", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0005", user:"pochi", loc:"Fukuoka", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0006", user:"jiro", loc:"Chiba", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0007", user:"gon", loc:"Nagoya", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0008", user:"kuro", loc:"Kobe", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0009", user:"momo", loc:"Okinawa", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0010", user:"santa", loc:"Hokkaido", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0011", user:"jiro", loc:"Nagoya", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0012", user:"gon", loc:"Kobe", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0013", user:"kuro", loc:"Okinawa", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0014", user:"momo", loc:"Tokyo", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0015", user:"santa", loc:"Kyoto", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0016", user:"sakura", loc:"Kyoto", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0017", user:"maki", loc:"Nara", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0018", user:"sakura", loc:"Nara", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0019", user:"maki", loc:"Shiga", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0020", user:"koro", loc:"Fukuoka", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0021", user:"koro", loc:"Shiga", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0022", user:"shiro", loc:"Fukuoka", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0023", user:"pochi", loc:"Chiba", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0001", user:"sakura", location:"Tokyo", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0002", user:"maki", location:"Kyoto", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0003", user:"koro", location:"Nara", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0004", user:"shiro", location:"Shiga", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0005", user:"pochi", location:"Fukuoka", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0006", user:"jiro", location:"Chiba", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0007", user:"gon", location:"Nagoya", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0008", user:"kuro", location:"Kobe", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0009", user:"momo", location:"Okinawa", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0010", user:"santa", location:"Hokkaido", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0011", user:"jiro", location:"Nagoya", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0012", user:"gon", location:"Kobe", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0013", user:"kuro", location:"Okinawa", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0014", user:"momo", location:"Tokyo", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0015", user:"santa", location:"Kyoto", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0016", user:"sakura", location:"Kyoto", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0017", user:"maki", location:"Nara", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0018", user:"sakura", location:"Nara", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0019", user:"maki", location:"Shiga", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0020", user:"koro", location:"Fukuoka", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0021", user:"koro", location:"Shiga", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0022", user:"shiro", location:"Fukuoka", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0023", user:"pochi", location:"Chiba", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
 ];
 
 commentList = [
@@ -55,15 +55,15 @@ likeList = [
 
 userList = [
 	{user:"sakura", photo:"56", like:"3", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"maki", photo:"86", like:"1", follow:"85", follower:"120", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"koro", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"shiro", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"pochi", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"jiro", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"gon", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"kuro", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"momo", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"santa", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"maki", photo:"86", like:"1", follow:"85", follower:"120", name:"さとう まき", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"koro", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう コロ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"shiro", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう しろ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"pochi", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう ポチ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"jiro", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう ジロー", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"gon", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう ゴン", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"kuro", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう クロ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"momo", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう もも", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"santa", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう サンタ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
 ];
 
 breedList = [
@@ -90,9 +90,9 @@ followList = [
 exports.model = {
 
 	// ログインIDの登録
-	setLoginId:function(_userId){
+	setLoginId:function(_user){
 		Ti.API.debug('[func]setLoginId:');
-		loginId = _userId;
+		loginId = _user;
 	},
 	// ログインIDの取得
 	getLoginId:function(){
@@ -184,19 +184,19 @@ exports.model = {
 		likeList.push(_likeList);
 	},
 	// ライクリストから削除
-	removeLikeList:function(_articleNo, _userId){
+	removeLikeList:function(_articleNo, _user){
 		Ti.API.debug('[func]removeLikeList:');
 		for (var i=0; i<likeList.length; i++) {
-			if (likeList[i].no == _articleNo && likeList[i].user == _userId) {
+			if (likeList[i].no == _articleNo && likeList[i].user == _user) {
 				likeList.splice(i, 1);
 			}
 		}
 	},
 	// ライクリストに追加されているかを確認
-	checkLikeList:function(_articleNo, _userId){
+	checkLikeList:function(_articleNo, _user){
 		Ti.API.debug('[func]checkLikeList:');
 		for (var i=0; i<likeList.length; i++) {
-			if (likeList[i].no == _articleNo && likeList[i].user == _userId) {
+			if (likeList[i].no == _articleNo && likeList[i].user == _user) {
 				return true;
 			}
 		}
@@ -260,11 +260,11 @@ exports.model = {
 		}
 	},
 	// ユーザデータの取得
-	getUser:function(_userId){
+	getUser:function(_user){
 		Ti.API.debug('[func]getUser:');
 		var target = null;
 		for (var i=0; i<userList.length; i++) {
-			if (userList[i].user == _userId) {
+			if (userList[i].user == _user) {
 				target = userList[i];
 				break;
 			}
@@ -294,21 +294,42 @@ exports.model = {
 	},
 
 	// フォローしているユーザリストの取得
-	getFollowList:function(_userId){
+	getFollowList:function(_user){
 		Ti.API.debug('[func]getFollowList:');
 		var target = [];
 		for (var i=0; i<followList.length; i++) {
-			if (followList[i].user == _userId) {
-				target.push(getUser(followList[i].follow));
+			if (followList[i].user == _user) {
+				for (var j=0; j<userList.length; j++) {
+					if (userList[j].user == followList[i].follow) {
+						target.push(userList[j]);
+						break;
+					}
+				}
+			}
+		}
+		return target;
+	},
+	// フォロワのユーザリストの取得
+	getFollowerList:function(_user){
+		Ti.API.debug('[func]getFollowerList:');
+		var target = [];
+		for (var i=0; i<followList.length; i++) {
+			if (followList[i].follow == _user) {
+				for (var j=0; j<userList.length; j++) {
+					if (userList[j].user == followList[i].user) {
+						target.push(userList[j]);
+						break;
+					}
+				}
 			}
 		}
 		return target;
 	},
 	// フォローしているかのチェック
-	checkFollowList:function(_userId, _follow){
+	checkFollowList:function(_user, _follow){
 		Ti.API.debug('[func]checkFollowList:');
 		for (var i=0; i<followList.length; i++) {
-			if (followList[i].user == _userId) {
+			if (followList[i].user == _user) {
 				if (followList[i].follow == _follow) {
 					return true;
 				}
@@ -317,23 +338,23 @@ exports.model = {
 		return false;
 	},
 	// フォローユーザの追加
-	addFollowList:function(_userId, _follow){
+	addFollowList:function(_user, _follow){
 		Ti.API.debug('[func]addFollowList:');
 		var existFlag = false;
 		for (var i=0; i<followList.length; i++) {
-			if (followList[i].user == _userId && followList[i].follow == _follow) {
+			if (followList[i].user == _user && followList[i].follow == _follow) {
 				existFlag = true;
 			}
 		}
 		if (! existFlag) {
-			followList.push({user:_userId, follow:_follow});
+			followList.push({user:_user, follow:_follow});
 		}
 	},
 	// フォローユーザの削除
-	removeFollowList:function(_userId, _follow){
+	removeFollowList:function(_user, _follow){
 		Ti.API.debug('[func]removeFollowList:');
 		for (var i=0; i<followList.length; i++) {
-			if (followList[i].user == _userId && followList[i].follow == _follow) {
+			if (followList[i].user == _user && followList[i].follow == _follow) {
 				followList.splice(i, 1);
 			}
 		}
