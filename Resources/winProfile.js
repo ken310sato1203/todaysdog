@@ -63,15 +63,12 @@ exports.createWindow = function(_userData){
 		    if(alert.index == 0){
 				actInd.show();
 				tabGroup.add(actInd);
-				// プロフィールのフォロー数を更新
-				var loginData = model.getUser(loginId);
-				loginData.follow--;
-
 				model.removeFollowList(loginId, _userData.user);
 		
 				setTimeout(function(){
 					profileWin.rightNavButton = followButton;
 					actInd.hide();
+					countFollowerLabel.text = _userData.follower;
 				},2000);		        
 		    }
 		});
@@ -83,14 +80,12 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]followButton.click:');
 		actInd.show();
 		tabGroup.add(actInd);
-		// プロフィールのフォロー数を更新
-		var loginData = model.getUser(loginId);
-		loginData.follow++;
 		model.addFollowList(loginId, _userData.user);
 
 		setTimeout(function(){
 			profileWin.rightNavButton = unfollowButton;
 			actInd.hide();
+			countFollowerLabel.text = _userData.follower;
 		},2000);
 	});
 	
@@ -386,18 +381,19 @@ exports.createWindow = function(_userData){
 	// フォト数をクリックでフォト一覧を表示
 	countPhotoView.addEventListener('click', function(e){
 		Ti.API.debug('[event]countPhotoView.click:');
-		countPhotoView.backgroundColor = '#dedede';
-		var _listType = "user";
-		var photoListWin = win.createPhotoListWindow(_listType, _userData);
-		// グローバル変数tabGroupを参照してWindowオープン
-		tabGroup.activeTab.open(photoListWin,{animated:true});
-		countPhotoView.backgroundColor = 'white';
+		if (_userData.photo > 0) {
+			countPhotoView.backgroundColor = '#dedede';
+			var _listType = "user";
+			var photoListWin = win.createPhotoListWindow(_listType, _userData);
+			// グローバル変数tabGroupを参照してWindowオープン
+			tabGroup.activeTab.open(photoListWin,{animated:true});
+			countPhotoView.backgroundColor = 'white';
+		}
 	});
 
 	// ライク数をクリックでフォト一覧を表示
 	countLikeView.addEventListener('click', function(e){
 		Ti.API.debug('[event]countLikeView.click:');
-		Ti.API.debug('_userData.like:' + _userData.like);
 		if (_userData.like > 0) {
 			countLikeView.backgroundColor = '#dedede';
 			var _listType = "like";
@@ -411,7 +407,6 @@ exports.createWindow = function(_userData){
 	// フォロワ数をクリックでユーザ一覧を表示
 	countFollowerView.addEventListener('click', function(e){
 		Ti.API.debug('[event]countFollowerView.click:');
-		Ti.API.debug('_userData.follower:' + _userData.follower);
 		if (_userData.follower > 0) {
 			countFollowerView.backgroundColor = '#dedede';
 			var _listType = "follower";
@@ -425,7 +420,6 @@ exports.createWindow = function(_userData){
 	// フォロー数をクリックでユーザ一覧を表示
 	countFollowView.addEventListener('click', function(e){
 		Ti.API.debug('[event]countFollowView.click:');
-		Ti.API.debug('_userData.follow:' + _userData.follow);
 		if (_userData.follow > 0) {
 			countFollowView.backgroundColor = '#dedede';
 			var _listType = "follow";

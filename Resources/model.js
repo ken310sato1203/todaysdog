@@ -54,16 +54,16 @@ likeList = [
 ];
 
 userList = [
-	{user:"sakura", photo:"56", like:"3", follow:"25", follower:"60", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"maki", photo:"86", like:"1", follow:"85", follower:"120", name:"さとう まき", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"koro", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう コロ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"shiro", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう しろ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"pochi", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう ポチ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"jiro", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう ジロー", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"gon", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう ゴン", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"kuro", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう クロ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"momo", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう もも", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"santa", photo:"56", like:"0", follow:"25", follower:"60", name:"さとう サンタ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"sakura", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"maki", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう まき", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"koro", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう コロ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"shiro", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう しろ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"pochi", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう ポチ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"jiro", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう ジロー", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"gon", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう ゴン", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"kuro", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう クロ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"momo", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう もも", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"santa", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう サンタ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
 ];
 
 breedList = [
@@ -83,9 +83,35 @@ followList = [
 	{user:"sakura", follow:"maki"},
 	{user:"sakura", follow:"kuro"},
 	{user:"maki", follow:"sakura"},
+	{user:"maki", follow:"koro"},
 	{user:"maki", follow:"shiro"},
 	{user:"shiro", follow:"sakura"},
 ];
+
+for (var i=0; i<articleList.length; i++) {
+	for (var j=0; j<userList.length; j++) {
+		if (articleList[i].user == userList[j].user) {
+			userList[j].photo++;
+		}
+	}
+}
+for (var i=0; i<likeList.length; i++) {
+	for (var j=0; j<userList.length; j++) {
+		if (likeList[i].user == userList[j].user) {
+			userList[j].like++;
+		}
+	}
+}
+for (var i=0; i<followList.length; i++) {
+	for (var j=0; j<userList.length; j++) {
+		if (followList[i].user == userList[j].user) {
+			userList[j].follow++;
+		}
+		if (followList[i].follow == userList[j].user) {
+			userList[j].follower++;
+		}
+	}
+}
 
 exports.model = {
 
@@ -182,6 +208,12 @@ exports.model = {
 	addLikeList:function(_likeList){
 		Ti.API.debug('[func]addLikeList:');
 		likeList.push(_likeList);
+		for (var i=0; i<userList.length; i++) {
+			if (userList[i].user == _likeList.user) {
+				userList[i].like++;
+				break;
+			}
+		}
 	},
 	// ライクリストから削除
 	removeLikeList:function(_articleNo, _user){
@@ -189,6 +221,13 @@ exports.model = {
 		for (var i=0; i<likeList.length; i++) {
 			if (likeList[i].no == _articleNo && likeList[i].user == _user) {
 				likeList.splice(i, 1);
+				break;
+			}
+		}
+		for (var i=0; i<userList.length; i++) {
+			if (userList[i].user == _user) {
+				userList[i].like--;
+				break;
 			}
 		}
 	},
@@ -244,6 +283,7 @@ exports.model = {
 		for (var i=0; i<userList.length; i++) {
 			if (userList[i].user == _userData.user) {
 				existFlag = true;
+				break;
 			}
 		}
 		if (! existFlag) {
@@ -256,6 +296,7 @@ exports.model = {
 		for (var i=0; i<userList.length; i++) {
 			if (userList[i].user == _userData.user) {
 				userList[i] = _userData;
+				break;
 			}
 		}
 	},
@@ -344,10 +385,23 @@ exports.model = {
 		for (var i=0; i<followList.length; i++) {
 			if (followList[i].user == _user && followList[i].follow == _follow) {
 				existFlag = true;
+				break;
 			}
 		}
 		if (! existFlag) {
 			followList.push({user:_user, follow:_follow});
+			for (var i=0; i<userList.length; i++) {
+				if (userList[i].user == _user) {
+					userList[i].follow++;
+					break;
+				}
+			}
+			for (var i=0; i<userList.length; i++) {
+				if (userList[i].user == _follow) {
+					userList[i].follower++;
+					break;
+				}
+			}		
 		}
 	},
 	// フォローユーザの削除
@@ -356,8 +410,21 @@ exports.model = {
 		for (var i=0; i<followList.length; i++) {
 			if (followList[i].user == _user && followList[i].follow == _follow) {
 				followList.splice(i, 1);
+				break;
 			}
 		}
+		for (var i=0; i<userList.length; i++) {
+			if (userList[i].user == _user) {
+				userList[i].follow--;
+				break;
+			}
+		}
+		for (var i=0; i<userList.length; i++) {
+			if (userList[i].user == _follow) {
+				userList[i].follower--;
+				break;
+			}
+		}		
 	},
 	
 

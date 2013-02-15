@@ -144,9 +144,6 @@ exports.createWindow = function(_articleData){
 		likeButton.enabled = false;
 		likeButton.backgroundColor = '#dedede';
 		updateLike();
-		// プロフィールのライク数を更新
-		var loginData = model.getUser(loginId);
-		loginData.like++;
 	});
 
 	// コメントフィールドでキーボード確定でコメントリストに追加
