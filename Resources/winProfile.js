@@ -52,6 +52,7 @@ exports.createWindow = function(_userData){
 	// 「フォロー中」ボタン
 	unfollowButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]unfollowButton.click:');
+		unfollowButton.enabled = false;
 		var alertDialog = Titanium.UI.createAlertDialog({
 		    title: 'フォローを解除しますか？',
 //		    message: 'フォローを解除しますか？',
@@ -73,20 +74,24 @@ exports.createWindow = function(_userData){
 		    }
 		});
 		alertDialog.show();
+		unfollowButton.enabled = true;
 	});
 
 	// 「フォローする」ボタン
 	followButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]followButton.click:');
+		followButton.enabled = false;
 		actInd.show();
 		tabGroup.add(actInd);
 		model.addFollowList(loginId, _userData.user);
 
 		setTimeout(function(){
+			unfollowButton.enabled = true;
 			profileWin.rightNavButton = unfollowButton;
 			actInd.hide();
 			countFollowerLabel.text = _userData.follower;
 		},2000);
+		followButton.enabled = true;
 	});
 	
 	var profileScrollView = Ti.UI.createScrollView(style.profileScrollView);
@@ -385,8 +390,7 @@ exports.createWindow = function(_userData){
 			countPhotoView.backgroundColor = '#dedede';
 			var _listType = "user";
 			var photoListWin = win.createPhotoListWindow(_listType, _userData);
-			// グローバル変数tabGroupを参照してWindowオープン
-			tabGroup.activeTab.open(photoListWin,{animated:true});
+			win.openWindow(profileWin, photoListWin);
 			countPhotoView.backgroundColor = 'white';
 		}
 	});
@@ -398,8 +402,7 @@ exports.createWindow = function(_userData){
 			countLikeView.backgroundColor = '#dedede';
 			var _listType = "like";
 			var photoListWin = win.createPhotoListWindow(_listType, _userData);
-			// グローバル変数tabGroupを参照してWindowオープン
-			tabGroup.activeTab.open(photoListWin,{animated:true});
+			win.openWindow(profileWin, photoListWin);
 			countLikeView.backgroundColor = 'white';
 		}
 	});
@@ -411,8 +414,7 @@ exports.createWindow = function(_userData){
 			countFollowerView.backgroundColor = '#dedede';
 			var _listType = "follower";
 			var userListWin = win.createUserListWindow(_listType, _userData);
-			// グローバル変数tabGroupを参照してWindowオープン
-			tabGroup.activeTab.open(userListWin,{animated:true});
+			win.openWindow(profileWin, userListWin);
 			countFollowerView.backgroundColor = 'white';
 		}
 	});
@@ -424,8 +426,7 @@ exports.createWindow = function(_userData){
 			countFollowView.backgroundColor = '#dedede';
 			var _listType = "follow";
 			var userListWin = win.createUserListWindow(_listType, _userData);
-			// グローバル変数tabGroupを参照してWindowオープン
-			tabGroup.activeTab.open(userListWin,{animated:true});
+			win.openWindow(profileWin, userListWin);
 			countFollowView.backgroundColor = 'white';
 		}
 	});
@@ -452,6 +453,11 @@ exports.createWindow = function(_userData){
 		if (e.direction == 'right') {
 			tabGroup.activeTab.close(profileWin);
 		}
+	});
+
+	// オープン時の処理
+	profileWin.addEventListener('open',function(e){
+		Ti.API.debug('[event]profileWin.open:');
 	});
 
 	return profileWin;

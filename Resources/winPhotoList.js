@@ -87,8 +87,7 @@ exports.createWindow = function(_listType, _userData) {
 				Ti.API.debug('[event]photoImage.click:');
 				e.source.opacity = 0.5;
 				var photoWin = win.createPhotoWindow(e.source.articleData);
-				// グローバル変数tabGroupを参照してWindowオープン
-				tabGroup.activeTab.open(photoWin,{animated:true});
+				win.openWindow(photoListWin, photoWin);
 				e.source.opacity = 1.0;
 			});
 		}

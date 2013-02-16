@@ -40,14 +40,11 @@ exports.win = {
 		return userListWin.createWindow(_listType, _userData);
 	},
 
-	// 指定タブを取得
-	getTab:function(_title) {
-		for (i=0; i<tabGroup.tabs.length; i++) {
-			if (tabGroup.tabs[i].title == _title){
-				return tabGroup.tabs[i];
-			}
-		}
-		return null;
+	// 新しいウィンドウを開き、クローズ時のイベント実行用に前のウィンドウを格納
+	openWindow:function(_prevWin, _nextWin) {
+		Ti.API.debug('[func]openWindow:');
+		tabPrevWin = _prevWin;
+		tabGroup.activeTab.open(_nextWin,{animated:true});
 	},
 	
 }

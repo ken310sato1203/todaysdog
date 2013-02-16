@@ -120,6 +120,8 @@ exports.style = {
 		borderColor: '#dedede',
 		borderWidth: 1.5,
 		borderRadius: 5,
+		// カスタムプロパティ
+		clickFlag: false,
 	},
 	photoLikeButtonIconImage:{
 		left: '5dp',
@@ -798,7 +800,16 @@ exports.style = {
 		borderRadius: 5,
 		// カスタムプロパティ
 		user: null,
+		clickFlag: false,
 	},
+	userFollowButtonLabel:{
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		font: {fontSize:10,fontFamily:'Helvetica Neue'},
+		color: '#000',
+		text: 'フォローする',
+	},
+/*
 	userUnfollowButton:{
 		right: '10dp',
 		width: '80dp',
@@ -810,13 +821,6 @@ exports.style = {
 		// カスタムプロパティ
 		user: null,
 	},
-	userFollowButtonLabel:{
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		font: {fontSize:10,fontFamily:'Helvetica Neue'},
-		color: '#000',
-		text: 'フォローする',
-	},
 	userUnfollowButtonLabel:{
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -824,6 +828,7 @@ exports.style = {
 		color: '#000',
 		text: 'フォロー中',
 	},
+*/
 
 // winFriends -------------------------------------------------------
 	friendsWin:{

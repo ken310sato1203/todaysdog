@@ -62,8 +62,7 @@ exports.createWindow = function(_listType, _userData){
 				Ti.API.debug('[event]userImage.click:');
 				e.source.opacity = 0.5;
 				var userWin = win.createPhotoWindow(e.source.userData);
-				// グローバル変数tabGroupを参照してWindowオープン
-				tabGroup.activeTab.open(userWin,{animated:true});
+				win.openWindow(userListWin, userWin);
 				e.source.opacity = 1.0;
 			});
 
@@ -77,6 +76,7 @@ exports.createWindow = function(_listType, _userData){
 	
 				if (model.checkFollowList(loginId, _userList[i].user)) {
 					followButton.backgroundColor = '#dedede';
+					followButton.clickFlag = true;
 					followButtonLabel.text = 'フォロー中';
 				} else {
 					followButtonLabel.text = 'フォローする';
@@ -85,16 +85,15 @@ exports.createWindow = function(_listType, _userData){
 				// 「フォロー中」「フォローする」ボタン
 				followButton.addEventListener('click', function(e){
 					Ti.API.debug('[event]followButton.click:');
-	
-					if (e.source.getChildren()[0].text == 'フォロー中') {
+					e.source.enabled = false;
+
+					if (e.source.clickFlag) {
 						var alertDialog = Titanium.UI.createAlertDialog({
 						    title: 'フォローを解除しますか？',
 				//		    message: 'フォローを解除しますか？',
 						    buttonNames: ['OK','キャンセル'],
 						    cancel: 1,
 						});
-						alertDialog.show();
-	
 						alertDialog.addEventListener('click',function(alert){
 							// OKの場合
 							if(alert.index == 0){
@@ -102,31 +101,34 @@ exports.createWindow = function(_listType, _userData){
 								tabGroup.add(actInd);
 								// プロフィールのフォロー数を更新
 								var loginData = model.getUser(loginId);
-								loginData.follow--;
 								model.removeFollowList(loginId, e.source.user);
 										
 								setTimeout(function(){
 									actInd.hide();
 									e.source.backgroundColor = 'white';
+									e.source.clickFlag = false;
 									e.source.getChildren()[0].text = 'フォローする';
 								},2000);		        
 							}
 						});
+						alertDialog.show();	
 	
 					} else {
 						actInd.show();
 						tabGroup.add(actInd);
 						// プロフィールのフォロー数を更新
 						var loginData = model.getUser(loginId);
-						loginData.follow++;
 						model.addFollowList(loginId, e.source.user);
 				
 						setTimeout(function(){
 							actInd.hide();
 							e.source.backgroundColor = '#dedede';
+							e.source.clickFlag = true;
 							e.source.getChildren()[0].text = 'フォロー中';
 						},2000);					
 					}
+
+					e.source.enabled = true;
 				});
 			}
 		}
@@ -240,6 +242,12 @@ exports.createWindow = function(_listType, _userData){
 			tabGroup.activeTab.close(userListWin);
 		}
 	});
-	
+
+	// クローズ時に前の画面を更新
+	userListWin.addEventListener('close',function(e){
+		Ti.API.debug('[event]userListWin.close:');
+		tabPrevWin.fireEvent('refresh');
+	});	
+
 	return userListWin;
 }

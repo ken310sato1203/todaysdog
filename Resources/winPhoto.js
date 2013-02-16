@@ -39,8 +39,8 @@ exports.createWindow = function(_articleData){
 	// ライクボタンの表示
 	var likeButton = Ti.UI.createButton(style.photoLikeButton);
 	if (model.checkLikeList(_articleData.no, model.getLoginId())) {
-		likeButton.enabled = false;
 		likeButton.backgroundColor = '#dedede';
+		likeButton.clickFlag = true;
 	}
 	var likeButtonIconImage = Ti.UI.createImageView(style.photoLikeButtonIconImage);
 	likeButton.add(likeButtonIconImage);
@@ -83,7 +83,7 @@ exports.createWindow = function(_articleData){
 		var commentList = model.getCommentList(_articleData.no, commentCount);
 		Ti.API.debug('commentList:' + commentList);
 		if (commentList.length > 0) {
-			commentTableRow.height = Ti.UI.SIZE;		
+			commentTableRow.height = Ti.UI.SIZE;
 			var commentListView = Ti.UI.createView(style.photoCommentListView);
 			commentTableRow.add(commentListView);
 			for (var i=0; i<commentList.length; i++) {
@@ -135,15 +135,22 @@ exports.createWindow = function(_articleData){
 	// ライクボタンのクリックでライクリストに追加
 	likeButton.addEventListener('click',function(e){
 		Ti.API.debug('[event]likeButton.click:');
-		var no = _articleData.no;
-		var user = model.getLoginId();
-		var date = util.getFormattedNowDateTime();
-		
-		var likeData = {no:no, user:user, date:date};
-		model.addLikeList(likeData);
-		likeButton.enabled = false;
-		likeButton.backgroundColor = '#dedede';
+		e.source.enabled = false;
+
+		if (e.source.clickFlag) {
+			// ライクを解除する処理を書く
+			model.removeLikeList(_articleData.no, model.getLoginId());
+			e.source.backgroundColor = 'white';
+			e.source.clickFlag = false;
+		} else {
+			var likeData = {no:_articleData.no, user:model.getLoginId(), date:util.getFormattedNowDateTime()};			
+			model.addLikeList(likeData);
+			e.source.backgroundColor = '#dedede';
+			e.source.clickFlag = true;
+		}
+
 		updateLike();
+		e.source.enabled = true;
 	});
 
 	// コメントフィールドでキーボード確定でコメントリストに追加
@@ -171,9 +178,7 @@ exports.createWindow = function(_articleData){
 		Ti.API.debug('[event]titleIconImage.click:');
 		var userData = model.getUser(_articleData.user);
 		var profileWin = win.createProfileWindow(userData);
-
-		// グローバル変数tabGroupを参照してWindowオープン
-		tabGroup.activeTab.open(profileWin,{animated:true});
+		win.openWindow(photoWin, profileWin);
 	});
 
 	// 右スワイプで前の画面に戻る

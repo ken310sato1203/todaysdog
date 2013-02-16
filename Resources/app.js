@@ -11,6 +11,7 @@ var loginId = model.getLoginId();
 
 // タブ作成
 var tabGroup = Ti.UI.createTabGroup();
+var tabPrevWin = null;
 
 var userData = model.getUser(loginId);
 var listType = "all";
