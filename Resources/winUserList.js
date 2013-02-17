@@ -211,10 +211,12 @@ exports.createWindow = function(_listType, _userData){
 		// 前回取得した最後のインデックス以降を取得
 		// 「続きを読む」ボタンの表示判定のため、表示件数より1件多い条件で取得
 		var userList = null;
+
 		// フォロワのユーザ一覧
 		if (_listType == "follower") {
-//			userList = model.getUserList(_listType, _userData, lastUserIndex, userCount + 1);
 			userList = model.getFollowerList(_userData.user);
+
+		// フォローのユーザ一覧
 		} else if (_listType == "follow") {
 			userList = model.getFollowList(_userData.user);
 		}

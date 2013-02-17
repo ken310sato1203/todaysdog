@@ -15,9 +15,10 @@ exports.win = {
 		var listType = "all";
 		return photoListWin.createWindow(listType, _userData);
 	},
-	createFriendsWindow:function(){
+	createFriendsWindow:function(_userData){
 		Ti.API.debug('[func]createFriendsWindow:');
-		return friendsWin.createWindow();
+		var listType = "follow";
+		return photoListWin.createWindow(listType, _userData);
 	},
 	createMydogWindow:function(){
 		Ti.API.debug('[func]createMydogWindow:');

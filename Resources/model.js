@@ -13,29 +13,29 @@ var followList = [];
 loginId = "sakura";
 
 articleList = [
-	{no:"A0001", user:"sakura", location:"Tokyo", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0002", user:"maki", location:"Kyoto", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0003", user:"koro", location:"Nara", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0004", user:"shiro", location:"Shiga", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0005", user:"pochi", location:"Fukuoka", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0006", user:"jiro", location:"Chiba", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0007", user:"gon", location:"Nagoya", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0008", user:"kuro", location:"Kobe", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0009", user:"momo", location:"Okinawa", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0010", user:"santa", location:"Hokkaido", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0011", user:"jiro", location:"Nagoya", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0012", user:"gon", location:"Kobe", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0013", user:"kuro", location:"Okinawa", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0014", user:"momo", location:"Tokyo", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0015", user:"santa", location:"Kyoto", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0016", user:"sakura", location:"Kyoto", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0017", user:"maki", location:"Nara", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0018", user:"sakura", location:"Nara", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0019", user:"maki", location:"Shiga", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0020", user:"koro", location:"Fukuoka", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0021", user:"koro", location:"Shiga", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0022", user:"shiro", location:"Fukuoka", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
-	{no:"A0023", user:"pochi", location:"Chiba", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！"},
+	{no:"A0001", user:"sakura", location:"Tokyo", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0002", user:"maki", location:"Kyoto", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0003", user:"koro", location:"Nara", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0004", user:"shiro", location:"Shiga", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0005", user:"pochi", location:"Fukuoka", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0006", user:"jiro", location:"Chiba", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0007", user:"gon", location:"Nagoya", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0008", user:"kuro", location:"Kobe", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0009", user:"momo", location:"Okinawa", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0010", user:"santa", location:"Hokkaido", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0011", user:"jiro", location:"Nagoya", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0012", user:"gon", location:"Kobe", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0013", user:"kuro", location:"Okinawa", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0014", user:"momo", location:"Tokyo", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0015", user:"santa", location:"Kyoto", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0016", user:"sakura", location:"Kyoto", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0017", user:"maki", location:"Nara", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0018", user:"sakura", location:"Nara", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0019", user:"maki", location:"Shiga", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0020", user:"koro", location:"Fukuoka", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0021", user:"koro", location:"Shiga", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0022", user:"shiro", location:"Fukuoka", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0023", user:"pochi", location:"Chiba", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 ];
 
 commentList = [
@@ -101,7 +101,13 @@ for (var i=0; i<likeList.length; i++) {
 			userList[j].like++;
 		}
 	}
+	for (var j=0; j<articleList.length; j++) {
+		if (likeList[i].no == articleList[j].no) {
+			articleList[j].like++;
+		}
+	}
 }
+
 for (var i=0; i<followList.length; i++) {
 	for (var j=0; j<userList.length; j++) {
 		if (followList[i].user == userList[j].user) {
@@ -109,6 +115,13 @@ for (var i=0; i<followList.length; i++) {
 		}
 		if (followList[i].follow == userList[j].user) {
 			userList[j].follower++;
+		}
+	}
+}
+for (var i=0; i<commentList.length; i++) {
+	for (var j=0; j<articleList.length; j++) {
+		if (commentList[i].no == articleList[j].no) {
+			articleList[j].comment++;
 		}
 	}
 }
@@ -143,65 +156,107 @@ exports.model = {
 	},
 
 	// 記事リストの取得
-	getArticleList:function(_listType, _userData, _articleIndex, _articleCount){
+	// 前回更新時に読み込んだ記事の最終インデックスより新しい記事を取得
+	getArticleList:function(_listType, _userData, _prevArticleIndex, _articleCount){
 		Ti.API.debug('[func]getArticleList:');
 		Ti.API.debug('_listType:' + _listType);
 		var target = [];
-/*
-		for (var i=0; i<articleList.length; i++) {
-			articleList[i].user = 'sakura';
-		}
-*/
+		var pushFlag = false;
+		var pushCount = 0;
+
 		// 全ユーザのフォト一覧
 		if (_listType == "all") {
-			target = articleList;
-			if (_articleIndex == null) {
-				return target.slice(0, 10);			
-			} else if (_articleIndex == 'A0009'){
-				return target.slice(9, 19);
-			} else if (_articleIndex == 'A0018'){
-				return target.slice(19, 28);
-			} else if (_articleIndex == 'A0024'){
-				return null;
+			for (var i=0; i<articleList.length; i++) {
+				if (_prevArticleIndex == null) {
+					pushFlag = true;
+				}
+				if (pushFlag) {
+					target.push(articleList[i]);
+					pushCount++;
+					if (pushCount == _articleCount) {
+						return target;
+					}
+				}
+				if (articleList[i].no == _prevArticleIndex) {
+					pushFlag = true;
+				}
 			}
 
 		// 指定ユーザのフォト一覧
 		} else 	if (_listType == "user") {
 			for (var i=0; i<articleList.length; i++) {
-				if (articleList[i].user == _userData.user) {
-					target.push(articleList[i]);
+				if (_prevArticleIndex == null) {
+					pushFlag = true;
+				}
+				if (pushFlag) {
+					if (articleList[i].user == _userData.user) {
+						target.push(articleList[i]);
+						pushCount++;
+						if (pushCount == _articleCount) {
+							return target;
+						}
+					}
+				}
+				if (articleList[i].no == _prevArticleIndex) {
+					pushFlag = true;
 				}
 			}
-			return target;		
 
 		// ライクなフォト一覧
 		} else 	if (_listType == "like") {
 			for (var i=0; i<articleList.length; i++) {
-				for (var j=0; j<likeList.length; j++) {
-					if (articleList[i].no == likeList[j].no && likeList[j].user == _userData.user) {
-						target.push(articleList[i]);
+				if (_prevArticleIndex == null) {
+					pushFlag = true;
+				}
+				if (pushFlag) {
+					for (var j=0; j<likeList.length; j++) {
+						if (articleList[i].no == likeList[j].no && likeList[j].user == _userData.user) {
+							target.push(articleList[i]);
+							pushCount++;
+							if (pushCount == _articleCount) {
+								return target;
+							}
+							break;
+						}
 					}
 				}
-			}
-			return target;		
-
-		} else 	if (_listType == "follow") {
-			for (var i=0; i<articleList.length; i++) {
-				if (articleList[i].user == _userData.user) {
-					target.push(articleList[i]);
-				} else {
-					for (var j=0; j<followList.length; j++) {
-						if (followList[j].user == _userData.user) {
-							if (articleList[i].user == followList[j].follow) {
-								target.push(articleList[i]);
-							}
-						}
-					}					
+				if (articleList[i].no == _prevArticleIndex) {
+					pushFlag = true;
 				}
 			}
-			return target;		
+
+		// フォローユーザのフォト一覧
+		} else 	if (_listType == "follow") {
+			for (var i=0; i<articleList.length; i++) {
+				if (_prevArticleIndex == null) {
+					pushFlag = true;
+				}
+				if (pushFlag) {
+					if (articleList[i].user == _userData.user) {
+						target.push(articleList[i]);
+						pushCount++;
+					} else {
+						for (var j=0; j<followList.length; j++) {
+							if (followList[j].user == _userData.user) {
+								if (articleList[i].user == followList[j].follow) {
+									target.push(articleList[i]);
+									pushCount++;
+									break;
+								}
+							}
+						}
+					}
+					if (pushCount == _articleCount) {
+						return target;
+					}
+				}
+				if (articleList[i].no == _prevArticleIndex) {
+					pushFlag = true;
+				}
+			}
 		}
 
+		return target;
 	},
 		
 	// ライクリストに追加
@@ -211,6 +266,12 @@ exports.model = {
 		for (var i=0; i<userList.length; i++) {
 			if (userList[i].user == _likeList.user) {
 				userList[i].like++;
+				break;
+			}
+		}
+		for (var i=0; i<articleList.length; i++) {
+			if (articleList[i].no == _likeList.no) {
+				articleList[i].like++;
 				break;
 			}
 		}
@@ -227,6 +288,12 @@ exports.model = {
 		for (var i=0; i<userList.length; i++) {
 			if (userList[i].user == _user) {
 				userList[i].like--;
+				break;
+			}
+		}
+		for (var i=0; i<articleList.length; i++) {
+			if (articleList[i].no == _articleNo) {
+				articleList[i].like--;
 				break;
 			}
 		}
@@ -260,6 +327,12 @@ exports.model = {
 	addCommentList:function(_commentList){
 		Ti.API.debug('[func]addCommentList:');
 		commentList.push(_commentList);
+		for (var i=0; i<articleList.length; i++) {
+			if (articleList[i].no == _commentList.no) {
+				articleList[i].comment++;
+				break;
+			}
+		}
 	},
 	// コメントリストの取得
 	getCommentList:function(_articleNo, _commentCount){
