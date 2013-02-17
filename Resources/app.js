@@ -10,7 +10,7 @@ var util = require('util').util;
 var loginId = model.getLoginId();
 
 // タブ作成
-var tabGroup = Ti.UI.createTabGroup();
+var tabGroup = Ti.UI.createTabGroup(style.tabGroup);
 var tabPrevWin = null;
 
 var userData = model.getUser(loginId);

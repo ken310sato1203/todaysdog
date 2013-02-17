@@ -5,36 +5,36 @@ exports.style = {
 	todayTab:function(win){
 		return {
 			window: win,
-			icon: Ti.UI.iPhone.SystemIcon.FAVORITES,
-			title: 'today'
+			icon: 'images/icon/light_globe.png',
+			title: 'today',
 		};
 	},
 	friendsTab:function(win){
 		return {
 			window: win,
-			icon: Ti.UI.iPhone.SystemIcon.MOST_VIEWED,
-			title: 'friends'
+			icon: 'images/icon/light_chat.png',
+			title: 'friends',
 		};
 	},
 	mydogTab:function(win){
 		return {
 			window: win,
-			icon: Ti.UI.iPhone.SystemIcon.MOST_RECENT,
-			title: 'mydog'
+			icon: 'images/icon/light_camera.png',
+			title: 'mydog',
 		};
 	},
 	scheduleTab:function(win){
 		return {
 			window: win,
-			icon: Ti.UI.iPhone.SystemIcon.BOOKMARKS,
-			title: 'schedule'
+			icon: 'images/icon/light_heart.png',
+			title: 'news',
 		};
 	},
 	profileTab:function(win){
 		return {
 			window: win,
-			icon: Ti.UI.iPhone.SystemIcon.CONTACTS,
-			title: 'profile'
+			icon: 'images/icon/light_pegman.png',
+			title: 'profile',
 		};
 	},
 
