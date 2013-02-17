@@ -388,8 +388,8 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]countPhotoView.click:');
 		if (_userData.photo > 0) {
 			countPhotoView.backgroundColor = '#dedede';
-			var _listType = "user";
-			var photoListWin = win.createPhotoListWindow(_listType, _userData);
+			var listType = "user";
+			var photoListWin = win.createPhotoListWindow(listType, _userData);
 			win.openWindow(profileWin, photoListWin);
 			countPhotoView.backgroundColor = 'white';
 		}
@@ -400,8 +400,8 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]countLikeView.click:');
 		if (_userData.like > 0) {
 			countLikeView.backgroundColor = '#dedede';
-			var _listType = "like";
-			var photoListWin = win.createPhotoListWindow(_listType, _userData);
+			var listType = "like";
+			var photoListWin = win.createPhotoListWindow(listType, _userData);
 			win.openWindow(profileWin, photoListWin);
 			countLikeView.backgroundColor = 'white';
 		}
@@ -412,8 +412,8 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]countFollowerView.click:');
 		if (_userData.follower > 0) {
 			countFollowerView.backgroundColor = '#dedede';
-			var _listType = "follower";
-			var userListWin = win.createUserListWindow(_listType, _userData);
+			var listType = "follower";
+			var userListWin = win.createUserListWindow(listType, _userData);
 			win.openWindow(profileWin, userListWin);
 			countFollowerView.backgroundColor = 'white';
 		}
@@ -424,8 +424,8 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]countFollowView.click:');
 		if (_userData.follow > 0) {
 			countFollowView.backgroundColor = '#dedede';
-			var _listType = "follow";
-			var userListWin = win.createUserListWindow(_listType, _userData);
+			var listType = "follow";
+			var userListWin = win.createUserListWindow(listType, _userData);
 			win.openWindow(profileWin, userListWin);
 			countFollowView.backgroundColor = 'white';
 		}

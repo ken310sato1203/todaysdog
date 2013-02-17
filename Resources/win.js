@@ -10,6 +10,11 @@ var userListWin = require('winUserList');
 
 exports.win = {
 
+	createTodayWindow:function(_userData){
+		Ti.API.debug('[func]createTodayWindow:');
+		var listType = "all";
+		return photoListWin.createWindow(listType, _userData);
+	},
 	createFriendsWindow:function(){
 		Ti.API.debug('[func]createFriendsWindow:');
 		return friendsWin.createWindow();

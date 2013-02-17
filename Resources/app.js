@@ -14,9 +14,8 @@ var tabGroup = Ti.UI.createTabGroup();
 var tabPrevWin = null;
 
 var userData = model.getUser(loginId);
-var listType = "all";
 
-var win1 = win.createPhotoListWindow(listType, userData);
+var win1 = win.createTodayWindow(userData);
 var win2 = win.createFriendsWindow(userData);
 var win3 = win.createMydogWindow(userData);
 var win4 = win.createScheduleWindow(userData);
