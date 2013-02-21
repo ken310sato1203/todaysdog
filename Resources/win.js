@@ -7,6 +7,7 @@ var profileWin = require('winProfile');
 var photoWin = require('winPhoto');
 var photoListWin = require('winPhotoList');
 var userListWin = require('winUserList');
+var commentListWin = require('winCommentList');
 
 exports.win = {
 
@@ -44,6 +45,10 @@ exports.win = {
 	createUserListWindow:function(_listType, _userData){
 		Ti.API.debug('[func]createUserListWindow:');
 		return userListWin.createWindow(_listType, _userData);
+	},
+	createCommentListWindow:function(_articleData){
+		Ti.API.debug('[func]createCommentListWindow:');
+		return commentListWin.createWindow(_articleData);
 	},
 
 	// 新しいウィンドウを開き、クローズ時のイベント実行用に前のウィンドウを格納

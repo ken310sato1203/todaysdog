@@ -229,7 +229,7 @@ exports.createWindow = function(_listType, _userData) {
 		// 前回取得した最後のインデックス以降を取得
 		// 「続きを読む」ボタンの表示判定のため、表示件数より1件多い条件で取得
 		var articleList = model.getArticleList(_listType, _userData, prevArticleIndex, articleCount + 1);
-		if (articleList == null) {
+		if (articleList == null || articleList.length == 0) {
 			// 1件も取得できなかった場合
 			appendNoDataLabel();		
 			// 次回更新用に続きの記事がないフラグを設定

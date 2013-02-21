@@ -6,8 +6,8 @@ exports.createWindow = function(_listType, _userData){
 
 	// ユーザ一覧の表示件数
 	var userCount = 9;
-	// 更新時に読み込んだユーザ一覧の最終インデックス（一番古いユーザ）
-	var lastUserIndex = null;
+	// 前回更新時に読み込んだ記事の最終インデックス
+	var prevArticleIndex = null;
 	// 次回更新時に読み込むべきユーザ一覧があるかどうかのフラグ
 	var nextUserFlag = false;
 	
@@ -44,7 +44,7 @@ exports.createWindow = function(_listType, _userData){
 		userTableRow.add(userListView);
 		
 		for (var i=0; i<_userList.length; i++) {	
-		Ti.API.debug('_userList[i].user:' + _userList[i].user);
+			Ti.API.debug('_userList[i].user:' + _userList[i].user);
 			var userView = Ti.UI.createView(style.userListUserView);
 			userListView.add(userView);
 			var userImage = Ti.UI.createImageView(style.userListIconImage);
@@ -221,7 +221,7 @@ exports.createWindow = function(_listType, _userData){
 			userList = model.getFollowList(_userData.user);
 		}
 
-		if (userList == null) {
+		if (userList == null || userList.length == 0) {
 			// 1件も取得できなかった場合
 			appendNoDataLabel();		
 			// 次回更新用に続きのユーザ一覧がないフラグを設定
@@ -231,7 +231,7 @@ exports.createWindow = function(_listType, _userData){
 			// 次回更新用に取得した最後のインデックスを設定
 			Ti.API.debug('userList:' + userList);
 			Ti.API.debug('userList.length:' + userList.length);
-			lastUserIndex = userList[userList.length-1].no;
+			prevArticleIndex = userList[userList.length-1].no;
 		}
 	}
 	// 初回読み込み時に、ユーザ一覧を更新

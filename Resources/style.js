@@ -86,7 +86,7 @@ exports.style = {
 		layout: 'vertical',
 		top: '10dp',
 	    bottom: '5dp',
-		width: '220dp',
+		width: '224dp',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
 	},
@@ -108,9 +108,16 @@ exports.style = {
 		color: '#000',
 	},
 
+	photoButtonView:{
+		layout: 'absolute',
+		top: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+	},
+
 	photoLikeButton:{
 		top: '0dp',
-		right: '10dp',
+		right: '85dp',
 	    bottom: '10dp',
 		width: '70dp',
 		height: '22dp',
@@ -138,73 +145,164 @@ exports.style = {
 		text: 'わんポチ',
 	},
 
-	photoLikeTableRow:{ 
-		// ライクがない場合のため
-		height: '1dp',
+	photoCommentButton:{
+		top: '0dp',
+		right: '10dp',
+	    bottom: '10dp',
+		width: '70dp',
+		height: '22dp',
+		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+		// iOSではbackgroundSelectedColorが対応していない
+//		backgroundSelectedColor: 'blue',
+		borderColor: '#dedede',
+		borderWidth: 1.5,
+		borderRadius: 5,
+	},
+	photoCommentButtonIconImage:{
+		left: '5dp',
+		width: '15dp',
+		height: '15dp',
+		image: 'images/icon/light_comment.png',
+	},
+	photoCommentButtonLabel:{
+		right: '5dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		font: {fontSize:10,fontFamily:'Helvetica Neue'},
+		color: '#000',
+		text: 'わんコメ',
+	},
+	
+	photoLikeCountTableRow:{ 
+		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
 		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
-	photoLikeListView:{
+	photoLikeCountView:{
+		layout: 'horizontal',
 		top: '5dp',
-		width: '284dp',
+		width: '226dp',
 		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
 	},
-	photoLikeListIconImage:{
+	photoLikeCountIconImage:{
 		top: '0dp',
 		left: '0dp',
 		width: '18dp',
 		height: '18dp',
 		image: 'images/icon/like.gif',
 	},
-	photoLikeListLabel:{
-		left: '20dp',
-		right: '20dp',
+	photoLikeCountLabel:{
+		top: '5dp',
+		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		font: {fontSize:10,fontFamily:'Helvetica Neue'},
 		color: '#000',
-		text: '',
+	},
+
+	photoLikeTableRow:{ 
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
+	photoLikeListView:{
+		layout: 'horizontal',
+		top: '5dp',
+		width: '226dp',
+		height: Ti.UI.SIZE,
+	},
+	photoLikeView:{
+		top: '0dp',
+		left: '1dp',
+		width: '44dp',
+		height: '44dp',
+		backgroundColor: 'white',
+	},
+	photoLikeUserIconImage:{
+		width: '40dp',
+		height: '40dp',
+	},
+	photoLikeIconImage:{
+		width: '18dp',
+		height: '18dp',
+		image: 'images/icon/like.gif',
+	},
+	photoLikeMoreLabel:{
+		font: {fontSize:10,fontFamily:'Helvetica Neue'},
+		color: '#000',
+		text: '...',
+	},
+
+	photoCommentCountTableRow:{ 
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
+	photoCommentCountView:{
+		layout: 'horizontal',
+		top: '5dp',
+		width: '226dp',
+		height: Ti.UI.SIZE,
+	},
+	photoCommentCountIconImage:{
+		top: '0dp',
+		left: '0dp',
+		width: '18dp',
+		height: '18dp',
+		image: 'images/icon/light_comment.png',
+	},
+	photoCommentCountLabel:{
+		top: '5dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		font: {fontSize:10,fontFamily:'Helvetica Neue'},
+		color: '#000',
 	},
 
 	photoCommentTableRow:{ 
+		top: '5dp',
 		// コメントがない場合のため
 		height: '1dp',
 		backgroundColor: '#dedede',
 		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
+
 	photoCommentListView:{
 		layout: 'vertical',
-		top: '5dp',
+//		top: '1dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
 	},
 	photoCommentView:{
 		top: '0dp',
-	    bottom: '5dp',
-		width: '284dp',
+	    bottom: '1dp',
+		width: '224dp',
 		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
+		backgroundColor: 'white',
 	},
-	photoCommentIconImage:{
-		top: '0dp',
-		left: '0dp',
-		width: '15dp',
-		height: '15dp',
-		image: 'images/icon/comment.gif',
+	photoCommentUserIconImage:{
+		top: '4dp',
+		bottom: '4dp',
+		left: '10dp',
+		width: '40dp',
+		height: '40dp',
 	},
 	photoCommentLabel:{
-		left: '20dp',
-		right: '20dp',
+		left: '60dp',
+		right: '10dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		textAlign: 'left',
 		font: {fontSize:10,fontFamily:'Helvetica Neue'},
 		color: '#000',
 		text: '',
 	},
+
 	photoCommentFieldTableRow:{ 
 		backgroundColor: '#dedede',
 		touchEnabled: false,
@@ -894,26 +992,111 @@ exports.style = {
 		color: '#000',
 		text: 'フォローする',
 	},
-/*
-	userUnfollowButton:{
-		right: '10dp',
-		width: '80dp',
-		height: '22dp',
-		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		borderColor: '#dedede',
-		borderWidth: 1.5,
-		borderRadius: 5,
-		// カスタムプロパティ
-		user: null,
+
+// winCommentList -------------------------------------------------------
+	commentListWin:{
+		backgroundColor: '#dedede',
+		barColor: '#a9a9a9',
 	},
-	userUnfollowButtonLabel:{
+
+	commentListTitleView:{
+		layout: 'absolute',
+		top: '0dp',
+		left: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+	},
+
+	commentListTitleLabel:{
+		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:18,fontFamily:'Helvetica Neue',fontWeight:"bold"}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+		text: 'コメント', 
+	},
+
+	commentListTableView:{ 
+		top: '10dp',
+		backgroundColor: '#dedede',
+		separatorColor: 'transparent',
+		data: [],
+	},
+	commentListUserTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
+	commentListNextTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
+	commentListUserListView:{
+		layout: 'vertical',
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	commentListUserView:{
+		top: '0dp',
+		bottom: '1dp',
+		width: '284dp',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+	},
+	commentListIconImage:{
+		top: '4dp',
+		bottom: '4dp',
+		left: '10dp',
+		width: '48dp',
+		height: '48dp',
+		backgroundColor: 'black',
+		// カスタムプロパティ
+		userData: null,
+	},
+	commentListTextLabel:{
+		left: '65dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
 		font: {fontSize:10,fontFamily:'Helvetica Neue'},
 		color: '#000',
-		text: 'フォロー中',
 	},
-*/
+	commentListNextView:{
+		top: '0dp',
+		left: '0dp',
+		width: '100%',
+		height: '40dp',
+		backgroundColor: '#dedede',
+	},
+	commentListNextButton:{
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		textAlign: 'center',
+		font: {fontSize:10,fontFamily:'Helvetica Neue'},
+		color: '#000',
+		title: '続きを読む',
+	},
+	commentListNoDataLabel:{
+		top: '5dp',
+		width: '90dp',
+		height: '15dp',
+		backgroundColor: '#dedede',
+		textAlign: 'left',
+		font: {fontSize:10,fontFamily:'Helvetica Neue'},
+		color: '#000',
+		text: 'データがありません'
+	},
+
 
 // winFriends -------------------------------------------------------
 	friendsWin:{
