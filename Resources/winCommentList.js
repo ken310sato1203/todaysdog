@@ -143,22 +143,6 @@ exports.createWindow = function(_articleData){
 	// 初回読み込み時に、コメント一覧を更新
 	updateCommentList();
 
-	var flexSpace = Ti.UI.createButton({
-		systemButton:Ti.UI.iPhone.SystemButton.FLEXIBLE_SPACE
-	});
-	var doneButton = Ti.UI.createButton({
-		systemButton:Ti.UI.iPhone.SystemButton.DONE
-	});
-	doneButton.addEventListener('click',function(){
-		commentField.blur();
-	});
-
-	var commentField = Ti.UI.createTextField(style.photoCommentField);
-	var dummyField = Ti.UI.createTextField(style.photoCommentField);
-	dummyField.top = '-50dp';
-	dummyField.keyboardToolbar = [flexSpace,commentField,doneButton];
-	commentListWin.add(dummyField);
-
 	// 右スワイプで前の画面に戻る
 	commentListWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]commentListWin.swipe:');
@@ -166,16 +150,6 @@ exports.createWindow = function(_articleData){
 			tabGroup.activeTab.close(commentListWin);
 		}
 	});
-
-	// クローズ時に前の画面を更新
-	commentListWin.addEventListener('open',function(e){
-		Ti.API.debug('[event]commentListWin.open:');
-		dummyField.focus();
-	});	
-	dummyField.addEventListener('focus',function(e){
-		Ti.API.debug('[event]dummyField.focus:');
-		commentField.focus();
-	});	
 
 	// クローズ時に前の画面を更新
 	commentListWin.addEventListener('close',function(e){

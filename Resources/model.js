@@ -39,17 +39,21 @@ articleList = [
 ];
 
 commentList = [
-	{no:"A0001", user:"kuro", date:"2013-01-01 08:14:27", text:"今年もよろしくお願いします。"},
+	{no:"A0001", user:"kuro", date:"2013-01-01 08:14:27", text:"今年もよろしくお願いします。あけましておめでとうございます。今年もよろしくお願いします。あけましておめでとうございます。"},
 	{no:"A0001", user:"shiro", date:"2013-01-02 09:23:45", text:"今年もよろしく。"},
+	{no:"A0001", user:"gon", date:"2013-01-02 09:23:45", text:"今年もよろしく。"},
+	{no:"A0001", user:"koro", date:"2013-01-02 09:23:45", text:"今年もよろしく。"},
+	{no:"A0001", user:"maki", date:"2013-01-02 09:23:45", text:"今年もよろしく。"},
+	{no:"A0001", user:"jiro", date:"2013-01-02 09:23:45", text:"今年もよろしく。"},
 	{no:"A0002", user:"jiro", date:"2013-01-03 13:37:02", text:"ことよろ。"},
 ];
 
 likeList = [
 	{no:"A0001", user:"sakura", date:"2013-01-01 08:14:27"},
 	{no:"A0001", user:"maki", date:"2013-01-02 09:23:45"},
-	{no:"A0002", user:"ichiro", date:"2013-01-03 13:37:02"},
+	{no:"A0002", user:"pochi", date:"2013-01-03 13:37:02"},
 	{no:"A0003", user:"sakura", date:"2013-01-04 12:37:02"},
-	{no:"A0003", user:"taro", date:"2013-01-05 11:37:02"},
+	{no:"A0003", user:"momo", date:"2013-01-05 11:37:02"},
 	{no:"A0004", user:"sakura", date:"2013-01-06 10:37:02"},
 ];
 
@@ -262,7 +266,8 @@ exports.model = {
 	// ライクリストに追加
 	addLikeList:function(_likeList){
 		Ti.API.debug('[func]addLikeList:');
-		likeList.push(_likeList);
+		// 先頭に追加
+		likeList.unshift(_likeList);
 		for (var i=0; i<userList.length; i++) {
 			if (userList[i].user == _likeList.user) {
 				userList[i].like++;
@@ -322,11 +327,23 @@ exports.model = {
 		}
 		return target;
 	},
+	// ライク数の取得
+	getLikeCount:function(_articleNo){
+		Ti.API.debug('[func]getLikeCount:');
+		var count = 0;
+		for (var i=0; i<likeList.length; i++) {
+			if (likeList[i].no == _articleNo) {
+				count++;
+			}
+		}
+		return count;
+	},
 
 	// コメントリストに追加
 	addCommentList:function(_commentList){
 		Ti.API.debug('[func]addCommentList:');
-		commentList.push(_commentList);
+		// 先頭に追加
+		commentList.unshift(_commentList);
 		for (var i=0; i<articleList.length; i++) {
 			if (articleList[i].no == _commentList.no) {
 				articleList[i].comment++;
@@ -348,6 +365,17 @@ exports.model = {
 		}
 		return target;
 	},
+	// コメント数の取得
+	getCommentCount:function(_articleNo){
+		Ti.API.debug('[func]getCommentCount:');
+		var count = 0;
+		for (var i=0; i<commentList.length; i++) {
+			if (commentList[i].no == _articleNo) {
+				count++;
+			}
+		}
+		return count;
+	},
 
 	// ユーザデータの追加
 	addUserList:function(_userData){
@@ -360,7 +388,8 @@ exports.model = {
 			}
 		}
 		if (! existFlag) {
-			userList.push(_userData);
+			// 先頭に追加
+			userList.unshift(_userData);
 		}
 	},
 	// ユーザデータの更新
@@ -462,7 +491,8 @@ exports.model = {
 			}
 		}
 		if (! existFlag) {
-			followList.push({user:_user, follow:_follow});
+			// 先頭に追加
+			followList.unshift({user:_user, follow:_follow});
 			for (var i=0; i<userList.length; i++) {
 				if (userList[i].user == _user) {
 					userList[i].follow++;

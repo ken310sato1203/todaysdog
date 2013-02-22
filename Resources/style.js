@@ -46,6 +46,7 @@ exports.style = {
 	},
 
 	photoTableView:{ 
+		bottom: '10dp',
 		backgroundColor: '#dedede',
 		separatorColor: 'transparent',
 		data: [],
@@ -181,7 +182,7 @@ exports.style = {
 	},
 	photoLikeCountView:{
 		layout: 'horizontal',
-		top: '5dp',
+		top: '3dp',
 		width: '226dp',
 		height: Ti.UI.SIZE,
 	},
@@ -199,9 +200,10 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		font: {fontSize:10,fontFamily:'Helvetica Neue'},
 		color: '#000',
+		text: null,
 	},
 
-	photoLikeTableRow:{ 
+	photoLikeTableRow:{
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
 		touchEnabled: false,
@@ -209,7 +211,7 @@ exports.style = {
 	},
 	photoLikeListView:{
 		layout: 'horizontal',
-		top: '5dp',
+		top: '2dp',
 		width: '226dp',
 		height: Ti.UI.SIZE,
 	},
@@ -221,18 +223,15 @@ exports.style = {
 		backgroundColor: 'white',
 	},
 	photoLikeUserIconImage:{
-		width: '40dp',
-		height: '40dp',
+		top: '4dp',
+		bottom: '4dp',
+		width: '36dp',
+		height: '36dp',
 	},
 	photoLikeIconImage:{
 		width: '18dp',
 		height: '18dp',
 		image: 'images/icon/like.gif',
-	},
-	photoLikeMoreLabel:{
-		font: {fontSize:10,fontFamily:'Helvetica Neue'},
-		color: '#000',
-		text: '...',
 	},
 
 	photoCommentCountTableRow:{ 
@@ -265,16 +264,14 @@ exports.style = {
 
 	photoCommentTableRow:{ 
 		top: '5dp',
-		// コメントがない場合のため
-		height: '1dp',
+		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
 		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
-
 	photoCommentListView:{
 		layout: 'vertical',
-//		top: '1dp',
+		top: '3dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
@@ -288,13 +285,14 @@ exports.style = {
 	photoCommentUserIconImage:{
 		top: '4dp',
 		bottom: '4dp',
-		left: '10dp',
-		width: '40dp',
-		height: '40dp',
+		left: '4dp',
+		width: '36dp',
+		height: '36dp',
 	},
 	photoCommentLabel:{
-		left: '60dp',
-		right: '10dp',
+		top: '4dp',
+		left: '46dp',
+		right: '5dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
@@ -931,7 +929,7 @@ exports.style = {
 	userListIconImage:{
 		top: '4dp',
 		bottom: '4dp',
-		left: '10dp',
+		left: '4dp',
 		width: '48dp',
 		height: '48dp',
 		backgroundColor: 'black',
@@ -939,7 +937,7 @@ exports.style = {
 		userData: null,
 	},
 	userListTextLabel:{
-		left: '65dp',
+		left: '60dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
