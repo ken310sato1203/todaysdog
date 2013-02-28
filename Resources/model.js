@@ -39,13 +39,13 @@ articleList = [
 ];
 
 commentList = [
-	{no:"A0001", user:"kuro", date:"2013-01-01 08:14:27", text:"今年もよろしくお願いします。あけましておめでとうございます。今年もよろしくお願いします。あけましておめでとうございます。"},
-	{no:"A0001", user:"shiro", date:"2013-01-02 09:23:45", text:"今年もよろしく。"},
-	{no:"A0001", user:"gon", date:"2013-01-02 09:23:45", text:"今年もよろしく。"},
-	{no:"A0001", user:"koro", date:"2013-01-02 09:23:45", text:"今年もよろしく。"},
-	{no:"A0001", user:"maki", date:"2013-01-02 09:23:45", text:"今年もよろしく。"},
-	{no:"A0001", user:"jiro", date:"2013-01-02 09:23:45", text:"今年もよろしく。"},
-	{no:"A0002", user:"jiro", date:"2013-01-03 13:37:02", text:"ことよろ。"},
+	{no:7, article:"A0002", user:"jiro", date:"2013-01-03 13:37:02", text:"ことよろ。"},
+	{no:6, article:"A0001", user:"jiro", date:"2013-01-02 09:23:45", text:"今年もよろしく。"},
+	{no:5, article:"A0001", user:"maki", date:"2013-01-02 09:23:45", text:"今年もよろしく。"},
+	{no:4, article:"A0001", user:"koro", date:"2013-01-02 09:23:45", text:"今年もよろしく。"},
+	{no:3, article:"A0001", user:"gon", date:"2013-01-02 09:23:45", text:"今年もよろしく。"},
+	{no:2, article:"A0001", user:"shiro", date:"2013-01-02 09:23:45", text:"今年もよろしく。"},
+	{no:1, article:"A0001", user:"kuro", date:"2013-01-01 08:14:27", text:"今年もよろしくお願いします。あけましておめでとうございます。今年もよろしくお願いします。あけましておめでとうございます。"},
 ];
 
 likeList = [
@@ -124,7 +124,7 @@ for (var i=0; i<followList.length; i++) {
 }
 for (var i=0; i<commentList.length; i++) {
 	for (var j=0; j<articleList.length; j++) {
-		if (commentList[i].no == articleList[j].no) {
+		if (commentList[i].article == articleList[j].no) {
 			articleList[j].comment++;
 		}
 	}
@@ -165,15 +165,15 @@ exports.model = {
 		Ti.API.debug('[func]getArticleList:');
 		Ti.API.debug('_listType:' + _listType);
 		var target = [];
-		var pushFlag = false;
 		var pushCount = 0;
+		var pushFlag = false;
+		if (_prevArticleIndex == null) {
+			pushFlag = true;
+		}
 
 		// 全ユーザのフォト一覧
 		if (_listType == "all") {
 			for (var i=0; i<articleList.length; i++) {
-				if (_prevArticleIndex == null) {
-					pushFlag = true;
-				}
 				if (pushFlag) {
 					target.push(articleList[i]);
 					pushCount++;
@@ -189,9 +189,6 @@ exports.model = {
 		// 指定ユーザのフォト一覧
 		} else 	if (_listType == "user") {
 			for (var i=0; i<articleList.length; i++) {
-				if (_prevArticleIndex == null) {
-					pushFlag = true;
-				}
 				if (pushFlag) {
 					if (articleList[i].user == _userData.user) {
 						target.push(articleList[i]);
@@ -209,9 +206,6 @@ exports.model = {
 		// ライクなフォト一覧
 		} else 	if (_listType == "like") {
 			for (var i=0; i<articleList.length; i++) {
-				if (_prevArticleIndex == null) {
-					pushFlag = true;
-				}
 				if (pushFlag) {
 					for (var j=0; j<likeList.length; j++) {
 						if (articleList[i].no == likeList[j].no && likeList[j].user == _userData.user) {
@@ -232,9 +226,6 @@ exports.model = {
 		// フォローユーザのフォト一覧
 		} else 	if (_listType == "follow") {
 			for (var i=0; i<articleList.length; i++) {
-				if (_prevArticleIndex == null) {
-					pushFlag = true;
-				}
 				if (pushFlag) {
 					if (articleList[i].user == _userData.user) {
 						target.push(articleList[i]);
@@ -342,24 +333,42 @@ exports.model = {
 	// コメントリストに追加
 	addCommentList:function(_commentList){
 		Ti.API.debug('[func]addCommentList:');
+
+		_commentList.no = commentList[0].no + 1;
+		Ti.API.debug('commentList.length:' + commentList.length);
+		Ti.API.debug('commentList[0].no:' + commentList[0].no);
+		Ti.API.debug('_commentList.no:' + _commentList.no);
+
 		// 先頭に追加
 		commentList.unshift(_commentList);
 		for (var i=0; i<articleList.length; i++) {
-			if (articleList[i].no == _commentList.no) {
+			if (articleList[i].no == _commentList.article) {
 				articleList[i].comment++;
 				break;
 			}
 		}
 	},
 	// コメントリストの取得
-	getCommentList:function(_articleNo, _commentCount){
+	getCommentList:function(_articleNo, _prevCommentIndex, _commentCount){
 		Ti.API.debug('[func]getCommentList:');
 		var target = [];
+		var pushCount = 0;
+		var pushFlag = false;
+		if (_prevCommentIndex == null) {
+			pushFlag = true;
+		}
+
 		for (var i=0; i<commentList.length; i++) {
-			if (commentList[i].no == _articleNo) {
-				target.push(commentList[i]);
-				if (target.length == _commentCount) {
-					break;
+			if (commentList[i].article == _articleNo) {
+				if (pushFlag) {
+					target.push(commentList[i]);
+					pushCount++;
+					if (pushCount == _commentCount) {
+						return target;
+					}
+				}
+				if (commentList[i].no == _prevCommentIndex) {
+					pushFlag = true;
 				}
 			}
 		}
@@ -370,7 +379,7 @@ exports.model = {
 		Ti.API.debug('[func]getCommentCount:');
 		var count = 0;
 		for (var i=0; i<commentList.length; i++) {
-			if (commentList[i].no == _articleNo) {
+			if (commentList[i].article == _articleNo) {
 				count++;
 			}
 		}
@@ -437,15 +446,29 @@ exports.model = {
 	},
 
 	// フォローしているユーザリストの取得
-	getFollowList:function(_user){
+	getFollowList:function(_user, _prevUserIndex, _followCount){
 		Ti.API.debug('[func]getFollowList:');
 		var target = [];
+		var pushCount = 0;
+		var pushFlag = false;
+		if (_prevUserIndex == null) {
+			pushFlag = true;
+		}
+
 		for (var i=0; i<followList.length; i++) {
 			if (followList[i].user == _user) {
 				for (var j=0; j<userList.length; j++) {
 					if (userList[j].user == followList[i].follow) {
-						target.push(userList[j]);
-						break;
+						if (pushFlag) {
+							target.push(userList[j]);
+							pushCount++;
+							if (pushCount == _followCount) {
+								return target;
+							}
+						}
+						if (followList[i].follow == _prevUserIndex) {
+							pushFlag = true;
+						}
 					}
 				}
 			}
@@ -453,15 +476,29 @@ exports.model = {
 		return target;
 	},
 	// フォロワのユーザリストの取得
-	getFollowerList:function(_user){
+	getFollowerList:function(_user, _prevUserIndex, _followerCount){
 		Ti.API.debug('[func]getFollowerList:');
 		var target = [];
+		var pushCount = 0;
+		var pushFlag = false;
+		if (_prevUserIndex == null) {
+			pushFlag = true;
+		}
+
 		for (var i=0; i<followList.length; i++) {
 			if (followList[i].follow == _user) {
 				for (var j=0; j<userList.length; j++) {
 					if (userList[j].user == followList[i].user) {
-						target.push(userList[j]);
-						break;
+						if (pushFlag) {
+							target.push(userList[j]);
+							pushCount++;
+							if (pushCount == _followerCount) {
+								return target;
+							}
+						}
+						if (followList[i].user == _prevUserIndex) {
+							pushFlag = true;
+						}
 					}
 				}
 			}

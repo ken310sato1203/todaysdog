@@ -4,9 +4,9 @@ exports.createWindow = function(_articleData){
 	Ti.API.debug('[func]winCommentList.createWindow:');
 
 	// コメント一覧の表示件数
-	var commentCount = 9;
+	var commentCount = 5;
 	// 前回更新時に読み込んだ記事の最終インデックス
-	var prevArticleIndex = null;
+	var prevCommentIndex = null;
 	// 次回更新時に読み込むべきコメント一覧があるかどうかのフラグ
 	var nextUserFlag = false;
 
@@ -64,7 +64,7 @@ exports.createWindow = function(_articleData){
 		
 		// 「続きを読む」ボタンをタップした場合、続きのコメント一覧を追加してからボタンを削除
 		nextButton.addEventListener('click', function(e) {
-			updateUser();
+			updateCommentList();
 		});		
 	}
 
@@ -82,8 +82,8 @@ exports.createWindow = function(_articleData){
 	}	
 
 	// コメント一覧の追加
-	var appendUser = function(_commentList) {
-		Ti.API.debug('[func]appendUser:');
+	var appendComment = function(_commentList) {
+		Ti.API.debug('[func]appendComment:');
 		// 「続きを読む」ボタンを押した場合、削除するボタンのインデックスを取得
 		var deleteRowIndex = null;
 		if (nextUserFlag) {
@@ -125,7 +125,7 @@ exports.createWindow = function(_articleData){
 		// 「続きを読む」ボタンの表示判定のため、表示件数より1件多い条件で取得
 		var commentList = null;
 
-		commentList = model.getCommentList(_articleData.no, commentCount);
+		commentList = model.getCommentList(_articleData.no, prevCommentIndex, commentCount + 1);
 
 		if (commentList == null || commentList.length == 0) {
 			// 1件も取得できなかった場合
@@ -133,11 +133,11 @@ exports.createWindow = function(_articleData){
 			// 次回更新用に続きのコメント一覧がないフラグを設定
 			nextUserFlag = false;
 		} else {
-			appendUser(commentList);
+			appendComment(commentList);
 			// 次回更新用に取得した最後のインデックスを設定
 			Ti.API.debug('commentList:' + commentList);
 			Ti.API.debug('commentList.length:' + commentList.length);
-			prevArticleIndex = commentList[commentList.length-1].no;
+			prevCommentIndex = commentList[commentList.length-1].no;
 		}
 	}
 	// 初回読み込み時に、コメント一覧を更新

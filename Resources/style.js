@@ -175,7 +175,8 @@ exports.style = {
 	},
 	
 	photoLikeCountTableRow:{ 
-		height: Ti.UI.SIZE,
+		// ライクがない場合に間を詰めるため高さを1dpに指定（0dpだと指定されないので1dp）
+		height: '1dp',
 		backgroundColor: '#dedede',
 		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
@@ -204,7 +205,8 @@ exports.style = {
 	},
 
 	photoLikeTableRow:{
-		height: Ti.UI.SIZE,
+		// ライクがない場合に間を詰めるため高さを1dpに指定（0dpだと指定されないので1dp）
+		height: '1dp',
 		backgroundColor: '#dedede',
 		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,

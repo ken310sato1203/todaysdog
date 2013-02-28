@@ -151,7 +151,7 @@ exports.createWindow = function(_listType, _userData){
 		
 		// 「続きを読む」ボタンをタップした場合、続きのユーザ一覧を追加してからボタンを削除
 		nextButton.addEventListener('click', function(e) {
-			updateUser();
+			updateUserList();
 		});		
 	}
 
@@ -214,11 +214,11 @@ exports.createWindow = function(_listType, _userData){
 
 		// フォロワのユーザ一覧
 		if (_listType == "follower") {
-			userList = model.getFollowerList(_userData.user);
+			userList = model.getFollowerList(_userData.user, prevUserIndex, userCount);
 
 		// フォローのユーザ一覧
 		} else if (_listType == "follow") {
-			userList = model.getFollowList(_userData.user);
+			userList = model.getFollowList(_userData.user, prevUserIndex, userCount);
 		}
 
 		if (userList == null || userList.length == 0) {
@@ -231,7 +231,7 @@ exports.createWindow = function(_listType, _userData){
 			// 次回更新用に取得した最後のインデックスを設定
 			Ti.API.debug('userList:' + userList);
 			Ti.API.debug('userList.length:' + userList.length);
-			prevArticleIndex = userList[userList.length-1].no;
+			prevUserIndex = userList[userList.length-1].no;
 		}
 	}
 	// 初回読み込み時に、ユーザ一覧を更新

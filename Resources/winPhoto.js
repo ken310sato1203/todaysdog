@@ -88,6 +88,9 @@ exports.createWindow = function(_articleData){
 			}
 			likeCountView.show();
 
+			// ライクがない場合に間を詰めるため1dpにしていた高さを変更
+			likeCountTableRow.height = Ti.UI.SIZE;
+			likeTableRow.height = Ti.UI.SIZE;
 			likeListView = Ti.UI.createView(style.photoLikeListView);
 			likeTableRow.add(likeListView);
 
@@ -109,6 +112,8 @@ exports.createWindow = function(_articleData){
 			if (children.length > 0) {
 				likeTableRow.remove(likeListView);				
 			}
+			likeCountTableRow.height = '1dp';
+			likeTableRow.height = '1dp';
 		}
 	}
 	// 初回読み込み時に、ライクリストの更新
@@ -135,7 +140,7 @@ exports.createWindow = function(_articleData){
 		var children = commentTableRow.getChildren();
 
 		if (count > 0) {
-			var commentList = model.getCommentList(_articleData.no, commentCount);
+			var commentList = model.getCommentList(_articleData.no, null, commentCount);
 			commentCountLabel.text = ' x ' + count;
 			if (children.length > 0) {
 				commentTableRow.remove(commentListView);				
@@ -174,7 +179,7 @@ exports.createWindow = function(_articleData){
 		var date = util.getFormattedNowDateTime();
 		var text = commentField.getValue();
 		
-		var commentData = {no:no, user:user, date:date, text:text};
+		var commentData = {no:null, article:no, user:user, date:date, text:text};
 		model.addCommentList(commentData);
 		updateComment();
 	}
