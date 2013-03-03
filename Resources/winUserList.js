@@ -7,7 +7,7 @@ exports.createWindow = function(_listType, _userData){
 	// ユーザ一覧の表示件数
 	var userCount = 9;
 	// 前回更新時に読み込んだ記事の最終インデックス
-	var prevArticleIndex = null;
+	var prevUserIndex = null;
 	// 次回更新時に読み込むべきユーザ一覧があるかどうかのフラグ
 	var nextUserFlag = false;
 	
@@ -49,7 +49,7 @@ exports.createWindow = function(_listType, _userData){
 			userListView.add(userView);
 			var userImage = Ti.UI.createImageView(style.userListIconImage);
 			userImage.image = 'images/icon/' + _userList[i].user + '.jpg';
-			// カスタムプロパティにユーザ一覧データを格納
+			// カスタムプロパティにユーザデータを格納
 			userImage.userData = _userList[i];
 			var textLabel = Ti.UI.createLabel(style.userListTextLabel);
 			textLabel.text = _userList[i].user + '\n' + _userList[i].name;

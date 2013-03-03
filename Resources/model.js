@@ -385,7 +385,23 @@ exports.model = {
 		}
 		return count;
 	},
-
+	// コメントの削除
+	removeCommentList:function(_user, _articleNo, _commentNo){
+		Ti.API.debug('[func]removeCommentList:');
+		for (var i=0; i<commentList.length; i++) {
+			if (commentList[i].no == _commentNo) {
+				commentList.splice(i, 1);
+				break;
+			}
+		}
+		for (var i=0; i<articleList.length; i++) {
+			if (articleList[i].no == _articleNo) {
+				articleList[i].comment--;
+				break;
+			}
+		}
+	},
+	
 	// ユーザデータの追加
 	addUserList:function(_userData){
 		Ti.API.debug('[func]addUserList:');

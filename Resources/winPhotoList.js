@@ -297,6 +297,11 @@ exports.createWindow = function(_listType, _userData) {
 	    }
 	});
 
+	// ライク・コメント編集を反映
+	photoListWin.addEventListener('refresh', function(e){
+		Ti.API.debug('[event]photoListWin.refresh:');
+	});
+
 	// 右スワイプで前の画面に戻る
 	photoListWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]photoListWin.swipe:');

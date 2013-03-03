@@ -1051,6 +1051,10 @@ exports.style = {
 		width: '284dp',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
+		// カスタムプロパティ
+		objectName: 'commentListUserView',
+		commentData: null,
+		deleteButton: null,
 	},
 	commentListIconImage:{
 		top: '4dp',
@@ -1060,7 +1064,8 @@ exports.style = {
 		height: '48dp',
 		backgroundColor: 'black',
 		// カスタムプロパティ
-		userData: null,
+		objectName: 'commentListIconImage',
+		commentData: null,
 	},
 	commentListTextLabel:{
 		left: '65dp',
@@ -1069,7 +1074,47 @@ exports.style = {
 		textAlign: 'left',
 		font: {fontSize:10,fontFamily:'Helvetica Neue'},
 		color: '#000',
+		// カスタムプロパティ
+		objectName: 'commentListTextLabel',
 	},
+/*
+	commentListDeleteButton:{
+		right: '15dp',		
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+//		backgroundColor: '#dedede',
+		textAlign: 'center',
+		font: {fontSize:10,fontFamily:'Helvetica Neue'},
+		color: '#000',
+		title: '削除',
+		visible: false,
+	},
+*/
+	commentListDeleteButton:{
+		right: '15dp',
+		width: '40dp',
+		height: '22dp',
+		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+		// iOSではbackgroundSelectedColorが対応していない
+//		backgroundSelectedColor: 'blue',
+		backgroundColor: '#CD5C5C',
+		borderColor: '#000',
+		borderWidth: 0.5,
+		borderRadius: 5,
+		font: {fontSize:10,fontFamily:'Helvetica Neue',fontWeight:'bold'},
+		color: 'white',
+		title: '削除',
+		visible: false,
+	},
+	commentListDeleteButtonLabel:{
+		right: '5dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		font: {fontSize:10,fontFamily:'Helvetica Neue'},
+		color: '#000',
+		text: '削除',
+	},
+
 	commentListNextView:{
 		top: '0dp',
 		left: '0dp',
@@ -1094,7 +1139,7 @@ exports.style = {
 		textAlign: 'left',
 		font: {fontSize:10,fontFamily:'Helvetica Neue'},
 		color: '#000',
-		text: 'データがありません'
+		text: 'データがありません',
 	},
 
 

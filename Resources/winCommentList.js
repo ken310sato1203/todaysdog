@@ -30,6 +30,7 @@ exports.createWindow = function(_articleData){
 		var userTableRow = Ti.UI.createTableViewRow(style.commentListUserTableRow);
 		var commentListView = Ti.UI.createView(style.commentListUserListView);
 		userTableRow.add(commentListView);
+//		var animation = Titanium.UI.createAnimation();
 		
 		for (var i=0; i<_commentList.length; i++) {	
 			Ti.API.debug('_commentList[i].user:' + _commentList[i].user);
@@ -37,13 +38,62 @@ exports.createWindow = function(_articleData){
 			commentListView.add(userView);
 			var userImage = Ti.UI.createImageView(style.commentListIconImage);
 			userImage.image = 'images/icon/' + _commentList[i].user + '.jpg';
-			// カスタムプロパティにコメント一覧データを格納
-			userImage.userData = _commentList[i];
+			// カスタムプロパティにコメントデータを格納
+			userImage.commentData = _commentList[i];
 			var textLabel = Ti.UI.createLabel(style.commentListTextLabel);
 			textLabel.text = _commentList[i].user + '\n' + _commentList[i].text;
 					
 			userView.add(userImage);
 			userView.add(textLabel);
+
+			if (_articleData.user == loginId || _commentList[i].user == loginId) {
+				// 削除ボタン
+				var deleteButton = Ti.UI.createButton(style.commentListDeleteButton);
+				// カスタムプロパティにコメントデータを格納
+				deleteButton.commentData = _commentList[i];
+				userView.add(deleteButton);
+				userView.deleteButton = deleteButton;
+	
+				// 左スワイプで削除ボタンを表示
+				userView.addEventListener('swipe',function(e){
+					Ti.API.debug('[event]userView.swipe:');
+	//				animation.right = 95;
+					var target = null;
+					if (e.source.objectName == "commentListUserView") {
+						target = e.source;						
+					} else {
+						// userView上にあるuserImage、textLabelの場合
+						Ti.API.debug('e.source.getParent():' + e.source.getParent());
+						target = e.source.getParent();
+					}
+	
+					Ti.API.debug('e.direction:' + e.direction);
+					if (e.direction == 'left') {
+	//					target.animate(animation);
+						// 削除ボタンを表示
+						target.deleteButton.show();
+					} else if (e.direction == 'right') {
+						if ( target.deleteButton.visible == true ) {
+							// 削除ボタンを隠す
+							target.deleteButton.hide();
+						} else {
+							// 前の画面に戻る
+							tabGroup.activeTab.close(commentListWin);						
+						}
+					}
+				});
+	
+				// 削除ボタンでコメント削除
+				deleteButton.addEventListener('click',function(e){
+					Ti.API.debug('[event]deleteButton.click:');
+					Ti.API.debug('e.source:' + e.source);
+					Ti.API.debug('e.source.getParent():' + e.source.getParent());
+					var deleteView = e.source.getParent();
+					deleteView.getParent().remove(deleteView);
+					model.removeCommentList(loginId, e.source.commentData.article, e.source.commentData.no);
+				});
+			}
+
 		}
 		
 		return userTableRow;
@@ -146,8 +196,13 @@ exports.createWindow = function(_articleData){
 	// 右スワイプで前の画面に戻る
 	commentListWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]commentListWin.swipe:');
+		Ti.API.debug('e.source.objectName:' + e.source.objectName);
 		if (e.direction == 'right') {
-			tabGroup.activeTab.close(commentListWin);
+			if (e.source.objectName != "commentListUserView" 
+				&& e.source.objectName != "commentListIconImage"
+				&& e.source.objectName != "commentListTextLabel") {
+				tabGroup.activeTab.close(commentListWin);
+			}
 		}
 	});
 

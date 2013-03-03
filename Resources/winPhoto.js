@@ -307,6 +307,13 @@ exports.createWindow = function(_articleData){
 		win.openWindow(photoWin, profileWin);
 	});
 
+	// コメント編集を反映
+	photoWin.addEventListener('refresh', function(e){
+		Ti.API.debug('[event]photoWin.refresh:');
+		// コメントリストの更新
+		updateComment();
+	});
+
 	// 右スワイプで前の画面に戻る
 	photoWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]photoWin.swipe:');
@@ -314,6 +321,12 @@ exports.createWindow = function(_articleData){
 			tabGroup.activeTab.close(photoWin);
 		}
 	});
+
+	// クローズ時に前の画面を更新
+	photoWin.addEventListener('close',function(e){
+		Ti.API.debug('[event]photoWin.close:');
+		tabPrevWin.fireEvent('refresh');
+	});	
 
 	return photoWin;
 }
