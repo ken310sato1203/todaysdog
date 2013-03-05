@@ -11,7 +11,7 @@ var loginId = model.getLoginId();
 
 // タブ作成
 var tabGroup = Ti.UI.createTabGroup(style.tabGroup);
-var tabPrevWin = null;
+var tabPrevWin = [];
 
 var userData = model.getUser(loginId);
 

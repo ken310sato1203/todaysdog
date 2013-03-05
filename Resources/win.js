@@ -54,7 +54,7 @@ exports.win = {
 	// 新しいウィンドウを開き、クローズ時のイベント実行用に前のウィンドウを格納
 	openWindow:function(_prevWin, _nextWin) {
 		Ti.API.debug('[func]openWindow:');
-		tabPrevWin = _prevWin;
+		tabPrevWin.push(_prevWin);
 		tabGroup.activeTab.open(_nextWin,{animated:true});
 	},
 	

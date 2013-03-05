@@ -57,12 +57,12 @@ exports.createWindow = function(_listType, _userData){
 			userView.add(userImage);
 			userView.add(textLabel);
 
-			// 各ユーザ一覧のタップでフォト画面へ遷移
+			// 各ユーザ一覧のタップでプロフィール画面へ遷移
 			userImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]userImage.click:');
 				e.source.opacity = 0.5;
-				var userWin = win.createPhotoWindow(e.source.userData);
-				win.openWindow(userListWin, userWin);
+				var profileWin = win.createProfileWindow(userData);
+				win.openWindow(userListWin, profileWin);
 				e.source.opacity = 1.0;
 			});
 
@@ -248,7 +248,7 @@ exports.createWindow = function(_listType, _userData){
 	// クローズ時に前の画面を更新
 	userListWin.addEventListener('close',function(e){
 		Ti.API.debug('[event]userListWin.close:');
-		tabPrevWin.fireEvent('refresh');
+		tabPrevWin.pop().fireEvent('refresh');
 	});	
 
 	return userListWin;

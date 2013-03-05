@@ -90,7 +90,7 @@ exports.createWindow = function(_articleData){
 					Ti.API.debug('e.source.getParent():' + e.source.getParent());
 					var deleteView = e.source.getParent();
 					deleteView.getParent().remove(deleteView);
-					model.removeCommentList(loginId, e.source.commentData.article, e.source.commentData.no);
+					model.removeCommentList(loginId, e.source.commentData.no, e.source.commentData.seq);
 				});
 			}
 
@@ -209,7 +209,7 @@ exports.createWindow = function(_articleData){
 	// クローズ時に前の画面を更新
 	commentListWin.addEventListener('close',function(e){
 		Ti.API.debug('[event]commentListWin.close:');
-		tabPrevWin.fireEvent('refresh');
+		tabPrevWin.pop().fireEvent('refresh', {articleData:_articleData});
 	});	
 
 	return commentListWin;

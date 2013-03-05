@@ -17,6 +17,9 @@ exports.createWindow = function(_listType, _userData) {
 	// 表示部分の最上位置からのオフセット
 	var offset = 0;
 
+	// リフレッシュ時用格納リスト
+	var refreshTarget = [];
+
 	var photoListWin = Ti.UI.createWindow(style.photoListWin);
 	var titleView = null;
 	var titleLabel = null;
@@ -133,6 +136,9 @@ exports.createWindow = function(_listType, _userData) {
 			countView.add(likeLabel);
 			countView.add(commentImage);
 			countView.add(commentLabel);
+
+			// リフレッシュ時に更新する対象を特定するために格納
+			refreshTarget.push({no:_articleList[i].no, likeLabel:likeLabel, commentLabel:commentLabel});
 			
 			// 各記事のタップでフォト画面へ遷移
 			photoImage.addEventListener('click',function(e){
@@ -300,6 +306,13 @@ exports.createWindow = function(_listType, _userData) {
 	// ライク・コメント編集を反映
 	photoListWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]photoListWin.refresh:');
+		for (var i=0; i<refreshTarget.length; i++) {
+			if (refreshTarget[i].no == e.articleData.no) {
+				refreshTarget[i].likeLabel.text = model.getLikeCount(e.articleData.no);
+				refreshTarget[i].commentLabel.text = model.getCommentCount(e.articleData.no);
+				break;
+			}
+		}
 	});
 
 	// 右スワイプで前の画面に戻る

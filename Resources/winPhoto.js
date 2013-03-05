@@ -174,16 +174,16 @@ exports.createWindow = function(_articleData){
 
 	// コメントの追加
 	var addComment = function() {
-		var no = _articleData.no;
-		var user = model.getLoginId();
-		var date = util.getFormattedNowDateTime();
-		var text = commentField.getValue();
-		
-		var commentData = {no:null, article:no, user:user, date:date, text:text};
+		var commentData = {
+			no:_articleData.no, 
+			seq:null, 
+			user:model.getLoginId(), 
+			date:util.getFormattedNowDateTime(), 
+			text:commentField.getValue()
+		};
 		model.addCommentList(commentData);
 		updateComment();
 	}
-
 
 /*
 	// コメントフィールドの表示
@@ -303,8 +303,10 @@ exports.createWindow = function(_articleData){
 	// タイトルアイコンのクリックでプロフィールを表示
 	titleIconImage.addEventListener('click',function(e){
 		Ti.API.debug('[event]titleIconImage.click:');
+		e.source.opacity = 0.5;
 		var profileWin = win.createProfileWindow(userData);
 		win.openWindow(photoWin, profileWin);
+		e.source.opacity = 1.0;
 	});
 
 	// コメント編集を反映
@@ -325,7 +327,7 @@ exports.createWindow = function(_articleData){
 	// クローズ時に前の画面を更新
 	photoWin.addEventListener('close',function(e){
 		Ti.API.debug('[event]photoWin.close:');
-		tabPrevWin.fireEvent('refresh');
+		tabPrevWin.pop().fireEvent('refresh', {articleData:_articleData});
 	});	
 
 	return photoWin;
