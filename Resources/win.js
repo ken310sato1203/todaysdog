@@ -21,9 +21,9 @@ exports.win = {
 		var listType = "follow";
 		return photoListWin.createWindow(listType, _userData);
 	},
-	createMydogWindow:function(){
+	createMydogWindow:function(_userData){
 		Ti.API.debug('[func]createMydogWindow:');
-		return mydogWin.createWindow();
+		return mydogWin.createWindow(_userData);
 	},
 	createScheduleWindow:function(){
 		Ti.API.debug('[func]createScheduleWindow:');

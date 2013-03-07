@@ -253,6 +253,19 @@ exports.model = {
 
 		return target;
 	},
+
+	getRandomArticle:function(_userData){
+		Ti.API.debug('[func]getRandomArticle:');
+		var target = [];
+
+		for (var i=0; i<articleList.length; i++) {
+			if (articleList[i].user == _userData.user) {
+				target.push(articleList[i]);
+			}
+		}
+		var randomIndex = Math.floor(Math.random() * target.length);
+		return target[randomIndex];
+	},
 		
 	// ライクリストに追加
 	addLikeList:function(_likeList){
