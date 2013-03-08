@@ -11,7 +11,6 @@ exports.createWindow = function(_userData){
 	var offset = 0;
 
 	var mydogWin = Ti.UI.createWindow(style.mydogWin);
-
 	var photoListTableView = Ti.UI.createTableView(style.photoListTableView);
 	mydogWin.add(photoListTableView);
 
@@ -30,20 +29,21 @@ exports.createWindow = function(_userData){
 	tableHeader.add(updateIndicator);
 	photoListTableView.headerPullView = tableHeader;		
 
+	Ti.API.debug('[func]updateArticle:');	
+	var articleView = Ti.UI.createView(style.photoArticleView);
+	var articleTableRow = Ti.UI.createTableViewRow(style.photoArticleTableRow);
+	articleTableRow.add(articleView);
+	photoListTableView.appendRow(articleTableRow);
+	var photoImage = Ti.UI.createImageView(style.photoPhotoImage);
+	var textLabel = Ti.UI.createLabel(style.photoTextLabel);
+	articleView.add(photoImage);
+	articleView.add(textLabel);
+
 	// 記事の更新
 	var updateArticle = function() {
-		Ti.API.debug('[func]updateArticle:');	
-		var articleView = Ti.UI.createView(style.photoArticleView);
-		var articleTableRow = Ti.UI.createTableViewRow(style.photoArticleTableRow);
-		articleTableRow.add(articleView);
-		photoListTableView.appendRow(articleTableRow);
-		var articleData = model.getRandomArticle(_userData);	
-		var photoImage = Ti.UI.createImageView(style.photoPhotoImage);
+		var articleData = model.getRandomArticle(_userData);
 		photoImage.image = 'images/photo/' + articleData.no + '.jpg';
-		var textLabel = Ti.UI.createLabel(style.photoTextLabel);
 		textLabel.text = articleData.date.substring(0,10) + '\n' + articleData.text;			
-		articleView.add(photoImage);
-		articleView.add(textLabel);
 	}
 	// 初回読み込み時に、記事を更新
 	updateArticle();
@@ -95,7 +95,6 @@ exports.createWindow = function(_userData){
 	        e.source.setContentInsets({top:80}, {animated:true});
 	        setTimeout(function(){
 	        	resetPullHeader();
-		    	photoListTableView.data = [];
 	        	updateArticle();
 	        }, 2000);
 	    }
