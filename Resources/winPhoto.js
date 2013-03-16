@@ -32,6 +32,8 @@ exports.createWindow = function(_articleData){
 	photoTableView.appendRow(articleTableRow);					
 	var photoImage = Ti.UI.createImageView(style.photoPhotoImage);
 	photoImage.image = 'images/photo/' + _articleData.no + '.jpg';
+	// カスタムプロパティに記事データを格納
+	photoImage.articleData = _articleData;
 	var textLabel = Ti.UI.createLabel(style.photoTextLabel);
 	textLabel.text = _articleData.date.substring(0,10) + '\n' + _articleData.text;			
 	articleView.add(photoImage);
@@ -202,7 +204,7 @@ exports.createWindow = function(_articleData){
 		Ti.API.debug('[event]photoImage.click:');
 		var photoFullWin = Titanium.UI.createWindow(style.photoPhotoFullWin);
 		var photoFullImage = Ti.UI.createImageView(style.photoPhotoFullImage);
-		photoFullImage.image = 'images/photo/' + _articleData.no + '.jpg';
+		photoFullImage.image = 'images/photo/' + e.source.articleData.no + '.jpg';
 		photoFullWin.add(photoFullImage);
 
 		photoFullWin.open({
@@ -249,9 +251,11 @@ exports.createWindow = function(_articleData){
 
 	doneButton.addEventListener('click',function(e){
 		Ti.API.debug('[event]doneButton.click:');
-		addComment();
-		commentField.value = "";
-		commentField.blur();
+		if (commentField.value != '') {
+			addComment();
+			commentField.value = '';
+		}
+		commentField.blur();			
 	});
 
 	var commentField = Ti.UI.createTextField(style.photoCommentField);
@@ -281,9 +285,11 @@ exports.createWindow = function(_articleData){
 	// コメントフィールドでキーボード確定でコメントリストに追加
 	commentField.addEventListener('return',function(e){
 		Ti.API.debug('[event]commentField.return:');
-		addComment();
-		commentField.value = "";
-		commentField.blur();
+		if (commentField.value != '') {
+			addComment();
+			commentField.value = '';
+		}
+		commentField.blur();			
 	});
 
 	// 画面クリックでコメントフィールドのフォーカスを外す

@@ -2,6 +2,7 @@
 
 var friendsWin = require('winFriends');
 var mydogWin = require('winMydog');
+var calendarWin = require('winCalendar');
 var scheduleWin = require('winSchedule');
 var profileWin = require('winProfile');
 var photoWin = require('winPhoto');
@@ -24,6 +25,10 @@ exports.win = {
 	createMydogWindow:function(_userData){
 		Ti.API.debug('[func]createMydogWindow:');
 		return mydogWin.createWindow(_userData);
+	},
+	createCalendarWindow:function(_articleData){
+		Ti.API.debug('[func]createCalendarWindow:');
+		return calendarWin.createWindow(_articleData);
 	},
 	createScheduleWindow:function(){
 		Ti.API.debug('[func]createScheduleWindow:');

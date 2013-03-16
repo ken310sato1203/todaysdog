@@ -62,7 +62,7 @@ exports.createWindow = function(_articleData){
 					if (e.source.objectName == "commentListUserView") {
 						target = e.source;						
 					} else {
-						// userView上にあるuserImage、textLabelの場合
+						// view上にあるimage、labelの場合
 						Ti.API.debug('e.source.getParent():' + e.source.getParent());
 						target = e.source.getParent();
 					}

@@ -18,7 +18,7 @@ articleList = [
 	{no:"A0021", user:"koro", location:"Shiga", date:"2013-02-09 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{no:"A0020", user:"koro", location:"Fukuoka", date:"2013-02-06 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{no:"A0019", user:"maki", location:"Shiga", date:"2013-02-05 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0018", user:"sakura", location:"Nara", date:"2013-01-28 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0018", user:"sakura", location:"Nara", date:"2013-02-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{no:"A0017", user:"maki", location:"Nara", date:"2013-01-27 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{no:"A0016", user:"sakura", location:"Kyoto", date:"2013-01-26 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{no:"A0015", user:"santa", location:"Kyoto", date:"2013-01-25 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
@@ -35,7 +35,7 @@ articleList = [
 	{no:"A0004", user:"shiro", location:"Shiga", date:"2013-01-11 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{no:"A0003", user:"koro", location:"Nara", date:"2013-01-03 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{no:"A0002", user:"maki", location:"Kyoto", date:"2013-01-02 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0001", user:"sakura", location:"Tokyo", date:"2013-01-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0001", user:"sakura", location:"Tokyo", date:"2012-12-07 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 ];
 
 commentList = [
@@ -254,6 +254,7 @@ exports.model = {
 		return target;
 	},
 
+	// 指定ユーザの記事リストからランダムに取得
 	getRandomArticle:function(_userData){
 		Ti.API.debug('[func]getRandomArticle:');
 		var target = [];
@@ -266,7 +267,35 @@ exports.model = {
 		var randomIndex = Math.floor(Math.random() * target.length);
 		return target[randomIndex];
 	},
-		
+
+	// 指定ユーザの記事リストから指定月の記事を取得
+	getCalendarArticle:function(_userData, _year, _month){
+		Ti.API.debug('[func]getCalendarArticle:');
+		var calendarTarget = [];
+
+		var daysInMonth = 32 - new Date(_year, _month, 32).getDate();
+		for (var i=0; i < daysInMonth; i++) {
+			var target = null;
+			for (var j=0; j<articleList.length; j++) {
+				if (articleList[j].user == _userData.user) {
+					var articleDate = util.getDate(articleList[j].date);
+					var articleDay = articleDate.getDate();
+					if (i == articleDay - 1) {
+						var articleYear = articleDate.getFullYear();
+						var articleMonth = articleDate.getMonth();
+						if (_year == articleYear && _month == articleMonth) {
+							target = articleList[j];
+							break;
+						}
+					}
+				}
+			}
+			calendarTarget.push(target);			
+		}
+
+		return calendarTarget;
+	},
+
 	// ライクリストに追加
 	addLikeList:function(_likeList){
 		Ti.API.debug('[func]addLikeList:');

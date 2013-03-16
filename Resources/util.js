@@ -35,5 +35,16 @@ exports.util = {
 		return new Date(year, month, day);
 	},
 
+	// フォーマットされた日付を要素に分解
+	getDateElement:function(_formatedDate){
+		Ti.API.debug('[func]getDate:');
+		Ti.API.debug('_formatedDate:' + _formatedDate);
+		var year = _formatedDate.substring(0,4);
+		var month = _formatedDate.substring(5,7);
+		var day = _formatedDate.substring(8,10);
+		Ti.API.debug('getDate:' + year + month + day);
+		return {year:year, mohth:month, day:day};
+	},
+
 }
 

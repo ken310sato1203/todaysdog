@@ -24,15 +24,22 @@ exports.createWindow = function(_listType, _userData) {
 	var titleView = null;
 	var titleLabel = null;
 
+	// 更新ボタン
+	var updateButton = Titanium.UI.createButton(style.photoListUpdateButton);
+	// ロード用画面
+	var actInd = Ti.UI.createActivityIndicator(style.profileActivityIndicator);
+
 	// 全ユーザのフォト一覧
 	if (_listType == "all") {
 		titleLabel = Ti.UI.createLabel(style.photoListTodayTitleLabel);	
 		photoListWin.titleControl = titleLabel;
+//		photoListWin.rightNavButton = updateButton;
 
 	// フォローユーザのフォト一覧
 	} else 	if (_listType == "follow") {
 		titleLabel = Ti.UI.createLabel(style.photoListFirendsTitleLabel);	
 		photoListWin.titleControl = titleLabel;
+//		photoListWin.rightNavButton = updateButton;
 		articleCount = 8;
 
 	// 指定ユーザのフォト一覧
@@ -54,7 +61,7 @@ exports.createWindow = function(_listType, _userData) {
 	photoListWin.add(photoListTableView);
 
 	// 最上部から下スクロールで最新データを更新する用のヘッダを作成
-	var tableHeader = Ti.UI.createView(style.tableHeader);
+	var tableHeader = Ti.UI.createView(style.photoListTableHeader);
 	var headerBorder = Ti.UI.createView(style.photoListHeaderBorder);
 	tableHeader.add(headerBorder);
 	var updateArrowImage = Ti.UI.createImageView(style.photoListUpdateArrowImage);
@@ -301,6 +308,23 @@ exports.createWindow = function(_listType, _userData) {
 	        	updateArticle();
 	        }, 2000);
 	    }
+	});
+
+	// 「更新」ボタン
+	updateButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]updateButton.click:');
+		actInd.show();
+		tabGroup.add(actInd);
+
+    	resetPullHeader();
+    	photoListTableView.data = [];
+    	prevArticleIndex = null;
+    	nextArticleFlag = false;
+    	updateArticle();
+
+		setTimeout(function(){
+			actInd.hide();
+		},2000);
 	});
 
 	// ライク・コメント編集を反映
