@@ -17,7 +17,7 @@ exports.createWindow = function(_userData){
 	// 「フォローする」未フォローユーザをフォローするボタン
 	var followButton = Titanium.UI.createButton(style.profileFollowButton);
 	// ロード用画面
-	var actInd = Ti.UI.createActivityIndicator(style.profileActivityIndicator);
+	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
 
 	if (loginId == _userData.user) {
 		profileWin.rightNavButton = saveButton;
@@ -59,6 +59,9 @@ exports.createWindow = function(_userData){
 		    buttonNames: ['OK','キャンセル'],
 		    cancel: 1
 		});
+		alertDialog.show();
+		unfollowButton.enabled = true;
+
 		alertDialog.addEventListener('click',function(alert){
 		    // OKの場合
 		    if(alert.index == 0){
@@ -73,8 +76,6 @@ exports.createWindow = function(_userData){
 				},2000);		        
 		    }
 		});
-		alertDialog.show();
-		unfollowButton.enabled = true;
 	});
 
 	// 「フォローする」ボタン
@@ -388,8 +389,8 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]countPhotoView.click:');
 		if (_userData.photo > 0) {
 			countPhotoView.backgroundColor = '#dedede';
-			var listType = "user";
-			var photoListWin = win.createPhotoListWindow(listType, _userData);
+			var type = "user";
+			var photoListWin = win.createPhotoListWindow(type, _userData);
 			win.openWindow(profileWin, photoListWin);
 			countPhotoView.backgroundColor = 'white';
 		}
@@ -400,8 +401,8 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]countLikeView.click:');
 		if (_userData.like > 0) {
 			countLikeView.backgroundColor = '#dedede';
-			var listType = "like";
-			var photoListWin = win.createPhotoListWindow(listType, _userData);
+			var type = "like";
+			var photoListWin = win.createPhotoListWindow(type, _userData);
 			win.openWindow(profileWin, photoListWin);
 			countLikeView.backgroundColor = 'white';
 		}
@@ -412,8 +413,8 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]countFollowerView.click:');
 		if (_userData.follower > 0) {
 			countFollowerView.backgroundColor = '#dedede';
-			var listType = "follower";
-			var userListWin = win.createUserListWindow(listType, _userData);
+			var type = "follower";
+			var userListWin = win.createUserListWindow(type, _userData);
 			win.openWindow(profileWin, userListWin);
 			countFollowerView.backgroundColor = 'white';
 		}
@@ -424,8 +425,8 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]countFollowView.click:');
 		if (_userData.follow > 0) {
 			countFollowView.backgroundColor = '#dedede';
-			var listType = "follow";
-			var userListWin = win.createUserListWindow(listType, _userData);
+			var type = "follow";
+			var userListWin = win.createUserListWindow(type, _userData);
 			win.openWindow(profileWin, userListWin);
 			countFollowView.backgroundColor = 'white';
 		}

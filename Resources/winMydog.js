@@ -1,6 +1,6 @@
 // うちのわんこ
 
-exports.createWindow = function(_userData, _calendarDate){
+exports.createWindow = function(_type, _userData, _articleData){
 	Ti.API.debug('[func]winMydog.createWindow:');
 
 	// スライド用サイズ
@@ -14,42 +14,71 @@ exports.createWindow = function(_userData, _calendarDate){
 	// 表示部分の最上位置からのオフセット
 	var offset = 0;
 
-	// 指定日の記事リストの取得
-	var articleList = model.getDateArticle(userData, _calendarDate);
-	var index = 0;
-	var thisArticleView = null;
-	var prevArticleView = null;
-	var nextArticleView = null;
-
 	var mydogWin = Ti.UI.createWindow(style.mydogWin);
 	// タイトルの表示
 	var titleLabel = Ti.UI.createLabel(style.mydogTitleLabel);	
 	mydogWin.titleControl = titleLabel;
 
-	if (_calendarDate == null) {	
-		if (articleList.length > 0) {
-			// カレンダーボタンの表示
-			var calendarButton = Titanium.UI.createButton(style.mydogCalendarButton);
-			mydogWin.leftNavButton = calendarButton;
-		
-			// カレンダーボタンをクリック
-			calendarButton.addEventListener('click', function(e){
-				Ti.API.debug('[event]calendarButton.click:');
-				var calendarWin = win.createCalendarWindow(articleList[0]);
-				win.openWindow(mydogWin, calendarWin);
-			});
-		}
+	// カレンダーボタンの表示
+	var calendarButton = Titanium.UI.createButton(style.mydogCalendarButton);
+	mydogWin.leftNavButton = calendarButton;
+	// カレンダーボタンをクリック
+	calendarButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]calendarButton.click:');
+		var calendarWin = win.createCalendarWindow(articleList[articleIndex]);
+		win.openWindow(mydogWin, calendarWin);
+	});
 
-	} else {
+	// カメラボタンの表示
+	var cameraButton = Titanium.UI.createButton(style.mydogCameraButton);
+	mydogWin.rightNavButton = cameraButton;
+	// カメラボタンをクリック
+	cameraButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]cameraButton.click:');
+		var cameraWin = win.createCameraWindow(_userData);
+		win.openWindow(mydogWin, cameraWin);
+	});
+
+	// 表示する記事リストの取得
+	var articleList = null;
+	var articleIndex = null;
+	var calendarDate = null;
+
+	if (_type == "random") {
+		// 対象記事の指定がない場合、ランダムに取得
+		articleList = model.getRandomArticle(userData, _articleData);
+		articleIndex = Math.floor(Math.random() * articleList.length);
+
+	} else 	if (_type == "date" || _type == "post") {
+		// 対象記事の指定がある場合、
+		calendarDate = util.getDate(_articleData.date);
+		articleList = model.getDateArticle(userData, calendarDate);
+		for (i=0; i<articleList.length; i++) {
+			if (articleList[i].no == _articleData.no) {
+				articleIndex = i;
+				break;
+			}
+		}
+	}
+	
+	if (_type == "date") {
 		// タイトルの表示
-		var year = _calendarDate.getFullYear();
-		var month = _calendarDate.getMonth() + 1;
-		var day = _calendarDate.getDate();
+		var year = calendarDate.getFullYear();
+		var month = calendarDate.getMonth() + 1;
+		var day = calendarDate.getDate();
 		titleLabel.text = year + '年' + month + '月' + day + '日';
+
+		// カレンダー・カメラボタンは表示しない
+		mydogWin.rightNavButton = null;
+		mydogWin.leftNavButton = null;
 	}
 
 	var articleTableView = Ti.UI.createTableView(style.mydogTableView);
+	mydogWin.add(articleTableView);
 	var articleTableRow = null;
+	var thisArticleView = null;
+	var prevArticleView = null;
+	var nextArticleView = null;
 
 	// 最上部から下スクロールで最新データを更新する用のヘッダを作成
 	var tableHeader = Ti.UI.createView(style.photoListTableHeader);
@@ -110,26 +139,26 @@ exports.createWindow = function(_userData, _calendarDate){
 	// 記事の更新
 	var updateArticle = function() {
 		Ti.API.debug('[func]updateArticle:');
-		if (articleList.length > index) {
+		if (articleList.length > articleIndex) {
 			articleTableRow = Ti.UI.createTableViewRow(style.mydogArticleTableRow);
 			articleTableView.appendRow(articleTableRow);
 
 			// 当日の記事
-			thisArticleView = getArticleView(articleList[index]);
+			thisArticleView = getArticleView(articleList[articleIndex]);
 			articleTableRow.add(thisArticleView);
 			
 			// 翌日の記事
-			if(articleList.length > index + 1) {
+			if(articleList.length > articleIndex + 1) {
 				Ti.API.debug('nextArticleView:');
-				nextArticleView = getArticleView(articleList[index+1]);
+				nextArticleView = getArticleView(articleList[articleIndex+1]);
 				nextArticleView.left = (screenWidth + (screenWidth - viewWidth) / 2) + 'dp';
 				articleTableRow.add(nextArticleView);
 			}
 		
 			// 前日の記事
-			if(index > 0) {
+			if(articleIndex > 0) {
 				Ti.API.debug('prevArticleView:');
-				prevArticleView = getArticleView(articleList[index-1]);
+				prevArticleView = getArticleView(articleList[articleIndex-1]);
 				prevArticleView.left = ((viewWidth + (screenWidth - viewWidth) / 2)  * -1) + 'dp';
 				articleTableRow.add(prevArticleView);
 			}
@@ -137,7 +166,6 @@ exports.createWindow = function(_userData, _calendarDate){
 	}
 	// 初回読み込み時に、記事を更新
 	updateArticle();
-	mydogWin.add(articleTableView);
 
 	// スライド用アニメーション
 	var slideNext = Ti.UI.createAnimation({
@@ -157,16 +185,16 @@ exports.createWindow = function(_userData, _calendarDate){
 	mydogWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]mydogWin.swipe:');
 		if (e.direction == 'right') {
-			if(index > 0) {
-				index--;
+			if(articleIndex > 0) {
+				articleIndex--;
 				thisArticleView.animate(slidePrev);
 				prevArticleView.animate(slideReset);
 				setTimeout(function() {
 					thisArticleView.left = screenWidth + 'dp';
 					nextArticleView = thisArticleView;
 					thisArticleView = prevArticleView;
-					if(index > 0) {
-						prevArticleView = getArticleView(articleList[index-1]);
+					if(articleIndex > 0) {
+						prevArticleView = getArticleView(articleList[articleIndex-1]);
 						prevArticleView.left = (screenWidth * -1) + 'dp';
 						articleTableRow.add(prevArticleView);
 					}
@@ -174,16 +202,16 @@ exports.createWindow = function(_userData, _calendarDate){
 			}
 
 		} else if (e.direction == 'left') {
-			if(articleList.length > index + 1) {
-				index++;
+			if(articleList.length > articleIndex + 1) {
+				articleIndex++;
 				thisArticleView.animate(slideNext);
 				nextArticleView.animate(slideReset);
 				setTimeout(function() {
 					thisArticleView.left = (screenWidth * -1) + 'dp';
 					prevArticleView = thisArticleView;
 					thisArticleView = nextArticleView;
-					if (articleList.length > index + 1) {
-						nextArticleView = getArticleView(articleList[index+1]);
+					if (articleList.length > articleIndex + 1) {
+						nextArticleView = getArticleView(articleList[articleIndex+1]);
 						nextArticleView.left = screenWidth + 'dp';
 						articleTableRow.add(nextArticleView);						
 					}
@@ -234,14 +262,16 @@ exports.createWindow = function(_userData, _calendarDate){
 	        updateArrowImage.hide();
 	        updateIndicator.show();
 	        e.source.setContentInsets({top:80}, {animated:true});
+
 	        setTimeout(function(){
 	        	resetPullHeader();
-				// 指定日の記事リストの取得
-				articleList = model.getDateArticle(userData, _calendarDate);
-				index = 0;
-		    	articleTableView.data = [];
-				updateArticle();
-				mydogWin.add(articleTableView);
+				if (_type == "random" || _type == "post") {
+					// 対象記事の指定がない場合、ランダムに取得（今の記事以外）
+					articleList = model.getRandomArticle(userData, articleList[articleIndex]);
+					articleIndex = Math.floor(Math.random() * articleList.length);
+			    	articleTableView.data = [];
+					updateArticle();
+				}
 	        }, 2000);
 	    }
 	});

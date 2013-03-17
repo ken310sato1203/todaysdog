@@ -1,8 +1,8 @@
 // ユーザ一覧
 
-exports.createWindow = function(_listType, _userData){
+exports.createWindow = function(_type, _userData){
 	Ti.API.debug('[func]winUserList.createWindow:');
-	Ti.API.debug('_listType:' + _listType);
+	Ti.API.debug('_type:' + _type);
 
 	// ユーザ一覧の表示件数
 	var userCount = 9;
@@ -13,20 +13,20 @@ exports.createWindow = function(_listType, _userData){
 	
 	var userListWin = Ti.UI.createWindow(style.userListWin);
 	// ロード用画面
-	var actInd = Ti.UI.createActivityIndicator(style.profileActivityIndicator);
+	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
 
 	var titleView = null;
 	var titleLabel = null;
 
 	// フォロワのユーザ一覧
-	if (_listType == "follower") {
+	if (_type == "follower") {
 		titleView = Ti.UI.createView(style.userListTitleView);
 		titleLabel = Ti.UI.createLabel(style.userListFollowerTitleLabel);	
 		titleView.add(titleLabel);		
 		userListWin.titleControl = titleView;
 
 	// フォローのユーザ一覧
-	} else 	if (_listType == "follow") {
+	} else 	if (_type == "follow") {
 		titleView = Ti.UI.createView(style.userListTitleView);
 		titleLabel = Ti.UI.createLabel(style.userListFollowTitleLabel);	
 		titleView.add(titleLabel);		
@@ -213,11 +213,11 @@ exports.createWindow = function(_listType, _userData){
 		var userList = null;
 
 		// フォロワのユーザ一覧
-		if (_listType == "follower") {
+		if (_type == "follower") {
 			userList = model.getFollowerList(_userData.user, prevUserIndex, userCount);
 
 		// フォローのユーザ一覧
-		} else if (_listType == "follow") {
+		} else if (_type == "follow") {
 			userList = model.getFollowList(_userData.user, prevUserIndex, userCount);
 		}
 

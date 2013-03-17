@@ -161,9 +161,9 @@ exports.model = {
 
 	// 記事リストの取得
 	// 前回更新時に読み込んだ記事の最終インデックスより新しい記事を取得
-	getArticleList:function(_listType, _userData, _prevArticleIndex, _articleCount){
+	getArticleList:function(_type, _userData, _prevArticleIndex, _articleCount){
 		Ti.API.debug('[func]getArticleList:');
-		Ti.API.debug('_listType:' + _listType);
+		Ti.API.debug('_type:' + _type);
 		var target = [];
 		var pushCount = 0;
 		var pushFlag = false;
@@ -172,7 +172,7 @@ exports.model = {
 		}
 
 		// 全ユーザのフォト一覧
-		if (_listType == "all") {
+		if (_type == "all") {
 			for (var i=0; i<articleList.length; i++) {
 				if (pushFlag) {
 					target.push(articleList[i]);
@@ -187,7 +187,7 @@ exports.model = {
 			}
 
 		// 指定ユーザのフォト一覧
-		} else 	if (_listType == "user") {
+		} else 	if (_type == "user") {
 			for (var i=0; i<articleList.length; i++) {
 				if (pushFlag) {
 					if (articleList[i].user == _userData.user) {
@@ -204,7 +204,7 @@ exports.model = {
 			}
 
 		// ライクなフォト一覧
-		} else 	if (_listType == "like") {
+		} else 	if (_type == "like") {
 			for (var i=0; i<articleList.length; i++) {
 				if (pushFlag) {
 					for (var j=0; j<likeList.length; j++) {
@@ -224,7 +224,7 @@ exports.model = {
 			}
 
 		// フォローユーザのフォト一覧
-		} else 	if (_listType == "follow") {
+		} else 	if (_type == "follow") {
 			for (var i=0; i<articleList.length; i++) {
 				if (pushFlag) {
 					if (articleList[i].user == _userData.user) {
@@ -254,38 +254,44 @@ exports.model = {
 		return target;
 	},
 
+	// 指定ユーザの記事リストから指定日除いてランダムに取得
+	getRandomArticle:function(_userData, _notInArticleData){
+		Ti.API.debug('[func]getRandomArticle:');
+		var target = [];
+		if (_notInArticleData != null) {
+			for (var i=0; i<articleList.length; i++) {
+				if (articleList[i].user == _userData.user) {
+					if (articleList[i].no != _notInArticleData.no) {
+						target.push(articleList[i]);
+					}
+				}
+			}
+
+		} else {
+			for (var i=0; i<articleList.length; i++) {
+				if (articleList[i].user == _userData.user) {
+					target.push(articleList[i]);
+				}
+			}
+		}
+
+		if (target.length > 0) {
+			var randomIndex = Math.floor(Math.random() * target.length);
+			var ramdomDate = util.getDate(target[randomIndex].date);
+			return this.getDateArticle(_userData, ramdomDate);
+
+		} else {
+			return target;
+		}
+	},
+
 	// 指定ユーザの記事リストから指定日の記事を取得
 	getDateArticle:function(_userData, _calendarDate){
 		Ti.API.debug('[func]getDateArticle:');
-
 		var target = [];
-		var calendarDay = null;
-		var calendarYear = null;
-		var calendarMonth = null;
-
-		if (_calendarDate != null) {
-			calendarDay = _calendarDate.getDate();
-			calendarYear = _calendarDate.getFullYear();
-			calendarMonth = _calendarDate.getMonth();
-
-		} else {
-			var randomTarget = [];
-			for (var i=0; i<articleList.length; i++) {
-				if (articleList[i].user == _userData.user) {
-					randomTarget.push(articleList[i]);
-				}
-			}
-			if (randomTarget.length > 0) {
-				var randomIndex = Math.floor(Math.random() * randomTarget.length);
-				var ramdomDate = util.getDate(randomTarget[randomIndex].date);
-				calendarDay = ramdomDate.getDate();
-				calendarYear = ramdomDate.getFullYear();
-				calendarMonth = ramdomDate.getMonth();
-
-			} else {
-				return target;
-			}
-		}
+		var calendarDay = _calendarDate.getDate();
+		var calendarYear = _calendarDate.getFullYear();
+		var calendarMonth = _calendarDate.getMonth();
 
 		for (var i=articleList.length; i>0; i--) {
 			if (articleList[i-1].user == _userData.user) {

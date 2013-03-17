@@ -3,6 +3,7 @@
 var friendsWin = require('winFriends');
 var mydogWin = require('winMydog');
 var calendarWin = require('winCalendar');
+var cameraWin = require('winCamera');
 var scheduleWin = require('winSchedule');
 var profileWin = require('winProfile');
 var photoWin = require('winPhoto');
@@ -14,25 +15,36 @@ exports.win = {
 
 	createTodayWindow:function(_userData){
 		Ti.API.debug('[func]createTodayWindow:');
-		var listType = "all";
-		return photoListWin.createWindow(listType, _userData, null, null);
+		var type = "all";
+		return photoListWin.createWindow(type, _userData, null, null);
 	},
 	createFriendsWindow:function(_userData){
 		Ti.API.debug('[func]createFriendsWindow:');
-		var listType = "follow";
-		return photoListWin.createWindow(listType, _userData, null, null);
+		var type = "follow";
+		return photoListWin.createWindow(type, _userData, null, null);
 	},
 	createMydogWindow:function(_userData){
 		Ti.API.debug('[func]createMydogWindow:');
-		return mydogWin.createWindow(_userData, null);
+		var type = "random";
+		return mydogWin.createWindow(type, _userData, null);
 	},
-	createCalendarPhotoWindow:function(_userData, _calendarDate){
+	createCalendarPhotoWindow:function(_userData, _articleData){
 		Ti.API.debug('[func]createCalendarPhotoWindow:');
-		return mydogWin.createWindow(_userData, _calendarDate);
+		var type = "date";
+		return mydogWin.createWindow(type, _userData, _articleData);
+	},
+	createCameraPhotoWindow:function(_userData, _articleData){
+		Ti.API.debug('[func]createCameraPhotoWindow:');
+		var type = "post";
+		return mydogWin.createWindow(type, _userData, _articleData);
 	},
 	createCalendarWindow:function(_articleData){
 		Ti.API.debug('[func]createCalendarWindow:');
 		return calendarWin.createWindow(_articleData);
+	},
+	createCameraWindow:function(_userData){
+		Ti.API.debug('[func]createCameraWindow:');
+		return cameraWin.createWindow(_userData);
 	},
 	createScheduleWindow:function(){
 		Ti.API.debug('[func]createScheduleWindow:');
@@ -47,13 +59,13 @@ exports.win = {
 		Ti.API.debug('[func]createPhotoWindow:');
 		return photoWin.createWindow(_articleData);
 	},
-	createPhotoListWindow:function(_listType, _userData){
+	createPhotoListWindow:function(_type, _userData){
 		Ti.API.debug('[func]createPhotoListWindow:');
-		return photoListWin.createWindow(_listType, _userData, null, null);
+		return photoListWin.createWindow(_type, _userData, null, null);
 	},
-	createUserListWindow:function(_listType, _userData){
+	createUserListWindow:function(_type, _userData){
 		Ti.API.debug('[func]createUserListWindow:');
-		return userListWin.createWindow(_listType, _userData);
+		return userListWin.createWindow(_type, _userData);
 	},
 	createCommentListWindow:function(_articleData){
 		Ti.API.debug('[func]createCommentListWindow:');

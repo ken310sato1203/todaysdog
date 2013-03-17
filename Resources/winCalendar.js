@@ -59,12 +59,13 @@ exports.createWindow = function(_articleData){
 		dayView.month = e.month;
 		dayView.day = e.day;
 		dayView.current = e.current;
+		dayView.articleData = e.articleData;
 
 		var articleImage = null;
 		
-		if (e.article != null) {
+		if (e.articleData != null) {
 			dayView.dayImage = Ti.UI.createImageView(style.calendarDayImage);
-			dayView.dayImage.image = 'images/photo/' + e.article.no + '.jpg';
+			dayView.dayImage.image = 'images/photo/' + e.articleData.no + '.jpg';
 			dayView.add(dayView.dayImage);
 		}
 
@@ -117,13 +118,13 @@ exports.createWindow = function(_articleData){
 				day : lastMonthFirstDay + i,
 				current : 'no',
 				textColor : '#8e959f',
-				article : null,
+				articleData : null,
 			}));
 		};
 		
 		// 当月の日付の作成
 		// 当月の記事データ
-		var calendarArticle = model.getCalendarArticle(userData, _year, _month);
+		var articleList = model.getCalendarArticle(userData, _year, _month);
 		for (var i=0; i < daysInMonth; i++) {
 			calView.add(getDayView({
 				backgroundColor: 'white',
@@ -132,7 +133,7 @@ exports.createWindow = function(_articleData){
 				day : i + 1,
 				current : 'yes',
 				textColor : '#3a4756',
-				article : calendarArticle[i],
+				articleData : articleList[i],
 			}));
 		};
 
@@ -145,7 +146,7 @@ exports.createWindow = function(_articleData){
 				day : i + 1,
 				current : 'no',
 				textColor : '#8e959f',
-				article : null,
+				articleData : null,
 			}));
 		};
 
@@ -167,13 +168,12 @@ exports.createWindow = function(_articleData){
 				}
 
 				if (target.dayImage != null) {
-					Ti.API.debug('[event]target.year:' + target.year);
-					Ti.API.debug('[event]target.month:' + target.month);
-					Ti.API.debug('[event]target.day:' + target.day);
+					Ti.API.debug('target.year:' + target.year);
+					Ti.API.debug('target.month:' + target.month);
+					Ti.API.debug('target.day:' + target.day);
 	
 					target.dayImage.opacity = 0.5;
-					var calendarDate = new Date(target.year, target.month, target.day);
-					var calendarPhotoWin = win.createCalendarPhotoWindow(userData, calendarDate);
+					var calendarPhotoWin = win.createCalendarPhotoWindow(userData, target.articleData);
 					win.openWindow(calendarWin, calendarPhotoWin);
 					target.dayImage.opacity = 1.0;
 				}

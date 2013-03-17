@@ -1,8 +1,8 @@
 // フォト一覧
 
-exports.createWindow = function(_listType, _userData, _year, _month) {
+exports.createWindow = function(_type, _userData, _year, _month) {
 	Ti.API.debug('[func]winPhotoList.createWindow:');
-	Ti.API.debug('_listType:' + _listType);
+	Ti.API.debug('_type:' + _type);
 
 	// 記事リストの表示件数
 	var articleCount = 9;
@@ -27,30 +27,30 @@ exports.createWindow = function(_listType, _userData, _year, _month) {
 	// 更新ボタン
 	var updateButton = Titanium.UI.createButton(style.photoListUpdateButton);
 	// ロード用画面
-	var actInd = Ti.UI.createActivityIndicator(style.profileActivityIndicator);
+	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
 
-	// 全ユーザのフォト一覧
-	if (_listType == "all") {
+	if (_type == "all") {
+		// 全ユーザのフォト一覧
 		titleLabel = Ti.UI.createLabel(style.photoListTodayTitleLabel);	
 		photoListWin.titleControl = titleLabel;
 //		photoListWin.rightNavButton = updateButton;
 
-	// フォローユーザのフォト一覧
-	} else 	if (_listType == "follow") {
+	} else 	if (_type == "follow") {
+		// フォローユーザのフォト一覧
 		titleLabel = Ti.UI.createLabel(style.photoListFirendsTitleLabel);	
 		photoListWin.titleControl = titleLabel;
 //		photoListWin.rightNavButton = updateButton;
 		articleCount = 8;
 
-	// 指定ユーザのフォト一覧
-	} else 	if (_listType == "user") {
+	} else 	if (_type == "user") {
+		// 指定ユーザのフォト一覧
 		titleView = Ti.UI.createView(style.photoListTitleView);
 		titleLabel = Ti.UI.createLabel(style.photoListPhotoTitleLabel);	
 		titleView.add(titleLabel);		
 		photoListWin.titleControl = titleView;
 
-	// ライクなフォト一覧
-	} else 	if (_listType == "like") {
+	} else 	if (_type == "like") {
+		// ライクなフォト一覧
 		titleView = Ti.UI.createView(style.photoListTitleView);
 		titleLabel = Ti.UI.createLabel(style.photoListLikeTitleLabel);	
 		titleView.add(titleLabel);		
@@ -203,7 +203,7 @@ exports.createWindow = function(_listType, _userData, _year, _month) {
 		// 取得した記事が表示件数以下の場合
 		if (_articleList.length < articleCount + 1) {
 			// 取得した記事をテーブルに追加
-			if (_listType == "follow") {
+			if (_type == "follow") {
 				photoListTableView.appendRow(getFriendsArticleTableRow(_articleList));
 			} else {
 				photoListTableView.appendRow(getArticleTableRow(_articleList));				
@@ -220,7 +220,7 @@ exports.createWindow = function(_listType, _userData, _year, _month) {
 			// 多く取得した1件のデータを削除
 			_articleList.pop();
 			// 取得した記事をテーブルに追加
-			if (_listType == "follow") {
+			if (_type == "follow") {
 				photoListTableView.appendRow(getFriendsArticleTableRow(_articleList), {animated:true});
 			} else {
 				photoListTableView.appendRow(getArticleTableRow(_articleList), {animated:true});				
@@ -241,7 +241,7 @@ exports.createWindow = function(_listType, _userData, _year, _month) {
 		Ti.API.debug('[func]updateArticle:');
 		// 前回取得した最後のインデックス以降を取得
 		// 「続きを読む」ボタンの表示判定のため、表示件数より1件多い条件で取得
-		var articleList = model.getArticleList(_listType, _userData, prevArticleIndex, articleCount + 1);
+		var articleList = model.getArticleList(_type, _userData, prevArticleIndex, articleCount + 1);
 		if (articleList == null || articleList.length == 0) {
 			// 1件も取得できなかった場合
 			appendNoDataLabel();		

@@ -1,6 +1,20 @@
 // スタイル
 
 exports.style = {
+
+// common -------------------------------------------------------	
+	commonActivityIndicator:{
+		backgroundColor: 'black',
+		opacity: 0.7,
+		width: '100%',
+		height: '100%',
+		style: Ti.UI.iPhone.ActivityIndicatorStyle.PLAIN,
+		font: {fontSize:14, fontWeight:'bold'},
+		color: 'white',
+		message: 'Loading...',
+	},
+				
+	
 // tab -------------------------------------------------------
 	todayTab:function(win){
 		return {
@@ -413,17 +427,6 @@ exports.style = {
 		title: '保存する',
 	},
 
-	profileActivityIndicator:{
-		backgroundColor: 'black',
-		opacity: 0.7,
-		width: '100%',
-		height: '100%',
-		style: Ti.UI.iPhone.ActivityIndicatorStyle.PLAIN,
-		font: {fontSize:14, fontWeight:'bold'},
-		color: 'white',
-		message: 'Loading...',
-	},
-				
 	profileCountView:{
 		layout: 'absolute',
 		top: '0dp',
@@ -1181,6 +1184,13 @@ exports.style = {
 		title: 'カレンダー',
 	},
 
+	mydogCameraButton:{
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		title: 'カメラ',
+		systemButton:Titanium.UI.iPhone.SystemButton.CAMERA,
+	},
+
 	mydogTableView:{ 
 		backgroundColor: '#dedede',
 		separatorColor: 'transparent',
@@ -1271,6 +1281,7 @@ exports.style = {
 		month : null,
 		day : null,
 		current : null,
+		articleData : null,
 	},
 	calendarDayImage:{
 		top : '3dp',
@@ -1298,6 +1309,61 @@ exports.style = {
 		height : 'auto',
 	},
 
+// winCamera -------------------------------------------------------
+	cameraWin:{
+		backgroundColor: '#dedede',
+		barColor: '#a9a9a9',
+	},
+	cameraTitleLabel:{
+		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+		text: 'カメラ', 
+	},
+
+	cameraPostButton:{
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		textAlign: 'center',
+		font: {fontSize:10, fontFamily:'Helvetica Neue'},
+		title: '投稿',
+	},
+
+	cameraArticleView:{
+		layout : 'horizontal',
+		top : '10dp',
+		left: '10dp',
+		width : '302dp',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+	},
+	cameraArticleImage:{
+		top : '5dp',
+		left: '5dp',
+		bottom : '5dp',
+		width : '70dp',
+		height : '70dp',
+		backgroundColor: 'black',
+		image : null,
+	},
+	cameraArticleTextArea:{
+		top : '5dp',
+		left: '0dp',
+		bottom : '5dp',
+		width: '226dp',
+		height : '70dp',
+		backgroundColor: 'white',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: 'gray',
+		// hintTextはiOSで対応されていないので、focus/blur時に処理
+		hintText: 'comment',
+		value: 'comment',
+		suppressReturn: false,
+        keyboardType:Ti.UI.KEYBOARD_DEFAULT,
+//        returnKeyType:Ti.UI.RETURNKEY_SEND,
+	},
 
 // winSchedule -------------------------------------------------------
 	scheduleWin:{
