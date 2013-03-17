@@ -784,7 +784,7 @@ exports.style = {
 		left: '12dp',
 		width: '15dp',
 		height: '15dp',
-		image: 'images/icon/comment.gif',
+		image: 'images/icon/light_comment.png',
 	},
 	photoListFriendsCommentLabel:{
 		left: '8dp',
@@ -1192,6 +1192,12 @@ exports.style = {
 		backgroundColor: '#dedede',
 		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
+	mydogArticleSlideView:{
+		layout: 'horizontal',
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
 	},
 	mydogArticleView:{
 		layout: 'vertical',

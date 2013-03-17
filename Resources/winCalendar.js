@@ -3,10 +3,8 @@
 exports.createWindow = function(_articleData){
 	Ti.API.debug('[func]winCalendar.createWindow:');
 
-	var calendarWin = Ti.UI.createWindow(style.calendarWin);
+	// 画面横幅
 	var screenWidth = 322;
-	var needToChangeSize = false;
-	var screenWidthActual = Ti.Platform.displayCaps.platformWidth;
 
 	var userData = model.getUser(_articleData.user);
 
@@ -26,6 +24,7 @@ exports.createWindow = function(_articleData){
 	var nowMonth = now.getMonth();
 	var nowDay = now.getDate();
 
+	var calendarWin = Ti.UI.createWindow(style.calendarWin);
 	// タイトルの表示
 	var monthName = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 	var monthTitle = Ti.UI.createLabel(style.calendarTitleLabel);	
@@ -173,10 +172,10 @@ exports.createWindow = function(_articleData){
 					Ti.API.debug('[event]target.day:' + target.day);
 	
 					target.dayImage.opacity = 0.5;
-		
-					setTimeout(function(){
-						target.dayImage.opacity = 1.0;
-					},1000);
+					var calendarDate = new Date(target.year, target.month, target.day);
+					var calendarPhotoWin = win.createCalendarPhotoWindow(userData, calendarDate);
+					win.openWindow(calendarWin, calendarPhotoWin);
+					target.dayImage.opacity = 1.0;
 				}
 	
 			}
@@ -187,9 +186,6 @@ exports.createWindow = function(_articleData){
 
 	// 当月のカレンダー
 	var thisCalendarView = getCalView(year, month);
-	if (needToChangeSize == false) {
-		thisCalendarView.left = '-1dp';
-	}
 	calendarWin.add(thisCalendarView);
 
 	// 翌月のカレンダー
@@ -212,25 +208,19 @@ exports.createWindow = function(_articleData){
 	prevCalendarView.left = (screenWidth * -1) + 'dp';
 	calendarWin.add(prevCalendarView);
 
+	// スライド用アニメーション
 	var slideNext = Ti.UI.createAnimation({
-		// left : '-322',
-		duration : 500
+		duration : 500,
+		left : (screenWidth * -1) + 'dp',
 	});
-	slideNext.left = (screenWidth * -1);
 	var slideReset = Ti.UI.createAnimation({
-		// left : '-1',
-		duration : 500
+		duration : 500,
+		left : '-1dp',
 	});
-	if (needToChangeSize == false) {
-		slideReset.left = '-1';
-	} else {
-		slideReset.left = ((screenWidth - 644) / 2);
-	}
 	var slidePrev = Ti.UI.createAnimation({
-		// left : '322',
-		duration : 500
+		duration : 500,
+		left : screenWidth + 'dp',
 	});
-	slidePrev.left = screenWidth;
 
 	// 左右スワイプで前月・翌月のカレンダーを表示
 	calendarWin.addEventListener('swipe',function(e){
@@ -246,11 +236,6 @@ exports.createWindow = function(_articleData){
 			prevCalendarView.animate(slideReset);
 			setTimeout(function() {
 				thisCalendarView.left = screenWidth + 'dp';
-				if (needToChangeSize == false) {
-					prevCalendarView.left = '-1dp';
-				} else {
-					prevCalendarView.left = ((screenWidth - 644) / 2);
-				}
 				nextCalendarView = thisCalendarView;
 				thisCalendarView = prevCalendarView;
 				if (month == 0) {
@@ -274,11 +259,6 @@ exports.createWindow = function(_articleData){
 			nextCalendarView.animate(slideReset);
 			setTimeout(function() {
 				thisCalendarView.left = (screenWidth * -1) + 'dp';
-				if (needToChangeSize == false) {
-					nextCalendarView.left = '-1dp';
-				} else {
-					nextCalendarView.left = ((screenWidth - 644) / 2);
-				}
 				prevCalendarView = thisCalendarView;
 				thisCalendarView = nextCalendarView;
 				if (month == 11) {

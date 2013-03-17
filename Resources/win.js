@@ -15,16 +15,20 @@ exports.win = {
 	createTodayWindow:function(_userData){
 		Ti.API.debug('[func]createTodayWindow:');
 		var listType = "all";
-		return photoListWin.createWindow(listType, _userData);
+		return photoListWin.createWindow(listType, _userData, null, null);
 	},
 	createFriendsWindow:function(_userData){
 		Ti.API.debug('[func]createFriendsWindow:');
 		var listType = "follow";
-		return photoListWin.createWindow(listType, _userData);
+		return photoListWin.createWindow(listType, _userData, null, null);
 	},
 	createMydogWindow:function(_userData){
 		Ti.API.debug('[func]createMydogWindow:');
-		return mydogWin.createWindow(_userData);
+		return mydogWin.createWindow(_userData, null);
+	},
+	createCalendarPhotoWindow:function(_userData, _calendarDate){
+		Ti.API.debug('[func]createCalendarPhotoWindow:');
+		return mydogWin.createWindow(_userData, _calendarDate);
 	},
 	createCalendarWindow:function(_articleData){
 		Ti.API.debug('[func]createCalendarWindow:');
@@ -45,7 +49,7 @@ exports.win = {
 	},
 	createPhotoListWindow:function(_listType, _userData){
 		Ti.API.debug('[func]createPhotoListWindow:');
-		return photoListWin.createWindow(_listType, _userData);
+		return photoListWin.createWindow(_listType, _userData, null, null);
 	},
 	createUserListWindow:function(_listType, _userData){
 		Ti.API.debug('[func]createUserListWindow:');

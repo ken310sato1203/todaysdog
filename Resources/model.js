@@ -13,9 +13,9 @@ var followList = [];
 loginId = "sakura";
 
 articleList = [
-	{no:"A0023", user:"pochi", location:"Chiba", date:"2013-02-21 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0022", user:"shiro", location:"Fukuoka", date:"2013-02-11 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0021", user:"koro", location:"Shiga", date:"2013-02-09 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0023", user:"sakura", location:"Chiba", date:"2013-02-09 10:26:05", text:"3明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0022", user:"sakura", location:"Fukuoka", date:"2013-02-09 08:26:05", text:"2明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0021", user:"sakura", location:"Shiga", date:"2013-02-09 07:26:05", text:"1明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{no:"A0020", user:"koro", location:"Fukuoka", date:"2013-02-06 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{no:"A0019", user:"maki", location:"Shiga", date:"2013-02-05 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{no:"A0018", user:"sakura", location:"Nara", date:"2013-02-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
@@ -31,9 +31,9 @@ articleList = [
 	{no:"A0008", user:"kuro", location:"Kobe", date:"2013-01-17 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{no:"A0007", user:"gon", location:"Nagoya", date:"2013-01-15 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{no:"A0006", user:"jiro", location:"Chiba", date:"2013-01-13 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0005", user:"pochi", location:"Fukuoka", date:"2013-12-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0004", user:"shiro", location:"Shiga", date:"2013-01-11 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0003", user:"koro", location:"Nara", date:"2013-01-03 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0005", user:"sakura", location:"Fukuoka", date:"2013-01-03 07:26:05", text:"3明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0004", user:"sakura", location:"Shiga", date:"2013-01-03 07:26:05", text:"2明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0003", user:"sakura", location:"Nara", date:"2013-01-03 07:26:05", text:"1明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{no:"A0002", user:"maki", location:"Kyoto", date:"2013-01-02 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{no:"A0001", user:"sakura", location:"Tokyo", date:"2012-12-07 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 ];
@@ -254,18 +254,51 @@ exports.model = {
 		return target;
 	},
 
-	// 指定ユーザの記事リストからランダムに取得
-	getRandomArticle:function(_userData){
-		Ti.API.debug('[func]getRandomArticle:');
-		var target = [];
+	// 指定ユーザの記事リストから指定日の記事を取得
+	getDateArticle:function(_userData, _calendarDate){
+		Ti.API.debug('[func]getDateArticle:');
 
-		for (var i=0; i<articleList.length; i++) {
-			if (articleList[i].user == _userData.user) {
-				target.push(articleList[i]);
+		var target = [];
+		var calendarDay = null;
+		var calendarYear = null;
+		var calendarMonth = null;
+
+		if (_calendarDate != null) {
+			calendarDay = _calendarDate.getDate();
+			calendarYear = _calendarDate.getFullYear();
+			calendarMonth = _calendarDate.getMonth();
+
+		} else {
+			var randomTarget = [];
+			for (var i=0; i<articleList.length; i++) {
+				if (articleList[i].user == _userData.user) {
+					randomTarget.push(articleList[i]);
+				}
+			}
+			if (randomTarget.length > 0) {
+				var randomIndex = Math.floor(Math.random() * randomTarget.length);
+				var ramdomDate = util.getDate(randomTarget[randomIndex].date);
+				calendarDay = ramdomDate.getDate();
+				calendarYear = ramdomDate.getFullYear();
+				calendarMonth = ramdomDate.getMonth();
+
+			} else {
+				return target;
 			}
 		}
-		var randomIndex = Math.floor(Math.random() * target.length);
-		return target[randomIndex];
+
+		for (var i=articleList.length; i>0; i--) {
+			if (articleList[i-1].user == _userData.user) {
+				var articleDate = util.getDate(articleList[i-1].date);
+				if (articleDate.getDate() == calendarDay) {
+					if (articleDate.getFullYear() == calendarYear && articleDate.getMonth() == calendarMonth) {
+						target.push(articleList[i-1]);
+					}
+				}
+			}
+		}
+
+		return target;
 	},
 
 	// 指定ユーザの記事リストから指定月の記事を取得
@@ -276,21 +309,21 @@ exports.model = {
 		var daysInMonth = 32 - new Date(_year, _month, 32).getDate();
 		for (var i=0; i < daysInMonth; i++) {
 			var target = null;
-			for (var j=0; j<articleList.length; j++) {
-				if (articleList[j].user == _userData.user) {
-					var articleDate = util.getDate(articleList[j].date);
+			for (var j=articleList.length; j>0; j--) {
+				if (articleList[j-1].user == _userData.user) {
+					var articleDate = util.getDate(articleList[j-1].date);
 					var articleDay = articleDate.getDate();
 					if (i == articleDay - 1) {
 						var articleYear = articleDate.getFullYear();
 						var articleMonth = articleDate.getMonth();
 						if (_year == articleYear && _month == articleMonth) {
-							target = articleList[j];
+							target = articleList[j-1];
 							break;
 						}
 					}
 				}
 			}
-			calendarTarget.push(target);			
+			calendarTarget.push(target);
 		}
 
 		return calendarTarget;

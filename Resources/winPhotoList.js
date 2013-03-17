@@ -1,6 +1,6 @@
 // フォト一覧
 
-exports.createWindow = function(_listType, _userData) {
+exports.createWindow = function(_listType, _userData, _year, _month) {
 	Ti.API.debug('[func]winPhotoList.createWindow:');
 	Ti.API.debug('_listType:' + _listType);
 
