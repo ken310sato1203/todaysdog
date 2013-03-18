@@ -37,7 +37,7 @@ exports.style = {
 			title: 'mydog',
 		};
 	},
-	scheduleTab:function(win){
+	diaryTab:function(win){
 		return {
 			window: win,
 			icon: 'images/icon/light_heart.png',
@@ -1365,11 +1365,20 @@ exports.style = {
 //        returnKeyType:Ti.UI.RETURNKEY_SEND,
 	},
 
-// winSchedule -------------------------------------------------------
-	scheduleWin:{
+// winDiary -------------------------------------------------------
+	diaryWin:{
 		backgroundColor: '#dedede',
 		barColor: '#a9a9a9',
 	},
+	diaryTitleLabel:{
+		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+		text: '日記', 
+	},
+
+
 
 };
 

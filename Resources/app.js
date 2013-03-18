@@ -18,13 +18,13 @@ var userData = model.getUser(loginId);
 var win1 = win.createTodayWindow(userData);
 var win2 = win.createFriendsWindow(userData);
 var win3 = win.createMydogWindow(userData);
-var win4 = win.createScheduleWindow(userData);
+var win4 = win.createDiaryWindow(userData);
 var win5 = win.createProfileWindow(userData);
 
 var tab1 =  Ti.UI.createTab(style.todayTab(win1));
 var tab2 =  Ti.UI.createTab(style.friendsTab(win2));
 var tab3 =  Ti.UI.createTab(style.mydogTab(win3));
-var tab4 =  Ti.UI.createTab(style.scheduleTab(win4));
+var tab4 =  Ti.UI.createTab(style.diaryTab(win4));
 var tab5 =  Ti.UI.createTab(style.profileTab(win5));
 
 tabGroup.addTab(tab1);
