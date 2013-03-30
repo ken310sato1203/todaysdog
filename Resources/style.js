@@ -3,6 +3,11 @@
 exports.style = {
 
 // common -------------------------------------------------------	
+	commonSize:{
+		// dpは計算のためつけないこと
+		screenWidth: 322,
+	},
+
 	commonActivityIndicator:{
 		backgroundColor: 'black',
 		opacity: 0.7,
@@ -63,6 +68,7 @@ exports.style = {
 		bottom: '10dp',
 		backgroundColor: '#dedede',
 		separatorColor: 'transparent',
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		data: [],
 	},
 	photoArticleTableRow:{ 
@@ -70,7 +76,6 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
 		touchEnabled: false,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
 
 	photoTitleView:{
@@ -911,6 +916,7 @@ exports.style = {
 		top: '10dp',
 		backgroundColor: '#dedede',
 		separatorColor: 'transparent',
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		data: [],
 	},
 	userListUserTableRow:{ 
@@ -918,14 +924,12 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
 		touchEnabled: false,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
 	userListNextTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
 		touchEnabled: false,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
 	userListUserListView:{
 		layout: 'vertical',
@@ -1035,6 +1039,7 @@ exports.style = {
 		top: '10dp',
 		backgroundColor: '#dedede',
 		separatorColor: 'transparent',
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		data: [],
 	},
 	commentListUserTableRow:{ 
@@ -1042,14 +1047,12 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
 		touchEnabled: false,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
 	commentListNextTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
 		touchEnabled: false,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
 	commentListUserListView:{
 		layout: 'vertical',
@@ -1264,7 +1267,7 @@ exports.style = {
 		height : '20dp',
 		text : null,
 		textAlign : 'center',
-		font : {fontSize:12, fontWeight:'bold'},
+		font : {fontSize:11, fontWeight:'bold'},
 		color : '#3a4756'
 	},
 
@@ -1371,14 +1374,81 @@ exports.style = {
 		barColor: '#a9a9a9',
 	},
 	diaryTitleLabel:{
+		width: '200dp',
+		textAlign: 'center',
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
-		text: '日記', 
 	},
 
+	diaryTableView:{
+		top: '1dp',
+		left:0,
+		width:320,
+		backgroundColor: '#dedede',
+		separatorColor: 'transparent',
+		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
+	},
 
+	diaryTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		touchEnabled: false,
+	},
+
+	diaryDayView:{
+		top: '0dp',
+		bottom: '1dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+		backgroundColor : 'white',
+		// カスタムプロパティ
+		objectName : 'diaryDayView',
+		dayImage: null,
+		dayLabel: null,
+		year : null,
+		month : null,
+		day : null,
+		current : null,
+		articleData : null,
+	},
+	diaryDayLabel:{
+		top: '15dp',
+		left: '8dp',
+		width:30,
+		height:30,
+		textAlign: 'center',
+		font : {fontSize:15, fontWeight:'bold'},
+		color: '#3a4756',
+		// カスタムプロパティ
+		objectName : 'diaryDayLabel',
+	},
+	diaryWeekdayLabel:{
+		top: '0dp',
+		left: '8dp',
+		width:30,
+		height:30,
+		textAlign: 'center',
+		font : {fontSize:11, fontWeight:'bold'},
+	},
+	diaryTodayView:{
+		top: '0dp',
+		left: '0dp',
+		width: '7dp',
+		height: '100%',
+		backgroundColor : '#87CEFA',
+	},
+	diaryDayImage:{
+		top : '3dp',
+		width : '40dp',
+		height : '40dp',
+		backgroundColor: 'black',
+		image : null,
+		// カスタムプロパティ
+		objectName : 'diaryDayImage',
+	},
 
 };
 

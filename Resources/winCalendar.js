@@ -3,9 +3,7 @@
 exports.createWindow = function(_articleData){
 	Ti.API.debug('[func]winCalendar.createWindow:');
 
-	// 画面横幅
-	var screenWidth = 322;
-
+	// ユーザデータの取得
 	var userData = model.getUser(_articleData.user);
 
 	// 記事の日付
@@ -14,15 +12,14 @@ exports.createWindow = function(_articleData){
 	var articleMonth = articleDate.getMonth();
 	var articleDay = articleDate.getDate();
 
-	var year = articleYear;
-	var month = articleMonth;
-	var day = articleDay;
-
 	// 今日の日付
 	var now = new Date();
 	var nowYear = now.getFullYear();
 	var nowMonth = now.getMonth();
 	var nowDay = now.getDate();
+
+	var year = articleYear;
+	var month = articleMonth;
 
 	var calendarWin = Ti.UI.createWindow(style.calendarWin);
 	// タイトルの表示
@@ -35,13 +32,13 @@ exports.createWindow = function(_articleData){
 	var headerView = Ti.UI.createView(style.calendarHeaderView);
 	calendarWin.add(headerView);
 	var weekday = [
-		{text:'Sun',color:'#CD5C5C'},
-		{text:'Mon',color:'#3a4756'},
-		{text:'Tue',color:'#3a4756'},
-		{text:'Wed',color:'#3a4756'},
-		{text:'Thu',color:'#3a4756'},
-		{text:'Fri',color:'#3a4756'},
-		{text:'Sat',color:'#4169E1'}];
+		{text:'SUN',color:'#CD5C5C'},
+		{text:'MON',color:'#3a4756'},
+		{text:'TUE',color:'#3a4756'},
+		{text:'WED',color:'#3a4756'},
+		{text:'THU',color:'#3a4756'},
+		{text:'FRI',color:'#3a4756'},
+		{text:'SAT',color:'#4169E1'}];
 
 	for (var i=0; i<weekday.length; i++) {
 		var headerLabel = Ti.UI.createLabel(style.calendarHeaderLabel);
@@ -58,7 +55,7 @@ exports.createWindow = function(_articleData){
 		dayView.year = e.year;
 		dayView.month = e.month;
 		dayView.day = e.day;
-		dayView.current = e.current;
+		dayView.currentFlag = e.currentFlag;
 		dayView.articleData = e.articleData;
 
 		var articleImage = null;
@@ -74,7 +71,7 @@ exports.createWindow = function(_articleData){
 		dayView.dayLabel.text = e.day;
 		dayView.add(dayView.dayLabel);
 
-		if ( e.current == 'yes' ) {
+		if ( e.currentFlag ) {
 			// 今日の日付表示
 			if ( e.day == nowDay ) {
 				if (e.year == nowYear && e.month == nowMonth) {
@@ -116,7 +113,7 @@ exports.createWindow = function(_articleData){
 				year : _year,
 				month : _month,
 				day : lastMonthFirstDay + i,
-				current : 'no',
+				currentFlag : false,
 				textColor : '#8e959f',
 				articleData : null,
 			}));
@@ -131,7 +128,7 @@ exports.createWindow = function(_articleData){
 				year : _year,
 				month : _month,
 				day : i + 1,
-				current : 'yes',
+				currentFlag : true,
 				textColor : '#3a4756',
 				articleData : articleList[i],
 			}));
@@ -144,7 +141,7 @@ exports.createWindow = function(_articleData){
 				year : _year,
 				month : _month,
 				day : i + 1,
-				current : 'no',
+				currentFlag : false,
 				textColor : '#8e959f',
 				articleData : null,
 			}));
@@ -195,7 +192,7 @@ exports.createWindow = function(_articleData){
 	} else {
 		nextCalendarView = getCalView(year, month + 1);
 	}
-	nextCalendarView.left = screenWidth + 'dp';
+	nextCalendarView.left = style.commonSize.screenWidth + 'dp';
 	calendarWin.add(nextCalendarView);
 
 	// 前月のカレンダー
@@ -205,13 +202,13 @@ exports.createWindow = function(_articleData){
 	} else {
 		prevCalendarView = getCalView(year, month - 1);
 	}
-	prevCalendarView.left = (screenWidth * -1) + 'dp';
+	prevCalendarView.left = (style.commonSize.screenWidth * -1) + 'dp';
 	calendarWin.add(prevCalendarView);
 
 	// スライド用アニメーション
 	var slideNext = Ti.UI.createAnimation({
 		duration : 500,
-		left : (screenWidth * -1) + 'dp',
+		left : (style.commonSize.screenWidth * -1) + 'dp',
 	});
 	var slideReset = Ti.UI.createAnimation({
 		duration : 500,
@@ -219,7 +216,7 @@ exports.createWindow = function(_articleData){
 	});
 	var slidePrev = Ti.UI.createAnimation({
 		duration : 500,
-		left : screenWidth + 'dp',
+		left : style.commonSize.screenWidth + 'dp',
 	});
 
 	// 左右スワイプで前月・翌月のカレンダーを表示
@@ -235,7 +232,8 @@ exports.createWindow = function(_articleData){
 			thisCalendarView.animate(slidePrev);
 			prevCalendarView.animate(slideReset);
 			setTimeout(function() {
-				thisCalendarView.left = screenWidth + 'dp';
+				calendarWin.remove(nextCalendarView);
+				thisCalendarView.left = style.commonSize.screenWidth + 'dp';
 				nextCalendarView = thisCalendarView;
 				thisCalendarView = prevCalendarView;
 				if (month == 0) {
@@ -244,7 +242,7 @@ exports.createWindow = function(_articleData){
 					prevCalendarView = getCalView(year, month - 1);
 				}
 				monthTitle.text = monthName[month] + ' ' + year;
-				prevCalendarView.left = (screenWidth * -1) + 'dp';
+				prevCalendarView.left = (style.commonSize.screenWidth * -1) + 'dp';
 				calendarWin.add(prevCalendarView);
 			}, 500);
 
@@ -258,7 +256,8 @@ exports.createWindow = function(_articleData){
 			thisCalendarView.animate(slideNext);
 			nextCalendarView.animate(slideReset);
 			setTimeout(function() {
-				thisCalendarView.left = (screenWidth * -1) + 'dp';
+				calendarWin.remove(prevCalendarView);
+				thisCalendarView.left = (style.commonSize.screenWidth * -1) + 'dp';
 				prevCalendarView = thisCalendarView;
 				thisCalendarView = nextCalendarView;
 				if (month == 11) {
@@ -267,7 +266,7 @@ exports.createWindow = function(_articleData){
 					nextCalendarView = getCalView(year, month + 1);
 				}
 				monthTitle.text = monthName[month] + ' ' + year;
-				nextCalendarView.left = screenWidth + 'dp';
+				nextCalendarView.left = style.commonSize.screenWidth + 'dp';
 				calendarWin.add(nextCalendarView);
 			}, 500);			
 		}

@@ -46,9 +46,9 @@ exports.win = {
 		Ti.API.debug('[func]createCameraWindow:');
 		return cameraWin.createWindow(_userData);
 	},
-	createDiaryWindow:function(){
+	createDiaryWindow:function(_userData){
 		Ti.API.debug('[func]createDiaryWindow:');
-		return diaryWin.createWindow();
+		return diaryWin.createWindow(_userData);
 	},
 	createProfileWindow:function(_userData){
 		Ti.API.debug('[func]createProfileWindow:');
