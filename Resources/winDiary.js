@@ -6,7 +6,7 @@ exports.createWindow = function(_userData){
 	// 今日の日付
 	var now = new Date();
 	var nowYear = now.getFullYear();
-	var nowMonth = now.getMonth();
+	var nowMonth = now.getMonth() + 1;
 	var nowDay = now.getDate();
 
 	var year = nowYear;
@@ -16,13 +16,13 @@ exports.createWindow = function(_userData){
 	// タイトルの表示
 	var monthName = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 	var monthTitle = Ti.UI.createLabel(style.diaryTitleLabel);	
-	monthTitle.text = monthName[month] + ' ' + year;
+	monthTitle.text = monthName[month-1] + ' ' + year;
 	diaryWin.titleControl = monthTitle;
 
 	// カレンダーデータの取得
-	var getCalendarRowData = function(year, month) {
+	var getCalendarRowData = function(_year, _month) {
 		Ti.API.debug('[func]getDiaryRowData:');
-		var leap = year % 4 ? 0 : year % 100 ? 1 : year % 400 ? 0 : 1;
+		var leap = _year % 4 ? 0 : _year % 100 ? 1 : _year % 400 ? 0 : 1;
 		var months = [31, 28 + leap, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 		var weekday = [
 			{text:'SUN',color:'#CD5C5C'},
@@ -33,18 +33,36 @@ exports.createWindow = function(_userData){
 			{text:'FRI',color:'#3a4756'},
 			{text:'SAT',color:'#4169E1'}];
 
+		// 当月の日記データ
+		var stampList = model.getStampList(_userData, _year, _month);
+
 		var rowData = [];
-		for (var day = 1; day <= months[month]; day++){
-			var dayOfWeek = (new Date(year, month, day, 0, 0, 0)).getDay();
-			var row = {
+		for (var i=1; i<=months[_month-1]; i++) {
+			var dayOfWeek = (new Date(_year, _month-1, i, 0, 0, 0)).getDay();
+			var diaryData = {
+				year: _year,
+				month: _month,
+				day: i,
 				weekday: weekday[dayOfWeek],
-				day: day,
 				todayFlag: false,
+				stampList: [],
 			};
-			if (year == nowYear && month == nowMonth && day == nowDay){
-				row.todayFlag = true;
+
+			if (_year == nowYear && _month == nowMonth && i == nowDay) {
+				diaryData.todayFlag = true;
 			}
-			rowData.push(row);
+
+			if (stampList.length > 0) {
+				var target = [];
+				for (var j=0; j<stampList.length; j++) {
+					if (_year == stampList[j].year && _month == stampList[j].month && i == stampList[j].day) {
+						target.push(stampList[j]);
+					}
+				}
+				diaryData.stampList = target;
+			}
+
+			rowData.push(diaryData);
 		}
 		return rowData;
 	}
@@ -52,11 +70,10 @@ exports.createWindow = function(_userData){
 	// カレンダービューを取得
 	var getCalendarTableViewRow = function(_rowData) {
 		Ti.API.debug('[func]getDiaryTableViewRow:');
-		var len = _rowData.length;
-		var tableViewRow= [];
-		for (var i = 0; i < len; i++) {
+		var tableViewRow = [];
+		for (var i=0; i<_rowData.length; i++) {
 			var row = Ti.UI.createTableViewRow(style.diaryTableRow);
-			tableViewRow.push(row);
+			row.diaryData = _rowData[i];
 
 			var dayView = Ti.UI.createView(style.diaryDayView);
 			row.add(dayView);
@@ -75,26 +92,21 @@ exports.createWindow = function(_userData){
 				dayView.add(todayView);
 			}
 
-			if (_rowData[i].day == 4){
+			if (_rowData[i].stampList.length > 0) {
+				var stampView = Ti.UI.createView(style.diaryStampView);
+				dayView.add(stampView);
 
-				var iconRed = Ti.UI.createImageView({
-					width:30,
-					height:30,
-					left:35,
-					top:0,
-					image:'/ui/parts/roundRed.png'
-				});
-				var iconGreen = Ti.UI.createImageView({
-					width:30,
-					height:30,
-					left:70,
-					top:0,
-					image:'/ui/parts/roundGreen.png'
-				});
-				dayView.add(iconRed);
-				dayView.add(iconGreen);
+				for (var j=0; j<_rowData[i].stampList.length; j++) {
+					var stampImage = Ti.UI.createImageView(style.diaryStampImage);
+					stampImage.image = 'images/icon/diary_' + _rowData[i].stampList[j].stamp + '.png';
+					stampView.add(stampImage);
+				}
 			}
 
+			var plusImage = Ti.UI.createImageView(style.diaryPlusImage);
+			dayView.add(plusImage);
+
+			tableViewRow.push(row);
 		}
 		return tableViewRow;
 	}
@@ -110,18 +122,27 @@ exports.createWindow = function(_userData){
 		var calendarRow = getCalendarTableViewRow(rowData);
 		calView.setData(calendarRow);
 
+		// 日付行をクリックした時
+		calView.addEventListener('click', function(e) {
+			Ti.API.debug('[event]calView.click:');
+
+			var timeWin = win.createTimeWindow(e.row.diaryData);
+			win.openWindow(diaryWin, timeWin);
+		});
+
 		return calView;
 	};
 
 	// 当月のカレンダー
 	var thisDiaryView = getCalView(year, month);
-	thisDiaryView.scrollToIndex(nowDay - 1, {animated:true});
 	diaryWin.add(thisDiaryView);
+	// 今日の日にスクロール
+	thisDiaryView.scrollToIndex(nowDay-3>0?nowDay-3:0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 
 	// 翌月のカレンダー
 	var nextDiaryView = null;
-	if (month == 0) {
-		nextDiaryView = getCalView(year + 1, 0);
+	if (month == 12) {
+		nextDiaryView = getCalView(year + 1, 1);
 	} else {
 		nextDiaryView = getCalView(year, month + 1);
 	}
@@ -130,8 +151,8 @@ exports.createWindow = function(_userData){
 
 	// 前月のカレンダー
 	var prevDiaryView = null;
-	if (month == 0) {
-		prevDiaryView = getCalView(year - 1, 11);
+	if (month == 1) {
+		prevDiaryView = getCalView(year - 1, 12);
 	} else {
 		prevDiaryView = getCalView(year, month - 1);
 	}
@@ -157,8 +178,8 @@ exports.createWindow = function(_userData){
 	diaryWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]diaryWin.swipe:');
 		if (e.direction == 'right') {
-			if (month == 0) {
-				month = 11;
+			if (month == 1) {
+				month = 12;
 				year--;
 			} else {
 				month--;
@@ -170,19 +191,19 @@ exports.createWindow = function(_userData){
 				thisDiaryView.left = style.commonSize.screenWidth + 'dp';
 				nextDiaryView = thisDiaryView;
 				thisDiaryView = prevDiaryView;
-				if (month == 0) {
-					prevDiaryView = getCalView(year - 1, 11);
+				if (month == 1) {
+					prevDiaryView = getCalView(year - 1, 12);
 				} else {
 					prevDiaryView = getCalView(year, month - 1);
 				}
-				monthTitle.text = monthName[month] + ' ' + year;
+				monthTitle.text = monthName[month-1] + ' ' + year;
 				prevDiaryView.left = (style.commonSize.screenWidth * -1) + 'dp';
 				diaryWin.add(prevDiaryView);
 			}, 500);
 
 		} else if (e.direction == 'left') {
-			if (month == 11) {
-				month = 0;
+			if (month == 12) {
+				month = 1;
 				year++;
 			} else {
 				month++;
@@ -194,12 +215,12 @@ exports.createWindow = function(_userData){
 				thisDiaryView.left = (style.commonSize.screenWidth * -1) + 'dp';
 				prevDiaryView = thisDiaryView;
 				thisDiaryView = nextDiaryView;
-				if (month == 11) {
-					nextDiaryView = getCalView(year + 1, 0);
+				if (month == 12) {
+					nextDiaryView = getCalView(year + 1, 1);
 				} else {
 					nextDiaryView = getCalView(year, month + 1);
 				}
-				monthTitle.text = monthName[month] + ' ' + year;
+				monthTitle.text = monthName[month-1] + ' ' + year;
 				nextDiaryView.left = style.commonSize.screenWidth + 'dp';
 				diaryWin.add(nextDiaryView);
 			}, 500);			
@@ -211,31 +232,27 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]monthTitle.click:');
 
 		if (year == nowYear && month == nowMonth) {
-			Ti.API.debug('[event]nowYear:' + nowYear);
-			Ti.API.debug('[event]nowMonth:' + nowMonth);
-			var scrollPosition = 0;
-			if (nowDay > 3) {
-				scrollPosition = nowDay - 3;
-			}
-			thisDiaryView.scrollToIndex(scrollPosition, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+			// 今日の日にスクロール
+			thisDiaryView.scrollToIndex(nowDay-3>0?nowDay-3:0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 			
 		} else {
 			year = nowYear;
 			month = nowMonth;
 			
 			// タイトルの年月
-			monthTitle.text = monthName[month] + ' ' + year;
+			monthTitle.text = monthName[month-1] + ' ' + year;
 	
 			// 当月のカレンダー
 			diaryWin.remove(thisDiaryView);
 			thisDiaryView = getCalView(year, month, true);
-			thisDiaryView.scrollToIndex(nowDay - 3, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 			diaryWin.add(thisDiaryView);
+			// 今日の日にスクロール
+			thisDiaryView.scrollToIndex(nowDay-3>0?nowDay-3:0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 	
 			// 翌月のカレンダー
 			diaryWin.remove(nextDiaryView);
-			if (month == 0) {
-				nextDiaryView = getCalView(year + 1, 0, false);
+			if (month == 1) {
+				nextDiaryView = getCalView(year + 1, 1, false);
 			} else {
 				nextDiaryView = getCalView(year, month + 1, false);
 			}
@@ -244,8 +261,8 @@ exports.createWindow = function(_userData){
 		
 			// 前月のカレンダー
 			diaryWin.remove(prevDiaryView);
-			if (month == 0) {
-				prevDiaryView = getCalView(year - 1, 11, false);
+			if (month == 1) {
+				prevDiaryView = getCalView(year - 1, 12, false);
 			} else {
 				prevDiaryView = getCalView(year, month - 1, false);
 			}

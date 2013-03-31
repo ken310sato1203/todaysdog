@@ -9,13 +9,13 @@ exports.createWindow = function(_articleData){
 	// 記事の日付
 	var articleDate = util.getDate(_articleData.date);
 	var articleYear = articleDate.getFullYear();
-	var articleMonth = articleDate.getMonth();
+	var articleMonth = articleDate.getMonth() + 1;
 	var articleDay = articleDate.getDate();
 
 	// 今日の日付
 	var now = new Date();
 	var nowYear = now.getFullYear();
-	var nowMonth = now.getMonth();
+	var nowMonth = now.getMonth() + 1;
 	var nowDay = now.getDate();
 
 	var year = articleYear;
@@ -25,7 +25,7 @@ exports.createWindow = function(_articleData){
 	// タイトルの表示
 	var monthName = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 	var monthTitle = Ti.UI.createLabel(style.calendarTitleLabel);	
-	monthTitle.text = monthName[month] + ' ' + year;
+	monthTitle.text = monthName[month-1] + ' ' + year;
 	calendarWin.titleControl = monthTitle;
 
 	// カレンダーヘッダ（曜日）
@@ -96,13 +96,13 @@ exports.createWindow = function(_articleData){
 		Ti.API.debug('[func]getCalView:');
 		var calView = Ti.UI.createView(style.calendarCalView);
 		// 当月の日数
-		var daysInMonth = 32 - new Date(_year, _month, 32).getDate();
+		var daysInMonth = 32 - new Date(_year, _month-1, 32).getDate();
 		// 当月1日の曜日
-		var dayOfWeek = new Date(_year, _month, 1).getDay();
+		var dayOfWeek = new Date(_year, _month-1, 1).getDay();
 		// 前月の日数
-		var daysInLastMonth = 32 - new Date(_year, _month - 1, 32).getDate();
+		var daysInLastMonth = 32 - new Date(_year, _month-2, 32).getDate();
 		// 最終週の翌月の日付数
-		var daysInNextMonth = 6 - (new Date(_year, _month, daysInMonth).getDay());
+		var daysInNextMonth = 6 - (new Date(_year, _month-1, daysInMonth).getDay());
 
 		// 前月の日付の作成
 		// 前月の最初の日付
@@ -187,8 +187,8 @@ exports.createWindow = function(_articleData){
 
 	// 翌月のカレンダー
 	var nextCalendarView = null;
-	if (month == 0) {
-		nextCalendarView = getCalView(year + 1, 0);
+	if (month == 12) {
+		nextCalendarView = getCalView(year + 1, 1);
 	} else {
 		nextCalendarView = getCalView(year, month + 1);
 	}
@@ -197,8 +197,8 @@ exports.createWindow = function(_articleData){
 
 	// 前月のカレンダー
 	var prevCalendarView = null;
-	if (month == 0) {
-		prevCalendarView = getCalView(year - 1, 11);
+	if (month == 1) {
+		prevCalendarView = getCalView(year - 1, 12);
 	} else {
 		prevCalendarView = getCalView(year, month - 1);
 	}
@@ -223,8 +223,8 @@ exports.createWindow = function(_articleData){
 	calendarWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]calendarWin.swipe:');
 		if (e.direction == 'right') {
-			if (month == 0) {
-				month = 11;
+			if (month == 1) {
+				month = 12;
 				year--;
 			} else {
 				month--;
@@ -236,19 +236,19 @@ exports.createWindow = function(_articleData){
 				thisCalendarView.left = style.commonSize.screenWidth + 'dp';
 				nextCalendarView = thisCalendarView;
 				thisCalendarView = prevCalendarView;
-				if (month == 0) {
-					prevCalendarView = getCalView(year - 1, 11);
+				if (month == 1) {
+					prevCalendarView = getCalView(year - 1, 12);
 				} else {
 					prevCalendarView = getCalView(year, month - 1);
 				}
-				monthTitle.text = monthName[month] + ' ' + year;
+				monthTitle.text = monthName[month-1] + ' ' + year;
 				prevCalendarView.left = (style.commonSize.screenWidth * -1) + 'dp';
 				calendarWin.add(prevCalendarView);
 			}, 500);
 
 		} else if (e.direction == 'left') {
-			if (month == 11) {
-				month = 0;
+			if (month == 12) {
+				month = 1;
 				year++;
 			} else {
 				month++;
@@ -260,12 +260,12 @@ exports.createWindow = function(_articleData){
 				thisCalendarView.left = (style.commonSize.screenWidth * -1) + 'dp';
 				prevCalendarView = thisCalendarView;
 				thisCalendarView = nextCalendarView;
-				if (month == 11) {
-					nextCalendarView = getCalView(year + 1, 0);
+				if (month == 12) {
+					nextCalendarView = getCalView(year + 1, 1);
 				} else {
 					nextCalendarView = getCalView(year, month + 1);
 				}
-				monthTitle.text = monthName[month] + ' ' + year;
+				monthTitle.text = monthName[month-1] + ' ' + year;
 				nextCalendarView.left = style.commonSize.screenWidth + 'dp';
 				calendarWin.add(nextCalendarView);
 			}, 500);			

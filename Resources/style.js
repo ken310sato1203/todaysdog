@@ -1389,13 +1389,14 @@ exports.style = {
 		backgroundColor: '#dedede',
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
-
 	diaryTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
-		touchEnabled: false,
+		// カスタムプロパティ
+		diaryData: null,
 	},
 
 	diaryDayView:{
@@ -1404,26 +1405,6 @@ exports.style = {
 		width: '100%',
 		height: Ti.UI.SIZE,
 		backgroundColor : 'white',
-		// カスタムプロパティ
-		objectName : 'diaryDayView',
-		dayImage: null,
-		dayLabel: null,
-		year : null,
-		month : null,
-		day : null,
-		current : null,
-		articleData : null,
-	},
-	diaryDayLabel:{
-		top: '15dp',
-		left: '8dp',
-		width:30,
-		height:30,
-		textAlign: 'center',
-		font : {fontSize:15, fontWeight:'bold'},
-		color: '#3a4756',
-		// カスタムプロパティ
-		objectName : 'diaryDayLabel',
 	},
 	diaryWeekdayLabel:{
 		top: '0dp',
@@ -1433,6 +1414,15 @@ exports.style = {
 		textAlign: 'center',
 		font : {fontSize:11, fontWeight:'bold'},
 	},
+	diaryDayLabel:{
+		top: '14dp',
+		left: '8dp',
+		width:30,
+		height:30,
+		textAlign: 'center',
+		font : {fontSize:15, fontWeight:'bold'},
+		color: '#3a4756',
+	},
 	diaryTodayView:{
 		top: '0dp',
 		left: '0dp',
@@ -1440,14 +1430,22 @@ exports.style = {
 		height: '100%',
 		backgroundColor : '#87CEFA',
 	},
-	diaryDayImage:{
-		top : '3dp',
-		width : '40dp',
-		height : '40dp',
-		backgroundColor: 'black',
+	diaryStampView:{
+		layout : 'horizontal',
+		left: '45dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	diaryStampImage:{
+		width : '32dp',
+		height : '32dp',
 		image : null,
-		// カスタムプロパティ
-		objectName : 'diaryDayImage',
+	},
+	diaryPlusImage:{
+		right: '8dp',
+		width : '28dp',
+		height : '28dp',
+		image : 'images/icon/diary_plus.png',
 	},
 
 };

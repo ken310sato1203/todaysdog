@@ -92,6 +92,11 @@ followList = [
 	{user:"shiro", follow:"sakura"},
 ];
 
+stampList = [
+	{no:"S0002", user:"sakura", stamp:"restaurant", text:"お昼ごはん、がっつり食べた", year:"2013", month:"3", day:"4", all:"0", repeat:"0", start:"13:00", end:"14:00", date:"2013-03-04 15:23:45"},
+	{no:"S0001", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:"2013", month:"3", day:"4", all:"0", repeat:"0", start:"09:00", end:"10:00", date:"2013-03-04 10:23:45"},
+];
+
 for (var i=0; i<articleList.length; i++) {
 	for (var j=0; j<userList.length; j++) {
 		if (articleList[i].user == userList[j].user) {
@@ -312,7 +317,7 @@ exports.model = {
 		Ti.API.debug('[func]getCalendarArticle:');
 		var calendarTarget = [];
 
-		var daysInMonth = 32 - new Date(_year, _month, 32).getDate();
+		var daysInMonth = 32 - new Date(_year, _month-1, 32).getDate();
 		for (var i=0; i < daysInMonth; i++) {
 			var target = null;
 			for (var j=articleList.length; j>0; j--) {
@@ -321,7 +326,7 @@ exports.model = {
 					var articleDay = articleDate.getDate();
 					if (i == articleDay - 1) {
 						var articleYear = articleDate.getFullYear();
-						var articleMonth = articleDate.getMonth();
+						var articleMonth = articleDate.getMonth() + 1;
 						if (_year == articleYear && _month == articleMonth) {
 							target = articleList[j-1];
 							break;
@@ -333,6 +338,27 @@ exports.model = {
 		}
 
 		return calendarTarget;
+	},
+
+	// 指定ユーザのスタンプリストから指定月のデータを取得
+	getStampList:function(_userData, _year, _month){
+		Ti.API.debug('[func]getStampList:');
+		var stampTarget = [];
+
+		var daysInMonth = 32 - new Date(_year, _month-1, 32).getDate();
+		for (var i=0; i < daysInMonth; i++) {
+			for (var j=stampList.length; j>0; j--) {
+				if (stampList[j-1].user == _userData.user) {
+					if (i == stampList[j-1].day - 1) {
+						if (_year == stampList[j-1].year && _month == stampList[j-1].month) {
+							stampTarget.push(stampList[j-1]);
+						}
+					}
+				}
+			}
+		}
+
+		return stampTarget;
 	},
 
 	// ライクリストに追加

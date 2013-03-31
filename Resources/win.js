@@ -5,6 +5,7 @@ var mydogWin = require('winMydog');
 var calendarWin = require('winCalendar');
 var cameraWin = require('winCamera');
 var diaryWin = require('winDiary');
+var timeWin = require('winTime');
 var profileWin = require('winProfile');
 var photoWin = require('winPhoto');
 var photoListWin = require('winPhotoList');
@@ -49,6 +50,10 @@ exports.win = {
 	createDiaryWindow:function(_userData){
 		Ti.API.debug('[func]createDiaryWindow:');
 		return diaryWin.createWindow(_userData);
+	},
+	createTimeWindow:function(_diaryData){
+		Ti.API.debug('[func]createTimeWindow:');
+		return timeWin.createWindow(_diaryData);
 	},
 	createProfileWindow:function(_userData){
 		Ti.API.debug('[func]createProfileWindow:');
