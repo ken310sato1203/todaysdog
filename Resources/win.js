@@ -1,6 +1,5 @@
 //ウィンドウ
 
-var friendsWin = require('winFriends');
 var mydogWin = require('winMydog');
 var calendarWin = require('winCalendar');
 var cameraWin = require('winCamera');

@@ -16,7 +16,7 @@ exports.createWindow = function(_userData){
 	// タイトルの表示
 	var monthName = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 	var monthTitle = Ti.UI.createLabel(style.diaryTitleLabel);	
-	monthTitle.text = monthName[month-1] + ' ' + year;
+	monthTitle.text = year + ' ' + monthName[month-1];
 	diaryWin.titleControl = monthTitle;
 
 	// カレンダーデータの取得
@@ -33,33 +33,31 @@ exports.createWindow = function(_userData){
 			{text:'FRI',color:'#3a4756'},
 			{text:'SAT',color:'#4169E1'}];
 
-		// 当月の日記データ
+		// 日別に登録
+		var stampDay = new Array(months[_month-1]);
+		for (var i=0; i<stampDay.length; i++) {
+			stampDay[i] = {data: []};
+		}
+		// 当月のデータ
 		var stampList = model.getStampList(_userData, _year, _month);
+		for (var i=0; i<stampList.length; i++) {
+			stampDay[stampList[i].day-1].data.push(stampList[i]);
+		}
 
 		var rowData = [];
-		for (var i=1; i<=months[_month-1]; i++) {
-			var dayOfWeek = (new Date(_year, _month-1, i, 0, 0, 0)).getDay();
+		for (var i=0; i<months[_month-1]; i++) {
+			var dayOfWeek = (new Date(_year, _month-1, i+1, 0, 0, 0)).getDay();
 			var diaryData = {
 				year: _year,
 				month: _month,
-				day: i,
+				day: i+1,
 				weekday: weekday[dayOfWeek],
 				todayFlag: false,
-				stampList: [],
+				stampList: stampDay[i].data,
 			};
 
-			if (_year == nowYear && _month == nowMonth && i == nowDay) {
+			if (_year == nowYear && _month == nowMonth && i+1 == nowDay) {
 				diaryData.todayFlag = true;
-			}
-
-			if (stampList.length > 0) {
-				var target = [];
-				for (var j=0; j<stampList.length; j++) {
-					if (_year == stampList[j].year && _month == stampList[j].month && i == stampList[j].day) {
-						target.push(stampList[j]);
-					}
-				}
-				diaryData.stampList = target;
 			}
 
 			rowData.push(diaryData);
@@ -92,19 +90,20 @@ exports.createWindow = function(_userData){
 				dayView.add(todayView);
 			}
 
-			if (_rowData[i].stampList.length > 0) {
+			var rowStampList = _rowData[i].stampList;
+			if (rowStampList.length > 0) {
 				var stampView = Ti.UI.createView(style.diaryStampView);
 				dayView.add(stampView);
 
-				for (var j=0; j<_rowData[i].stampList.length; j++) {
+				for (var j=0; j<rowStampList.length; j++) {
 					var stampImage = Ti.UI.createImageView(style.diaryStampImage);
-					stampImage.image = 'images/icon/diary_' + _rowData[i].stampList[j].stamp + '.png';
+					stampImage.image = 'images/icon/diary_' + rowStampList[j].stamp + '.png';
 					stampView.add(stampImage);
 				}
 			}
 
-			var plusImage = Ti.UI.createImageView(style.diaryPlusImage);
-			dayView.add(plusImage);
+//			var plusImage = Ti.UI.createImageView(style.diaryPlusImage);
+//			dayView.add(plusImage);
 
 			tableViewRow.push(row);
 		}
