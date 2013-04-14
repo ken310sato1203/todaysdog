@@ -38,11 +38,14 @@ exports.createWindow = function(_userData){
 		for (var i=0; i<stampDay.length; i++) {
 			stampDay[i] = {data: []};
 		}
-		// 当月のデータ
+		// 当月のスタンプデータ
 		var stampList = model.getStampList(_userData, _year, _month);
 		for (var i=0; i<stampList.length; i++) {
 			stampDay[stampList[i].day-1].data.push(stampList[i]);
 		}
+
+		// 当月の記事データ
+		var articleList = model.getCalendarArticle(_userData, _year, _month);
 
 		var rowData = [];
 		for (var i=0; i<months[_month-1]; i++) {
@@ -54,6 +57,7 @@ exports.createWindow = function(_userData){
 				weekday: weekday[dayOfWeek],
 				todayFlag: false,
 				stampList: stampDay[i].data,
+				articleData: articleList[i],
 			};
 
 			if (_year == nowYear && _month == nowMonth && i+1 == nowDay) {
@@ -102,6 +106,21 @@ exports.createWindow = function(_userData){
 				}
 			}
 
+			var rowArticleData = _rowData[i].articleData;
+			if (rowArticleData != null) {
+				var stampPhotoImage = Ti.UI.createImageView(style.diaryPhotoImage);
+				stampPhotoImage.image = 'images/icon/diary_camera.png';
+				stampPhotoImage.articleData = rowArticleData;
+				dayView.add(stampPhotoImage);
+
+				// フォトスタンプをクリックした時
+				stampPhotoImage.addEventListener('click', function(e) {
+					Ti.API.debug('[event]stampPhotoImage.click:');
+					var diaryPhotoWin = win.createCalendarPhotoWindow(_userData, e.source.articleData);
+					win.openWindow(diaryWin, diaryPhotoWin);
+				});
+			}
+
 //			var plusImage = Ti.UI.createImageView(style.diaryPlusImage);
 //			dayView.add(plusImage);
 
@@ -124,9 +143,11 @@ exports.createWindow = function(_userData){
 		// 日付行をクリックした時
 		calView.addEventListener('click', function(e) {
 			Ti.API.debug('[event]calView.click:');
-
-			var timeWin = win.createTimeWindow(e.row.diaryData);
-			win.openWindow(diaryWin, timeWin);
+			Ti.API.debug('[event]e.source:', e.source);
+			if (e.source.objectName != "diaryPhotoImage") {
+				var timeWin = win.createTimeWindow(_userData, e.row.diaryData);
+				win.openWindow(diaryWin, timeWin);
+			}
 		});
 
 		return calView;

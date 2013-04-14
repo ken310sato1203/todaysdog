@@ -60,14 +60,23 @@ exports.createWindow = function(_type, _userData, _articleData){
 			}
 		}
 	}
-	
-	if (_type == "date") {
-		// タイトルの表示
+
+	// タイトルの取得
+	var getDateTitle = function() {
+        Ti.API.debug('[func]getDateTitle:');
 		var year = calendarDate.getFullYear();
 		var month = calendarDate.getMonth() + 1;
 		var day = calendarDate.getDate();
-		titleLabel.text = year + '年' + month + '月' + day + '日';
-
+		var dateTitle = year + '年' + month + '月' + day + '日';
+		if (articleList.length > 1) {
+			dateTitle += '（' + (articleIndex + 1) + '/' + articleList.length + '）';			
+		}
+		return dateTitle;
+	}
+		
+	if (_type == "date") {
+		// タイトルの表示
+		titleLabel.text = getDateTitle();
 		// カレンダー・カメラボタンは表示しない
 		mydogWin.rightNavButton = null;
 		mydogWin.leftNavButton = null;
@@ -187,6 +196,8 @@ exports.createWindow = function(_type, _userData, _articleData){
 		if (e.direction == 'right') {
 			if(articleIndex > 0) {
 				articleIndex--;
+				// タイトルの表示
+				titleLabel.text = getDateTitle();
 				thisArticleView.animate(slidePrev);
 				prevArticleView.animate(slideReset);
 				setTimeout(function() {
@@ -204,6 +215,8 @@ exports.createWindow = function(_type, _userData, _articleData){
 		} else if (e.direction == 'left') {
 			if(articleList.length > articleIndex + 1) {
 				articleIndex++;
+				// タイトルの表示
+				titleLabel.text = getDateTitle();
 				thisArticleView.animate(slideNext);
 				nextArticleView.animate(slideReset);
 				setTimeout(function() {

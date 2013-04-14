@@ -13,48 +13,48 @@ var followList = [];
 loginId = "sakura";
 
 articleList = [
-	{no:"A0023", user:"sakura", location:"Chiba", date:"2013-02-09 10:26:05", text:"3明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0022", user:"sakura", location:"Fukuoka", date:"2013-02-09 08:26:05", text:"2明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0021", user:"sakura", location:"Shiga", date:"2013-02-09 07:26:05", text:"1明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0020", user:"koro", location:"Fukuoka", date:"2013-02-06 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0019", user:"maki", location:"Shiga", date:"2013-02-05 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0018", user:"sakura", location:"Nara", date:"2013-02-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0017", user:"maki", location:"Nara", date:"2013-01-27 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0016", user:"sakura", location:"Kyoto", date:"2013-01-26 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0015", user:"santa", location:"Kyoto", date:"2013-01-25 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0014", user:"momo", location:"Tokyo", date:"2013-01-24 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0013", user:"kuro", location:"Okinawa", date:"2013-01-23 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0012", user:"gon", location:"Kobe", date:"2013-01-22 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0011", user:"jiro", location:"Nagoya", date:"2013-01-21 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0010", user:"santa", location:"Hokkaido", date:"2013-01-20 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0009", user:"momo", location:"Okinawa", date:"2013-01-19 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0008", user:"kuro", location:"Kobe", date:"2013-01-17 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0007", user:"gon", location:"Nagoya", date:"2013-01-15 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0006", user:"jiro", location:"Chiba", date:"2013-01-13 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0005", user:"sakura", location:"Fukuoka", date:"2013-01-03 07:26:05", text:"3明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0004", user:"sakura", location:"Shiga", date:"2013-01-03 07:26:05", text:"2明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0003", user:"sakura", location:"Nara", date:"2013-01-03 07:26:05", text:"1明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0002", user:"maki", location:"Kyoto", date:"2013-01-02 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0023", user:"sakura", location:"Chiba", date:"2013-04-09 10:26:05", text:"3明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0022", user:"sakura", location:"Fukuoka", date:"2013-04-09 08:26:05", text:"2明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0021", user:"sakura", location:"Shiga", date:"2013-04-09 07:26:05", text:"1明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0020", user:"koro", location:"Fukuoka", date:"2013-04-06 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0019", user:"maki", location:"Shiga", date:"2013-04-05 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0018", user:"sakura", location:"Nara", date:"2013-04-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0017", user:"maki", location:"Nara", date:"2013-03-27 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0016", user:"sakura", location:"Kyoto", date:"2013-03-26 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0015", user:"santa", location:"Kyoto", date:"2013-03-25 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0014", user:"momo", location:"Tokyo", date:"2013-03-24 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0013", user:"kuro", location:"Okinawa", date:"2013-03-23 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0012", user:"gon", location:"Kobe", date:"2013-03-22 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0011", user:"jiro", location:"Nagoya", date:"2013-03-21 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0010", user:"santa", location:"Hokkaido", date:"2013-03-20 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0009", user:"momo", location:"Okinawa", date:"2013-03-19 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0008", user:"kuro", location:"Kobe", date:"2013-03-17 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0007", user:"gon", location:"Nagoya", date:"2013-03-15 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0006", user:"jiro", location:"Chiba", date:"2013-03-13 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0005", user:"sakura", location:"Fukuoka", date:"2013-03-03 07:26:05", text:"3明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0004", user:"sakura", location:"Shiga", date:"2013-03-03 07:26:05", text:"2明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0003", user:"sakura", location:"Nara", date:"2013-03-03 07:26:05", text:"1明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0002", user:"maki", location:"Kyoto", date:"2013-03-02 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{no:"A0001", user:"sakura", location:"Tokyo", date:"2012-12-07 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 ];
 
 commentList = [
-	{no:"A0001", seq:"2", user:"jiro", date:"2013-01-02 09:23:45", text:"今年もよろしく。"},
-	{no:"A0001", seq:"1", user:"jiro", date:"2013-01-01 13:37:02", text:"ことよろ。"},
-	{no:"A0002", seq:"3", user:"gon", date:"2013-01-05 09:23:45", text:"今年もよろしく。"},
-	{no:"A0002", seq:"2", user:"koro", date:"2013-01-03 09:23:45", text:"今年もよろしく。"},
-	{no:"A0002", seq:"1", user:"maki", date:"2013-01-02 09:23:45", text:"今年もよろしく。"},
-	{no:"A0003", seq:"1", user:"shiro", date:"2013-01-02 09:23:45", text:"今年もよろしく。"},
-	{no:"A0004", seq:"1", user:"kuro", date:"2013-01-10 08:14:27", text:"今年もよろしくお願いします。あけましておめでとうございます。今年もよろしくお願いします。あけましておめでとうございます。"},
+	{no:"A0001", seq:"2", user:"jiro", date:"2013-03-02 09:23:45", text:"今年もよろしく。"},
+	{no:"A0001", seq:"1", user:"jiro", date:"2013-03-01 13:37:02", text:"ことよろ。"},
+	{no:"A0002", seq:"3", user:"gon", date:"2013-03-05 09:23:45", text:"今年もよろしく。"},
+	{no:"A0002", seq:"2", user:"koro", date:"2013-03-03 09:23:45", text:"今年もよろしく。"},
+	{no:"A0002", seq:"1", user:"maki", date:"2013-03-02 09:23:45", text:"今年もよろしく。"},
+	{no:"A0003", seq:"1", user:"shiro", date:"2013-03-02 09:23:45", text:"今年もよろしく。"},
+	{no:"A0004", seq:"1", user:"kuro", date:"2013-03-10 08:14:27", text:"今年もよろしくお願いします。あけましておめでとうございます。今年もよろしくお願いします。あけましておめでとうございます。"},
 ];
 
 likeList = [
-	{no:"A0001", seq:"2", user:"maki", date:"2013-01-02 09:23:45"},
-	{no:"A0001", seq:"1", user:"sakura", date:"2013-01-01 08:14:27"},
-	{no:"A0002", seq:"1", user:"pochi", date:"2013-01-03 13:37:02"},
-	{no:"A0003", seq:"2", user:"momo", date:"2013-01-05 11:37:02"},
-	{no:"A0003", seq:"1", user:"sakura", date:"2013-01-04 12:37:02"},
-	{no:"A0004", seq:"1", user:"sakura", date:"2013-01-06 10:37:02"},
+	{no:"A0001", seq:"2", user:"maki", date:"2013-03-02 09:23:45"},
+	{no:"A0001", seq:"1", user:"sakura", date:"2013-03-01 08:14:27"},
+	{no:"A0002", seq:"1", user:"pochi", date:"2013-03-03 13:37:02"},
+	{no:"A0003", seq:"2", user:"momo", date:"2013-03-05 11:37:02"},
+	{no:"A0003", seq:"1", user:"sakura", date:"2013-03-04 12:37:02"},
+	{no:"A0004", seq:"1", user:"sakura", date:"2013-03-06 10:37:02"},
 ];
 
 userList = [
@@ -338,6 +338,7 @@ exports.model = {
 						var articleYear = articleDate.getFullYear();
 						var articleMonth = articleDate.getMonth() + 1;
 						if (_year == articleYear && _month == articleMonth) {
+							// 同じ日に複数の記事があっても１つのみセット
 							target = articleList[j-1];
 							break;
 						}

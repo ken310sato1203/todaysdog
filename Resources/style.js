@@ -1443,12 +1443,15 @@ exports.style = {
 		height : '32dp',
 		image : null,
 	},
-	diaryPlusImage:{
-		top: '8dp',
+	diaryPhotoImage:{
+		top: '6dp',
 		right: '8dp',
-		width : '28dp',
-		height : '28dp',
-		image : 'images/icon/diary_plus.png',
+		width : '32dp',
+		height : '32dp',
+		image : 'images/icon/diary_camera.png',
+		// カスタムプロパティ
+		articleData: null,
+		objectName : 'diaryPhotoImage',
 	},
 
 // winTime -------------------------------------------------------
@@ -1525,17 +1528,18 @@ exports.style = {
 		width : '32dp',
 		height : '32dp',
 		image : null,
+		// カスタムプロパティ
+		objectName : 'timeStampImage',
 	},
 	timeStampLabel:{
 		top: '6dp',
 		left: '36dp',
 		width: '195dp',
-//		height: Ti.UI.SIZE,
 		height: '32dp',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
 		// カスタムプロパティ
-		overFlag: false,
+		objectName : 'timeStampLabel',
 	},
 	timePlusImage:{
 		top: '8dp',
@@ -1543,6 +1547,45 @@ exports.style = {
 		width : '28dp',
 		height : '28dp',
 		image : 'images/icon/diary_plus.png',
+	},
+
+// winStamp -------------------------------------------------------
+	stampWin:{
+		backgroundColor: '#dedede',
+		barColor: '#a9a9a9',
+	},
+	stampTitleLabel:{
+		width: '200dp',
+		textAlign: 'center',
+		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+	},
+
+	stampListView:{
+		top: '10dp',
+		width: '284dp',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+	},
+	stampView:{
+		layout: 'horizontal',
+		top: '10dp',
+		left: '20dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	stampImage:{
+		top: '0dp',
+		bottom: '10dp',
+		right: '10dp',
+		width : '32dp',
+		height : '32dp',
+		image : null,
+		opacity : 0.2,
+		// カスタムプロパティ
+		stamp : null,
 	},
 
 };

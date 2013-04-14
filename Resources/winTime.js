@@ -1,6 +1,6 @@
 // 時間スケジュール
 
-exports.createWindow = function(_timeData){
+exports.createWindow = function(_userData, _diaryData){
 	Ti.API.debug('[func]winTime.createWindow:');
 
 	// 今日の日付
@@ -8,9 +8,9 @@ exports.createWindow = function(_timeData){
 	var nowDay = now.getDate();
 	var nowHour = now.getHours();
 
-	var year = _timeData.year;
-	var month = _timeData.month;
-	var day = _timeData.day;
+	var year = _diaryData.year;
+	var month = _diaryData.month;
+	var day = _diaryData.day;
 
 	var timeWin = Ti.UI.createWindow(style.timeWin);
 	// タイトルの表示
@@ -32,13 +32,26 @@ exports.createWindow = function(_timeData){
 		stampHour[i] = {data: []};
 	}
 	// 当日のデータ
-	var stampList = _timeData.stampList;
+	var stampList = _diaryData.stampList;
 	for (var i=0; i<stampList.length; i++) {
 		stampHour[stampList[i].hour].data.push(stampList[i]);
 	}
 
 	for (var i=0; i<timeRange.length; i++) {
-		var row = Ti.UI.createTableViewRow(style.timeTableRow);
+		var row = Ti.UI.createTableViewRow(style.timeTableRow);		
+		row.stampData = {
+			user: _userData.user,
+			stamp: null,
+			text: null,
+			year: year,
+			month: month,
+			day: day,
+			hour: i,
+			all: null,
+			report: null,
+			date: null,
+		};
+		
 		var hourView = Ti.UI.createView(style.timeHourView);
 		row.add(hourView);
 
@@ -49,7 +62,7 @@ exports.createWindow = function(_timeData){
 		}
 		hourView.add(timeLabel);
 
-		if (_timeData.todayFlag) {
+		if (_diaryData.todayFlag) {
 			if (timeRange[i] == nowHour) {
 				var todayView = Ti.UI.createView(style.timeTodayView);
 				hourView.add(todayView);
@@ -64,16 +77,28 @@ exports.createWindow = function(_timeData){
 			for (var j=0; j<rowStampList.length; j++) {
 				var stampView = Ti.UI.createView(style.timeStampView);
 				stampListView.add(stampView);
+				stampView.stampData = rowStampList[j];
+
+				stampView.addEventListener('click',function(e){
+					Ti.API.debug('[event]stampView.click:');
+					if (e.source.objectName == "timeStampImage" || e.source.objectName == "timeStampLabel") {
+						var stampUpdateWin = win.createStampUpdateWindow(_userData, e.source.getParent().stampData);
+						win.openWindow(timeWin, stampUpdateWin);						
+					}
+				});
+
 				var stampImage = Ti.UI.createImageView(style.timeStampImage);
 				stampImage.image = 'images/icon/diary_' + rowStampList[j].stamp + '.png';
 				stampView.add(stampImage);
 				var stampLabel = Ti.UI.createLabel(style.timeStampLabel);
 				stampLabel.text = rowStampList[j].text;
+				stampView.add(stampLabel);
+/*
 				if (stampLabel.text.length > 32) {
 					stampLabel.overFlag = true;
 				}
-				stampView.add(stampLabel);
-
+*/
+/*
 				// stampLabelをクリックでテキストを全表示
 				stampLabel.addEventListener('click',function(e){
 					Ti.API.debug('[event]stampLabel.click:');
@@ -88,7 +113,7 @@ exports.createWindow = function(_timeData){
 						timeView.setData(timeView.data);
 					}
 				});
-
+*/
 			}
 			if (firstHour == null) {
 				firstHour = i;				
@@ -97,6 +122,12 @@ exports.createWindow = function(_timeData){
 
 		var plusImage = Ti.UI.createImageView(style.timePlusImage);
 		hourView.add(plusImage);
+
+		plusImage.addEventListener('click',function(e){
+			Ti.API.debug('[event]plusImage.click:');
+			var stampPostWin = win.createStampPostWindow(_userData, e.row.stampData);
+			win.openWindow(timeWin, stampPostWin);
+		});
 		
 		timeRow.push(row);
 	}
@@ -107,7 +138,7 @@ exports.createWindow = function(_timeData){
 	timeWin.addEventListener('open', function(e) {
 		Ti.API.debug('[event]timeWin.open:');
 		// timeView作成後にスクロールさせると下の方のインデックスの場合、最下層より下を表示してしまうため、オープン時にスクロールさせる
-		if (_timeData.todayFlag) {
+		if (_diaryData.todayFlag) {
 			// 今日の場合、今の時間帯にスクロール
 			timeView.scrollToIndex(nowHour, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 		} else {
