@@ -1,6 +1,6 @@
 // スタンプ
 
-exports.createWindow = function(_type, _userData, _stampData){
+exports.createWindow = function(_userData, _stampData){
 	Ti.API.debug('[func]winStamp.createWindow:');
 
 	// 今日の日付
@@ -20,11 +20,16 @@ exports.createWindow = function(_type, _userData, _stampData){
 	monthTitle.text =  year + ' ' + monthName[month] + ' ' + day;
 	stampWin.titleControl = monthTitle;
 
+	// 次へボタンの表示
+	var nextButton = Titanium.UI.createButton(style.stampNextButton);
+	stampWin.rightNavButton = nextButton;
+
 	var stampListView = Ti.UI.createView(style.stampListView);
 	stampWin.add(stampListView);
 	var stampView = Ti.UI.createView(style.stampView);
 	stampListView.add(stampView);
 	
+	var selectedStamp = null;
 	var stampList = [
 		'edit','dog','restaurant','home','sun','water','star','favorite','time',
 		'edit','dog','restaurant','home','sun','water','star','favorite','time',
@@ -34,20 +39,21 @@ exports.createWindow = function(_type, _userData, _stampData){
 		];
 	for (var i=0; i<stampList.length; i++) {
 		var stampImage = Ti.UI.createImageView(style.stampImage);
+		stampImage.stamp = stampList[i];
 		stampImage.image = 'images/icon/diary_' + stampList[i] + '.png';
+		
 		if (i == 0) {
 			stampImage.opacity = 1.0;
+			selectedStamp = stampImage;
 		}
 		stampView.add(stampImage);
 
 		// スタンプをクリック
 		stampImage.addEventListener('click',function(e){
 			Ti.API.debug('[event]stampImage.click:');
-			if (e.source.opacity == 1.0) {
-				e.source.opacity = 0.2;
-			} else {
-				e.source.opacity = 1.0;
-			}
+			selectedStamp.opacity = 0.2;
+			e.source.opacity = 1.0;
+			selectedStamp = e.source;
 		});
 	}
 
@@ -58,6 +64,15 @@ exports.createWindow = function(_type, _userData, _stampData){
 			tabGroup.activeTab.close(stampWin);
 		}
 	});
+
+	// 次へボタンをクリック
+	nextButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]nextButton.click:');
+		_stampData.stamp = selectedStamp.stamp;
+		var stampPostWin = win.createStampPostWindow(_userData, _stampData);		
+		win.openWindow(stampWin, stampPostWin);
+	});
+
 
 	return stampWin;
 }

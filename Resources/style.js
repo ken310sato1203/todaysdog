@@ -1587,6 +1587,67 @@ exports.style = {
 		// カスタムプロパティ
 		stamp : null,
 	},
+	stampNextButton:{
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		textAlign: 'center',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		title: '次へ',
+	},
 
+// winStampPost -------------------------------------------------------
+	stampPostWin:{
+		backgroundColor: '#dedede',
+		barColor: '#a9a9a9',
+	},
+	stampPostTitleLabel:{
+		width: '200dp',
+		textAlign: 'center',
+		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+	},
+	stampPostButton:{
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		textAlign: 'center',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		title: '投稿',
+	},
+	stampPostView:{
+		layout : 'horizontal',
+		top : '10dp',
+		left: '10dp',
+		width : '302dp',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+	},
+	stampPostImage:{
+		top : '10dp',
+		left: '10dp',
+		bottom : '10dp',
+		width : '32dp',
+		height : '32dp',
+		image : null,
+	},
+	stampPostTextArea:{
+		top : '5dp',
+		left: '0dp',
+		bottom : '5dp',
+		width: '226dp',
+		height : '70dp',
+		backgroundColor: 'white',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: 'gray',
+		// hintTextはiOSで対応されていないので、focus/blur時に処理
+		hintText: 'comment',
+		value: 'comment',
+		suppressReturn: false,
+        keyboardType:Ti.UI.KEYBOARD_DEFAULT,
+//        returnKeyType:Ti.UI.RETURNKEY_SEND,
+	},
 };
 

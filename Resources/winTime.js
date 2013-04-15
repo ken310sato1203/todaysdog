@@ -82,8 +82,8 @@ exports.createWindow = function(_userData, _diaryData){
 				stampView.addEventListener('click',function(e){
 					Ti.API.debug('[event]stampView.click:');
 					if (e.source.objectName == "timeStampImage" || e.source.objectName == "timeStampLabel") {
-						var stampUpdateWin = win.createStampUpdateWindow(_userData, e.source.getParent().stampData);
-						win.openWindow(timeWin, stampUpdateWin);						
+						var stampPostWin = win.createStampPostWindow(_userData, e.source.getParent().stampData);
+						win.openWindow(timeWin, stampPostWin);						
 					}
 				});
 
@@ -125,8 +125,8 @@ exports.createWindow = function(_userData, _diaryData){
 
 		plusImage.addEventListener('click',function(e){
 			Ti.API.debug('[event]plusImage.click:');
-			var stampPostWin = win.createStampPostWindow(_userData, e.row.stampData);
-			win.openWindow(timeWin, stampPostWin);
+			var stampWin = win.createStampWindow(_userData, e.row.stampData);
+			win.openWindow(timeWin, stampWin);
 		});
 		
 		timeRow.push(row);
