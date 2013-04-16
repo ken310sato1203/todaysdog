@@ -30,17 +30,12 @@ exports.createWindow = function(_userData, _stampData){
 	stampListView.add(stampView);
 	
 	var selectedStamp = null;
-	var stampList = [
-		'edit','dog','restaurant','home','sun','water','star','favorite','time',
-		'edit','dog','restaurant','home','sun','water','star','favorite','time',
-		'edit','dog','restaurant','home','sun','water','star','favorite','time',
-		'edit','dog','restaurant','home','sun','water','star','favorite','time',
-		'edit','dog','restaurant','home','sun','water'
-		];
-	for (var i=0; i<stampList.length; i++) {
+	var stampSelectList = model.getStampSelectList();
+
+	for (var i=0; i<stampSelectList.length; i++) {
 		var stampImage = Ti.UI.createImageView(style.stampImage);
-		stampImage.stamp = stampList[i];
-		stampImage.image = 'images/icon/diary_' + stampList[i] + '.png';
+		stampImage.stamp = stampSelectList[i];
+		stampImage.image = 'images/icon/diary_' + stampSelectList[i] + '.png';
 		
 		if (i == 0) {
 			stampImage.opacity = 1.0;

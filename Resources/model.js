@@ -9,6 +9,9 @@ var userList = [];
 var breedList = [];
 var sexList = [];
 var followList = [];
+var stampList = [];
+var stampSelectList = [];
+var stampHistoryList = [];
 
 loginId = "sakura";
 
@@ -106,6 +109,27 @@ stampList = [
 	{no:"S0002", user:"sakura", stamp:"restaurant", text:"お昼ごはん、がっつり食べた", year:"2013", month:"3", day:"4", hour:"13", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
 	{no:"S0001", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:"2013", month:"3", day:"4", hour:"9", all:"0", repeat:"0", date:"2013-03-04 10:23:45"},
 ];
+
+stampSelectList = [
+	'edit','dog','restaurant','home','sun','water','star','favorite','time',
+	'edit','dog','restaurant','home','sun','water','star','favorite','time',
+	'edit','dog','restaurant','home','sun','water','star','favorite','time',
+	'edit','dog','restaurant','home','sun','water','star','favorite','time',
+	'edit','dog','restaurant','home','sun','water'
+];
+
+stampHistoryList = [
+	{stamp:'edit',textList:['おはようございます','こんにちは','おやすみなさい']},
+	{stamp:'dog',textList:['朝のお散歩','昼のお散歩','夜のお散歩']},
+	{stamp:'restaurant',textList:['朝ご飯','昼ご飯','夜ご飯']},
+	{stamp:'home',textList:['お留守番','お泊まり']},
+	{stamp:'sun',textList:['いいお天気','元気です']},
+	{stamp:'water',textList:['雨模様','ちょっと元気ないね']},
+	{stamp:'star',textList:['ごほうび']},
+	{stamp:'favorite',textList:['お薬','病院']},
+	{stamp:'time',textList:['シャンプー予約']}
+];
+
 
 for (var i=0; i<articleList.length; i++) {
 	for (var j=0; j<userList.length; j++) {
@@ -370,6 +394,22 @@ exports.model = {
 		}
 
 		return stampTarget;
+	},
+
+	// 選択スタンプのリストを取得
+	getStampSelectList:function(){
+		Ti.API.debug('[func]getStampSelectList:');
+		return stampSelectList;
+	},
+
+	// 指定スタンプの履歴データを取得
+	getStampHistoryList:function(_stamp){
+		Ti.API.debug('[func]getStampHistoryList:');
+		for (var i=0; i<stampHistoryList.length; i++) {
+			if (stampHistoryList[i].stamp == _stamp) {
+				return stampHistoryList[i].textList;
+			}
+		}
 	},
 
 	// ライクリストに追加

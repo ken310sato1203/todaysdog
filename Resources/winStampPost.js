@@ -63,6 +63,38 @@ exports.createWindow = function(_userData, _stampData){
 		}
 	});
 
+
+	var historyList = model.getStampHistoryList(_stampData.stamp);
+	var historyRowList = [];
+	if (historyList != null) {
+		for (var i=0; i<historyList.length; i++) {
+			var historyRow = Titanium.UI.createTableViewRow(style.stampHistoryTableRow);
+			historyRowList.push(historyRow);
+//			var historyView = Titanium.UI.createView(style.stampHistoryView);
+//			historyRow.add(historyView);
+			var historyLabel = Ti.UI.createLabel(style.stampHistoryLabel);
+			historyLabel.text = historyList[i];
+			historyRow.add(historyLabel);
+		}
+	}
+
+	var historyTableView = Ti.UI.createTableView(style.stampHistoryTableView);
+	historyTableView.data = historyRowList;
+	postWin.add(historyTableView);
+
+	// 履歴クリックでチェックし入力テキストにコピー
+	historyTableView.addEventListener('click',function(e){
+		Ti.API.debug('[event]historyTableView.click:');
+		var tableRow = historyTableView.data[0].rows;
+		if (tableRow != null) {
+			for (var i=0; i<tableRow.length; i++) {
+				tableRow[i].hasCheck = false;
+			}
+		}
+		e.row.hasCheck = true;
+		postTextArea.value = historyList[e.index];
+	});
+
 	// 画面クリックでコメントフィールドのフォーカスを外す
 	postWin.addEventListener('click',function(e){
 		Ti.API.debug('[event]postWin.click:');

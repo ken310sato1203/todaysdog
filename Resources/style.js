@@ -1620,8 +1620,8 @@ exports.style = {
 	stampPostView:{
 		layout : 'horizontal',
 		top : '10dp',
-		left: '10dp',
-		width : '302dp',
+//		left: '10dp',
+		width : '284dp',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
 	},
@@ -1649,5 +1649,33 @@ exports.style = {
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
 //        returnKeyType:Ti.UI.RETURNKEY_SEND,
 	},
+	stampHistoryTableView:{ 
+		top: '105dp',
+		width: '284dp',
+		height: Ti.UI.SIZE,
+//		scrollable: false,
+		data: [],
+	},
+	stampHistoryTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
+	stampHistoryView:{
+		layout: 'absolute',
+		top: '0dp',
+		height: Ti.UI.SIZE,
+	},
+	stampHistoryLabel:{
+		left: '15dp',
+		width: '100%',
+		height: '35dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#000',
+		// カスタムプロパティ
+		objectName : 'stampHistoryLabel',
+	},
+
 };
 
