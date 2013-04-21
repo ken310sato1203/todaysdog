@@ -38,5 +38,6 @@ tabGroup.open();
 // プロフィールのタブをクリックで最新情報を表示
 tab5.addEventListener('focus', function(e){
 	Ti.API.debug('[event]tab5.focus:');
-	tab5.window.fireEvent('refresh');
+	var currentData = model.getUser(loginId);
+	tab5.window.fireEvent('refresh', {userData:currentData});
 });

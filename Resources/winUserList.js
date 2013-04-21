@@ -61,7 +61,7 @@ exports.createWindow = function(_type, _userData){
 			userImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]userImage.click:');
 				e.source.opacity = 0.5;
-				var profileWin = win.createProfileWindow(userData);
+				var profileWin = win.createProfileWindow(e.source.userData);
 				win.openWindow(userListWin, profileWin);
 				e.source.opacity = 1.0;
 			});
@@ -248,7 +248,8 @@ exports.createWindow = function(_type, _userData){
 	// クローズ時に前の画面を更新
 	userListWin.addEventListener('close',function(e){
 		Ti.API.debug('[event]userListWin.close:');
-		tabPrevWin.pop().fireEvent('refresh');
+		var currentData = model.getUser(_userData.user);
+		tabPrevWin.pop().fireEvent('refresh', {userData:currentData});
 	});	
 
 	return userListWin;

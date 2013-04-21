@@ -7,6 +7,7 @@ var diaryWin = require('winDiary');
 var timeWin = require('winTime');
 var stampWin = require('winStamp');
 var stampPostWin = require('winStampPost');
+var stampTextWin = require('winStampText');
 var profileWin = require('winProfile');
 var photoWin = require('winPhoto');
 var photoListWin = require('winPhotoList');
@@ -64,6 +65,10 @@ exports.win = {
 		Ti.API.debug('[func]createStampPostWindow:');
 		return stampPostWin.createWindow(_userData, _stampData);
 	},
+	createStampTextWindow:function(_userData, _stampData){
+		Ti.API.debug('[func]createStampTextWindow:');
+		return stampTextWin.createWindow(_userData, _stampData);
+	},
 	createProfileWindow:function(_userData){
 		Ti.API.debug('[func]createProfileWindow:');
 		Ti.API.debug('_userData.name:' + _userData.name);
@@ -86,12 +91,16 @@ exports.win = {
 		return commentListWin.createWindow(_articleData);
 	},
 
+	// タブでウィンドウを開く
+	openTabWindow:function(_win) {
+		Ti.API.debug('[func]openTabWindow:');
+		tabGroup.activeTab.open(_win,{animated:true});
+	},
 	// 新しいウィンドウを開き、クローズ時のイベント実行用に前のウィンドウを格納
 	openWindow:function(_prevWin, _nextWin) {
 		Ti.API.debug('[func]openWindow:');
 		tabPrevWin.push(_prevWin);
 		tabGroup.activeTab.open(_nextWin,{animated:true});
 	},
-	
 }
 

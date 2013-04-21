@@ -64,10 +64,17 @@ exports.createWindow = function(_userData, _stampData){
 	nextButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]nextButton.click:');
 		_stampData.stamp = selectedStamp.stamp;
-		var stampPostWin = win.createStampPostWindow(_userData, _stampData);		
-		win.openWindow(stampWin, stampPostWin);
+		var postWin = win.createStampPostWindow(_userData, _stampData);	
+		postWin.prevWin = stampWin;
+		win.openTabWindow(postWin);
 	});
 
+	// 更新用イベント
+	stampWin.addEventListener('refresh', function(e){
+		Ti.API.debug('[event]stampWin.refresh:');
+		stampWin.prevWin.fireEvent('refresh', {stampData:e.stampData});
+		stampWin.close();
+	});
 
 	return stampWin;
 }

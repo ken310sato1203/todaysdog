@@ -96,18 +96,18 @@ followList = [
 ];
 
 stampList = [
-	{no:"S0007", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:"2013", month:"4", day:"14", hour:"14", all:"0", repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"S0006", user:"sakura", stamp:"sun", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:"2013", month:"4", day:"14", hour:"14", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"S0005", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち。朝のさんぽ、いいうんち。朝のさんぽ、いい", year:"2013", month:"4", day:"14", hour:"14", all:"0", repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"S0004", user:"sakura", stamp:"restaurant", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:"2013", month:"4", day:"14", hour:"13", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"S0002", user:"sakura", stamp:"time", text:"シャンプー予約", year:"2013", month:"4", day:"10", hour:"13", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"S0002", user:"sakura", stamp:"sun", text:"公園でBBQ", year:"2013", month:"4", day:"8", hour:"13", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"S0002", user:"sakura", stamp:"edit", text:"のみだに薬", year:"2013", month:"4", day:"8", hour:"13", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"S0002", user:"sakura", stamp:"restaurant", text:"お昼ごはん、がっつり食べた", year:"2013", month:"4", day:"7", hour:"13", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"S0007", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:"2013", month:"4", day:"5", hour:"10", all:"0", repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"S0003", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:"2013", month:"4", day:"24", hour:"9", all:"0", repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"S0002", user:"sakura", stamp:"restaurant", text:"お昼ごはん、がっつり食べた", year:"2013", month:"3", day:"4", hour:"13", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"S0001", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:"2013", month:"3", day:"4", hour:"9", all:"0", repeat:"0", date:"2013-03-04 10:23:45"},
+	{no:"12", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:"2013", month:"4", day:"14", hour:"14", all:"0", repeat:"0", date:"2013-03-04 10:23:45"},
+	{no:"11", user:"sakura", stamp:"sun", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:"2013", month:"4", day:"14", hour:"14", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"10", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち。朝のさんぽ、いいうんち。朝のさんぽ、いい", year:"2013", month:"4", day:"14", hour:"14", all:"0", repeat:"0", date:"2013-03-04 10:23:45"},
+	{no:"9", user:"sakura", stamp:"restaurant", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:"2013", month:"4", day:"14", hour:"13", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"8", user:"sakura", stamp:"time", text:"シャンプー予約", year:"2013", month:"4", day:"10", hour:"13", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"7", user:"sakura", stamp:"sun", text:"公園でBBQ", year:"2013", month:"4", day:"8", hour:"13", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"6", user:"sakura", stamp:"edit", text:"のみだに薬", year:"2013", month:"4", day:"8", hour:"13", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"5", user:"sakura", stamp:"restaurant", text:"お昼ごはん、がっつり食べた", year:"2013", month:"4", day:"7", hour:"13", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"4", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:"2013", month:"4", day:"5", hour:"10", all:"0", repeat:"0", date:"2013-03-04 10:23:45"},
+	{no:"3", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:"2013", month:"4", day:"24", hour:"9", all:"0", repeat:"0", date:"2013-03-04 10:23:45"},
+	{no:"2", user:"sakura", stamp:"restaurant", text:"お昼ごはん、がっつり食べた", year:"2013", month:"3", day:"4", hour:"13", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"1", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:"2013", month:"3", day:"4", hour:"9", all:"0", repeat:"0", date:"2013-03-04 10:23:45"},
 ];
 
 stampSelectList = [
@@ -395,6 +395,22 @@ exports.model = {
 
 		return stampTarget;
 	},
+	// スタンプデータの追加
+	addStampList:function(_stampData){
+		Ti.API.debug('[func]addStampList:');
+		_stampData.no = parseInt(stampList[0].no, 10) + 1;
+		stampList.unshift(_stampData);
+	},
+	// スタンプデータの更新
+	updateStampList:function(_stampData){
+		Ti.API.debug('[func]updateStampList:');
+		for (var i=0; i<stampList.length; i++) {
+			if (stampList[i].no == _stampData.no) {
+				stampList[i] = _stampData;
+				break;
+			}
+		}
+	},
 
 	// 選択スタンプのリストを取得
 	getStampSelectList:function(){
@@ -418,7 +434,7 @@ exports.model = {
 		_likeList.seq = 1;
 		for (var i=0; i<likeList.length; i++) {
 			if (likeList[i].no == _likeList.no) {
-				_likeList.seq = likeList[i].seq + 1;
+				_likeList.seq = parseInt(likeList[i].seq, 10) + 1;
 				break;
 			}
 		}
@@ -501,7 +517,7 @@ exports.model = {
 		_commentList.seq = 1;
 		for (var i=0; i<commentList.length; i++) {
 			if (commentList[i].no == _commentList.no) {
-				_commentList.seq = commentList[i].seq + 1;
+				_commentList.seq = parseInt(commentList[i].seq, 10) + 1;
 				break;
 			}
 		}

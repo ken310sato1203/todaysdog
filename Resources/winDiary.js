@@ -146,7 +146,8 @@ exports.createWindow = function(_userData){
 			Ti.API.debug('[event]e.source:', e.source);
 			if (e.source.objectName != "diaryPhotoImage") {
 				var timeWin = win.createTimeWindow(_userData, e.row.diaryData);
-				win.openWindow(diaryWin, timeWin);
+				timeWin.prevWin = diaryWin;
+				win.openTabWindow(timeWin);
 			}
 		});
 
@@ -289,6 +290,11 @@ exports.createWindow = function(_userData){
 			prevDiaryView.left = (style.commonSize.screenWidth * -1) + 'dp';
 			diaryWin.add(prevDiaryView);			
 		}
+	});
+
+	// 更新用イベント
+	diaryWin.addEventListener('refresh', function(e){
+		Ti.API.debug('[event]diaryWin.refresh:');
 	});
 
 	return diaryWin;

@@ -435,17 +435,17 @@ exports.createWindow = function(_userData){
 	// プロフィール編集を反映
 	profileWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]profileWin.refresh:');
-		// _userDataは、modelのuserListの参照なので値セットで反映される
-		countLikeLabel.text = _userData.like;
-		countFollowerLabel.text = _userData.follower;
-		countFollowLabel.text = _userData.follow;
-		nameField.value = _userData.name;
-		breedField.value = _userData.breed;
-		sexField.value = _userData.sex;
-		birthField.value = _userData.birth;
-		locationField.value = _userData.location;
-		featureField.value = _userData.feature;
-		characterField.value = _userData.character;
+
+		countLikeLabel.text = e.userData.like;
+		countFollowerLabel.text = e.userData.follower;
+		countFollowLabel.text = e.userData.follow;
+		nameField.value = e.userData.name;
+		breedField.value = e.userData.breed;
+		sexField.value = e.userData.sex;
+		birthField.value = e.userData.birth;
+		locationField.value = e.userData.location;
+		featureField.value = e.userData.feature;
+		characterField.value = e.userData.character;
 	});
 
 	// 右スワイプで前の画面に戻る

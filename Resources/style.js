@@ -577,7 +577,7 @@ exports.style = {
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		hintText: 'なまえを入力してください',
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
-//      returnKeyType:Ti.UI.RETURNKEY_SEND,
+        returnKeyType:Ti.UI.RETURNKEY_DONE,
         borderStyle:Ti.UI.INPUT_BORDERSTYLE_NONE,
         touchEnabled: false,
 //      enabled: false,
@@ -1405,7 +1405,7 @@ exports.style = {
 		top: '0dp',
 		bottom: '1dp',
 		width: '100%',
-		height: Ti.UI.SIZE,
+		height: '44dp',
 		backgroundColor : 'white',
 	},
 	diaryWeekdayLabel:{
@@ -1417,10 +1417,10 @@ exports.style = {
 		font : {fontSize:11, fontWeight:'bold'},
 	},
 	diaryDayLabel:{
-		top: '14dp',
+		bottom: '6dp',
 		left: '8dp',
 		width: '30dp',
-		height: '30dp',
+		height: Ti.UI.SIZE,
 		textAlign: 'center',
 		font : {fontSize:15, fontWeight:'bold'},
 		color: '#3a4756',
@@ -1434,7 +1434,7 @@ exports.style = {
 	},
 	diaryStampView:{
 		layout : 'horizontal',
-		left: '47dp',
+		left: '45dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
@@ -1458,6 +1458,8 @@ exports.style = {
 	timeWin:{
 		backgroundColor: '#dedede',
 		barColor: '#a9a9a9',
+		// カスタムプロパティ
+		openFlag : false,
 	},
 	timeTitleLabel:{
 		width: '200dp',
@@ -1511,19 +1513,24 @@ exports.style = {
 	timeStampListView:{
 		layout: 'vertical',
 		top: '0dp',
+		bottom: '6dp',
 		left: '47dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		// カスタムプロパティ
+		objectName : 'timeStampListView',
 	},
 	timeStampView:{
-		top: '0dp',
+		top: '6dp',
 		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-//		height : '45dp',
+		// カスタムプロパティ
+		stampData : null,
+		objectName : 'timeStampView',
 	},
 	timeStampImage:{
-		top: '6dp',
+		top: '0dp',
 		left: '0dp',
 		width : '32dp',
 		height : '32dp',
@@ -1532,10 +1539,9 @@ exports.style = {
 		objectName : 'timeStampImage',
 	},
 	timeStampLabel:{
-		top: '6dp',
 		left: '36dp',
 		width: '195dp',
-		height: '32dp',
+		height: Ti.UI.SIZE,
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
 		// カスタムプロパティ
@@ -1553,6 +1559,8 @@ exports.style = {
 	stampWin:{
 		backgroundColor: '#dedede',
 		barColor: '#a9a9a9',
+		// カスタムプロパティ
+		prevWin : null,
 	},
 	stampTitleLabel:{
 		width: '200dp',
@@ -1600,6 +1608,8 @@ exports.style = {
 	stampPostWin:{
 		backgroundColor: '#dedede',
 		barColor: '#a9a9a9',
+		// カスタムプロパティ
+		prevWin : null,
 	},
 	stampPostTitleLabel:{
 		width: '200dp',
@@ -1618,39 +1628,71 @@ exports.style = {
 		title: '投稿',
 	},
 	stampPostView:{
-		layout : 'horizontal',
 		top : '10dp',
-//		left: '10dp',
 		width : '284dp',
-		height: Ti.UI.SIZE,
+		height: '52dp',
 		backgroundColor: 'white',
 	},
 	stampPostImage:{
-		top : '10dp',
 		left: '10dp',
-		bottom : '10dp',
 		width : '32dp',
 		height : '32dp',
 		image : null,
 	},
-	stampPostTextArea:{
+	stampPostTextLabel:{
+		left: '48dp',
+		width: '224dp',
+		height: Ti.UI.SIZE,
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+
+// winStampText -------------------------------------------------------
+	stampTextWin:{
+		backgroundColor: '#dedede',
+		barColor: '#a9a9a9',
+	},
+	stampTextTitleLabel:{
+		width: '200dp',
+		textAlign: 'center',
+		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+	},
+	stampTextDoneButton:{
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		textAlign: 'center',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		title: '完了',
+	},
+
+	stampTextView:{
+		top : '10dp',
+		width : '284dp',
+		height: '140dp',
+		backgroundColor: 'white',
+	},
+
+	stampTextArea:{
 		top : '5dp',
-		left: '0dp',
-		bottom : '5dp',
-		width: '226dp',
-		height : '70dp',
+		left: '8dp',
+		width: '268dp',
+		height : '130dp',
 		backgroundColor: 'white',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: 'gray',
+		color: '#000',
 		// hintTextはiOSで対応されていないので、focus/blur時に処理
 		hintText: 'comment',
 		value: 'comment',
 		suppressReturn: false,
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
-//        returnKeyType:Ti.UI.RETURNKEY_SEND,
+        returnKeyType:Ti.UI.RETURNKEY_DONE,
 	},
 	stampHistoryTableView:{ 
-		top: '105dp',
+		top: '160dp',
 		width: '284dp',
 		height: Ti.UI.SIZE,
 //		scrollable: false,
@@ -1671,7 +1713,7 @@ exports.style = {
 		left: '15dp',
 		width: '100%',
 		height: '35dp',
-		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
 		// カスタムプロパティ
 		objectName : 'stampHistoryLabel',

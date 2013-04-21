@@ -31,10 +31,16 @@ exports.createWindow = function(_userData, _stampData){
 				actInd.show();
 				tabGroup.add(actInd);
 				// 処理を書く
+				if (_stampData.no == null) {
+					model.addStampList(_stampData);
+				} else {
+					model.updateStampList(_stampData);					
+				}
+				postWin.prevWin.fireEvent('refresh', {stampData:_stampData});
+				postWin.close();
 				
 				setTimeout(function(){
 					actInd.hide();
-					postWin.close();
 				},2000);
 			}
 		});
@@ -47,58 +53,24 @@ exports.createWindow = function(_userData, _stampData){
 	postImage.image = 'images/icon/diary_' + _stampData.stamp + '.png';
 	postView.add(postImage);
 
-	var postTextArea = Ti.UI.createTextArea(style.stampPostTextArea);
-	postView.add(postTextArea);
+	var postLabel = Ti.UI.createLabel(style.stampPostTextLabel);
+	postLabel.text = _stampData.text;
+	postView.add(postLabel);
 
-	postTextArea.addEventListener('focus',function(e){
-		if (e.source.value == e.source.hintText) {
-			e.source.value = "";
-			e.source.color = "black";
-		}
-	});
-	postTextArea.addEventListener('blur',function(e){
-		if (e.source.value == "") {
-			e.source.value = e.source.hintText;
-			e.source.color = "gray";
-		}
+	// 投稿テキストを編集
+	postView.addEventListener('click', function(e){
+		Ti.API.debug('[event]postView.click:');
+		var textWin = win.createStampTextWindow(_userData, _stampData);		
+		textWin.prevWin = postWin;
+		win.openTabWindow(textWin);
 	});
 
-
-	var historyList = model.getStampHistoryList(_stampData.stamp);
-	var historyRowList = [];
-	if (historyList != null) {
-		for (var i=0; i<historyList.length; i++) {
-			var historyRow = Titanium.UI.createTableViewRow(style.stampHistoryTableRow);
-			historyRowList.push(historyRow);
-//			var historyView = Titanium.UI.createView(style.stampHistoryView);
-//			historyRow.add(historyView);
-			var historyLabel = Ti.UI.createLabel(style.stampHistoryLabel);
-			historyLabel.text = historyList[i];
-			historyRow.add(historyLabel);
-		}
-	}
-
-	var historyTableView = Ti.UI.createTableView(style.stampHistoryTableView);
-	historyTableView.data = historyRowList;
-	postWin.add(historyTableView);
-
-	// 履歴クリックでチェックし入力テキストにコピー
-	historyTableView.addEventListener('click',function(e){
-		Ti.API.debug('[event]historyTableView.click:');
-		var tableRow = historyTableView.data[0].rows;
-		if (tableRow != null) {
-			for (var i=0; i<tableRow.length; i++) {
-				tableRow[i].hasCheck = false;
-			}
-		}
-		e.row.hasCheck = true;
-		postTextArea.value = historyList[e.index];
-	});
-
-	// 画面クリックでコメントフィールドのフォーカスを外す
-	postWin.addEventListener('click',function(e){
-		Ti.API.debug('[event]postWin.click:');
-		postTextArea.blur();
+	// 更新用イベント
+	postWin.addEventListener('refresh', function(e){
+		Ti.API.debug('[event]postWin.refresh:');
+		// 投稿テキストの更新
+		_stampData.text = e.stampText;
+		postLabel.text = e.stampText;
 	});
 
 	return postWin;

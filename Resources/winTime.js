@@ -19,8 +19,10 @@ exports.createWindow = function(_userData, _diaryData){
 	monthTitle.text =  year + ' ' + monthName[month] + ' ' + day;
 	timeWin.titleControl = monthTitle;
 
-	var timeView = Ti.UI.createTableView(style.timeTableView);
+	// リフレッシュ時用格納リスト
+	var refreshTarget = [];
 
+	var timeView = Ti.UI.createTableView(style.timeTableView);
 	var timeRow = [];
 	var timeRange = ['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23'];
 	// 一番早い時間帯に登録されているデータの時間帯
@@ -37,9 +39,32 @@ exports.createWindow = function(_userData, _diaryData){
 		stampHour[stampList[i].hour].data.push(stampList[i]);
 	}
 
+	// フォローユーザの記事の取得
+	var getStampView = function(_rowStamp) {
+		Ti.API.debug('[func]getStampView:');
+
+		var targetView = Ti.UI.createView(style.timeStampView);
+		targetView.stampData = _rowStamp;
+
+		var stampLabel = Ti.UI.createLabel(style.timeStampLabel);
+		stampLabel.text = _rowStamp.text;
+		targetView.add(stampLabel);
+
+		var stampImage = Ti.UI.createImageView(style.timeStampImage);
+		stampImage.image = 'images/icon/diary_' + _rowStamp.stamp + '.png';
+		targetView.add(stampImage);
+
+		// リフレッシュ時に更新する対象を特定するために格納
+		refreshTarget.push({no:_rowStamp.no, stampView:targetView, stampImage:stampImage, stampLabel:stampLabel});
+
+		return targetView;
+	}
+
+
 	for (var i=0; i<timeRange.length; i++) {
 		var row = Ti.UI.createTableViewRow(style.timeTableRow);		
 		row.stampData = {
+			no: null,
 			user: _userData.user,
 			stamp: null,
 			text: null,
@@ -55,6 +80,19 @@ exports.createWindow = function(_userData, _diaryData){
 		var hourView = Ti.UI.createView(style.timeHourView);
 		row.add(hourView);
 
+		hourView.addEventListener('click',function(e){
+			Ti.API.debug('[event]hourView.click:');
+			if (timeWin.openFlag == false) {
+				if (e.source.objectName == "timeStampImage" || e.source.objectName == "timeStampLabel") {
+					var postWin = win.createStampPostWindow(_userData, e.source.getParent().stampData);
+					postWin.prevWin = timeWin;
+					win.openTabWindow(postWin);
+					// timWinからstampPostWinへの遷移でイベントが複数回実行（原因不明）されないようにするためのフラグ
+					timeWin.openFlag = true;
+				}
+			}
+		});
+
 		var timeLabel = Ti.UI.createLabel(style.timeHourLabel);
 		timeLabel.text = timeRange[i] + ':00';
 		if (timeRange[i] % 3 == 0) {
@@ -69,30 +107,15 @@ exports.createWindow = function(_userData, _diaryData){
 			}
 		}
 
+		var stampListView = Ti.UI.createView(style.timeStampListView);
+		hourView.add(stampListView);
+
 		var rowStampList = stampHour[i].data;
 		if (rowStampList.length > 0) {
-			var stampListView = Ti.UI.createView(style.timeStampListView);
-			hourView.add(stampListView);
-
 			for (var j=0; j<rowStampList.length; j++) {
-				var stampView = Ti.UI.createView(style.timeStampView);
+				var stampView = getStampView(rowStampList[j]);
 				stampListView.add(stampView);
-				stampView.stampData = rowStampList[j];
 
-				stampView.addEventListener('click',function(e){
-					Ti.API.debug('[event]stampView.click:');
-					if (e.source.objectName == "timeStampImage" || e.source.objectName == "timeStampLabel") {
-						var stampPostWin = win.createStampPostWindow(_userData, e.source.getParent().stampData);
-						win.openWindow(timeWin, stampPostWin);						
-					}
-				});
-
-				var stampImage = Ti.UI.createImageView(style.timeStampImage);
-				stampImage.image = 'images/icon/diary_' + rowStampList[j].stamp + '.png';
-				stampView.add(stampImage);
-				var stampLabel = Ti.UI.createLabel(style.timeStampLabel);
-				stampLabel.text = rowStampList[j].text;
-				stampView.add(stampLabel);
 /*
 				if (stampLabel.text.length > 32) {
 					stampLabel.overFlag = true;
@@ -126,7 +149,8 @@ exports.createWindow = function(_userData, _diaryData){
 		plusImage.addEventListener('click',function(e){
 			Ti.API.debug('[event]plusImage.click:');
 			var stampWin = win.createStampWindow(_userData, e.row.stampData);
-			win.openWindow(timeWin, stampWin);
+			stampWin.prevWin = timeWin;
+			win.openTabWindow(stampWin);
 		});
 		
 		timeRow.push(row);
@@ -158,6 +182,40 @@ exports.createWindow = function(_userData, _diaryData){
 		if (e.direction == 'right') {
 			tabGroup.activeTab.close(timeWin);
 		}
+	});
+
+	// 更新用イベント
+	timeWin.addEventListener('refresh', function(e){
+		Ti.API.debug('[event]timeWin.refresh:');
+		var addFlag = true;
+		for (var i=0; i<refreshTarget.length; i++) {
+			if (refreshTarget[i].no == e.stampData.no) {
+				refreshTarget[i].stampView.stampData = e.stampData;
+				refreshTarget[i].stampImage.image = 'images/icon/diary_' + e.stampData.stamp + '.png';
+				refreshTarget[i].stampLabel.text = e.stampData.text;
+				addFlag = false;
+				break;
+			}
+		}
+		if (addFlag) {
+			var targetViewList = timeView.data[0].rows[e.stampData.hour].children[0].children;
+			for (var i=0; i<targetViewList.length; i++) {
+				if (targetViewList[i].objectName == "timeStampListView") {
+					var stampAddView = getStampView(e.stampData);
+					targetViewList[i].add(stampAddView);
+
+					break;
+				}
+			}
+
+		}
+//		timeWin.prevWin.fireEvent('refresh', {stampData:e.stampData});
+	});
+
+	// timWinからstampPostWinへの遷移でイベントが複数回実行（原因不明）されないようにするためのフラグ
+	timeWin.addEventListener('focus', function(e){
+		Ti.API.debug('[event]timeWin.focus:');
+		timeWin.openFlag = false;
 	});
 
 	return timeWin;
