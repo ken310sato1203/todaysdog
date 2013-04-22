@@ -880,6 +880,8 @@ exports.style = {
 	userListWin:{
 		backgroundColor: '#dedede',
 		barColor: '#a9a9a9',
+		// カスタムプロパティ
+		prevWin : null,
 	},
 
 	userListTitleView:{
@@ -1015,6 +1017,8 @@ exports.style = {
 	commentListWin:{
 		backgroundColor: '#dedede',
 		barColor: '#a9a9a9',
+		// カスタムプロパティ
+		prevWin : null,
 	},
 
 	commentListTitleView:{

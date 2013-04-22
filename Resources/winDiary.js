@@ -117,7 +117,7 @@ exports.createWindow = function(_userData){
 				stampPhotoImage.addEventListener('click', function(e) {
 					Ti.API.debug('[event]stampPhotoImage.click:');
 					var diaryPhotoWin = win.createCalendarPhotoWindow(_userData, e.source.articleData);
-					win.openWindow(diaryWin, diaryPhotoWin);
+					win.openTabWindow(diaryPhotoWin);
 				});
 			}
 

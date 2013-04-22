@@ -26,7 +26,7 @@ exports.createWindow = function(_type, _userData, _articleData){
 	calendarButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]calendarButton.click:');
 		var calendarWin = win.createCalendarWindow(articleList[articleIndex]);
-		win.openWindow(mydogWin, calendarWin);
+		win.openTabWindow(calendarWin);
 	});
 
 	// カメラボタンの表示
@@ -36,7 +36,7 @@ exports.createWindow = function(_type, _userData, _articleData){
 	cameraButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]cameraButton.click:');
 		var cameraWin = win.createCameraWindow(_userData);
-		win.openWindow(mydogWin, cameraWin);
+		win.openTabWindow(cameraWin);
 	});
 
 	// 表示する記事リストの取得

@@ -302,7 +302,8 @@ exports.createWindow = function(_articleData){
 	commentCountIconImage.addEventListener('click',function(e){
 		Ti.API.debug('[event]commentCountIconImage.click:');
 		var commentListWin = win.createCommentListWindow(_articleData);
-		win.openWindow(photoWin, commentListWin);
+		commentListWin.prevWin = photoWin;
+		win.openTabWindow(commentListWin);
 	});
 
 
@@ -311,7 +312,7 @@ exports.createWindow = function(_articleData){
 		Ti.API.debug('[event]titleIconImage.click:');
 		e.source.opacity = 0.5;
 		var profileWin = win.createProfileWindow(userData);
-		win.openWindow(photoWin, profileWin);
+		win.openTabWindow(profileWin);
 		e.source.opacity = 1.0;
 	});
 
@@ -333,7 +334,7 @@ exports.createWindow = function(_articleData){
 	// クローズ時に前の画面を更新
 	photoWin.addEventListener('close',function(e){
 		Ti.API.debug('[event]photoWin.close:');
-		tabPrevWin.pop().fireEvent('refresh', {articleData:_articleData});
+		photoWin.prevWin.fireEvent('refresh', {articleData:_articleData});
 	});	
 
 	return photoWin;

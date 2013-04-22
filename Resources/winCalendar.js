@@ -171,7 +171,7 @@ exports.createWindow = function(_articleData){
 	
 					target.dayImage.opacity = 0.5;
 					var calendarPhotoWin = win.createCalendarPhotoWindow(userData, target.articleData);
-					win.openWindow(calendarWin, calendarPhotoWin);
+					win.openTabWindow(calendarPhotoWin);
 					target.dayImage.opacity = 1.0;
 				}
 	

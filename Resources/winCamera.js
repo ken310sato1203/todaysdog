@@ -44,7 +44,7 @@ exports.createWindow = function(_userData){
 				setTimeout(function(){
 					actInd.hide();
 					var cameraPhotoWin = win.createCameraPhotoWindow(_userData, articleData);
-					win.openWindow(cameraWin, cameraPhotoWin);
+					win.openTabWindow(cameraPhotoWin);
 				},2000);
 			}
 		});

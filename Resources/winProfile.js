@@ -391,7 +391,7 @@ exports.createWindow = function(_userData){
 			countPhotoView.backgroundColor = '#dedede';
 			var type = "user";
 			var photoListWin = win.createPhotoListWindow(type, _userData);
-			win.openWindow(profileWin, photoListWin);
+			win.openTabWindow(photoListWin);
 			countPhotoView.backgroundColor = 'white';
 		}
 	});
@@ -403,7 +403,7 @@ exports.createWindow = function(_userData){
 			countLikeView.backgroundColor = '#dedede';
 			var type = "like";
 			var photoListWin = win.createPhotoListWindow(type, _userData);
-			win.openWindow(profileWin, photoListWin);
+			win.openTabWindow(photoListWin);
 			countLikeView.backgroundColor = 'white';
 		}
 	});
@@ -415,7 +415,8 @@ exports.createWindow = function(_userData){
 			countFollowerView.backgroundColor = '#dedede';
 			var type = "follower";
 			var userListWin = win.createUserListWindow(type, _userData);
-			win.openWindow(profileWin, userListWin);
+			userListWin.prevWin = profileWin;
+			win.openTabWindow(userListWin);
 			countFollowerView.backgroundColor = 'white';
 		}
 	});
@@ -427,7 +428,8 @@ exports.createWindow = function(_userData){
 			countFollowView.backgroundColor = '#dedede';
 			var type = "follow";
 			var userListWin = win.createUserListWindow(type, _userData);
-			win.openWindow(profileWin, userListWin);
+			userListWin.prevWin = profileWin;
+			win.openTabWindow(userListWin);
 			countFollowView.backgroundColor = 'white';
 		}
 	});

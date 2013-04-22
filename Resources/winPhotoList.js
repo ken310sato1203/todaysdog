@@ -100,7 +100,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				Ti.API.debug('[event]photoImage.click:');
 				e.source.opacity = 0.5;
 				var photoWin = win.createPhotoWindow(e.source.articleData);
-				win.openWindow(photoListWin, photoWin);
+				photoWin.prevWin = photoListWin;
+				win.openTabWindow(photoWin);
 				e.source.opacity = 1.0;
 			});
 		}		
@@ -152,7 +153,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				Ti.API.debug('[event]photoImage.click:');
 				e.source.opacity = 0.5;
 				var photoWin = win.createPhotoWindow(e.source.articleData);
-				win.openWindow(photoListWin, photoWin);
+				photoWin.prevWin = photoListWin;
+				win.openTabWindow(photoWin);
 				e.source.opacity = 1.0;
 			});
 		}		
