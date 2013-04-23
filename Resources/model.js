@@ -395,6 +395,28 @@ exports.model = {
 
 		return stampTarget;
 	},
+
+	// 指定ユーザのスタンプリストから指定日のデータを取得
+	getStampDayList:function(_userData, _year, _month, _day){
+		Ti.API.debug('[func]getStampDayList:');
+		var stampTarget = [];
+
+		var daysInMonth = 32 - new Date(_year, _month-1, 32).getDate();
+		for (var i=0; i < daysInMonth; i++) {
+			for (var j=stampList.length; j>0; j--) {
+				if (stampList[j-1].user == _userData.user) {
+					if (i == stampList[j-1].day - 1) {
+						if (_year == stampList[j-1].year && _month == stampList[j-1].month && _day == stampList[j-1].day) {
+							stampTarget.push(stampList[j-1]);
+						}
+					}
+				}
+			}
+		}
+
+		return stampTarget;
+	},
+
 	// スタンプデータの追加
 	addStampList:function(_stampData){
 		Ti.API.debug('[func]addStampList:');
