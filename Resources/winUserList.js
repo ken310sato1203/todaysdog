@@ -109,7 +109,7 @@ exports.createWindow = function(_type, _userData){
 		}
 		
 		return userTableRow;
-	}
+	};
 
 	// 「続きを読む」ボタンの追加
 	var appendNextButton = function() {
@@ -128,7 +128,7 @@ exports.createWindow = function(_type, _userData){
 		nextButton.addEventListener('click', function(e) {
 			updateUserList();
 		});		
-	}
+	};
 
 	// データなしラベルの追加	
 	var appendNoDataLabel = function() {
@@ -141,7 +141,7 @@ exports.createWindow = function(_type, _userData){
 	
 		var noDataLabel = Ti.UI.createLabel(style.userListNoDataLabel);
 		nextView.add(noDataLabel);
-	}	
+	};
 
 	// ユーザ一覧の追加
 	var appendUser = function(_userList) {
@@ -178,7 +178,7 @@ exports.createWindow = function(_type, _userData){
 			// 次回更新用に続きのユーザ一覧があるフラグを設定
 			nextUserFlag = true;
 		}
-	}
+	};
 
 	// ユーザ一覧の更新
 	var updateUserList = function() {
@@ -208,7 +208,7 @@ exports.createWindow = function(_type, _userData){
 			Ti.API.debug('userList.length:' + userList.length);
 			prevUserIndex = userList[userList.length-1].no;
 		}
-	}
+	};
 	
 // ---------------------------------------------------------------------
 	var userListWin = Ti.UI.createWindow(style.userListWin);

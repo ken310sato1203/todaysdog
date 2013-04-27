@@ -30,7 +30,7 @@ exports.createWindow = function(_type, _userData, _articleData){
 			dateTitle += '（' + (articleIndex + 1) + '/' + articleList.length + '）';			
 		}
 		return dateTitle;
-	}
+	};
 		
 	// 記事の表示
 	var getArticleView = function(_articleData) {
@@ -70,7 +70,7 @@ exports.createWindow = function(_type, _userData, _articleData){
 		});
 		
 		return articleView;
-	}
+	};
 
 	// 記事の更新
 	var updateArticle = function() {
@@ -99,7 +99,7 @@ exports.createWindow = function(_type, _userData, _articleData){
 				articleTableRow.add(prevArticleView);
 			}
 		}
-	}
+	};
 	
 // ---------------------------------------------------------------------
 	var mydogWin = Ti.UI.createWindow(style.mydogWin);

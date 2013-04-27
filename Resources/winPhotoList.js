@@ -51,7 +51,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			});
 		}		
 		return articleTableRow;
-	}
+	};
 
 	// フォローユーザの記事の取得
 	var getFriendsArticleTableRow = function(_articleList) {
@@ -104,7 +104,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			});
 		}		
 		return articleTableRow;
-	}
+	};
 
 	// 「続きを読む」ボタンの追加
 	var appendNextButton = function() {
@@ -123,7 +123,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		nextButton.addEventListener('click', function(e) {
 			updateArticle();
 		});		
-	}
+	};
 
 	// データなしラベルの追加	
 	var appendNoDataLabel = function() {
@@ -136,7 +136,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	
 		var noDataLabel = Ti.UI.createLabel(style.photoListNoDataLabel);
 		nextView.add(noDataLabel);
-	}	
+	};
 
 	// 記事の追加
 	var appendArticle = function(_articleList) {
@@ -181,7 +181,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			// 次回更新用に続きの記事があるフラグを設定
 			nextArticleFlag = true;
 		}
-	}
+	};
 
 	// 記事の更新
 	var updateArticle = function() {
@@ -199,7 +199,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			// 次回更新用に取得した最後のインデックスを設定
 			prevArticleIndex = articleList[articleList.length-1].no;
 		}
-	}
+	};
 	
 // ---------------------------------------------------------------------
 	var photoListWin = Ti.UI.createWindow(style.photoListWin);
@@ -273,7 +273,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	    updateArrowImage.show();
 	    pullLabel.text = 'Pull down to refresh...';
 	    photoListTableView.setContentInsets({top:0}, {animated:true});
-	}
+	};
 	 
 	// スクロールで発生するイベント
 	photoListTableView.addEventListener('scroll',function(e){

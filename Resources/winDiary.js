@@ -298,7 +298,16 @@ exports.createWindow = function(_userData){
 	// 更新用イベント
 	diaryWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]diaryWin.refresh:');
+		var childView = e.source.children[0];
+		diaryWin.remove(childView);
+
+		// 当月のカレンダー
+		var thisDiaryView = getCalView(e.stampData.year, e.stampData.month);
+		diaryWin.add(thisDiaryView);
+		thisDiaryView.scrollToIndex(e.stampData.day-3>0?e.stampData.day-3:0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+
 	});
+
 
 	return diaryWin;
 }

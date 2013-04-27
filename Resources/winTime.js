@@ -12,12 +12,7 @@ exports.createWindow = function(_userData, _diaryData){
 	var month = _diaryData.month;
 	var day = _diaryData.day;
 
-	var timeWin = Ti.UI.createWindow(style.timeWin);
-	// タイトルの表示
 	var monthName = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-	var monthTitle = Ti.UI.createLabel(style.timeTitleLabel);	
-	monthTitle.text =  year + ' ' + monthName[month] + ' ' + day;
-	timeWin.titleControl = monthTitle;
 
 	// 一番早い時間帯に登録されているデータの時間帯
 	var firstHour = null;
@@ -152,9 +147,15 @@ exports.createWindow = function(_userData, _diaryData){
 				_view.scrollToIndex(firstHour, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 			}
 		}		
-	}
+	};
 
 // ---------------------------------------------------------------------
+	var timeWin = Ti.UI.createWindow(style.timeWin);
+	// タイトルの表示
+	var monthTitle = Ti.UI.createLabel(style.timeTitleLabel);	
+	monthTitle.text =  year + ' ' + monthName[month] + ' ' + day;
+	timeWin.titleControl = monthTitle;
+
 	// ビューの作成
 	var timeView = getTimeView();
 	timeWin.add(timeView);
@@ -186,7 +187,7 @@ exports.createWindow = function(_userData, _diaryData){
 
 		var timeView = getTimeView();
 		timeWin.add(timeView);
-		timeView.scrollToIndex(e.stampData.hour, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+		timeView.scrollToIndex(e.stampData.hour-3>0?e.stampData.hour-3:0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 
 		timeWin.prevWin.fireEvent('refresh', {stampData:e.stampData});
 	});

@@ -51,7 +51,7 @@ exports.createWindow = function(_articleData){
 			likeCountTableRow.height = '1dp';
 			likeTableRow.height = '1dp';
 		}
-	}
+	};
 
 	// コメントリストの更新
 	var updateComment = function() {
@@ -87,7 +87,7 @@ exports.createWindow = function(_articleData){
 				commentTableRow.remove(commentListView);				
 			}
 		}
-	}
+	};
 
 	// コメントの追加
 	var addComment = function() {
@@ -100,7 +100,7 @@ exports.createWindow = function(_articleData){
 		};
 		model.addCommentList(commentData);
 		updateComment();
-	}
+	};
 
 // ---------------------------------------------------------------------
 
