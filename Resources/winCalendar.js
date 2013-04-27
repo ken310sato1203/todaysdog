@@ -21,16 +21,7 @@ exports.createWindow = function(_articleData){
 	var year = articleYear;
 	var month = articleMonth;
 
-	var calendarWin = Ti.UI.createWindow(style.calendarWin);
-	// タイトルの表示
 	var monthName = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-	var monthTitle = Ti.UI.createLabel(style.calendarTitleLabel);	
-	monthTitle.text = monthName[month-1] + ' ' + year;
-	calendarWin.titleControl = monthTitle;
-
-	// カレンダーヘッダ（曜日）
-	var headerView = Ti.UI.createView(style.calendarHeaderView);
-	calendarWin.add(headerView);
 	var weekday = [
 		{text:'SUN',color:'#CD5C5C'},
 		{text:'MON',color:'#3a4756'},
@@ -40,12 +31,6 @@ exports.createWindow = function(_articleData){
 		{text:'FRI',color:'#3a4756'},
 		{text:'SAT',color:'#4169E1'}];
 
-	for (var i=0; i<weekday.length; i++) {
-		var headerLabel = Ti.UI.createLabel(style.calendarHeaderLabel);
-		headerLabel.text = weekday[i].text;
-		headerLabel.color = weekday[i].color;
-		headerView.add(headerLabel);
-	}
 
 	// 日付の作成
 	var getDayView = function(e) {
@@ -181,6 +166,25 @@ exports.createWindow = function(_articleData){
 		return calView;
 	};
 
+// ---------------------------------------------------------------------
+
+	var calendarWin = Ti.UI.createWindow(style.calendarWin);
+	// タイトルの表示
+	var monthTitle = Ti.UI.createLabel(style.calendarTitleLabel);	
+	monthTitle.text = monthName[month-1] + ' ' + year;
+	calendarWin.titleControl = monthTitle;
+
+	// カレンダーヘッダ（曜日）
+	var headerView = Ti.UI.createView(style.calendarHeaderView);
+	calendarWin.add(headerView);
+
+	for (var i=0; i<weekday.length; i++) {
+		var headerLabel = Ti.UI.createLabel(style.calendarHeaderLabel);
+		headerLabel.text = weekday[i].text;
+		headerLabel.color = weekday[i].color;
+		headerView.add(headerLabel);
+	}
+
 	// 当月のカレンダー
 	var thisCalendarView = getCalView(year, month);
 	calendarWin.add(thisCalendarView);
@@ -205,6 +209,7 @@ exports.createWindow = function(_articleData){
 	prevCalendarView.left = (style.commonSize.screenWidth * -1) + 'dp';
 	calendarWin.add(prevCalendarView);
 
+// ---------------------------------------------------------------------
 	// スライド用アニメーション
 	var slideNext = Ti.UI.createAnimation({
 		duration : 500,

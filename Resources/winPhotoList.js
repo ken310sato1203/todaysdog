@@ -20,61 +20,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// リフレッシュ時用格納リスト
 	var refreshTarget = [];
 
-	var photoListWin = Ti.UI.createWindow(style.photoListWin);
-	var titleView = null;
-	var titleLabel = null;
-
-	// 更新ボタン
-	var updateButton = Titanium.UI.createButton(style.photoListUpdateButton);
-	// ロード用画面
-	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
-
-	if (_type == "all") {
-		// 全ユーザのフォト一覧
-		titleLabel = Ti.UI.createLabel(style.photoListTodayTitleLabel);	
-		photoListWin.titleControl = titleLabel;
-//		photoListWin.rightNavButton = updateButton;
-
-	} else 	if (_type == "follow") {
-		// フォローユーザのフォト一覧
-		titleLabel = Ti.UI.createLabel(style.photoListFirendsTitleLabel);	
-		photoListWin.titleControl = titleLabel;
-//		photoListWin.rightNavButton = updateButton;
-		articleCount = 8;
-
-	} else 	if (_type == "user") {
-		// 指定ユーザのフォト一覧
-		titleView = Ti.UI.createView(style.photoListTitleView);
-		titleLabel = Ti.UI.createLabel(style.photoListPhotoTitleLabel);	
-		titleView.add(titleLabel);		
-		photoListWin.titleControl = titleView;
-
-	} else 	if (_type == "like") {
-		// ライクなフォト一覧
-		titleView = Ti.UI.createView(style.photoListTitleView);
-		titleLabel = Ti.UI.createLabel(style.photoListLikeTitleLabel);	
-		titleView.add(titleLabel);		
-		photoListWin.titleControl = titleView;
-	}
-
-	var photoListTableView = Ti.UI.createTableView(style.photoListTableView);
-	photoListWin.add(photoListTableView);
-
-	// 最上部から下スクロールで最新データを更新する用のヘッダを作成
-	var tableHeader = Ti.UI.createView(style.photoListTableHeader);
-	var headerBorder = Ti.UI.createView(style.photoListHeaderBorder);
-	tableHeader.add(headerBorder);
-	var updateArrowImage = Ti.UI.createImageView(style.photoListUpdateArrowImage);
-	tableHeader.add(updateArrowImage);
-	var pullLabel = Ti.UI.createLabel(style.photoListPullLabel);
-	tableHeader.add(pullLabel);
-	var lastUpdatedLabel = Ti.UI.createLabel(style.photoListLastUpdatedLabel);
-	lastUpdatedLabel.text = 'Last Updated: ' + util.getFormattedNowDateTime();
-	tableHeader.add(lastUpdatedLabel);
-	var updateIndicator = Ti.UI.createActivityIndicator(style.photoListUpdateIndicator);
-	tableHeader.add(updateIndicator);
-	photoListTableView.headerPullView = tableHeader;		
-
 	// 記事の取得
 	var getArticleTableRow = function(_articleList) {
 		Ti.API.debug('[func]getArticleTableRow:');
@@ -255,9 +200,69 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			prevArticleIndex = articleList[articleList.length-1].no;
 		}
 	}
+	
+// ---------------------------------------------------------------------
+	var photoListWin = Ti.UI.createWindow(style.photoListWin);
+	var titleView = null;
+	var titleLabel = null;
+
+	// 更新ボタン
+	var updateButton = Titanium.UI.createButton(style.photoListUpdateButton);
+	// ロード用画面
+	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
+
+	if (_type == "all") {
+		// 全ユーザのフォト一覧
+		titleLabel = Ti.UI.createLabel(style.photoListTodayTitleLabel);	
+		photoListWin.titleControl = titleLabel;
+//		photoListWin.rightNavButton = updateButton;
+
+	} else 	if (_type == "follow") {
+		// フォローユーザのフォト一覧
+		titleLabel = Ti.UI.createLabel(style.photoListFirendsTitleLabel);	
+		photoListWin.titleControl = titleLabel;
+//		photoListWin.rightNavButton = updateButton;
+		articleCount = 8;
+
+	} else 	if (_type == "user") {
+		// 指定ユーザのフォト一覧
+		titleView = Ti.UI.createView(style.photoListTitleView);
+		titleLabel = Ti.UI.createLabel(style.photoListPhotoTitleLabel);	
+		titleView.add(titleLabel);		
+		photoListWin.titleControl = titleView;
+
+	} else 	if (_type == "like") {
+		// ライクなフォト一覧
+		titleView = Ti.UI.createView(style.photoListTitleView);
+		titleLabel = Ti.UI.createLabel(style.photoListLikeTitleLabel);	
+		titleView.add(titleLabel);		
+		photoListWin.titleControl = titleView;
+	}
+
+	var photoListTableView = Ti.UI.createTableView(style.photoListTableView);
+	photoListWin.add(photoListTableView);
+
+	// 最上部から下スクロールで最新データを更新する用のヘッダを作成
+	var tableHeader = Ti.UI.createView(style.photoListTableHeader);
+	var headerBorder = Ti.UI.createView(style.photoListHeaderBorder);
+	tableHeader.add(headerBorder);
+	var updateArrowImage = Ti.UI.createImageView(style.photoListUpdateArrowImage);
+	tableHeader.add(updateArrowImage);
+	var pullLabel = Ti.UI.createLabel(style.photoListPullLabel);
+	tableHeader.add(pullLabel);
+	var lastUpdatedLabel = Ti.UI.createLabel(style.photoListLastUpdatedLabel);
+	lastUpdatedLabel.text = 'Last Updated: ' + util.getFormattedNowDateTime();
+	tableHeader.add(lastUpdatedLabel);
+	var updateIndicator = Ti.UI.createActivityIndicator(style.photoListUpdateIndicator);
+	tableHeader.add(updateIndicator);
+	photoListTableView.headerPullView = tableHeader;		
+
+
 	// 初回読み込み時に、記事を更新
 	updateArticle();
 
+
+// ---------------------------------------------------------------------
 	// ヘッダの表示をもとに戻す
 	var resetPullHeader = function(){
         Ti.API.debug('[func]resetPullHeader:');

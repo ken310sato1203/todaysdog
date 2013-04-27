@@ -6,6 +6,7 @@ var style = require('style').style;
 var model = require('model').model;
 var util = require('util').util;
 
+// ---------------------------------------------------------------------
 // ログインユーザの取得
 var loginId = model.getLoginId();
 
@@ -26,13 +27,6 @@ var tab3 =  Ti.UI.createTab(style.mydogTab(win3));
 var tab4 =  Ti.UI.createTab(style.diaryTab(win4));
 var tab5 =  Ti.UI.createTab(style.profileTab(win5));
 
-tabGroup.addTab(tab1);
-tabGroup.addTab(tab2);
-tabGroup.addTab(tab3);
-tabGroup.addTab(tab4);
-tabGroup.addTab(tab5);
-
-tabGroup.open();
 
 // プロフィールのタブをクリックで最新情報を表示
 tab5.addEventListener('focus', function(e){
@@ -40,3 +34,13 @@ tab5.addEventListener('focus', function(e){
 	var currentData = model.getUser(loginId);
 	tab5.window.fireEvent('refresh', {userData:currentData});
 });
+
+// ---------------------------------------------------------------------
+
+tabGroup.addTab(tab1);
+tabGroup.addTab(tab2);
+tabGroup.addTab(tab3);
+tabGroup.addTab(tab4);
+tabGroup.addTab(tab5);
+
+tabGroup.open();

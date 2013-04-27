@@ -26,74 +26,6 @@ exports.createWindow = function(_userData){
 	} else {
 		profileWin.rightNavButton = followButton;
 	}
-
-	// 「保存」ボタン
-	saveButton.addEventListener('click', function(e){
-		Ti.API.debug('[event]saveButton.click:');
-		actInd.show();
-		tabGroup.add(actInd);
-		
-		_userData.name = nameField.value;
-		_userData.breed = breedField.value;
-		_userData.sex = sexField.value;
-		_userData.birth = birthField.value;
-		_userData.location = locationField.value;
-		_userData.feature = featureField.value;
-		_userData.character = characterField.value;
-
-		// _userDataは、modelのuserListの参照なので上記の値セットで反映される。下記はDBに反映するようの処理。
-		model.updateUserList(_userData);
-
-		setTimeout(function(){
-			actInd.hide();
-		},2000);
-	});
-
-	// 「フォロー中」ボタン
-	unfollowButton.addEventListener('click', function(e){
-		Ti.API.debug('[event]unfollowButton.click:');
-		unfollowButton.enabled = false;
-		var alertDialog = Titanium.UI.createAlertDialog({
-		    title: 'フォローを解除しますか？',
-//		    message: 'フォローを解除しますか？',
-		    buttonNames: ['OK','キャンセル'],
-		    cancel: 1
-		});
-		alertDialog.show();
-		unfollowButton.enabled = true;
-
-		alertDialog.addEventListener('click',function(alert){
-		    // OKの場合
-		    if(alert.index == 0){
-				actInd.show();
-				tabGroup.add(actInd);
-				model.removeFollowList(loginId, _userData.user);
-		
-				setTimeout(function(){
-					profileWin.rightNavButton = followButton;
-					actInd.hide();
-					countFollowerLabel.text = _userData.follower;
-				},2000);		        
-		    }
-		});
-	});
-
-	// 「フォローする」ボタン
-	followButton.addEventListener('click', function(e){
-		Ti.API.debug('[event]followButton.click:');
-		followButton.enabled = false;
-		actInd.show();
-		tabGroup.add(actInd);
-		model.addFollowList(loginId, _userData.user);
-
-		setTimeout(function(){
-			unfollowButton.enabled = true;
-			profileWin.rightNavButton = unfollowButton;
-			actInd.hide();
-			countFollowerLabel.text = _userData.follower;
-		},2000);
-		followButton.enabled = true;
-	});
 	
 	var profileScrollView = Ti.UI.createScrollView(style.profileScrollView);
 	var profileTableView = Ti.UI.createTableView(style.profileTableView);
@@ -315,6 +247,75 @@ exports.createWindow = function(_userData){
 	});
 	birthPicker.addEventListener('change',function(e){
 	    targetBirth = e.value;
+	});
+
+// ---------------------------------------------------------------------
+	// 「保存」ボタン
+	saveButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]saveButton.click:');
+		actInd.show();
+		tabGroup.add(actInd);
+		
+		_userData.name = nameField.value;
+		_userData.breed = breedField.value;
+		_userData.sex = sexField.value;
+		_userData.birth = birthField.value;
+		_userData.location = locationField.value;
+		_userData.feature = featureField.value;
+		_userData.character = characterField.value;
+
+		// _userDataは、modelのuserListの参照なので上記の値セットで反映される。下記はDBに反映するようの処理。
+		model.updateUserList(_userData);
+
+		setTimeout(function(){
+			actInd.hide();
+		},2000);
+	});
+
+	// 「フォロー中」ボタン
+	unfollowButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]unfollowButton.click:');
+		unfollowButton.enabled = false;
+		var alertDialog = Titanium.UI.createAlertDialog({
+		    title: 'フォローを解除しますか？',
+//		    message: 'フォローを解除しますか？',
+		    buttonNames: ['OK','キャンセル'],
+		    cancel: 1
+		});
+		alertDialog.show();
+		unfollowButton.enabled = true;
+
+		alertDialog.addEventListener('click',function(alert){
+		    // OKの場合
+		    if(alert.index == 0){
+				actInd.show();
+				tabGroup.add(actInd);
+				model.removeFollowList(loginId, _userData.user);
+		
+				setTimeout(function(){
+					profileWin.rightNavButton = followButton;
+					actInd.hide();
+					countFollowerLabel.text = _userData.follower;
+				},2000);		        
+		    }
+		});
+	});
+
+	// 「フォローする」ボタン
+	followButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]followButton.click:');
+		followButton.enabled = false;
+		actInd.show();
+		tabGroup.add(actInd);
+		model.addFollowList(loginId, _userData.user);
+
+		setTimeout(function(){
+			unfollowButton.enabled = true;
+			profileWin.rightNavButton = unfollowButton;
+			actInd.hide();
+			countFollowerLabel.text = _userData.follower;
+		},2000);
+		followButton.enabled = true;
 	});
 
 	// 選択したフィールド名を保管

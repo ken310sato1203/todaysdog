@@ -14,52 +14,10 @@ exports.createWindow = function(_type, _userData, _articleData){
 	// 表示部分の最上位置からのオフセット
 	var offset = 0;
 
-	var mydogWin = Ti.UI.createWindow(style.mydogWin);
-	// タイトルの表示
-	var titleLabel = Ti.UI.createLabel(style.mydogTitleLabel);	
-	mydogWin.titleControl = titleLabel;
-
-	// カレンダーボタンの表示
-	var calendarButton = Titanium.UI.createButton(style.mydogCalendarButton);
-	mydogWin.leftNavButton = calendarButton;
-	// カレンダーボタンをクリック
-	calendarButton.addEventListener('click', function(e){
-		Ti.API.debug('[event]calendarButton.click:');
-		var calendarWin = win.createCalendarWindow(articleList[articleIndex]);
-		win.openTabWindow(calendarWin);
-	});
-
-	// カメラボタンの表示
-	var cameraButton = Titanium.UI.createButton(style.mydogCameraButton);
-	mydogWin.rightNavButton = cameraButton;
-	// カメラボタンをクリック
-	cameraButton.addEventListener('click', function(e){
-		Ti.API.debug('[event]cameraButton.click:');
-		var cameraWin = win.createCameraWindow(_userData);
-		win.openTabWindow(cameraWin);
-	});
-
 	// 表示する記事リストの取得
 	var articleList = null;
 	var articleIndex = null;
 	var calendarDate = null;
-
-	if (_type == "random") {
-		// 対象記事の指定がない場合、ランダムに取得
-		articleList = model.getRandomArticle(userData, _articleData);
-		articleIndex = Math.floor(Math.random() * articleList.length);
-
-	} else 	if (_type == "date" || _type == "post") {
-		// 対象記事の指定がある場合、
-		calendarDate = util.getDate(_articleData.date);
-		articleList = model.getDateArticle(userData, calendarDate);
-		for (i=0; i<articleList.length; i++) {
-			if (articleList[i].no == _articleData.no) {
-				articleIndex = i;
-				break;
-			}
-		}
-	}
 
 	// タイトルの取得
 	var getDateTitle = function() {
@@ -74,37 +32,6 @@ exports.createWindow = function(_type, _userData, _articleData){
 		return dateTitle;
 	}
 		
-	if (_type == "date") {
-		// タイトルの表示
-		titleLabel.text = getDateTitle();
-		// カレンダー・カメラボタンは表示しない
-		mydogWin.rightNavButton = null;
-		mydogWin.leftNavButton = null;
-	}
-
-	var articleTableView = Ti.UI.createTableView(style.mydogTableView);
-	mydogWin.add(articleTableView);
-	var articleTableRow = null;
-	var thisArticleView = null;
-	var prevArticleView = null;
-	var nextArticleView = null;
-
-	// 最上部から下スクロールで最新データを更新する用のヘッダを作成
-	var tableHeader = Ti.UI.createView(style.photoListTableHeader);
-	var headerBorder = Ti.UI.createView(style.photoListHeaderBorder);
-	tableHeader.add(headerBorder);
-	var updateArrowImage = Ti.UI.createImageView(style.photoListUpdateArrowImage);
-	tableHeader.add(updateArrowImage);
-	var pullLabel = Ti.UI.createLabel(style.photoListPullLabel);
-	tableHeader.add(pullLabel);
-	var lastUpdatedLabel = Ti.UI.createLabel(style.photoListLastUpdatedLabel);
-	lastUpdatedLabel.text = 'Last Updated: ' + util.getFormattedNowDateTime();
-	tableHeader.add(lastUpdatedLabel);
-	var updateIndicator = Ti.UI.createActivityIndicator(style.photoListUpdateIndicator);
-	tableHeader.add(updateIndicator);
-	articleTableView.headerPullView = tableHeader;		
-
-
 	// 記事の表示
 	var getArticleView = function(_articleData) {
         Ti.API.debug('[func]getArticleView:');
@@ -173,9 +100,84 @@ exports.createWindow = function(_type, _userData, _articleData){
 			}
 		}
 	}
+	
+// ---------------------------------------------------------------------
+	var mydogWin = Ti.UI.createWindow(style.mydogWin);
+	// タイトルの表示
+	var titleLabel = Ti.UI.createLabel(style.mydogTitleLabel);	
+	mydogWin.titleControl = titleLabel;
+
+	// カレンダーボタンの表示
+	var calendarButton = Titanium.UI.createButton(style.mydogCalendarButton);
+	mydogWin.leftNavButton = calendarButton;
+	// カレンダーボタンをクリック
+	calendarButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]calendarButton.click:');
+		var calendarWin = win.createCalendarWindow(articleList[articleIndex]);
+		win.openTabWindow(calendarWin);
+	});
+
+	// カメラボタンの表示
+	var cameraButton = Titanium.UI.createButton(style.mydogCameraButton);
+	mydogWin.rightNavButton = cameraButton;
+	// カメラボタンをクリック
+	cameraButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]cameraButton.click:');
+		var cameraWin = win.createCameraWindow(_userData);
+		win.openTabWindow(cameraWin);
+	});
+
+	if (_type == "random") {
+		// 対象記事の指定がない場合、ランダムに取得
+		articleList = model.getRandomArticle(userData, _articleData);
+		articleIndex = Math.floor(Math.random() * articleList.length);
+
+	} else 	if (_type == "date" || _type == "post") {
+		// 対象記事の指定がある場合、
+		calendarDate = util.getDate(_articleData.date);
+		articleList = model.getDateArticle(userData, calendarDate);
+		for (i=0; i<articleList.length; i++) {
+			if (articleList[i].no == _articleData.no) {
+				articleIndex = i;
+				break;
+			}
+		}
+	}
+
+	if (_type == "date") {
+		// タイトルの表示
+		titleLabel.text = getDateTitle();
+		// カレンダー・カメラボタンは表示しない
+		mydogWin.rightNavButton = null;
+		mydogWin.leftNavButton = null;
+	}
+
+	var articleTableView = Ti.UI.createTableView(style.mydogTableView);
+	mydogWin.add(articleTableView);
+	var articleTableRow = null;
+	var thisArticleView = null;
+	var prevArticleView = null;
+	var nextArticleView = null;
+
+	// 最上部から下スクロールで最新データを更新する用のヘッダを作成
+	var tableHeader = Ti.UI.createView(style.photoListTableHeader);
+	var headerBorder = Ti.UI.createView(style.photoListHeaderBorder);
+	tableHeader.add(headerBorder);
+	var updateArrowImage = Ti.UI.createImageView(style.photoListUpdateArrowImage);
+	tableHeader.add(updateArrowImage);
+	var pullLabel = Ti.UI.createLabel(style.photoListPullLabel);
+	tableHeader.add(pullLabel);
+	var lastUpdatedLabel = Ti.UI.createLabel(style.photoListLastUpdatedLabel);
+	lastUpdatedLabel.text = 'Last Updated: ' + util.getFormattedNowDateTime();
+	tableHeader.add(lastUpdatedLabel);
+	var updateIndicator = Ti.UI.createActivityIndicator(style.photoListUpdateIndicator);
+	tableHeader.add(updateIndicator);
+	articleTableView.headerPullView = tableHeader;		
+
 	// 初回読み込み時に、記事を更新
 	updateArticle();
 
+// ---------------------------------------------------------------------
 	// スライド用アニメーション
 	var slideNext = Ti.UI.createAnimation({
 		duration : 500,

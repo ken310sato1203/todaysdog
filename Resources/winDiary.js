@@ -12,26 +12,21 @@ exports.createWindow = function(_userData){
 	var year = nowYear;
 	var month = nowMonth;
 
-	var diaryWin = Ti.UI.createWindow(style.diaryWin);
-	// タイトルの表示
 	var monthName = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-	var monthTitle = Ti.UI.createLabel(style.diaryTitleLabel);	
-	monthTitle.text = year + ' ' + monthName[month-1];
-	diaryWin.titleControl = monthTitle;
+	var weekday = [
+		{text:'SUN',color:'#CD5C5C'},
+		{text:'MON',color:'#3a4756'},
+		{text:'TUE',color:'#3a4756'},
+		{text:'WED',color:'#3a4756'},
+		{text:'THU',color:'#3a4756'},
+		{text:'FRI',color:'#3a4756'},
+		{text:'SAT',color:'#4169E1'}];
 
 	// カレンダーデータの取得
 	var getCalendarRowData = function(_year, _month) {
 		Ti.API.debug('[func]getDiaryRowData:');
 		var leap = _year % 4 ? 0 : _year % 100 ? 1 : _year % 400 ? 0 : 1;
 		var months = [31, 28 + leap, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-		var weekday = [
-			{text:'SUN',color:'#CD5C5C'},
-			{text:'MON',color:'#3a4756'},
-			{text:'TUE',color:'#3a4756'},
-			{text:'WED',color:'#3a4756'},
-			{text:'THU',color:'#3a4756'},
-			{text:'FRI',color:'#3a4756'},
-			{text:'SAT',color:'#4169E1'}];
 
 		// 日別に登録
 		var stampDay = new Array(months[_month-1]);
@@ -154,6 +149,13 @@ exports.createWindow = function(_userData){
 		return calView;
 	};
 
+// ---------------------------------------------------------------------
+	var diaryWin = Ti.UI.createWindow(style.diaryWin);
+	// タイトルの表示
+	var monthTitle = Ti.UI.createLabel(style.diaryTitleLabel);	
+	monthTitle.text = year + ' ' + monthName[month-1];
+	diaryWin.titleControl = monthTitle;
+
 	// 当月のカレンダー
 	var thisDiaryView = getCalView(year, month);
 	diaryWin.add(thisDiaryView);
@@ -180,6 +182,7 @@ exports.createWindow = function(_userData){
 	prevDiaryView.left = (style.commonSize.screenWidth * -1) + 'dp';
 	diaryWin.add(prevDiaryView);
 
+// ---------------------------------------------------------------------
 
 	// スライド用アニメーション
 	var slideNext = Ti.UI.createAnimation({

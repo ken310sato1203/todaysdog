@@ -19,8 +19,6 @@ exports.createWindow = function(_userData, _diaryData){
 	monthTitle.text =  year + ' ' + monthName[month] + ' ' + day;
 	timeWin.titleControl = monthTitle;
 
-	// リフレッシュ時用格納リスト
-	var refreshTarget = [];
 	// 一番早い時間帯に登録されているデータの時間帯
 	var firstHour = null;
 
@@ -56,9 +54,6 @@ exports.createWindow = function(_userData, _diaryData){
 			var stampImage = Ti.UI.createImageView(style.timeStampImage);
 			stampImage.image = 'images/icon/diary_' + _rowStamp.stamp + '.png';
 			targetView.add(stampImage);
-	
-			// リフレッシュ時に更新する対象を特定するために格納
-			refreshTarget.push({no:_rowStamp.no, stampView:targetView, stampImage:stampImage, stampLabel:stampLabel});
 	
 			return targetView;
 		}
@@ -117,29 +112,7 @@ exports.createWindow = function(_userData, _diaryData){
 			if (rowStampList.length > 0) {
 				for (var j=0; j<rowStampList.length; j++) {
 					var stampView = getStampView(rowStampList[j]);
-					stampListView.add(stampView);
-	
-	/*
-					if (stampLabel.text.length > 32) {
-						stampLabel.overFlag = true;
-					}
-	*/
-	/*
-					// stampLabelをクリックでテキストを全表示
-					stampLabel.addEventListener('click',function(e){
-						Ti.API.debug('[event]stampLabel.click:');
-						// テキストが全表示できてない場合
-						if (e.source.overFlag) {
-							if (e.source.height != Ti.UI.SIZE) {
-								e.source.height = Ti.UI.SIZE;
-							} else {
-								e.source.height = '32dp';
-							}
-							// サイズを反映するためにリフレッシュ
-							targetView.setData(targetView.data);
-						}
-					});
-	*/
+					stampListView.add(stampView);	
 				}
 				if (firstHour == null) {
 					firstHour = i;				
@@ -161,10 +134,7 @@ exports.createWindow = function(_userData, _diaryData){
 		targetView.setData(timeRow);
 
 		return targetView;
-	}
-
-	var timeView = getTimeView();
-	timeWin.add(timeView);
+	};
 
 	// 表示位置にスクロール
 	var scrollPosition = function(_view) {
@@ -184,6 +154,12 @@ exports.createWindow = function(_userData, _diaryData){
 		}		
 	}
 
+// ---------------------------------------------------------------------
+	// ビューの作成
+	var timeView = getTimeView();
+	timeWin.add(timeView);
+
+// ---------------------------------------------------------------------
 	// windowオープン時
 	timeWin.addEventListener('open', function(e) {
 		Ti.API.debug('[event]timeWin.open:');
@@ -212,31 +188,7 @@ exports.createWindow = function(_userData, _diaryData){
 		timeWin.add(timeView);
 		timeView.scrollToIndex(e.stampData.hour, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 
-/*
-		var childView = e.source.children[0];
-		var addFlag = true;
-		for (var i=0; i<refreshTarget.length; i++) {
-			if (refreshTarget[i].no == e.stampData.no) {
-				refreshTarget[i].stampView.stampData = e.stampData;
-				refreshTarget[i].stampImage.image = 'images/icon/diary_' + e.stampData.stamp + '.png';
-				refreshTarget[i].stampLabel.text = e.stampData.text;
-				addFlag = false;
-				break;
-			}
-		}
-		if (addFlag) {
-			var targetViewList = childView.data[0].rows[e.stampData.hour].children[0].children;
-			for (var i=0; i<targetViewList.length; i++) {
-				if (targetViewList[i].objectName == "timeStampListView") {
-					var stampAddView = getStampView(e.stampData);
-					targetViewList[i].add(stampAddView);
-
-					break;
-				}
-			}
-		}
-//		timeWin.prevWin.fireEvent('refresh', {stampData:e.stampData});
-*/
+		timeWin.prevWin.fireEvent('refresh', {stampData:e.stampData});
 	});
 
 	// timWinからstampPostWinへの遷移でイベントが複数回実行（原因不明）されないようにするためのフラグ

@@ -14,6 +14,7 @@ var photoListWin = require('winPhotoList');
 var userListWin = require('winUserList');
 var commentListWin = require('winCommentList');
 
+// ---------------------------------------------------------------------
 exports.win = {
 
 	createTodayWindow:function(_userData){

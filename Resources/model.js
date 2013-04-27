@@ -13,6 +13,7 @@ var stampList = [];
 var stampSelectList = [];
 var stampHistoryList = [];
 
+// ---------------------------------------------------------------------
 loginId = "sakura";
 
 articleList = [
@@ -169,6 +170,7 @@ for (var i=0; i<commentList.length; i++) {
 	}
 }
 
+// ---------------------------------------------------------------------
 exports.model = {
 
 	// ログインIDの登録

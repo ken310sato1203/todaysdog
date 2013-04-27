@@ -11,12 +11,6 @@ exports.createWindow = function(_userData, _stampData){
 	// 完了ボタンの表示
 	var doneButton = Titanium.UI.createButton(style.stampTextDoneButton);
 	textWin.rightNavButton = doneButton;
-	// 完了ボタンをクリック
-	doneButton.addEventListener('click', function(e){
-		Ti.API.debug('[event]doneButton.click:');
-		textWin.prevWin.fireEvent('refresh', {stampText:textArea.value});
-		textWin.close();
-	});
 	
 	var textView = Titanium.UI.createView(style.stampTextView);
 	textWin.add(textView);
@@ -24,20 +18,6 @@ exports.createWindow = function(_userData, _stampData){
 	var textArea = Ti.UI.createTextArea(style.stampTextArea);
 	textArea.value = _stampData.text;
 	textView.add(textArea);
-
-	textArea.addEventListener('focus',function(e){
-		if (e.source.value == e.source.hintText) {
-			e.source.value = "";
-			e.source.color = "black";
-		}
-	});
-	textArea.addEventListener('blur',function(e){
-		if (e.source.value == "") {
-			e.source.value = e.source.hintText;
-			e.source.color = "gray";
-		}
-	});
-
 
 	var historyList = model.getStampHistoryList(_stampData.stamp);
 	var historyRowList = [];
@@ -54,6 +34,28 @@ exports.createWindow = function(_userData, _stampData){
 	var historyTableView = Ti.UI.createTableView(style.stampHistoryTableView);
 	historyTableView.data = historyRowList;
 	textWin.add(historyTableView);
+
+// ---------------------------------------------------------------------
+
+	// 完了ボタンをクリック
+	doneButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]doneButton.click:');
+		textWin.prevWin.fireEvent('refresh', {stampText:textArea.value});
+		textWin.close();
+	});
+
+	textArea.addEventListener('focus',function(e){
+		if (e.source.value == e.source.hintText) {
+			e.source.value = "";
+			e.source.color = "black";
+		}
+	});
+	textArea.addEventListener('blur',function(e){
+		if (e.source.value == "") {
+			e.source.value = e.source.hintText;
+			e.source.color = "gray";
+		}
+	});
 
 	// 履歴クリックでチェックし入力テキストにコピー
 	historyTableView.addEventListener('click',function(e){

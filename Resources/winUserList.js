@@ -11,31 +11,6 @@ exports.createWindow = function(_type, _userData){
 	// 次回更新時に読み込むべきユーザ一覧があるかどうかのフラグ
 	var nextUserFlag = false;
 	
-	var userListWin = Ti.UI.createWindow(style.userListWin);
-	// ロード用画面
-	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
-
-	var titleView = null;
-	var titleLabel = null;
-
-	// フォロワのユーザ一覧
-	if (_type == "follower") {
-		titleView = Ti.UI.createView(style.userListTitleView);
-		titleLabel = Ti.UI.createLabel(style.userListFollowerTitleLabel);	
-		titleView.add(titleLabel);		
-		userListWin.titleControl = titleView;
-
-	// フォローのユーザ一覧
-	} else 	if (_type == "follow") {
-		titleView = Ti.UI.createView(style.userListTitleView);
-		titleLabel = Ti.UI.createLabel(style.userListFollowTitleLabel);	
-		titleView.add(titleLabel);		
-		userListWin.titleControl = titleView;
-	}
-
-	var userListTableView = Ti.UI.createTableView(style.userListTableView);
-	userListWin.add(userListTableView);
-
 	// ユーザ一覧の行の追加
 	var getUserTableRow = function(_userList) {
 		Ti.API.debug('[func]getUserTableRow:');
@@ -234,9 +209,37 @@ exports.createWindow = function(_type, _userData){
 			prevUserIndex = userList[userList.length-1].no;
 		}
 	}
+	
+// ---------------------------------------------------------------------
+	var userListWin = Ti.UI.createWindow(style.userListWin);
+	// ロード用画面
+	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
+
+	var titleView = null;
+	var titleLabel = null;
+
+	// フォロワのユーザ一覧
+	if (_type == "follower") {
+		titleView = Ti.UI.createView(style.userListTitleView);
+		titleLabel = Ti.UI.createLabel(style.userListFollowerTitleLabel);	
+		titleView.add(titleLabel);		
+		userListWin.titleControl = titleView;
+
+	// フォローのユーザ一覧
+	} else 	if (_type == "follow") {
+		titleView = Ti.UI.createView(style.userListTitleView);
+		titleLabel = Ti.UI.createLabel(style.userListFollowTitleLabel);	
+		titleView.add(titleLabel);		
+		userListWin.titleControl = titleView;
+	}
+
+	var userListTableView = Ti.UI.createTableView(style.userListTableView);
+	userListWin.add(userListTableView);
+
 	// 初回読み込み時に、ユーザ一覧を更新
 	updateUserList();
 
+// ---------------------------------------------------------------------
 	// 右スワイプで前の画面に戻る
 	userListWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]userListWin.swipe:');

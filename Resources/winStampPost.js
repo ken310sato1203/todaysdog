@@ -3,9 +3,6 @@
 exports.createWindow = function(_userData, _stampData){
 	Ti.API.debug('[func]winStampPost.createWindow:');
 
-	// ロード用画面
-	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
-
 	var postWin = Ti.UI.createWindow(style.stampPostWin);
 	// タイトルの表示
 	var titleLabel = Ti.UI.createLabel(style.stampPostTitleLabel);	
@@ -14,6 +11,22 @@ exports.createWindow = function(_userData, _stampData){
 	// 投稿ボタンの表示
 	var postButton = Titanium.UI.createButton(style.stampPostButton);
 	postWin.rightNavButton = postButton;
+
+	var postView = Titanium.UI.createView(style.stampPostView);
+	postWin.add(postView);
+
+	var postImage = Titanium.UI.createImageView(style.stampPostImage);
+	postImage.image = 'images/icon/diary_' + _stampData.stamp + '.png';
+	postView.add(postImage);
+
+	var postLabel = Ti.UI.createLabel(style.stampPostTextLabel);
+	postLabel.text = _stampData.text;
+	postView.add(postLabel);
+
+// ---------------------------------------------------------------------
+	// ロード用画面
+	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
+
 	// 投稿ボタンをクリック
 	postButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]postButton.click:');
@@ -45,17 +58,6 @@ exports.createWindow = function(_userData, _stampData){
 			}
 		});
 	});
-
-	var postView = Titanium.UI.createView(style.stampPostView);
-	postWin.add(postView);
-
-	var postImage = Titanium.UI.createImageView(style.stampPostImage);
-	postImage.image = 'images/icon/diary_' + _stampData.stamp + '.png';
-	postView.add(postImage);
-
-	var postLabel = Ti.UI.createLabel(style.stampPostTextLabel);
-	postLabel.text = _stampData.text;
-	postView.add(postLabel);
 
 	// 投稿テキストを編集
 	postView.addEventListener('click', function(e){

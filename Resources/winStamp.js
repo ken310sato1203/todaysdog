@@ -13,9 +13,11 @@ exports.createWindow = function(_userData, _stampData){
 	var day = _stampData.day;
 	var hour = _stampData.hour;
 
+	var monthName = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+// ---------------------------------------------------------------------
 	var stampWin = Ti.UI.createWindow(style.stampWin);
 	// タイトルの表示
-	var monthName = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 	var monthTitle = Ti.UI.createLabel(style.stampTitleLabel);	
 	monthTitle.text =  year + ' ' + monthName[month] + ' ' + day;
 	stampWin.titleControl = monthTitle;
@@ -52,6 +54,7 @@ exports.createWindow = function(_userData, _stampData){
 		});
 	}
 
+// ---------------------------------------------------------------------
 	// 右スワイプで前の画面に戻る
 	stampWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]stampWin.swipe:');

@@ -9,6 +9,101 @@ exports.createWindow = function(_articleData){
 	var commentCount = 5;
 
 	var userData = model.getUser(_articleData.user);
+
+	// ライクリストの更新
+	var updateLike = function() {
+		Ti.API.debug('[func]updateLike:');
+		var count = model.getLikeCount(_articleData.no);
+		var children = likeTableRow.getChildren();
+
+		if (count > 0) {
+			var likeList = model.getLikeList(_articleData.no, likeCount);
+			likeCountLabel.text = ' x ' + count;
+			if (children.length > 0) {
+				likeTableRow.remove(likeListView);				
+			}
+			likeCountView.show();
+
+			// ライクがない場合に間を詰めるため1dpにしていた高さを変更
+			likeCountTableRow.height = Ti.UI.SIZE;
+			likeTableRow.height = Ti.UI.SIZE;
+			likeListView = Ti.UI.createView(style.photoLikeListView);
+			likeTableRow.add(likeListView);
+
+			for (var i=0; i<likeCount; i++) {
+				var likeView = Ti.UI.createView(style.photoLikeView);
+				likeListView.add(likeView);					
+				if (i < likeList.length) {
+					var likeUserIconImage = Ti.UI.createImageView(style.photoLikeUserIconImage);
+					likeUserIconImage.image = 'images/icon/' + likeList[i].user + '.jpg';						
+					likeView.add(likeUserIconImage);					
+				} else {
+					var likeIconImage = Ti.UI.createImageView(style.photoLikeIconImage);
+					likeView.add(likeIconImage);						
+				}
+			}
+
+		} else {
+			likeCountView.hide();
+			if (children.length > 0) {
+				likeTableRow.remove(likeListView);				
+			}
+			likeCountTableRow.height = '1dp';
+			likeTableRow.height = '1dp';
+		}
+	}
+
+	// コメントリストの更新
+	var updateComment = function() {
+		Ti.API.debug('[func]updateComment:');
+		var count = model.getCommentCount(_articleData.no);
+		var children = commentTableRow.getChildren();
+
+		if (count > 0) {
+			var commentList = model.getCommentList(_articleData.no, null, commentCount);
+			commentCountLabel.text = ' x ' + count;
+			if (children.length > 0) {
+				commentTableRow.remove(commentListView);				
+			}
+			commentCountView.show();
+		
+			commentListView = Ti.UI.createView(style.photoCommentListView);
+			commentTableRow.add(commentListView);
+
+			for (var i=0; i<commentList.length; i++) {
+				var commentView = Ti.UI.createView(style.photoCommentView);
+				commentListView.add(commentView);
+				var commentUserIconImage = Ti.UI.createImageView(style.photoCommentUserIconImage);
+				commentUserIconImage.image = 'images/icon/' + commentList[i].user + '.jpg';						
+				commentView.add(commentUserIconImage);					
+				var commentLabel = Ti.UI.createLabel(style.photoCommentLabel);
+				commentLabel.text = commentList[i].user + '\n' + commentList[i].text;
+				commentView.add(commentLabel);
+			}
+
+		} else {
+			commentCountView.hide();
+			if (children.length > 0) {
+				commentTableRow.remove(commentListView);				
+			}
+		}
+	}
+
+	// コメントの追加
+	var addComment = function() {
+		var commentData = {
+			no:_articleData.no, 
+			seq:null, 
+			user:model.getLoginId(), 
+			date:util.getFormattedNowDateTime(), 
+			text:commentField.getValue()
+		};
+		model.addCommentList(commentData);
+		updateComment();
+	}
+
+// ---------------------------------------------------------------------
+
 	var photoWin = Ti.UI.createWindow(style.photoWin);
 
 	// タイトルの表示
@@ -76,48 +171,6 @@ exports.createWindow = function(_articleData){
 	photoTableView.appendRow(likeTableRow);
 	var likeListView = null;
 
-	// ライクリストの更新
-	var updateLike = function() {
-		Ti.API.debug('[func]updateLike:');
-		var count = model.getLikeCount(_articleData.no);
-		var children = likeTableRow.getChildren();
-
-		if (count > 0) {
-			var likeList = model.getLikeList(_articleData.no, likeCount);
-			likeCountLabel.text = ' x ' + count;
-			if (children.length > 0) {
-				likeTableRow.remove(likeListView);				
-			}
-			likeCountView.show();
-
-			// ライクがない場合に間を詰めるため1dpにしていた高さを変更
-			likeCountTableRow.height = Ti.UI.SIZE;
-			likeTableRow.height = Ti.UI.SIZE;
-			likeListView = Ti.UI.createView(style.photoLikeListView);
-			likeTableRow.add(likeListView);
-
-			for (var i=0; i<likeCount; i++) {
-				var likeView = Ti.UI.createView(style.photoLikeView);
-				likeListView.add(likeView);					
-				if (i < likeList.length) {
-					var likeUserIconImage = Ti.UI.createImageView(style.photoLikeUserIconImage);
-					likeUserIconImage.image = 'images/icon/' + likeList[i].user + '.jpg';						
-					likeView.add(likeUserIconImage);					
-				} else {
-					var likeIconImage = Ti.UI.createImageView(style.photoLikeIconImage);
-					likeView.add(likeIconImage);						
-				}
-			}
-
-		} else {
-			likeCountView.hide();
-			if (children.length > 0) {
-				likeTableRow.remove(likeListView);				
-			}
-			likeCountTableRow.height = '1dp';
-			likeTableRow.height = '1dp';
-		}
-	}
 	// 初回読み込み時に、ライクリストの更新
 	updateLike();
 
@@ -135,70 +188,10 @@ exports.createWindow = function(_articleData){
 	photoTableView.appendRow(commentTableRow);
 	var commentListView = null;
 	
-	// コメントリストの更新
-	var updateComment = function() {
-		Ti.API.debug('[func]updateComment:');
-		var count = model.getCommentCount(_articleData.no);
-		var children = commentTableRow.getChildren();
-
-		if (count > 0) {
-			var commentList = model.getCommentList(_articleData.no, null, commentCount);
-			commentCountLabel.text = ' x ' + count;
-			if (children.length > 0) {
-				commentTableRow.remove(commentListView);				
-			}
-			commentCountView.show();
-		
-			commentListView = Ti.UI.createView(style.photoCommentListView);
-			commentTableRow.add(commentListView);
-
-			for (var i=0; i<commentList.length; i++) {
-				var commentView = Ti.UI.createView(style.photoCommentView);
-				commentListView.add(commentView);
-				var commentUserIconImage = Ti.UI.createImageView(style.photoCommentUserIconImage);
-				commentUserIconImage.image = 'images/icon/' + commentList[i].user + '.jpg';						
-				commentView.add(commentUserIconImage);					
-				var commentLabel = Ti.UI.createLabel(style.photoCommentLabel);
-				commentLabel.text = commentList[i].user + '\n' + commentList[i].text;
-				commentView.add(commentLabel);
-			}
-
-		} else {
-			commentCountView.hide();
-			if (children.length > 0) {
-				commentTableRow.remove(commentListView);				
-			}
-		}
-	}
 	// 初回読み込み時に、コメントリストの更新
 	updateComment();
 
-
-	// コメントの追加
-	var addComment = function() {
-		var commentData = {
-			no:_articleData.no, 
-			seq:null, 
-			user:model.getLoginId(), 
-			date:util.getFormattedNowDateTime(), 
-			text:commentField.getValue()
-		};
-		model.addCommentList(commentData);
-		updateComment();
-	}
-
-/*
-	// コメントフィールドの表示
-	var commentFieldTableRow = Ti.UI.createTableViewRow(style.photoCommentFieldTableRow);
-	photoTableView.appendRow(commentFieldTableRow);
-	var commentFieldView = Ti.UI.createView(style.photoCommentView);
-	commentFieldTableRow.add(commentFieldView);
-	var commentIconImage = Ti.UI.createImageView(style.photoCommentIconImage);
-	commentFieldView.add(commentIconImage);
-	var commentField = Ti.UI.createTextField(style.photoCommentField);
-	commentFieldView.add(commentField);
-*/
-
+// ---------------------------------------------------------------------
 	// フォトにタップでフォト拡大画面を表示
 	photoImage.addEventListener('click',function(e){
 		Ti.API.debug('[event]photoImage.click:');

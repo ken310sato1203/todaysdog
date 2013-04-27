@@ -10,20 +10,6 @@ exports.createWindow = function(_articleData){
 	// 次回更新時に読み込むべきコメント一覧があるかどうかのフラグ
 	var nextUserFlag = false;
 
-	var commentListWin = Ti.UI.createWindow(style.commentListWin);
-
-	var titleView = null;
-	var titleLabel = null;
-
-	titleView = Ti.UI.createView(style.commentListTitleView);
-	titleLabel = Ti.UI.createLabel(style.commentListTitleLabel);
-	titleView.add(titleLabel);		
-	commentListWin.titleControl = titleView;
-
-
-	var commentListTableView = Ti.UI.createTableView(style.commentListTableView);
-	commentListWin.add(commentListTableView);
-
 	// コメント一覧の行の追加
 	var getUserTableRow = function(_commentList) {
 		Ti.API.debug('[func]getUserTableRow:');
@@ -190,9 +176,23 @@ exports.createWindow = function(_articleData){
 			prevCommentIndex = commentList[commentList.length-1].no;
 		}
 	}
+
+
+// ---------------------------------------------------------------------
+	var commentListWin = Ti.UI.createWindow(style.commentListWin);
+
+	var titleView = Ti.UI.createView(style.commentListTitleView);
+	var titleLabel = Ti.UI.createLabel(style.commentListTitleLabel);
+	titleView.add(titleLabel);		
+	commentListWin.titleControl = titleView;
+
+	var commentListTableView = Ti.UI.createTableView(style.commentListTableView);
+	commentListWin.add(commentListTableView);
+
 	// 初回読み込み時に、コメント一覧を更新
 	updateCommentList();
 
+// ---------------------------------------------------------------------
 	// 右スワイプで前の画面に戻る
 	commentListWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]commentListWin.swipe:');
