@@ -97,38 +97,38 @@ followList = [
 ];
 
 stampList = [
-	{no:"12", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:"2013", month:"4", day:"14", hour:"14", all:"0", repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"11", user:"sakura", stamp:"sun", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:"2013", month:"4", day:"14", hour:"14", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"10", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち。朝のさんぽ、いいうんち。朝のさんぽ、いい", year:"2013", month:"4", day:"14", hour:"14", all:"0", repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"9", user:"sakura", stamp:"restaurant", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:"2013", month:"4", day:"14", hour:"13", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"8", user:"sakura", stamp:"time", text:"シャンプー予約", year:"2013", month:"4", day:"10", hour:"13", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"7", user:"sakura", stamp:"sun", text:"公園でBBQ", year:"2013", month:"4", day:"8", hour:"13", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"6", user:"sakura", stamp:"edit", text:"のみだに薬", year:"2013", month:"4", day:"8", hour:"13", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"5", user:"sakura", stamp:"restaurant", text:"お昼ごはん、がっつり食べた", year:"2013", month:"4", day:"7", hour:"13", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"4", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:"2013", month:"4", day:"5", hour:"10", all:"0", repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"3", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:"2013", month:"4", day:"24", hour:"9", all:"0", repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"2", user:"sakura", stamp:"restaurant", text:"お昼ごはん、がっつり食べた", year:"2013", month:"3", day:"4", hour:"13", all:"0", repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"1", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:"2013", month:"3", day:"4", hour:"9", all:"0", repeat:"0", date:"2013-03-04 10:23:45"},
+	{no:"12", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:2013, month:4, day:14, hour:-1, repeat:"0", date:"2013-03-04 10:23:45"},
+	{no:"11", user:"sakura", stamp:"sun", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:2013, month:4, day:14, hour:-1, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"10", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち。朝のさんぽ、いいうんち。朝のさんぽ、いい", year:2013, month:4, day:14, hour:14, repeat:"0", date:"2013-03-04 10:23:45"},
+	{no:"9", user:"sakura", stamp:"restaurant", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:2013, month:4, day:14, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"8", user:"sakura", stamp:"time", text:"シャンプー予約", year:2013, month:4, day:10, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"7", user:"sakura", stamp:"sun", text:"公園でBBQ", year:2013, month:4, day:8, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"6", user:"sakura", stamp:"edit", text:"のみだに薬", year:2013, month:4, day:8, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"5", user:"sakura", stamp:"restaurant", text:"お昼ごはん、がっつり食べた", year:2013, month:4, day:7, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"4", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:2013, month:4, day:5, hour:10, repeat:"0", date:"2013-03-04 10:23:45"},
+	{no:"3", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:2013, month:4, day:24, hour:9, repeat:"0", date:"2013-03-04 10:23:45"},
+	{no:"2", user:"sakura", stamp:"restaurant", text:"お昼ごはん、がっつり食べた", year:2013, month:3, day:4, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"1", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:2013, month:3, day:4, hour:9, repeat:"0", date:"2013-03-04 10:23:45"},
 ];
 
 stampSelectList = [
-	'edit','dog','restaurant','home','sun','water','star','favorite','time',
-	'edit','dog','restaurant','home','sun','water','star','favorite','time',
-	'edit','dog','restaurant','home','sun','water','star','favorite','time',
-	'edit','dog','restaurant','home','sun','water','star','favorite','time',
-	'edit','dog','restaurant','home','sun','water'
+	"edit","dog","restaurant","home","sun","water","star","favorite","time",
+	"edit","dog","restaurant","home","sun","water","star","favorite","time",
+	"edit","dog","restaurant","home","sun","water","star","favorite","time",
+	"edit","dog","restaurant","home","sun","water","star","favorite","time",
+	"edit","dog","restaurant","home","sun","water"
 ];
 
 stampHistoryList = [
-	{stamp:'edit',textList:['おはようございます','こんにちは','おやすみなさい']},
-	{stamp:'dog',textList:['朝のお散歩','昼のお散歩','夜のお散歩']},
-	{stamp:'restaurant',textList:['朝ご飯','昼ご飯','夜ご飯']},
-	{stamp:'home',textList:['お留守番','お泊まり']},
-	{stamp:'sun',textList:['いいお天気','元気です']},
-	{stamp:'water',textList:['雨模様','ちょっと元気ないね']},
-	{stamp:'star',textList:['ごほうび']},
-	{stamp:'favorite',textList:['お薬','病院']},
-	{stamp:'time',textList:['シャンプー予約']}
+	{stamp:"edit",textList:["おはようございます","こんにちは","おやすみなさい"]},
+	{stamp:"dog",textList:["朝のお散歩","昼のお散歩","夜のお散歩"]},
+	{stamp:"restaurant",textList:["朝ご飯","昼ご飯","夜ご飯"]},
+	{stamp:"home",textList:["お留守番","お泊まり"]},
+	{stamp:"sun",textList:["いいお天気","元気です"]},
+	{stamp:"water",textList:["雨模様","ちょっと元気ないね"]},
+	{stamp:"star",textList:["ごほうび"]},
+	{stamp:"favorite",textList:["お薬","病院"]},
+	{stamp:"time",textList:["シャンプー予約"]}
 ];
 
 

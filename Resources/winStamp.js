@@ -13,17 +13,15 @@ exports.createWindow = function(_userData, _stampData){
 	var day = _stampData.day;
 	var hour = _stampData.hour;
 
-	var monthName = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-
 // ---------------------------------------------------------------------
 	var stampWin = Ti.UI.createWindow(style.stampWin);
 	// タイトルの表示
 	var monthTitle = Ti.UI.createLabel(style.stampTitleLabel);	
-	monthTitle.text =  year + ' ' + monthName[month] + ' ' + day;
 	stampWin.titleControl = monthTitle;
 
 	// 次へボタンの表示
 	var nextButton = Titanium.UI.createButton(style.stampNextButton);
+	nextButton.enabled = false;
 	stampWin.rightNavButton = nextButton;
 
 	var stampListView = Ti.UI.createView(style.stampListView);
@@ -31,26 +29,33 @@ exports.createWindow = function(_userData, _stampData){
 	var stampView = Ti.UI.createView(style.stampView);
 	stampListView.add(stampView);
 	
-	var selectedStamp = null;
 	var stampSelectList = model.getStampSelectList();
+	var selectedIndex = new Array(stampSelectList.length);
+	var selectedCount = 0;
 
 	for (var i=0; i<stampSelectList.length; i++) {
 		var stampImage = Ti.UI.createImageView(style.stampImage);
-		stampImage.stamp = stampSelectList[i];
-		stampImage.image = 'images/icon/diary_' + stampSelectList[i] + '.png';
-		
-		if (i == 0) {
-			stampImage.opacity = 1.0;
-			selectedStamp = stampImage;
-		}
+		stampImage.index = i;
+		stampImage.image = 'images/icon/diary_' + stampSelectList[i] + '.png';		
 		stampView.add(stampImage);
 
 		// スタンプをクリック
 		stampImage.addEventListener('click',function(e){
 			Ti.API.debug('[event]stampImage.click:');
-			selectedStamp.opacity = 0.2;
-			e.source.opacity = 1.0;
-			selectedStamp = e.source;
+			if (selectedIndex[e.source.index]) {
+				e.source.opacity = 0.2;
+				selectedIndex[e.source.index] = false;
+				selectedCount--;
+			} else {
+				e.source.opacity = 1.0;
+				selectedIndex[e.source.index] = true;
+				selectedCount++;
+			}
+			if (selectedCount > 0) {
+				nextButton.enabled = true;
+			} else {
+				nextButton.enabled = false;
+			}
 		});
 	}
 
@@ -66,8 +71,27 @@ exports.createWindow = function(_userData, _stampData){
 	// 次へボタンをクリック
 	nextButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]nextButton.click:');
-		_stampData.stamp = selectedStamp.stamp;
-		var postWin = win.createStampPostWindow(_userData, _stampData);	
+		var stampDataList = [];
+		for (var i=0; i<stampSelectList.length; i++) {
+			if (selectedIndex[i]) {
+				var stampData = {
+					no: null,
+					user: _stampData.user,
+					stamp: stampSelectList[i],
+					text: null,
+					year: _stampData.year,
+					month: _stampData.month,
+					day: _stampData.day,
+					hour: _stampData.hour,
+					all: null,
+					report: null,
+					date: null,
+				};
+				stampDataList.push(stampData);
+			}
+		}
+
+		var postWin = win.createStampPostWindow(_userData, stampDataList);	
 		postWin.prevWin = stampWin;
 		win.openTabWindow(postWin);
 	});
@@ -76,6 +100,7 @@ exports.createWindow = function(_userData, _stampData){
 	stampWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]stampWin.refresh:');
 		stampWin.prevWin.fireEvent('refresh', {stampData:e.stampData});
+		Ti.API.debug('[***]stampWin.close:');
 		stampWin.close();
 	});
 

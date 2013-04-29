@@ -548,6 +548,8 @@ exports.style = {
 		height: Ti.UI.SIZE,
 //		selectedBackgroundColor: 'white',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		// カスタムプロパティ
+		objectName: null,
 	},
 	profileListItemView:{
 		layout: 'absolute',
@@ -563,19 +565,13 @@ exports.style = {
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
-	profileListValueLabel:{
-		right: '15dp',
-		height: '35dp',
-		font: {fontSize:14, fontFamily:'Helvetica Neue'},
-		color: '#3D4460',
-	},
 	profileListValueField:{
 		right: '15dp',
 		textAlign:'right',
 		width: '166dp',
 		height: '35dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
-		hintText: 'なまえを入力してください',
+		hintText: '入力してください',
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
         returnKeyType:Ti.UI.RETURNKEY_DONE,
         borderStyle:Ti.UI.INPUT_BORDERSTYLE_NONE,
@@ -1396,6 +1392,7 @@ exports.style = {
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		data: [],
 	},
 	diaryTableRow:{ 
 		width: Ti.UI.SIZE,
@@ -1473,7 +1470,16 @@ exports.style = {
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
 	},
-
+	timeListButton:{
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		textAlign: 'center',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		title: 'リスト',
+		// カスタムプロパティ
+		listFlag : false,
+	},
 	timeTableView:{
 		top: '1dp',
 		left: '0dp',
@@ -1482,6 +1488,7 @@ exports.style = {
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		data: [],
 	},
 	timeTableRow:{ 
 		width: Ti.UI.SIZE,
@@ -1573,6 +1580,7 @@ exports.style = {
 		color: 'white', 
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
+		text: 'スタンプの選択', 
 	},
 
 	stampListView:{
@@ -1597,7 +1605,8 @@ exports.style = {
 		image : null,
 		opacity : 0.2,
 		// カスタムプロパティ
-		stamp : null,
+		index : null,
+		isSelect : false,
 	},
 	stampNextButton:{
 		width: Ti.UI.SIZE,
@@ -1631,11 +1640,29 @@ exports.style = {
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		title: '投稿',
 	},
-	stampPostView:{
-		top : '10dp',
-		width : '284dp',
+	stampPostTableView:{
+		top: '10dp',
+		width: '284dp',
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		data: [],
+	},
+	stampPostTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		// カスタムプロパティ
+		objectName: null,
+	},
+
+	stampPostStampView:{
+//		bottom : '2dp',
+//		width: Ti.UI.SIZE,
 		height: '52dp',
 		backgroundColor: 'white',
+		// カスタムプロパティ
+		stampData : null,
 	},
 	stampPostImage:{
 		left: '10dp',
@@ -1649,6 +1676,71 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
+	},
+
+	stampPostListView:{
+//		bottom : '2dp',
+//		width : '284dp',
+		height: '52dp',
+		backgroundColor: 'white',
+		// カスタムプロパティ
+		stampData : null,
+	},
+	stampPostListItemLabel:{
+		left: '15dp',
+		height: '35dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+	stampPostListValueField:{
+		right: '15dp',
+		textAlign:'right',
+		width: '166dp',
+		height: '35dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		hintText: '入力してください',
+        keyboardType:Ti.UI.KEYBOARD_DEFAULT,
+        returnKeyType:Ti.UI.RETURNKEY_DONE,
+        borderStyle:Ti.UI.INPUT_BORDERSTYLE_NONE,
+        touchEnabled: false,
+//      enabled: false,
+	},
+	stampPostListValueSwitch:{
+		right: '15dp',
+		value: false,
+	},
+	stampPostListPickerView:{
+		bottom: '-259dp',
+		height: '259dp',
+	},
+	stampPostListPickerToolbar:{
+		top: '0dp',
+		items: null,
+	},
+	stampPostListCancelButton:{
+		style: Ti.UI.iPhone.SystemButtonStyle.BORDERED,
+		title: 'Cancel',
+	},
+	stampPostListSpacerButton:{
+		systemButton:Ti.UI.iPhone.SystemButton.FLEXIBLE_SPACE,
+	},
+	stampPostListDoneButton:{
+		style:Ti.UI.iPhone.SystemButtonStyle.DONE,
+		title: 'Done',
+	},
+	stampPostListDatePicker:{
+		top: '43dp',
+		selectionIndicator: true,
+		type:Ti.UI.PICKER_TYPE_DATE,
+		minDate:new Date(1980,1,1),
+		maxDate:new Date(2020,12,31),
+		value: null,
+	},
+	stampPostListHourPicker:{
+		top: '43dp',
+		selectionIndicator: true,
+		type:Ti.UI.PICKER_TYPE_PLAIN,
+		value: null,
 	},
 
 // winStampText -------------------------------------------------------

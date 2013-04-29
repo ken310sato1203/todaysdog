@@ -17,12 +17,30 @@ exports.createWindow = function(_userData, _diaryData){
 	// 一番早い時間帯に登録されているデータの時間帯
 	var firstHour = null;
 
-	// Viewの取得
-	var getTimeView = function() {
+	// フォローユーザの記事の取得
+	var getStampView = function(_rowStamp) {
+		Ti.API.debug('[func]getStampView:');
 
+		var targetView = Ti.UI.createView(style.timeStampView);
+		targetView.stampData = _rowStamp;
+
+		var stampLabel = Ti.UI.createLabel(style.timeStampLabel);
+		stampLabel.text = _rowStamp.text;
+		targetView.add(stampLabel);
+
+		var stampImage = Ti.UI.createImageView(style.timeStampImage);
+		stampImage.image = 'images/icon/diary_' + _rowStamp.stamp + '.png';
+		targetView.add(stampImage);
+
+		return targetView;
+	}
+
+	// Viewの取得
+	var getTimeView = function(_type) {
+		Ti.API.debug('[func]getTimeView:');
 		var targetView = Ti.UI.createTableView(style.timeTableView);
-		var timeRow = [];
-		var timeRange = ['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23'];
+		var rowList = [];
+		var timeRange = ['-1','0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23'];
 
 		// 時間別に登録
 		var stampHour = new Array(timeRange.length);
@@ -32,28 +50,11 @@ exports.createWindow = function(_userData, _diaryData){
 		// 当日のデータ
 		var stampList = _diaryData.stampList;
 		for (var i=0; i<stampList.length; i++) {
-			stampHour[stampList[i].hour].data.push(stampList[i]);
-		}
+			stampHour[stampList[i].hour+1].data.push(stampList[i]);
+		}	
+		// 表示位置のリセット	
+		firstHour = null;
 
-		// フォローユーザの記事の取得
-		var getStampView = function(_rowStamp) {
-			Ti.API.debug('[func]getStampView:');
-	
-			var targetView = Ti.UI.createView(style.timeStampView);
-			targetView.stampData = _rowStamp;
-	
-			var stampLabel = Ti.UI.createLabel(style.timeStampLabel);
-			stampLabel.text = _rowStamp.text;
-			targetView.add(stampLabel);
-	
-			var stampImage = Ti.UI.createImageView(style.timeStampImage);
-			stampImage.image = 'images/icon/diary_' + _rowStamp.stamp + '.png';
-			targetView.add(stampImage);
-	
-			return targetView;
-		}
-	
-	
 		for (var i=0; i<timeRange.length; i++) {
 			var row = Ti.UI.createTableViewRow(style.timeTableRow);		
 			row.stampData = {
@@ -64,7 +65,7 @@ exports.createWindow = function(_userData, _diaryData){
 				year: year,
 				month: month,
 				day: day,
-				hour: i,
+				hour: i-1,
 				all: null,
 				report: null,
 				date: null,
@@ -87,7 +88,11 @@ exports.createWindow = function(_userData, _diaryData){
 			});
 	
 			var timeLabel = Ti.UI.createLabel(style.timeHourLabel);
-			timeLabel.text = timeRange[i] + ':00';
+			if (i == 0) {
+				timeLabel.text = '終日';				
+			} else {
+				timeLabel.text = timeRange[i] + ':00';				
+			}
 			if (timeRange[i] % 3 == 0) {
 				timeLabel.color = '#4169E1';
 			}
@@ -124,10 +129,12 @@ exports.createWindow = function(_userData, _diaryData){
 				win.openTabWindow(stampWin);
 			});
 			
-			timeRow.push(row);
+			if (_type == "time" || (_type == "list" && rowStampList.length > 0)) {
+				rowList.push(row);
+			}
 		}
-		targetView.setData(timeRow);
 
+		targetView.setData(rowList);
 		return targetView;
 	};
 
@@ -137,11 +144,11 @@ exports.createWindow = function(_userData, _diaryData){
 		// view作成後にスクロールさせると下の方のインデックスの場合、最下層より下を表示してしまうため、オープン時にスクロールさせる
 		if (_diaryData.todayFlag) {
 			// 今日の場合、今の時間帯にスクロール
-			_view.scrollToIndex(nowHour, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+			_view.scrollToIndex(nowHour+1, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 		} else {
 			if (firstHour == null) {
 				// 登録がない場合、9時にスクロール
-				_view.scrollToIndex(9, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+				_view.scrollToIndex(10, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 			} else {
 				// 登録がある場合、一番早い時間帯に登録されているデータの時間帯にスクロール
 				_view.scrollToIndex(firstHour, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
@@ -153,19 +160,44 @@ exports.createWindow = function(_userData, _diaryData){
 	var timeWin = Ti.UI.createWindow(style.timeWin);
 	// タイトルの表示
 	var monthTitle = Ti.UI.createLabel(style.timeTitleLabel);	
-	monthTitle.text =  year + ' ' + monthName[month] + ' ' + day;
+	monthTitle.text =  year + ' ' + monthName[month-1] + ' ' + day;
 	timeWin.titleControl = monthTitle;
 
+	// リストボタンの表示
+	var listButton = Titanium.UI.createButton(style.timeListButton);
+	timeWin.rightNavButton = listButton;
+
 	// ビューの作成
-	var timeView = getTimeView();
+	var type = "time";
+	var timeView = getTimeView(type);
 	timeWin.add(timeView);
 
 // ---------------------------------------------------------------------
+	// リストボタンをクリック
+	listButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]listButton.click:');
+		// ビューの削除
+		timeWin.remove(timeView);
+		// ビューの再作成
+		var type = null;
+		if (e.source.listFlag == false) {
+			type = "list";
+			e.source.listFlag = true;
+			e.source.title = "時間別";
+		} else {
+			type = "time";
+			e.source.listFlag = false;
+			e.source.title = "リスト";
+		}
+		timeView = getTimeView(type);
+		scrollPosition(timeView);
+		timeWin.add(timeView);
+	});
+
 	// windowオープン時
 	timeWin.addEventListener('open', function(e) {
 		Ti.API.debug('[event]timeWin.open:');
-		var childView = e.source.children[0];
-		scrollPosition(childView);
+		scrollPosition(timeView);
 	});
 
 	// 右スワイプで前の画面に戻る
@@ -179,15 +211,15 @@ exports.createWindow = function(_userData, _diaryData){
 	// 更新用イベント
 	timeWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]timeWin.refresh:');
-		var childView = e.source.children[0];
-		timeWin.remove(childView);
-
+		// ビューの削除
+		timeWin.remove(timeView);
+		// ビューの再作成
 		var stampDayList = model.getStampDayList(_userData, _diaryData.year, _diaryData.month, _diaryData.day);
 		_diaryData.stampList = stampDayList;
-
-		var timeView = getTimeView();
+		var type = "time";
+		timeView = getTimeView(type);
 		timeWin.add(timeView);
-		timeView.scrollToIndex(e.stampData.hour-3>0?e.stampData.hour-3:0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+		timeView.scrollToIndex(e.stampData.hour+1, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 
 		timeWin.prevWin.fireEvent('refresh', {stampData:e.stampData});
 	});

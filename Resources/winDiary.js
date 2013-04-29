@@ -65,9 +65,11 @@ exports.createWindow = function(_userData){
 	}
 
 	// カレンダービューを取得
-	var getCalendarTableViewRow = function(_rowData) {
-		Ti.API.debug('[func]getDiaryTableViewRow:');
-		var tableViewRow = [];
+	var getCalendarTableView = function(_rowData) {
+		Ti.API.debug('[func]getCalendarTableView:');
+		var targetView = Ti.UI.createTableView(style.diaryTableView);
+		var rowList = [];
+
 		for (var i=0; i<_rowData.length; i++) {
 			var row = Ti.UI.createTableViewRow(style.diaryTableRow);
 			row.diaryData = _rowData[i];
@@ -119,21 +121,20 @@ exports.createWindow = function(_userData){
 //			var plusImage = Ti.UI.createImageView(style.diaryPlusImage);
 //			dayView.add(plusImage);
 
-			tableViewRow.push(row);
+			rowList.push(row);
 		}
-		return tableViewRow;
+
+		targetView.setData(rowList);
+		return targetView;
 	}
 
 	// カレンダー表示
 	var getCalView = function(_year, _month) {
 		Ti.API.debug('[func]getCalView:');
 
-		var calView = Ti.UI.createTableView(style.diaryTableView);
-
 		// 当月のカレンダーの表示
 		var rowData = getCalendarRowData(_year, _month);
-		var calendarRow = getCalendarTableViewRow(rowData);
-		calView.setData(calendarRow);
+		var calView = getCalendarTableView(rowData);
 
 		// 日付行をクリックした時
 		calView.addEventListener('click', function(e) {
@@ -257,7 +258,7 @@ exports.createWindow = function(_userData){
 
 		if (year == nowYear && month == nowMonth) {
 			// 今日の日にスクロール
-			thisDiaryView.scrollToIndex(nowDay-3>0?nowDay-3:0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+			thisDiaryView.scrollToIndex(nowDay-3 > 0? nowDay-3 : 0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 			
 		} else {
 			year = nowYear;
@@ -271,7 +272,7 @@ exports.createWindow = function(_userData){
 			thisDiaryView = getCalView(year, month, true);
 			diaryWin.add(thisDiaryView);
 			// 今日の日にスクロール
-			thisDiaryView.scrollToIndex(nowDay-3>0?nowDay-3:0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+			thisDiaryView.scrollToIndex(nowDay-3 > 0? nowDay-3 : 0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 	
 			// 翌月のカレンダー
 			diaryWin.remove(nextDiaryView);
@@ -298,13 +299,12 @@ exports.createWindow = function(_userData){
 	// 更新用イベント
 	diaryWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]diaryWin.refresh:');
-		var childView = e.source.children[0];
-		diaryWin.remove(childView);
-
-		// 当月のカレンダー
-		var thisDiaryView = getCalView(e.stampData.year, e.stampData.month);
+		// ビューの削除
+		diaryWin.remove(thisDiaryView);
+		// ビューの再作成
+		thisDiaryView = getCalView(year, month);
 		diaryWin.add(thisDiaryView);
-		thisDiaryView.scrollToIndex(e.stampData.day-3>0?e.stampData.day-3:0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+		thisDiaryView.scrollToIndex(e.stampData.day - 1, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 
 	});
 

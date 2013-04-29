@@ -85,7 +85,7 @@ exports.createWindow = function(_userData){
 	// ユーザIDのフィールドを表示
 	var userRow = Titanium.UI.createTableViewRow(style.profileListTableRow);
 	profileRowList.push(userRow);
-	userRow.className = 'user';
+	userRow.objectName = 'user';
 	var userView = Ti.UI.createView(style.profileListItemView);
 	userRow.add(userView);
 	var userLabel = Ti.UI.createLabel(style.profileListItemLabel);
@@ -98,7 +98,7 @@ exports.createWindow = function(_userData){
 	// 名前のフィールドを表示
 	var nameRow = Titanium.UI.createTableViewRow(style.profileListTableRow);
 	profileRowList.push(nameRow);
-	nameRow.className = 'name';
+	nameRow.objectName = 'name';
 	var nameView = Ti.UI.createView(style.profileListItemView);
 	nameRow.add(nameView);
 	var nameLabel = Ti.UI.createLabel(style.profileListItemLabel);
@@ -111,7 +111,7 @@ exports.createWindow = function(_userData){
 	// 犬種のフィールドを表示
 	var breedRow = Titanium.UI.createTableViewRow(style.profileListTableRow);
 	profileRowList.push(breedRow);
-	breedRow.className = 'breed';
+	breedRow.objectName = 'breed';
 	var breedView = Ti.UI.createView(style.profileListItemView);
 	breedRow.add(breedView);
 	var breedLabel = Ti.UI.createLabel(style.profileListItemLabel);
@@ -124,7 +124,7 @@ exports.createWindow = function(_userData){
 	// 性別のフィールドを表示
 	var sexRow = Titanium.UI.createTableViewRow(style.profileListTableRow);
 	profileRowList.push(sexRow);
-	sexRow.className = 'sex';
+	sexRow.objectName = 'sex';
 	var sexView = Ti.UI.createView(style.profileListItemView);
 	sexRow.add(sexView);
 	var sexLabel = Ti.UI.createLabel(style.profileListItemLabel);
@@ -138,7 +138,7 @@ exports.createWindow = function(_userData){
 	// 誕生日のフィールドを表示
 	var birthRow = Titanium.UI.createTableViewRow(style.profileListTableRow);
 	profileRowList.push(birthRow);
-	birthRow.className = 'birth';
+	birthRow.objectName = 'birth';
 	var birthView = Ti.UI.createView(style.profileListItemView);
 	birthRow.add(birthView);
 	var birthLabel = Ti.UI.createLabel(style.profileListItemLabel);
@@ -152,7 +152,7 @@ exports.createWindow = function(_userData){
 	// 居住地のフィールドを表示
 	var locationRow = Titanium.UI.createTableViewRow(style.profileListTableRow);
 	profileRowList.push(locationRow);
-	locationRow.className = 'location';
+	locationRow.objectName = 'location';
 	var locationView = Ti.UI.createView(style.profileListItemView);
 	locationRow.add(locationView);
 	var locationLabel = Ti.UI.createLabel(style.profileListItemLabel);
@@ -165,7 +165,7 @@ exports.createWindow = function(_userData){
 	// 特徴のフィールドを表示
 	var featureRow = Titanium.UI.createTableViewRow(style.profileListTableRow);
 	profileRowList.push(featureRow);
-	featureRow.className = 'feature';
+	featureRow.objectName = 'feature';
 	var featureView = Ti.UI.createView(style.profileListItemView);
 	featureRow.add(featureView);
 	var featureLabel = Ti.UI.createLabel(style.profileListItemLabel);
@@ -178,7 +178,7 @@ exports.createWindow = function(_userData){
 	// 性格のフィールドを表示
 	var characterRow = Titanium.UI.createTableViewRow(style.profileListTableRow);
 	profileRowList.push(characterRow);
-	characterRow.className = 'character';
+	characterRow.objectName = 'character';
 	var characterView = Ti.UI.createView(style.profileListItemView);
 	characterRow.add(characterView);
 	var characterLabel = Ti.UI.createLabel(style.profileListItemLabel);
@@ -201,9 +201,9 @@ exports.createWindow = function(_userData){
 
 	var sexPickerToolbar =  Titanium.UI.iOS.createToolbar(style.profileListPickerToolbar);
 	sexPickerView.add(sexPickerToolbar);
-	var sexCancel =  Titanium.UI.createButton(style.profileListCancelButton);
-	var sexSpacer =  Titanium.UI.createButton(style.profileListSpacerButton); 
-	var sexDone =  Titanium.UI.createButton(style.profileListDoneButton); 
+	var sexCancel = Titanium.UI.createButton(style.profileListCancelButton);
+	var sexSpacer = Titanium.UI.createButton(style.profileListSpacerButton); 
+	var sexDone = Titanium.UI.createButton(style.profileListDoneButton); 
 	sexPickerToolbar.setItems([sexCancel,sexSpacer,sexDone]);
 
 	var sexPicker = Titanium.UI.createPicker(style.profileListPicker);
@@ -230,9 +230,9 @@ exports.createWindow = function(_userData){
 
 	var birthPickerToolbar =  Titanium.UI.iOS.createToolbar(style.profileListPickerToolbar);
 	birthPickerView.add(birthPickerToolbar);
-	var birthCancel =  Titanium.UI.createButton(style.profileListCancelButton);
-	var birthSpacer =  Titanium.UI.createButton(style.profileListSpacerButton); 
-	var birthDone =  Titanium.UI.createButton(style.profileListDoneButton); 
+	var birthCancel = Titanium.UI.createButton(style.profileListCancelButton);
+	var birthSpacer = Titanium.UI.createButton(style.profileListSpacerButton); 
+	var birthDone = Titanium.UI.createButton(style.profileListDoneButton); 
 	birthPickerToolbar.setItems([birthCancel,birthSpacer,birthDone]);
 	var targetBirth = null;
 
@@ -326,8 +326,8 @@ exports.createWindow = function(_userData){
 
 		// 自分のプロフィールは編集できる
 		if (loginId == _userData.user) {
-			if (typeof e.rowData.className != 'undefined'){
-				var targetName = e.rowData.className;
+			if (e.rowData.objectName != null){
+				var targetName = e.rowData.objectName;
 				Ti.API.debug('targetName:' + targetName);
 				Ti.API.debug('selectedName:' + selectedName);
 				if (targetName == "user"){

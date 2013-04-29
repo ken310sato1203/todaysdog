@@ -40,7 +40,8 @@ exports.createWindow = function(_userData, _stampData){
 	// 完了ボタンをクリック
 	doneButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]doneButton.click:');
-		textWin.prevWin.fireEvent('refresh', {stampText:textArea.value});
+		_stampData.text = textArea.value;
+		textWin.prevWin.fireEvent('refresh', {stampData:_stampData});
 		textWin.close();
 	});
 

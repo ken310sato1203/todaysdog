@@ -62,9 +62,9 @@ exports.win = {
 		Ti.API.debug('[func]createStampWindow:');
 		return stampWin.createWindow(_userData, _stampData);
 	},
-	createStampPostWindow:function(_userData, _stampData){
+	createStampPostWindow:function(_userData, _stampDataList){
 		Ti.API.debug('[func]createStampPostWindow:');
-		return stampPostWin.createWindow(_userData, _stampData);
+		return stampPostWin.createWindow(_userData, _stampDataList);
 	},
 	createStampTextWindow:function(_userData, _stampData){
 		Ti.API.debug('[func]createStampTextWindow:');
