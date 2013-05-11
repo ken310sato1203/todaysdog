@@ -22,41 +22,116 @@ exports.createWindow = function(_userData, _stampData){
 	// 次へボタンの表示
 	var nextButton = Titanium.UI.createButton(style.stampNextButton);
 	nextButton.enabled = false;
-	stampWin.rightNavButton = nextButton;
+	stampWin.rightNavButton = nextButton;		
 
+	var stampScrollView = Ti.UI.createScrollView(style.stampScrollView);
+	stampWin.add(stampScrollView);
 	var stampListView = Ti.UI.createView(style.stampListView);
-	stampWin.add(stampListView);
-	var stampView = Ti.UI.createView(style.stampView);
-	stampListView.add(stampView);
+	stampScrollView.add(stampListView);
 	
 	var stampSelectList = model.getStampSelectList();
-	var selectedIndex = new Array(stampSelectList.length);
+	var selectedIndex = [];
+	for (var i=0; i<stampSelectList.length; i++) {
+		for (var j=0; j<stampSelectList[i].stampList.length; j++) {
+			selectedIndex.push({selected:false, stamp:stampSelectList[i].stampList[j]});
+		}
+	}	
 	var selectedCount = 0;
 
-	for (var i=0; i<stampSelectList.length; i++) {
-		var stampImage = Ti.UI.createImageView(style.stampImage);
-		stampImage.index = i;
-		stampImage.image = 'images/icon/diary_' + stampSelectList[i] + '.png';		
-		stampView.add(stampImage);
+	// 余白
+	var stampView = Ti.UI.createView(style.stampView);
+	stampListView.add(stampView);
 
-		// スタンプをクリック
-		stampImage.addEventListener('click',function(e){
-			Ti.API.debug('[event]stampImage.click:');
-			if (selectedIndex[e.source.index]) {
-				e.source.opacity = 0.2;
-				selectedIndex[e.source.index] = false;
-				selectedCount--;
-			} else {
-				e.source.opacity = 1.0;
-				selectedIndex[e.source.index] = true;
-				selectedCount++;
-			}
-			if (selectedCount > 0) {
-				nextButton.enabled = true;
-			} else {
-				nextButton.enabled = false;
-			}
-		});
+	var stampIndex = 0;
+	var countMax = 7;
+	var alertFlag = false;
+	
+	for (var i=0; i<stampSelectList.length; i++) {
+		var stampView = Ti.UI.createView(style.stampView);
+		stampView.type = stampSelectList[i].type;
+		stampListView.add(stampView);
+		var stampText = Ti.UI.createLabel(style.stampTextLabel);
+		stampText.text = stampSelectList[i].title;
+		stampView.add(stampText);
+
+		for (var j=0; j<stampSelectList[i].stampList.length; j++) {
+			var stamp = stampSelectList[i].stampList[j];
+			var stampImage = Ti.UI.createImageView(style.stampImage);
+			stampImage.index = stampIndex;
+			stampIndex++;
+			stampImage.image = 'images/icon/diary_' + stamp + '.png';		
+			stampView.add(stampImage);
+			
+			// スタンプをクリック
+			stampImage.addEventListener('click',function(e){
+				Ti.API.debug('[event]stampImage.click:');
+				
+				var parentView = e.source.getParent();
+				if (parentView.type == "one") {
+					var childList = parentView.getChildren();
+					var selectedChild = null;
+					for (var k=0; k<childList.length; k++) {
+						if (childList[k].objectName == "stampImage") {
+							if (selectedIndex[childList[k].index].selected) {
+								selectedChild = childList[k];
+							}
+						}
+					}
+					if (selectedChild == null) {
+						if (selectedCount == countMax) {
+							alertFlag = true;
+						} else {
+							e.source.opacity = 1.0;
+							selectedIndex[e.source.index].selected = true;
+							selectedCount++;
+						}
+					} else {
+						selectedChild.opacity = 0.2;
+						selectedIndex[selectedChild.index].selected = false;
+						if (selectedChild.index == e.source.index) {
+							selectedCount--;
+						} else {
+							e.source.opacity = 1.0;
+							selectedIndex[e.source.index].selected = true;
+						}
+					}
+
+				} else {
+					if (selectedIndex[e.source.index].selected) {
+						e.source.opacity = 0.2;
+						selectedIndex[e.source.index].selected = false;
+						selectedCount--;
+					} else {
+						if (selectedCount == countMax) {
+							alertFlag = true;
+						} else {
+							e.source.opacity = 1.0;
+							selectedIndex[e.source.index].selected = true;
+							selectedCount++;
+						}
+					}
+				}
+
+				if (selectedCount > 0) {
+					nextButton.enabled = true;
+				} else {
+					nextButton.enabled = false;
+				}
+
+				if (alertFlag) {
+					var alertDialog = Titanium.UI.createAlertDialog({
+						title: '一度に投稿できるスタンプ数は７個です',
+						buttonNames: ['OK'],
+					});
+					alertDialog.show();
+			
+					alertDialog.addEventListener('click',function(alert){
+						alertFlag = false;
+					});
+				}
+
+			});
+		}
 	}
 
 // ---------------------------------------------------------------------
@@ -72,12 +147,12 @@ exports.createWindow = function(_userData, _stampData){
 	nextButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]nextButton.click:');
 		var stampDataList = [];
-		for (var i=0; i<stampSelectList.length; i++) {
-			if (selectedIndex[i]) {
+		for (var i=0; i<selectedIndex.length; i++) {
+			if (selectedIndex[i].selected) {
 				var stampData = {
 					no: null,
 					user: _stampData.user,
-					stamp: stampSelectList[i],
+					stamp: selectedIndex[i].stamp,
 					text: null,
 					year: _stampData.year,
 					month: _stampData.month,
@@ -100,8 +175,6 @@ exports.createWindow = function(_userData, _stampData){
 	stampWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]stampWin.refresh:');
 		stampWin.prevWin.fireEvent('refresh', {stampData:e.stampData});
-		Ti.API.debug('[***]stampWin.close:');
-		stampWin.close();
 	});
 
 	return stampWin;

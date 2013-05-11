@@ -78,10 +78,10 @@ exports.createWindow = function(_userData, _diaryData){
 				Ti.API.debug('[event]hourView.click:');
 				if (timeWin.openFlag == false) {
 					if (e.source.objectName == "timeStampImage" || e.source.objectName == "timeStampLabel") {
-						var postWin = win.createStampPostWindow(_userData, e.source.getParent().stampData);
+						var postWin = win.createStampPostWindow(_userData, [e.source.getParent().stampData]);
 						postWin.prevWin = timeWin;
 						win.openTabWindow(postWin);
-						// timWinからstampPostWinへの遷移でイベントが複数回実行（原因不明）されないようにするためのフラグ
+						// timWinからの遷移でイベントが複数回実行（原因不明）されないようにするためのフラグ
 						timeWin.openFlag = true;
 					}
 				}

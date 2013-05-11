@@ -282,11 +282,12 @@ exports.createWindow = function(_userData, _stampDataList){
 					}
 				}
 				postWin.prevWin.fireEvent('refresh', {stampData:_stampDataList[0]});
+				postWin.prevWin.close();
 				postWin.close();
 				
-//				setTimeout(function(){
+				setTimeout(function(){
 					actInd.hide();
-//				},2000);
+				},2000);
 
 			}
 		});

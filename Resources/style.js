@@ -1582,32 +1582,6 @@ exports.style = {
 		shadowColor: '#696969', 
 		text: 'スタンプの選択', 
 	},
-
-	stampListView:{
-		top: '10dp',
-		width: '284dp',
-		height: Ti.UI.SIZE,
-		backgroundColor: 'white',
-	},
-	stampView:{
-		layout: 'horizontal',
-		top: '10dp',
-		left: '20dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-	},
-	stampImage:{
-		top: '0dp',
-		bottom: '10dp',
-		right: '10dp',
-		width : '32dp',
-		height : '32dp',
-		image : null,
-		opacity : 0.2,
-		// カスタムプロパティ
-		index : null,
-		isSelect : false,
-	},
 	stampNextButton:{
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -1615,6 +1589,50 @@ exports.style = {
 		textAlign: 'center',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		title: '次へ',
+	},
+
+	stampScrollView:{
+		contentWidth:'auto',
+		contentHeight:'auto',
+		top:0,
+		showVerticalScrollIndicator:true,
+		showHorizontalScrollIndicator:true,
+		backgroundColor: '#dedede',
+	},
+	stampListView:{
+		layout: 'vertical',
+		top: '10dp',
+		width: '284dp',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+	},
+	stampView:{
+		layout: 'horizontal',
+		top: '0dp',
+		bottom: '10dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		// カスタムプロパティ
+		type : null,
+	},
+	stampTextLabel:{
+		top: '0dp',
+		width : '64dp',
+		height : '32dp',
+		font: {fontSize:11, fontFamily:'Helvetica Neue'},
+		color: '#000',
+		objectName: 'stampTextLabel',
+	},
+	stampImage:{
+		top: '0dp',
+		left: '20dp',
+		width : '32dp',
+		height : '32dp',
+		image : null,
+		opacity : 0.2,
+		// カスタムプロパティ
+		index : null,
+		objectName: 'stampImage',
 	},
 
 // winStampPost -------------------------------------------------------

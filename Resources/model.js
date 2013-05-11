@@ -112,11 +112,13 @@ stampList = [
 ];
 
 stampSelectList = [
-	"edit","dog","restaurant","home","sun","water","star","favorite","time",
-	"edit","dog","restaurant","home","sun","water","star","favorite","time",
-	"edit","dog","restaurant","home","sun","water","star","favorite","time",
-	"edit","dog","restaurant","home","sun","water","star","favorite","time",
-	"edit","dog","restaurant","home","sun","water"
+	{type:"one", title:"体調",stampList:["sun","favorite","water"]},
+	{type:"one", title:"ご飯",stampList:["restaurant","home","dog"]},
+	{type:"one", title:"うんち",stampList:["favorite","star","water"]},
+	{type:"one", title:"散歩",stampList:["dog","sun","home"]},
+	{type:"all", title:"薬・病院",stampList:["favorite","edit","time"]},
+	{type:"all", title:"シャンプー\nホテル",stampList:["water","home","restaurant"]},
+	{type:"all", title:"おでかけ\nイベント",stampList:["time","edit","star"]},
 ];
 
 stampHistoryList = [
