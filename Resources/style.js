@@ -35,11 +35,11 @@ exports.style = {
 			title: 'friends',
 		};
 	},
-	mydogTab:function(win){
+	stampTab:function(win){
 		return {
 			window: win,
 			icon: 'images/icon/light_camera.png',
-			title: 'mydog',
+			title: 'stamp',
 		};
 	},
 	diaryTab:function(win){
@@ -62,6 +62,8 @@ exports.style = {
 		backgroundColor: '#dedede',
 		barColor: '#a9a9a9',
 		title: 'フォト',
+		// カスタムプロパティ
+		prevWin : null,
 	},
 
 	photoTableView:{ 
@@ -1374,6 +1376,8 @@ exports.style = {
 	diaryWin:{
 		backgroundColor: '#dedede',
 		barColor: '#a9a9a9',
+		// カスタムプロパティ
+		nextWin: null,
 	},
 	diaryTitleLabel:{
 		width: '200dp',
@@ -1460,6 +1464,7 @@ exports.style = {
 		backgroundColor: '#dedede',
 		barColor: '#a9a9a9',
 		// カスタムプロパティ
+		prevWin : null,
 		openFlag : false,
 	},
 	timeTitleLabel:{
@@ -1592,6 +1597,7 @@ exports.style = {
 	},
 
 	stampScrollView:{
+		layout: 'vertical',
 		contentWidth:'auto',
 		contentHeight:'auto',
 		top:0,
@@ -1599,9 +1605,45 @@ exports.style = {
 		showHorizontalScrollIndicator:true,
 		backgroundColor: '#dedede',
 	},
+	stampOperationView:{
+		top: '10dp',
+		bottom: '2dp',
+		width: '284dp',
+		height: Ti.UI.SIZE,
+	},
+	stampCameraView:{
+		top: '0dp',
+		left: '0dp',
+		width: '141dp',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+	},
+	stampCameraImage:{
+		top: '10dp',
+		bottom: '10dp',
+		width : '32dp',
+		height : '32dp',
+		image : 'images/icon/diary_camera.png',
+	},
+	stampDiaryView:{
+		top: '0dp',
+		right: '0dp',
+		width: '141dp',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+		enabled: false,
+	},
+	stampDiaryImage:{
+		top: '10dp',
+		bottom: '10dp',
+		width : '32dp',
+		height : '32dp',
+		image : 'images/icon/diary_edit.png',
+	},
+
 	stampListView:{
 		layout: 'vertical',
-		top: '10dp',
+		top: '0dp',
 		width: '284dp',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
@@ -1619,7 +1661,7 @@ exports.style = {
 		top: '0dp',
 		width : '64dp',
 		height : '32dp',
-		font: {fontSize:11, fontFamily:'Helvetica Neue'},
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
 		objectName: 'stampTextLabel',
 	},
@@ -1765,6 +1807,8 @@ exports.style = {
 	stampTextWin:{
 		backgroundColor: '#dedede',
 		barColor: '#a9a9a9',
+		// カスタムプロパティ
+		prevWin : null,
 	},
 	stampTextTitleLabel:{
 		width: '200dp',

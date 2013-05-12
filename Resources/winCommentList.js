@@ -209,7 +209,9 @@ exports.createWindow = function(_articleData){
 	// クローズ時に前の画面を更新
 	commentListWin.addEventListener('close',function(e){
 		Ti.API.debug('[event]commentListWin.close:');
-		commentListWin.prevWin.fireEvent('refresh', {articleData:_articleData});
+		if (commentListWin.prevWin != null) {
+			commentListWin.prevWin.fireEvent('refresh', {articleData:_articleData});
+		}
 	});	
 
 	return commentListWin;

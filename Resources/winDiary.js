@@ -118,9 +118,6 @@ exports.createWindow = function(_userData){
 				});
 			}
 
-//			var plusImage = Ti.UI.createImageView(style.diaryPlusImage);
-//			dayView.add(plusImage);
-
 			rowList.push(row);
 		}
 
@@ -144,12 +141,40 @@ exports.createWindow = function(_userData){
 				var timeWin = win.createTimeWindow(_userData, e.row.diaryData);
 				timeWin.prevWin = diaryWin;
 				win.openTabWindow(timeWin);
+				diaryWin.nextWin = timeWin;
 			}
 		});
 
 		return calView;
 	};
 
+	// 当月・翌月・前月のカレンダー表示
+	var addCalView = function(_year, _month) {
+		Ti.API.debug('[func]addCalView:');
+		// 当月のカレンダー
+		thisDiaryView = getCalView(_year, _month);
+		diaryWin.add(thisDiaryView);
+
+		// 翌月のカレンダー
+		nextDiaryView = null;
+		if (month == 12) {
+			nextDiaryView = getCalView(_year + 1, 1);
+		} else {
+			nextDiaryView = getCalView(_year, _month + 1);
+		}
+		nextDiaryView.left = style.commonSize.screenWidth + 'dp';
+		diaryWin.add(nextDiaryView);
+	
+		// 前月のカレンダー
+		prevDiaryView = null;
+		if (month == 1) {
+			prevDiaryView = getCalView(_year - 1, 12);
+		} else {
+			prevDiaryView = getCalView(_year, _month - 1);
+		}
+		prevDiaryView.left = (style.commonSize.screenWidth * -1) + 'dp';
+		diaryWin.add(prevDiaryView);
+	};
 // ---------------------------------------------------------------------
 	var diaryWin = Ti.UI.createWindow(style.diaryWin);
 	// タイトルの表示
@@ -157,31 +182,14 @@ exports.createWindow = function(_userData){
 	monthTitle.text = year + ' ' + monthName[month-1];
 	diaryWin.titleControl = monthTitle;
 
-	// 当月のカレンダー
-	var thisDiaryView = getCalView(year, month);
-	diaryWin.add(thisDiaryView);
+	var thisDiaryView = null;
+	var nextDiaryView = null;
+	var prevDiaryView = null;
+	
+	// 当月・翌月・前月のカレンダー表示
+	addCalView(year, month);
 	// 今日の日にスクロール
 	thisDiaryView.scrollToIndex(nowDay-3>0?nowDay-3:0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-
-	// 翌月のカレンダー
-	var nextDiaryView = null;
-	if (month == 12) {
-		nextDiaryView = getCalView(year + 1, 1);
-	} else {
-		nextDiaryView = getCalView(year, month + 1);
-	}
-	nextDiaryView.left = style.commonSize.screenWidth + 'dp';
-	diaryWin.add(nextDiaryView);
-
-	// 前月のカレンダー
-	var prevDiaryView = null;
-	if (month == 1) {
-		prevDiaryView = getCalView(year - 1, 12);
-	} else {
-		prevDiaryView = getCalView(year, month - 1);
-	}
-	prevDiaryView.left = (style.commonSize.screenWidth * -1) + 'dp';
-	diaryWin.add(prevDiaryView);
 
 // ---------------------------------------------------------------------
 
@@ -265,47 +273,28 @@ exports.createWindow = function(_userData){
 			month = nowMonth;
 			
 			// タイトルの年月
-			monthTitle.text = monthName[month-1] + ' ' + year;
-	
-			// 当月のカレンダー
-			diaryWin.remove(thisDiaryView);
-			thisDiaryView = getCalView(year, month, true);
-			diaryWin.add(thisDiaryView);
+			monthTitle.text = monthName[month-1] + ' ' + year;	
+			// 当月・前月・翌月のカレンダー表示
+			addCalView(year, month);
 			// 今日の日にスクロール
 			thisDiaryView.scrollToIndex(nowDay-3 > 0? nowDay-3 : 0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 	
-			// 翌月のカレンダー
-			diaryWin.remove(nextDiaryView);
-			if (month == 1) {
-				nextDiaryView = getCalView(year + 1, 1, false);
-			} else {
-				nextDiaryView = getCalView(year, month + 1, false);
-			}
-			nextDiaryView.left = style.commonSize.screenWidth + 'dp';
-			diaryWin.add(nextDiaryView);
-		
-			// 前月のカレンダー
-			diaryWin.remove(prevDiaryView);
-			if (month == 1) {
-				prevDiaryView = getCalView(year - 1, 12, false);
-			} else {
-				prevDiaryView = getCalView(year, month - 1, false);
-			}
-			prevDiaryView.left = (style.commonSize.screenWidth * -1) + 'dp';
-			diaryWin.add(prevDiaryView);			
 		}
 	});
 
 	// 更新用イベント
 	diaryWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]diaryWin.refresh:');
-		// ビューの削除
-		diaryWin.remove(thisDiaryView);
 		// ビューの再作成
-		thisDiaryView = getCalView(year, month);
-		diaryWin.add(thisDiaryView);
-		thisDiaryView.scrollToIndex(e.stampData.day - 1, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+		diaryWin.remove(thisDiaryView);
+		diaryWin.remove(nextDiaryView);
+		diaryWin.remove(prevDiaryView);
+		// 当月・前月・翌月のカレンダー表示
+		addCalView(year, month);
 
+		if (e.stampData != null) {
+			thisDiaryView.scrollToIndex(e.stampData.day - 1, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+		}
 	});
 
 

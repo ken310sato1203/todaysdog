@@ -327,7 +327,9 @@ exports.createWindow = function(_articleData){
 	// クローズ時に前の画面を更新
 	photoWin.addEventListener('close',function(e){
 		Ti.API.debug('[event]photoWin.close:');
-		photoWin.prevWin.fireEvent('refresh', {articleData:_articleData});
+		if (photoWin.prevWin != null) {
+			photoWin.prevWin.fireEvent('refresh', {articleData:_articleData});
+		}
 	});	
 
 	return photoWin;

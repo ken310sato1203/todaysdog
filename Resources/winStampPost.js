@@ -86,7 +86,10 @@ exports.createWindow = function(_userData, _stampDataList){
 				} else if (targetName == "hour"){
 					if(allSwitch.value == false) {
 						hourPicker.setSelectedRow(0, util.getHour(hourField.value));
-						hourPickerView.animate(slideIn);
+						// アニメーションがうまく動かないので時間遅らせて表示
+						setTimeout(function() {
+							hourPickerView.animate(slideIn);
+						}, 100);
 					}
 				}
 	
@@ -140,7 +143,6 @@ exports.createWindow = function(_userData, _stampDataList){
 	var postView = getPostView();
 	postWin.add(postView);
 
-// ---------------------------------------------------------------------
 	// 日付選択
 	var datePickerView = Titanium.UI.createView(style.stampPostListPickerView);
 	postWin.add(datePickerView);
@@ -281,8 +283,10 @@ exports.createWindow = function(_userData, _stampDataList){
 						model.updateStampList(_stampDataList[i]);
 					}
 				}
-				postWin.prevWin.fireEvent('refresh', {stampData:_stampDataList[0]});
-				postWin.prevWin.close();
+				if (postWin.prevWin != null) {
+					postWin.prevWin.fireEvent('refresh', {stampData:_stampDataList[0]});
+//					postWin.prevWin.close();
+				}
 				postWin.close();
 				
 				setTimeout(function(){
@@ -302,11 +306,10 @@ exports.createWindow = function(_userData, _stampDataList){
 				_stampDataList[i].text = e.stampData.text;
 			}
 		}
-		// ビューの削除
+		// ビューの再作成
 		postWin.remove(postView);
 		postWin.remove(datePickerView);
 		postWin.remove(hourPickerView);
-		// ビューの再作成
 		postView = getPostView();
 		postWin.add(postView);
 		postWin.add(datePickerView);

@@ -251,8 +251,10 @@ exports.createWindow = function(_type, _userData){
 	// クローズ時に前の画面を更新
 	userListWin.addEventListener('close',function(e){
 		Ti.API.debug('[event]userListWin.close:');
-		var currentData = model.getUser(_userData.user);
-		userListWin.prevWin.fireEvent('refresh', {userData:currentData});
+		if (userListWin.prevWin != null) {
+			var currentData = model.getUser(_userData.user);
+			userListWin.prevWin.fireEvent('refresh', {userData:currentData});
+		}
 	});	
 
 	return userListWin;

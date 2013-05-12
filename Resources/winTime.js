@@ -176,9 +176,8 @@ exports.createWindow = function(_userData, _diaryData){
 	// リストボタンをクリック
 	listButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]listButton.click:');
-		// ビューの削除
-		timeWin.remove(timeView);
 		// ビューの再作成
+		timeWin.remove(timeView);
 		var type = null;
 		if (e.source.listFlag == false) {
 			type = "list";
@@ -211,17 +210,21 @@ exports.createWindow = function(_userData, _diaryData){
 	// 更新用イベント
 	timeWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]timeWin.refresh:');
-		// ビューの削除
-		timeWin.remove(timeView);
 		// ビューの再作成
+		timeWin.remove(timeView);
 		var stampDayList = model.getStampDayList(_userData, _diaryData.year, _diaryData.month, _diaryData.day);
 		_diaryData.stampList = stampDayList;
 		var type = "time";
 		timeView = getTimeView(type);
 		timeWin.add(timeView);
-		timeView.scrollToIndex(e.stampData.hour+1, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+		
+		if (e.stampData != null) {
+			timeView.scrollToIndex(e.stampData.hour+1, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+		}
 
-		timeWin.prevWin.fireEvent('refresh', {stampData:e.stampData});
+		if (timeWin.prevWin != null) {
+			timeWin.prevWin.fireEvent('refresh', {stampData:e.stampData});
+		}
 	});
 
 	// timWinからstampPostWinへの遷移でイベントが複数回実行（原因不明）されないようにするためのフラグ
