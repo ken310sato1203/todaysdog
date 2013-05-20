@@ -97,10 +97,10 @@ followList = [
 ];
 
 stampList = [
-	{no:"12", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:2013, month:4, day:14, hour:-1, repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"11", user:"sakura", stamp:"sun", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:2013, month:4, day:14, hour:-1, repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"10", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち。朝のさんぽ、いいうんち。朝のさんぽ、いい", year:2013, month:4, day:14, hour:14, repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"9", user:"sakura", stamp:"restaurant", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:2013, month:4, day:14, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"12", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:2013, month:4, day:14, hour:16, repeat:"0", date:"2013-03-04 10:23:45"},
+	{no:"11", user:"sakura", stamp:"sun", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:2013, month:4, day:14, hour:15, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"10", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち。朝のさんぽ、いいうんち。朝のさんぽ、いい", year:2013, month:4, day:14, hour:-1, repeat:"0", date:"2013-03-04 10:23:45"},
+	{no:"9", user:"sakura", stamp:"restaurant", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:2013, month:4, day:14, hour:-1, repeat:"0", date:"2013-03-04 15:23:45"},
 	{no:"8", user:"sakura", stamp:"time", text:"シャンプー予約", year:2013, month:4, day:10, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
 	{no:"7", user:"sakura", stamp:"sun", text:"公園でBBQ", year:2013, month:4, day:8, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
 	{no:"6", user:"sakura", stamp:"edit", text:"のみだに薬", year:2013, month:4, day:8, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},

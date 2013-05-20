@@ -64,7 +64,8 @@ exports.createWindow = function(_articleData){
 							target.deleteButton.hide();
 						} else {
 							// 前の画面に戻る
-							tabGroup.activeTab.close(commentListWin);						
+//							tabGroup.activeTab.close(commentListWin);						
+							commentListWin.close();
 						}
 					}
 				});
@@ -201,7 +202,8 @@ exports.createWindow = function(_articleData){
 			if (e.source.objectName != "commentListUserView" 
 				&& e.source.objectName != "commentListIconImage"
 				&& e.source.objectName != "commentListTextLabel") {
-				tabGroup.activeTab.close(commentListWin);
+//				tabGroup.activeTab.close(commentListWin);
+				commentListWin.close();
 			}
 		}
 	});

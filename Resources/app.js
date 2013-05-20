@@ -29,6 +29,7 @@ var tab5 =  Ti.UI.createTab(style.profileTab(win5));
 
 
 // プロフィールのタブをクリックで最新情報を表示
+/*
 tab4.addEventListener('focus', function(e){
 	Ti.API.debug('[event]tab4.focus:');
 	if (tab4.window != null) {
@@ -38,7 +39,7 @@ tab4.addEventListener('focus', function(e){
 		}
 	}
 });
-
+*/
 // プロフィールのタブをクリックで最新情報を表示
 tab5.addEventListener('focus', function(e){
 	Ti.API.debug('[event]tab5.focus:');

@@ -1702,7 +1702,7 @@ exports.style = {
 	},
 	stampPostTableView:{
 		top: '10dp',
-		width: '284dp',
+		width: '100%',
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
 		data: [],
@@ -1717,8 +1717,7 @@ exports.style = {
 	},
 
 	stampPostStampView:{
-//		bottom : '2dp',
-//		width: Ti.UI.SIZE,
+		width: '284dp',
 		height: '52dp',
 		backgroundColor: 'white',
 		// カスタムプロパティ
@@ -1739,8 +1738,7 @@ exports.style = {
 	},
 
 	stampPostListView:{
-//		bottom : '2dp',
-//		width : '284dp',
+		width: '284dp',
 		height: '52dp',
 		backgroundColor: 'white',
 		// カスタムプロパティ

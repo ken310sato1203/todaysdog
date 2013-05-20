@@ -244,7 +244,8 @@ exports.createWindow = function(_type, _userData){
 	userListWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]userListWin.swipe:');
 		if (e.direction == 'right') {
-			tabGroup.activeTab.close(userListWin);
+//			tabGroup.activeTab.close(userListWin);
+			userListWin.close();
 		}
 	});
 

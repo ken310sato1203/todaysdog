@@ -49,8 +49,11 @@ exports.createWindow = function(_userData, _diaryData){
 		}
 		// 当日のデータ
 		var stampList = _diaryData.stampList;
+		if (stampList == null) {
+			stampList = model.getStampDayList(_userData, _diaryData.year, _diaryData.month, _diaryData.day);			
+		}
 		for (var i=0; i<stampList.length; i++) {
-			stampHour[stampList[i].hour+1].data.push(stampList[i]);
+			stampHour[stampList[i].hour + 1].data.push(stampList[i]);
 		}	
 		// 表示位置のリセット	
 		firstHour = null;
@@ -144,15 +147,18 @@ exports.createWindow = function(_userData, _diaryData){
 		// view作成後にスクロールさせると下の方のインデックスの場合、最下層より下を表示してしまうため、オープン時にスクロールさせる
 		if (_diaryData.todayFlag) {
 			// 今日の場合、今の時間帯にスクロール
-			_view.scrollToIndex(nowHour+1, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+			_view.scrollToIndex(nowHour + 1, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 		} else {
+			_view.scrollToIndex(_diaryData.timeIndex + 1, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+/*			
 			if (firstHour == null) {
 				// 登録がない場合、9時にスクロール
-				_view.scrollToIndex(10, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+				_view.scrollToIndex(10, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 			} else {
 				// 登録がある場合、一番早い時間帯に登録されているデータの時間帯にスクロール
-				_view.scrollToIndex(firstHour, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+				_view.scrollToIndex(firstHour, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 			}
+*/
 		}		
 	};
 
@@ -160,7 +166,7 @@ exports.createWindow = function(_userData, _diaryData){
 	var timeWin = Ti.UI.createWindow(style.timeWin);
 	// タイトルの表示
 	var monthTitle = Ti.UI.createLabel(style.timeTitleLabel);	
-	monthTitle.text =  year + ' ' + monthName[month-1] + ' ' + day;
+	monthTitle.text =  year + ' ' + monthName[month - 1] + ' ' + day;
 	timeWin.titleControl = monthTitle;
 
 	// リストボタンの表示
@@ -199,11 +205,18 @@ exports.createWindow = function(_userData, _diaryData){
 		scrollPosition(timeView);
 	});
 
+	// windowクローズ時
+	timeWin.addEventListener('close', function(e) {
+		Ti.API.debug('[event]timeWin.close:');
+		timeWin.prevWin.nextWin = null;
+	});
+
 	// 右スワイプで前の画面に戻る
 	timeWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]timeWin.swipe:');
 		if (e.direction == 'right') {
 			tabGroup.activeTab.close(timeWin);
+			timeWin.close();
 		}
 	});
 
@@ -212,18 +225,17 @@ exports.createWindow = function(_userData, _diaryData){
 		Ti.API.debug('[event]timeWin.refresh:');
 		// ビューの再作成
 		timeWin.remove(timeView);
-		var stampDayList = model.getStampDayList(_userData, _diaryData.year, _diaryData.month, _diaryData.day);
-		_diaryData.stampList = stampDayList;
 		var type = "time";
+		_diaryData = e.diaryData;
 		timeView = getTimeView(type);
 		timeWin.add(timeView);
-		
-		if (e.stampData != null) {
-			timeView.scrollToIndex(e.stampData.hour+1, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-		}
+		timeView.scrollToIndex(e.diaryData.timeIndex + 1, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+
+		// タイトルの表示
+		monthTitle.text =  e.diaryData.year + ' ' + monthName[e.diaryData.month - 1] + ' ' + e.diaryData.day;
 
 		if (timeWin.prevWin != null) {
-			timeWin.prevWin.fireEvent('refresh', {stampData:e.stampData});
+			timeWin.prevWin.fireEvent('refresh', {diaryData:e.diaryData});
 		}
 	});
 

@@ -46,9 +46,9 @@ exports.win = {
 		Ti.API.debug('[func]createCalendarWindow:');
 		return calendarWin.createWindow(_articleData);
 	},
-	createCameraWindow:function(_userData){
+	createCameraWindow:function(_userData, _stampData){
 		Ti.API.debug('[func]createCameraWindow:');
-		return cameraWin.createWindow(_userData);
+		return cameraWin.createWindow(_userData, _stampData);
 	},
 	createDiaryWindow:function(_userData){
 		Ti.API.debug('[func]createDiaryWindow:');
@@ -58,9 +58,9 @@ exports.win = {
 		Ti.API.debug('[func]createTimeWindow:');
 		return timeWin.createWindow(_userData, _diaryData);
 	},
-	createStampWindow:function(_userData, _stampDataList){
+	createStampWindow:function(_userData, _stampData){
 		Ti.API.debug('[func]createStampWindow:');
-		return stampWin.createWindow(_userData, _stampDataList);
+		return stampWin.createWindow(_userData, _stampData);
 	},
 	createStampPostWindow:function(_userData, _stampDataList){
 		Ti.API.debug('[func]createStampPostWindow:');
@@ -95,7 +95,7 @@ exports.win = {
 	// タブでウィンドウを開く
 	openTabWindow:function(_win) {
 		Ti.API.debug('[func]openTabWindow:');
-		tabGroup.activeTab.open(_win,{animated:true});
+		tabGroup.activeTab.open(_win, {animated:true});
 	},
 }
 

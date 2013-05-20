@@ -455,7 +455,8 @@ exports.createWindow = function(_userData){
 	profileWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]profileWin.swipe:');
 		if (e.direction == 'right') {
-			tabGroup.activeTab.close(profileWin);
+//			tabGroup.activeTab.close(profileWin);
+			profileWin.close();
 		}
 	});
 

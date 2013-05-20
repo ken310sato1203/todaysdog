@@ -350,7 +350,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	photoListWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]photoListWin.swipe:');
 		if (e.direction == 'right') {
-			tabGroup.activeTab.close(photoListWin);
+//			tabGroup.activeTab.close(photoListWin);
+			photoListWin.close();
 		}
 	});
 	

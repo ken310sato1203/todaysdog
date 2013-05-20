@@ -283,12 +283,13 @@ exports.createWindow = function(_userData, _stampDataList){
 						model.updateStampList(_stampDataList[i]);
 					}
 				}
+
 				if (postWin.prevWin != null) {
-					postWin.prevWin.fireEvent('refresh', {stampData:_stampDataList[0]});
-//					postWin.prevWin.close();
+					postWin.prevWin.fireEvent('refresh', {stampDataList:_stampDataList});
 				}
-				postWin.close();
-				
+				// 複数の画面を同時にアニメーションさせるとエラーになるのでアニメーションさせない
+				postWin.close({animated:false});
+
 				setTimeout(function(){
 					actInd.hide();
 				},2000);

@@ -39,6 +39,14 @@ exports.createWindow = function(_userData, _stampData){
 		operationView.add(cameraView);
 		var cameraImage = Ti.UI.createImageView(style.stampCameraImage);
 		cameraView.add(cameraImage);
+
+		// cameraViewをクリック
+		cameraView.addEventListener('click',function(e){
+			Ti.API.debug('[event]cameraView.click:');
+			var cameraWin = win.createCameraWindow(_userData, _stampData);
+			cameraWin.prevWin = stampWin;
+			win.openTabWindow(cameraWin);
+		});
 	
 		var diaryView = Ti.UI.createView(style.stampDiaryView);
 		operationView.add(diaryView);
@@ -199,7 +207,8 @@ exports.createWindow = function(_userData, _stampData){
 	stampWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]stampWin.swipe:');
 		if (e.direction == 'right') {
-			tabGroup.activeTab.close(stampWin);
+//			tabGroup.activeTab.close(stampWin);
+			stampWin.close();
 		}
 	});
 
@@ -211,11 +220,44 @@ exports.createWindow = function(_userData, _stampData){
 		stampScrollView = getStampScrollView();
 		stampWin.add(stampScrollView);
 
+		var diaryData = {
+			year: e.stampDataList[0].year,
+			month: e.stampDataList[0].month,
+			day: e.stampDataList[0].day,
+			weekday: null,
+			todayFlag: null,
+			stampList: null,
+			articleData: null,
+			timeIndex: e.stampDataList[0].hour,
+		};
+
+		// timeWinから遷移してきた場合
 		if (stampWin.prevWin != null) {
-			stampWin.prevWin.fireEvent('refresh', {stampData:e.stampData});
+			// timeWinを更新
+			stampWin.prevWin.fireEvent('refresh', {diaryData:diaryData});
 			// 複数の画面を同時にアニメーションさせるとエラーになるのでアニメーションさせない
 			stampWin.close({animated:false});
-		}
+
+		} else {
+			var targetTab = tabGroup.tabs[3];
+			// timeWinがオープンしている場合
+			if (targetTab.window.nextWin != null) {
+				// timeWinを更新
+				targetTab.window.nextWin.fireEvent('refresh', {diaryData:diaryData});
+
+			} else {
+				// timeWinを新規オープン
+				var timeWin = win.createTimeWindow(_userData, diaryData);
+				timeWin.prevWin = targetTab.window;
+				targetTab.open(timeWin, {animated:false});
+
+				// diaryWinを更新
+				targetTab.window.fireEvent('refresh', {diaryData:diaryData});
+			}
+	
+			tabGroup.activeTab = targetTab;
+		}		
+
 	});
 
 	return stampWin;

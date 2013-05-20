@@ -1,6 +1,6 @@
 // カメラ
 
-exports.createWindow = function(_userData){
+exports.createWindow = function(_userData, _stampData){
 	Ti.API.debug('[func]winCamera.createWindow:');
 
 	var articleData = {
@@ -73,10 +73,15 @@ exports.createWindow = function(_userData){
 				tabGroup.add(actInd);
 				// 処理を書く
 				
+				if (cameraWin.prevWin != null) {
+					cameraWin.prevWin.fireEvent('refresh');
+				}
+				cameraWin.close();
+
+				tabGroup.activeTab = tabGroup.tabs[0];
+
 				setTimeout(function(){
 					actInd.hide();
-					var cameraPhotoWin = win.createCameraPhotoWindow(_userData, articleData);
-					win.openTabWindow(cameraPhotoWin);
 				},2000);
 			}
 		});
