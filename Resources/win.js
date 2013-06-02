@@ -5,6 +5,7 @@ var calendarWin = require('winCalendar');
 var cameraWin = require('winCamera');
 var diaryWin = require('winDiary');
 var timeWin = require('winTime');
+var todayWin = require('winToday');
 var stampWin = require('winStamp');
 var stampPostWin = require('winStampPost');
 var stampTextWin = require('winStampText');
@@ -17,11 +18,6 @@ var commentListWin = require('winCommentList');
 // ---------------------------------------------------------------------
 exports.win = {
 
-	createTodayWindow:function(_userData){
-		Ti.API.debug('[func]createTodayWindow:');
-		var type = "all";
-		return photoListWin.createWindow(type, _userData, null, null);
-	},
 	createFriendsWindow:function(_userData){
 		Ti.API.debug('[func]createFriendsWindow:');
 		var type = "follow";
@@ -46,9 +42,9 @@ exports.win = {
 		Ti.API.debug('[func]createCalendarWindow:');
 		return calendarWin.createWindow(_articleData);
 	},
-	createCameraWindow:function(_userData, _stampData){
+	createCameraWindow:function(_userData){
 		Ti.API.debug('[func]createCameraWindow:');
-		return cameraWin.createWindow(_userData, _stampData);
+		return cameraWin.createWindow(_userData);
 	},
 	createDiaryWindow:function(_userData){
 		Ti.API.debug('[func]createDiaryWindow:');
@@ -57,6 +53,10 @@ exports.win = {
 	createTimeWindow:function(_userData, _diaryData){
 		Ti.API.debug('[func]createTimeWindow:');
 		return timeWin.createWindow(_userData, _diaryData);
+	},
+	createTodayWindow:function(_userData, _stampData){
+		Ti.API.debug('[func]createTodayWindow:');
+		return todayWin.createWindow(_userData, _stampData);
 	},
 	createStampWindow:function(_userData, _stampData){
 		Ti.API.debug('[func]createStampWindow:');
@@ -97,5 +97,18 @@ exports.win = {
 		Ti.API.debug('[func]openTabWindow:');
 		tabGroup.activeTab.open(_win, {animated:true});
 	},
+	// 指定したobjectNameのタブを取得
+	getTab:function(_objectName) {
+		Ti.API.debug('[func]getTab:');
+		var targetTab = null;
+		for (var i=0; i<tabGroup.tabs.length; i++) {
+			if (tabGroup.tabs[i].objectName == _objectName) {
+				targetTab = tabGroup.tabs[i];
+				break;
+			}
+		}
+		return targetTab;
+	},
+
 }
 

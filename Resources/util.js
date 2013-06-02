@@ -1,6 +1,20 @@
 //ユーティリティ
 
 exports.util = {
+	
+	diary:{
+		monthName:['January','February','March','April','May','June','July','August','September','October','November','December'],
+		weekday:[
+			{text:'SUN',color:'#CD5C5C'},
+			{text:'MON',color:'#3a4756'},
+			{text:'TUE',color:'#3a4756'},
+			{text:'WED',color:'#3a4756'},
+			{text:'THU',color:'#3a4756'},
+			{text:'FRI',color:'#3a4756'},
+			{text:'SAT',color:'#4169E1'}],
+		timeRange:['-1','0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23'],
+
+	},
 	// 現在日時を日時フォーマットに変換
 	getFormattedNowDateTime:function(){
 	    var now = new Date();

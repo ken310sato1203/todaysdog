@@ -4,8 +4,8 @@ exports.style = {
 
 // common -------------------------------------------------------	
 	commonSize:{
-		// dpは計算のためつけないこと
-		screenWidth: 322,
+		// 計算で遣う数値なので'dp'はつけない
+		screenWidth: Ti.Platform.displayCaps.platformWidth,
 	},
 
 	commonActivityIndicator:{
@@ -19,42 +19,83 @@ exports.style = {
 		message: 'Loading...',
 	},
 				
+	commonTableHeader:{
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+		height: '60dp',
+//		backgroundColor: '#dedede',
+	},	    
+	commonHeaderBorder:{
+	    bottom: '0dp',
+		height: '0dp',
+	},	    
+	commonUpdateArrowImage:{
+	    image:'images/whiteArrow.png',
+	    left: '20dp',
+	    bottom: '10dp',
+	    width: '23dp',
+	    height: '60dp',
+	},
+	commonPullLabel:{
+	    left: '55dp', 
+	    bottom: '30dp',
+	    width: '200dp',
+	    color:'white',
+	    font: {fontSize:13, fontWeight:'bold'},
+	    text: 'Pull down to refresh...',
+	    textAlign: 'center',
+	},
+	commonLastUpdatedLabel:{
+	    left: '55dp',
+	    bottom: '15dp',
+	    width: '200dp',
+	    color: 'white',
+	    font: {fontSize:12},
+	    textAlign: 'center',
+	},
+	commonUpdateIndicator:{
+	    left: '20dp',
+	    bottom: '13dp',
+	    width: '30dp',
+	    height: '30dp',
+	    image:'images/whiteArrow.png',
+	    left: '20dp',
+	    bottom: '10dp',
+	    width: '23dp',
+	    height: '60dp',
+	},	
 	
 // tab -------------------------------------------------------
-	todayTab:function(win){
-		return {
-			window: win,
-			icon: 'images/icon/light_globe.png',
-			title: 'today',
-		};
+	tabGroup:{
+//		bottom: '-50dp',
+//		navBarHidden : true,
+		// カスタムプロパティ
+		showFlag: false,
 	},
-	friendsTab:function(win){
-		return {
-			window: win,
-			icon: 'images/icon/light_chat.png',
-			title: 'friends',
-		};
+	todayTab:{
+		icon: 'images/icon/light_square.png',
+		title: 'today',
+		// カスタムプロパティ
+		objectName: "todayTab",
 	},
-	stampTab:function(win){
-		return {
-			window: win,
-			icon: 'images/icon/light_camera.png',
-			title: 'stamp',
-		};
+	friendsTab:{
+		icon: 'images/icon/light_chat.png',
+		title: 'friends',
+		objectName: "friendsTab",
 	},
-	diaryTab:function(win){
-		return {
-			window: win,
-			icon: 'images/icon/light_heart.png',
-			title: 'news',
-		};
+	stampTab:{
+		icon: 'images/icon/light_plus.png',
+		title: 'top',
+		objectName: "stampTab",
 	},
-	profileTab:function(win){
-		return {
-			window: win,
-			icon: 'images/icon/light_pegman.png',
-			title: 'profile',
-		};
+	diaryTab:{
+		icon: 'images/icon/light_diary.png',
+		title: 'diary',
+		objectName: "diaryTab",
+	},
+	profileTab:{
+		icon: 'images/icon/light_pegman.png',
+		title: 'profile',
+		objectName: "profileTab",
 	},
 
 // winPhoto -------------------------------------------------------
@@ -699,7 +740,7 @@ exports.style = {
 	photoListArticleListView:{
 		layout: 'horizontal',
 		top: '0dp',
-		width: '320dp',
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
 		height: Ti.UI.SIZE,
 	},
 	photoListArticleView:{
@@ -829,50 +870,6 @@ exports.style = {
 		color: '#000',
 		text: 'データがありません'
 	},
-	photoListTableHeader:{
-		width: '320dp',
-		height: '60dp',
-//		backgroundColor: '#dedede',
-	},	    
-	photoListHeaderBorder:{
-	    bottom: '0dp',
-		height: '0dp',
-	},	    
-	photoListUpdateArrowImage:{
-	    image:'images/whiteArrow.png',
-	    left: '20dp',
-	    bottom: '10dp',
-	    width: '23dp',
-	    height: '60dp',
-	},
-	photoListPullLabel:{
-	    left: '55dp', 
-	    bottom: '30dp',
-	    width: '200dp',
-	    color:'white',
-	    font: {fontSize:13, fontWeight:'bold'},
-	    text: 'Pull down to refresh...',
-	    textAlign: 'center',
-	},
-	photoListLastUpdatedLabel:{
-	    left: '55dp',
-	    bottom: '15dp',
-	    width: '200dp',
-	    color: 'white',
-	    font: {fontSize:12},
-	    textAlign: 'center',
-	},
-	photoListUpdateIndicator:{
-	    left: '20dp',
-	    bottom: '13dp',
-	    width: '30dp',
-	    height: '30dp',
-	    image:'images/whiteArrow.png',
-	    left: '20dp',
-	    bottom: '10dp',
-	    width: '23dp',
-	    height: '60dp',
-	},	
 
 // winUserList -------------------------------------------------------
 	userListWin:{
@@ -1260,7 +1257,7 @@ exports.style = {
 	calendarHeaderView:{
 		layout : 'horizontal',
 		top : '0dp',
-		width : '322dp',
+		width : Ti.Platform.displayCaps.platformWidth + 'dp',
 		height : '20dp',
 		backgroundColor : '#F5F5F5',
 	},
@@ -1312,7 +1309,7 @@ exports.style = {
 	calendarCalView:{
 		layout : 'horizontal',
 		top : '21dp',
-		width : '322dp',
+		width : Ti.Platform.displayCaps.platformWidth + 'dp',
 		height : 'auto',
 	},
 
@@ -1390,8 +1387,8 @@ exports.style = {
 
 	diaryTableView:{
 		top: '1dp',
-		left:0,
-		width:320,
+		left: '0dp',
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
 		backgroundColor: '#dedede',
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
@@ -1413,22 +1410,22 @@ exports.style = {
 		height: '44dp',
 		backgroundColor : 'white',
 	},
+	diaryDayLabel:{
+		top: '5dp',
+		left: '8dp',
+		width: '30dp',
+		height: Ti.UI.SIZE,
+		textAlign: 'center',
+		font : {fontSize:17, fontWeight:'bold'},
+		color: '#3a4756',
+	},
 	diaryWeekdayLabel:{
-		top: '7dp',
+		top: '25dp',
 		left: '8dp',
 		width: '30dp',
 		height: Ti.UI.SIZE,
 		textAlign: 'center',
 		font : {fontSize:11, fontWeight:'bold'},
-	},
-	diaryDayLabel:{
-		bottom: '6dp',
-		left: '8dp',
-		width: '30dp',
-		height: Ti.UI.SIZE,
-		textAlign: 'center',
-		font : {fontSize:15, fontWeight:'bold'},
-		color: '#3a4756',
 	},
 	diaryTodayView:{
 		top: '0dp',
@@ -1488,7 +1485,7 @@ exports.style = {
 	timeTableView:{
 		top: '1dp',
 		left: '0dp',
-		width: '320dp',
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
 		backgroundColor: '#dedede',
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
@@ -1571,6 +1568,155 @@ exports.style = {
 		image : 'images/icon/diary_plus.png',
 	},
 
+// winToay -------------------------------------------------------
+	todayWin:{
+		backgroundColor: 'white',
+		barColor: '#a9a9a9',
+		// タイトルバーを隠す
+//		navBarHidden: true,
+		// カスタムプロパティ
+		prevWin : null,
+	},
+	todayTitleLabel:{
+		width: '200dp',
+		textAlign: 'center',
+		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+		text: '今日のわんこ', 
+	},
+
+	todayScrollView:{
+		layout: 'vertical',
+//		layout: 'absolute',
+		contentWidth:'auto',
+		contentHeight:'auto',
+		top:0,
+		showVerticalScrollIndicator:true,
+		showHorizontalScrollIndicator:true,
+		backgroundColor: 'white',
+	},
+	todayTableView:{
+		top: '0dp',
+		height: Ti.UI.SIZE,
+		separatorColor: 'transparent',
+		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		data: [],
+	},
+	todayTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+	},
+
+	todayPhotoView:{
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
+		backgroundColor: '#eeeeee',
+	},
+	todayPhotoImage:{
+		top: '0dp',
+//		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+//		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		image : null,
+		// カスタムプロパティ
+		displayFlag: false,
+	},
+	todayCameraImage:{
+		width: '64dp',
+		height: '64dp',
+		image: 'images/icon/b_camera.png',
+	},
+	todayDiaryView:{
+		layout: 'horizontal',
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		// 画面の最下部まで表示
+		height: Ti.Platform.displayCaps.platformHeight - (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
+		enabled: false,
+		backgroundColor: 'white',
+	},
+	todayDayView:{
+		layout: 'vertical',
+		top: '0dp',
+		width: '80dp',
+		height: Ti.UI.SIZE,
+		enabled: false,
+		backgroundColor: 'white',
+	},
+	todayDayLabel:{
+		top: '10dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+		textAlign: 'center',
+		font : {fontSize:18, fontWeight:'bold'},
+		color: '#3a4756',
+	},
+	todayWeekdayLabel:{
+		top: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+		textAlign: 'center',
+		font : {fontSize:14, fontWeight:'bold'},
+	},
+	todayEditImage:{
+		top: '3dp',
+		width : '64dp',
+		height : '64dp',
+		image : 'images/icon/b_edit.png',
+		backgroundColor: 'white',
+	},
+	todayTimeTableView:{
+		top: '5dp',
+		height: Ti.UI.SIZE,
+		separatorColor: 'transparent',
+		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		scrollable: false,
+		data: [],
+	},
+	todayTimeTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		// カスタムプロパティ
+		timeData: null,
+	},
+	todayTimeStampView:{
+		top: '0dp',
+		left: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+		// カスタムプロパティ
+		stampData : null,
+		objectName : 'todayTimeStampView',
+	},
+	todayTimeStampImage:{
+		left: '0dp',
+		width : '32dp',
+		height : '32dp',
+		image : null,
+		// カスタムプロパティ
+		objectName : 'todayTimeStampImage',
+	},
+	todayTimeStampLabel:{
+		left: '36dp',
+		right: '10dp',
+//		width: '190dp',
+		width: Ti.UI.SIZE,
+		height: '40dp',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#000',
+		// カスタムプロパティ
+		objectName : 'todayTimeStampLabel',
+	},
+	
 // winStamp -------------------------------------------------------
 	stampWin:{
 		backgroundColor: '#dedede',
@@ -1594,6 +1740,7 @@ exports.style = {
 		textAlign: 'center',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		title: '次へ',
+		enabled: false,
 	},
 
 	stampScrollView:{
@@ -1605,45 +1752,10 @@ exports.style = {
 		showHorizontalScrollIndicator:true,
 		backgroundColor: '#dedede',
 	},
-	stampOperationView:{
-		top: '10dp',
-		bottom: '2dp',
-		width: '284dp',
-		height: Ti.UI.SIZE,
-	},
-	stampCameraView:{
-		top: '0dp',
-		left: '0dp',
-		width: '141dp',
-		height: Ti.UI.SIZE,
-		backgroundColor: 'white',
-	},
-	stampCameraImage:{
-		top: '10dp',
-		bottom: '10dp',
-		width : '32dp',
-		height : '32dp',
-		image : 'images/icon/diary_camera.png',
-	},
-	stampDiaryView:{
-		top: '0dp',
-		right: '0dp',
-		width: '141dp',
-		height: Ti.UI.SIZE,
-		backgroundColor: 'white',
-		enabled: false,
-	},
-	stampDiaryImage:{
-		top: '10dp',
-		bottom: '10dp',
-		width : '32dp',
-		height : '32dp',
-		image : 'images/icon/diary_edit.png',
-	},
 
 	stampListView:{
 		layout: 'vertical',
-		top: '0dp',
+		top: '10dp',
 		width: '284dp',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
@@ -1676,7 +1788,7 @@ exports.style = {
 		index : null,
 		objectName: 'stampImage',
 	},
-
+	
 // winStampPost -------------------------------------------------------
 	stampPostWin:{
 		backgroundColor: '#dedede',

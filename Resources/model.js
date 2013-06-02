@@ -39,7 +39,7 @@ articleList = [
 	{no:"A0004", user:"sakura", location:"Shiga", date:"2013-03-03 07:26:05", text:"2明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{no:"A0003", user:"sakura", location:"Nara", date:"2013-03-03 07:26:05", text:"1明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{no:"A0002", user:"maki", location:"Kyoto", date:"2013-03-02 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{no:"A0001", user:"sakura", location:"Tokyo", date:"2012-12-07 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{no:"A0001", user:"sakura", location:"Tokyo", date:"2013-06-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 ];
 
 commentList = [
@@ -97,10 +97,10 @@ followList = [
 ];
 
 stampList = [
-	{no:"12", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:2013, month:4, day:14, hour:16, repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"11", user:"sakura", stamp:"sun", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:2013, month:4, day:14, hour:15, repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"10", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち。朝のさんぽ、いいうんち。朝のさんぽ、いい", year:2013, month:4, day:14, hour:-1, repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"9", user:"sakura", stamp:"restaurant", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:2013, month:4, day:14, hour:-1, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"12", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち", year:2013, month:6, day:1, hour:16, repeat:"0", date:"2013-03-04 10:23:45"},
+	{no:"11", user:"sakura", stamp:"sun", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:2013, month:6, day:1, hour:15, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"10", user:"sakura", stamp:"dog", text:"朝のさんぽ、いいうんち。朝のさんぽ、いいうんち。朝のさんぽ、いい", year:2013, month:6, day:1, hour:-1, repeat:"0", date:"2013-03-04 10:23:45"},
+	{no:"9", user:"sakura", stamp:"restaurant", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:2013, month:6, day:1, hour:-1, repeat:"0", date:"2013-03-04 15:23:45"},
 	{no:"8", user:"sakura", stamp:"time", text:"シャンプー予約", year:2013, month:4, day:10, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
 	{no:"7", user:"sakura", stamp:"sun", text:"公園でBBQ", year:2013, month:4, day:8, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
 	{no:"6", user:"sakura", stamp:"edit", text:"のみだに薬", year:2013, month:4, day:8, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},

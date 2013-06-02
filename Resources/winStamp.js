@@ -25,68 +25,20 @@ exports.createWindow = function(_userData, _stampData){
 		hour = _stampData.hour;
 	}
 
+	// スタンプの選択インデックス
+	var selectedIndex = [];
+
 // ---------------------------------------------------------------------
 	// Viewの取得
 	var getStampScrollView = function() {
 		Ti.API.debug('[func]getStampScrollView:');
 
 		var targetView = Ti.UI.createScrollView(style.stampScrollView);
-	
-		var operationView = Ti.UI.createView(style.stampOperationView);
-		targetView.add(operationView);		
-	
-		var cameraView = Ti.UI.createView(style.stampCameraView);
-		operationView.add(cameraView);
-		var cameraImage = Ti.UI.createImageView(style.stampCameraImage);
-		cameraView.add(cameraImage);
-
-		// cameraViewをクリック
-		cameraView.addEventListener('click',function(e){
-			Ti.API.debug('[event]cameraView.click:');
-			var cameraWin = win.createCameraWindow(_userData, _stampData);
-			cameraWin.prevWin = stampWin;
-			win.openTabWindow(cameraWin);
-		});
-	
-		var diaryView = Ti.UI.createView(style.stampDiaryView);
-		operationView.add(diaryView);
-		var diaryImage = Ti.UI.createImageView(style.stampDiaryImage);
-		diaryView.add(diaryImage);
-	
-		// diaryViewをクリック
-		diaryView.addEventListener('click',function(e){
-			Ti.API.debug('[event]diaryView.click:');
-
-			var stampDataList = [];
-			for (var i=0; i<selectedIndex.length; i++) {
-				if (selectedIndex[i].selected) {
-					var stampData = {
-						no: null,
-						user: user,
-						stamp: selectedIndex[i].stamp,
-						text: null,
-						year: year,
-						month: month,
-						day: day,
-						hour: hour,
-						all: null,
-						report: null,
-						date: null,
-					};
-					stampDataList.push(stampData);
-				}
-			}
-	
-			var postWin = win.createStampPostWindow(_userData, stampDataList);	
-			postWin.prevWin = stampWin;
-			win.openTabWindow(postWin);
-		});
-	
+		
 		var stampListView = Ti.UI.createView(style.stampListView);
 		targetView.add(stampListView);
 		
 		var stampSelectList = model.getStampSelectList();
-		var selectedIndex = [];
 		for (var i=0; i<stampSelectList.length; i++) {
 			for (var j=0; j<stampSelectList[i].stampList.length; j++) {
 				selectedIndex.push({selected:false, stamp:stampSelectList[i].stampList[j]});
@@ -169,9 +121,9 @@ exports.createWindow = function(_userData, _stampData){
 					}
 	
 					if (selectedCount > 0) {
-						diaryView.enabled = true;
+						nextButton.enabled = true;
 					} else {
-						diaryView.enabled = false;
+						nextButton.enabled = false;
 					}
 	
 					if (alertFlag) {
@@ -198,6 +150,9 @@ exports.createWindow = function(_userData, _stampData){
 	// タイトルの表示
 	var monthTitle = Ti.UI.createLabel(style.stampTitleLabel);	
 	stampWin.titleControl = monthTitle;
+	// 次へボタンの表示
+	var nextButton = Titanium.UI.createButton(style.stampNextButton);
+	stampWin.rightNavButton = nextButton;
 
 	var stampScrollView = getStampScrollView();
 	stampWin.add(stampScrollView);
@@ -210,6 +165,34 @@ exports.createWindow = function(_userData, _stampData){
 //			tabGroup.activeTab.close(stampWin);
 			stampWin.close();
 		}
+	});
+
+	// 次へボタンをクリック
+	nextButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]nextButton.click:');
+			var stampDataList = [];
+			for (var i=0; i<selectedIndex.length; i++) {
+				if (selectedIndex[i].selected) {
+					var stampData = {
+						no: null,
+						user: user,
+						stamp: selectedIndex[i].stamp,
+						text: null,
+						year: year,
+						month: month,
+						day: day,
+						hour: hour,
+						all: null,
+						report: null,
+						date: null,
+					};
+					stampDataList.push(stampData);
+				}
+			}
+	
+			var postWin = win.createStampPostWindow(_userData, stampDataList);	
+			postWin.prevWin = stampWin;
+			win.openTabWindow(postWin);
 	});
 
 	// 更新用イベント
@@ -239,7 +222,7 @@ exports.createWindow = function(_userData, _stampData){
 			stampWin.close({animated:false});
 
 		} else {
-			var targetTab = tabGroup.tabs[3];
+			var targetTab = win.getTab("diaryTab");
 			// timeWinがオープンしている場合
 			if (targetTab.window.nextWin != null) {
 				// timeWinを更新
@@ -253,8 +236,7 @@ exports.createWindow = function(_userData, _stampData){
 
 				// diaryWinを更新
 				targetTab.window.fireEvent('refresh', {diaryData:diaryData});
-			}
-	
+			}	
 			tabGroup.activeTab = targetTab;
 		}		
 

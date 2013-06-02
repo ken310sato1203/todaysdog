@@ -11,16 +11,8 @@ exports.createWindow = function(_userData){
 
 	var year = nowYear;
 	var month = nowMonth;
-
-	var monthName = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-	var weekday = [
-		{text:'SUN',color:'#CD5C5C'},
-		{text:'MON',color:'#3a4756'},
-		{text:'TUE',color:'#3a4756'},
-		{text:'WED',color:'#3a4756'},
-		{text:'THU',color:'#3a4756'},
-		{text:'FRI',color:'#3a4756'},
-		{text:'SAT',color:'#4169E1'}];
+	var monthName = util.diary.monthName;
+	var weekday = util.diary.weekday;
 
 	// カレンダーデータの取得
 	var getCalendarRowData = function(_year, _month) {

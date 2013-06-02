@@ -12,12 +12,13 @@ exports.createWindow = function(_userData, _diaryData){
 	var month = _diaryData.month;
 	var day = _diaryData.day;
 
-	var monthName = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+	var monthName = util.diary.monthName;
+	var timeRange = util.diary.timeRange;
 
 	// 一番早い時間帯に登録されているデータの時間帯
 	var firstHour = null;
 
-	// フォローユーザの記事の取得
+	// StampViewの取得
 	var getStampView = function(_rowStamp) {
 		Ti.API.debug('[func]getStampView:');
 
@@ -40,7 +41,6 @@ exports.createWindow = function(_userData, _diaryData){
 		Ti.API.debug('[func]getTimeView:');
 		var targetView = Ti.UI.createTableView(style.timeTableView);
 		var rowList = [];
-		var timeRange = ['-1','0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23'];
 
 		// 時間別に登録
 		var stampHour = new Array(timeRange.length);

@@ -1,6 +1,6 @@
 // カメラ
 
-exports.createWindow = function(_userData, _stampData){
+exports.createWindow = function(_userData){
 	Ti.API.debug('[func]winCamera.createWindow:');
 
 	var articleData = {
@@ -40,7 +40,7 @@ exports.createWindow = function(_userData, _stampData){
 		 },
 		cancel: function(e) {
 			Ti.API.debug('cancel:');
-			articleImage.image = 'images/photo/A0023.jpg';
+			articleImage.image = 'images/photo/today_sakura.jpg';
 			articleView.show();
 		 },
 		error: function(e) {
@@ -77,8 +77,6 @@ exports.createWindow = function(_userData, _stampData){
 					cameraWin.prevWin.fireEvent('refresh');
 				}
 				cameraWin.close();
-
-				tabGroup.activeTab = tabGroup.tabs[0];
 
 				setTimeout(function(){
 					actInd.hide();
