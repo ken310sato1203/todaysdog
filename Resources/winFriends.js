@@ -1,8 +1,14 @@
-// フォト一覧
+// 犬とも一覧
 
 exports.createWindow = function(_type, _userData, _year, _month) {
-	Ti.API.debug('[func]winPhotoList.createWindow:');
+	Ti.API.debug('[func]winFriends.createWindow:');
 	Ti.API.debug('_type:' + _type);
+
+	var year = null;
+	var month = null;
+	var day = null;
+	var hour = null;
+	var weekday = null;
 
 	// 記事リストの表示件数
 	var articleCount = 9;
@@ -14,70 +20,67 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// リフレッシュ時用格納リスト
 	var refreshTarget = [];
 
-	// 記事の取得
-	var getArticleTableRow = function(_articleList) {
-		Ti.API.debug('[func]getArticleTableRow:');
-		var articleTableRow = Ti.UI.createTableViewRow(style.photoListArticleTableRow);
-		var articleListView = Ti.UI.createView(style.photoListArticleListView);
-		articleTableRow.add(articleListView);
-		
-		for (var i=0; i<_articleList.length; i++) {	
-			var articleView = Ti.UI.createView(style.photoListArticleView);
-			articleListView.add(articleView);
-			var photoImage = Ti.UI.createImageView(style.photoListPhotoImage);
-			photoImage.image = 'images/photo/' + _articleList[i].no + '.jpg';
-			// カスタムプロパティに記事データを格納
-			photoImage.articleData = _articleList[i];
-			var textLabel = Ti.UI.createLabel(style.photoListTextLabel);
-			textLabel.text = '@' + _articleList[i].location;
-					
-			articleView.add(photoImage);
-			articleView.add(textLabel);
-			
-			// 各記事のタップでフォト画面へ遷移
-			photoImage.addEventListener('click',function(e){
-				Ti.API.debug('[event]photoImage.click:');
-				e.source.opacity = 0.5;
-				var photoWin = win.createPhotoWindow(e.source.articleData);
-				photoWin.prevWin = photoListWin;
-				win.openTabWindow(photoWin);
-				e.source.opacity = 1.0;
-			});
-		}		
-		return articleTableRow;
+// ---------------------------------------------------------------------
+
+	// 日時の更新
+	var updateDate = function() {
+		Ti.API.debug('[func]updateDate:');
+		var now = new Date();
+		year = now.getFullYear();
+		month = now.getMonth() + 1;
+		day = now.getDate();
+		weekday = util.diary.weekday[now.getDay()];
+
+		var dateTableRow = Ti.UI.createTableViewRow(style.friendsDateTableRow);
+		friendsTableView.appendRow(dateTableRow);
+		var dateView = Ti.UI.createView(style.friendsDateView);
+		dateTableRow.add(dateView);
+		var dateLabel = Ti.UI.createLabel(style.friendsDateLabel);
+		dateLabel.text = year + '/' + month + '/' + day + ' ' + weekday.text;
+		dateView.add(dateLabel);
 	};
 
 	// フォローユーザの記事の取得
 	var getFriendsArticleTableRow = function(_articleList) {
 		Ti.API.debug('[func]getFriendsArticleTableRow:');
-		var articleTableRow = Ti.UI.createTableViewRow(style.photoListArticleTableRow);
-		var articleListView = Ti.UI.createView(style.photoListFriendsArticleListView);
+		var articleTableRow = Ti.UI.createTableViewRow(style.friendsArticleTableRow);
+		var articleListView = Ti.UI.createView(style.friendsArticleListView);
 		articleTableRow.add(articleListView);
 		
 		for (var i=0; i<_articleList.length; i++) {	
-			var articleView = Ti.UI.createView(style.photoListFriendsArticleView);
+			var articleView = Ti.UI.createView(style.friendsArticleView);
 			articleListView.add(articleView);
-			var photoImage = Ti.UI.createImageView(style.photoListFriendsPhotoImage);
-			photoImage.image = 'images/photo/' + _articleList[i].no + '.jpg';
+			var photoImage = Ti.UI.createImageView(style.friendsPhotoImage);
+			photoImage.image = 'images/icon/' + _articleList[i].user + '.png';
 			// カスタムプロパティに記事データを格納
 			photoImage.articleData = _articleList[i];
 			articleView.add(photoImage);
 
-			var nameLabel = Ti.UI.createLabel(style.photoListFriendsNameLabel);
+			var textView = Ti.UI.createView(style.friendsTextView);
+			articleView.add(textView);
+
+			var nameLabel = Ti.UI.createLabel(style.friendsNameLabel);
 			nameLabel.text = _articleList[i].user;
-			var textLabel = Ti.UI.createLabel(style.photoListFriendsTextLabel);
+			textView.add(nameLabel);
+			var textLabel = Ti.UI.createLabel(style.friendsTextLabel);
 			textLabel.text = _articleList[i].text;
-			articleView.add(nameLabel);
-			articleView.add(textLabel);
+			textView.add(textLabel);
 
-			var countView = Ti.UI.createView(style.photoListFriendsCountView);
-			articleView.add(countView);
+			var timeView = Ti.UI.createView(style.friendsTimeView);
+			textView.add(timeView);
+			var timeLabel = Ti.UI.createLabel(style.friendsTimeLabel);
+			var date = util.getDateElement(_articleList[i].date);
+			timeLabel.text = date.hour + ":" + date.minute + ":" + date.second;
+			timeView.add(timeLabel);
 
-			var likeImage = Ti.UI.createImageView(style.photoListFriendsLikeIconImage);
-			var likeLabel = Ti.UI.createLabel(style.photoListFriendsLikeLabel);
+			var countView = Ti.UI.createView(style.friendsCountView);
+			timeView.add(countView);
+
+			var likeImage = Ti.UI.createImageView(style.friendsLikeIconImage);
+			var likeLabel = Ti.UI.createLabel(style.friendsLikeLabel);
 			likeLabel.text = _articleList[i].like;
-			var commentImage = Ti.UI.createImageView(style.photoListFriendsCommentIconImage);				
-			var commentLabel = Ti.UI.createLabel(style.photoListFriendsCommentLabel);
+			var commentImage = Ti.UI.createImageView(style.friendsCommentIconImage);				
+			var commentLabel = Ti.UI.createLabel(style.friendsCommentLabel);
 			commentLabel.text = _articleList[i].comment;
 			countView.add(likeImage);
 			countView.add(likeLabel);
@@ -92,7 +95,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				Ti.API.debug('[event]photoImage.click:');
 				e.source.opacity = 0.5;
 				var photoWin = win.createPhotoWindow(e.source.articleData);
-				photoWin.prevWin = photoListWin;
+				photoWin.prevWin = friendsWin;
 				win.openTabWindow(photoWin);
 				e.source.opacity = 1.0;
 			});
@@ -103,14 +106,14 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// 「続きを読む」ボタンの追加
 	var appendNextButton = function() {
 		Ti.API.debug('[func]appendNextButton:');
-		var nextTableRow = Ti.UI.createTableViewRow(style.photoListNextTableRow);
-		photoListTableView.appendRow(nextTableRow);
+		var nextTableRow = Ti.UI.createTableViewRow(style.friendsNextTableRow);
+		friendsTableView.appendRow(nextTableRow);
 	
-		var nextView = Ti.UI.createView(style.photoListNextView);
+		var nextView = Ti.UI.createView(style.friendsNextView);
 		nextTableRow.add(nextView);
 	
 		// 「続きを読む」ボタンをテーブルに追加	
-		var nextButton = Ti.UI.createButton(style.photoListNextButton);
+		var nextButton = Ti.UI.createButton(style.friendsNextButton);
 		nextView.add(nextButton);
 		
 		// 「続きを読む」ボタンをタップした場合、続きの記事を追加してからボタンを削除
@@ -122,13 +125,13 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// データなしラベルの追加	
 	var appendNoDataLabel = function() {
 		Ti.API.debug('[func]appendNoDataLabel:');
-		var nextTableRow = Ti.UI.createTableViewRow(style.photoListNextTableRow);
-		photoListTableView.appendRow(nextTableRow);
+		var nextTableRow = Ti.UI.createTableViewRow(style.friendsNextTableRow);
+		friendsTableView.appendRow(nextTableRow);
 	
-		var nextView = Ti.UI.createView(style.photoListNextView);
+		var nextView = Ti.UI.createView(style.friendsNextView);
 		nextTableRow.add(nextView);
 	
-		var noDataLabel = Ti.UI.createLabel(style.photoListNoDataLabel);
+		var noDataLabel = Ti.UI.createLabel(style.friendsNoDataLabel);
 		nextView.add(noDataLabel);
 	};
 
@@ -138,20 +141,16 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		// 「続きを読む」ボタンを押した場合、削除するボタンのインデックスを取得
 		var deleteRowIndex = null;
 		if (nextArticleFlag) {
-			deleteRowIndex = photoListTableView.data[0].rowCount - 1;
+			deleteRowIndex = friendsTableView.data[0].rowCount - 1;
 		}
 
 		// 取得した記事が表示件数以下の場合
 		if (_articleList.length < articleCount + 1) {
 			// 取得した記事をテーブルに追加
-			if (_type == "follow") {
-				photoListTableView.appendRow(getFriendsArticleTableRow(_articleList));
-			} else {
-				photoListTableView.appendRow(getArticleTableRow(_articleList));				
-			}
+			friendsTableView.appendRow(getFriendsArticleTableRow(_articleList));
 			// 「続きを読む」ボタンをタップした場合、ボタンを削除
 			if (nextArticleFlag) {
-				photoListTableView.deleteRow(deleteRowIndex);
+				friendsTableView.deleteRow(deleteRowIndex);
 			}
 			// 次回更新用に続きの記事がないフラグを設定
 			nextArticleFlag = false;
@@ -161,16 +160,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			// 多く取得した1件のデータを削除
 			_articleList.pop();
 			// 取得した記事をテーブルに追加
-			if (_type == "follow") {
-				photoListTableView.appendRow(getFriendsArticleTableRow(_articleList), {animated:true});
-			} else {
-				photoListTableView.appendRow(getArticleTableRow(_articleList), {animated:true});				
-			}
+			friendsTableView.appendRow(getFriendsArticleTableRow(_articleList), {animated:true});
 			// 「続きを読む」ボタンを追加
 			appendNextButton();
 			// 「続きを読む」ボタンをタップした場合、ボタンを削除
 			if (nextArticleFlag) {
-				photoListTableView.deleteRow(deleteRowIndex);
+				friendsTableView.deleteRow(deleteRowIndex);
 			}
 			// 次回更新用に続きの記事があるフラグを設定
 			nextArticleFlag = true;
@@ -180,6 +175,9 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// 記事の更新
 	var updateArticle = function() {
 		Ti.API.debug('[func]updateArticle:');
+
+		updateDate();
+
 		// 前回取得した最後のインデックス以降を取得
 		// 「続きを読む」ボタンの表示判定のため、表示件数より1件多い条件で取得
 		var articleList = model.getArticleList(_type, _userData, prevArticleIndex, articleCount + 1);
@@ -222,46 +220,18 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	};
 	
 // ---------------------------------------------------------------------
-	var photoListWin = Ti.UI.createWindow(style.photoListWin);
+	var friendsWin = Ti.UI.createWindow(style.friendsWin);
 	var titleView = null;
 	var titleLabel = null;
 
 	// 更新ボタン
-	var updateButton = Titanium.UI.createButton(style.photoListUpdateButton);
+	var updateButton = Titanium.UI.createButton(style.friendsUpdateButton);
 	// ロード用画面
 	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
 
-	if (_type == "all") {
-		// 全ユーザのフォト一覧
-		titleLabel = Ti.UI.createLabel(style.photoListTodayTitleLabel);	
-		photoListWin.titleControl = titleLabel;
-//		photoListWin.rightNavButton = updateButton;
-
-	} else 	if (_type == "follow") {
-		// フォローユーザのフォト一覧
-		titleLabel = Ti.UI.createLabel(style.photoListFirendsTitleLabel);	
-		photoListWin.titleControl = titleLabel;
-//		photoListWin.rightNavButton = updateButton;
-		articleCount = 8;
-
-	} else 	if (_type == "user") {
-		// 指定ユーザのフォト一覧
-		titleView = Ti.UI.createView(style.photoListTitleView);
-		titleLabel = Ti.UI.createLabel(style.photoListPhotoTitleLabel);	
-		titleView.add(titleLabel);		
-		photoListWin.titleControl = titleView;
-
-	} else 	if (_type == "like") {
-		// ライクなフォト一覧
-		titleView = Ti.UI.createView(style.photoListTitleView);
-		titleLabel = Ti.UI.createLabel(style.photoListLikeTitleLabel);	
-		titleView.add(titleLabel);		
-		photoListWin.titleControl = titleView;
-	}
-
-	var photoListTableView = Ti.UI.createTableView(style.photoListTableView);
-	photoListTableView.headerPullView = getTableHeader();
-	photoListWin.add(photoListTableView);
+	var friendsTableView = Ti.UI.createTableView(style.friendsTableView);
+	friendsTableView.headerPullView = getTableHeader();
+	friendsWin.add(friendsTableView);
 
 	// ビューの更新
 	updateArticle();
@@ -275,7 +245,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		tabGroup.add(actInd);
 
     	resetPullHeader();
-		photoListTableView.data = [];
+		friendsTableView.data = [];
     	prevArticleIndex = null;
     	nextArticleFlag = false;
     	updateArticle();
@@ -286,8 +256,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	});
 
 	// ライク・コメント編集を反映
-	photoListWin.addEventListener('refresh', function(e){
-		Ti.API.debug('[event]photoListWin.refresh:');
+	friendsWin.addEventListener('refresh', function(e){
+		Ti.API.debug('[event]friendsWin.refresh:');
 		for (var i=0; i<refreshTarget.length; i++) {
 			if (refreshTarget[i].no == e.articleData.no) {
 				refreshTarget[i].likeLabel.text = model.getLikeCount(e.articleData.no);
@@ -298,11 +268,11 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	});
 
 	// 右スワイプで前の画面に戻る
-	photoListWin.addEventListener('swipe',function(e){
-		Ti.API.debug('[event]photoListWin.swipe:');
+	friendsWin.addEventListener('swipe',function(e){
+		Ti.API.debug('[event]friendsWin.swipe:');
 		if (e.direction == 'right') {
-//			tabGroup.activeTab.close(photoListWin);
-			photoListWin.close();
+//			tabGroup.activeTab.close(friendsWin);
+			friendsWin.close();
 		}
 	});
 
@@ -326,7 +296,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	};
 	 
 	// スクロールで発生するイベント
-	photoListTableView.addEventListener('scroll',function(e){
+	friendsTableView.addEventListener('scroll',function(e){
 		// 表示部分の最上位置からのオフセット
 	    offset = e.contentOffset.y;
 		// 下スクロールで、上部のヘッダが一部表示している場合
@@ -346,7 +316,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	});
 		
 	// スクロールの終了時に発生するイベント
-	photoListTableView.addEventListener('dragEnd',function(e){
+	friendsTableView.addEventListener('dragEnd',function(e){
 		// 下スクロールで、上部のヘッダがすべて表示されたらを最新データを更新
 	    if (pulling && !reloading && offset < -80){
 	        pulling = false;
@@ -358,7 +328,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	        setTimeout(function(){
 	        	resetPullHeader(e.source);
 				// ビューの更新
-				photoListTableView.data = [];
+				friendsTableView.data = [];
 		    	prevArticleIndex = null;
 		    	nextArticleFlag = false;
 	        	updateArticle();
@@ -366,5 +336,5 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	    }
 	});
 
-	return photoListWin;
+	return friendsWin;
 }

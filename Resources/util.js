@@ -38,7 +38,10 @@ exports.util = {
 		var year = _formatedDate.substr(0,4);
 		var month = _formatedDate.substr(5,2) - 1;
 		var day = _formatedDate.substr(8,2);
-		return new Date(year, month, day);
+		var hour = _formatedDate.substr(11,2);
+		var minute = _formatedDate.substr(14,2);
+		var second = _formatedDate.substr(17,2);
+		return new Date(year, month, day, hour, minute, second);
 	},
 
 	// 時間フォーマットに変換
@@ -59,7 +62,10 @@ exports.util = {
 		var year = _formatedDate.substr(0,4);
 		var month = _formatedDate.substr(5,2);
 		var day = _formatedDate.substr(8,2);
-		return {year:year, mohth:month, day:day};
+		var hour = _formatedDate.substr(11,2);
+		var minute = _formatedDate.substr(14,2);
+		var second = _formatedDate.substr(17,2);
+		return {year:year, mohth:month, day:day, hour:hour, minute:minute, second:second};
 	},
 
 }

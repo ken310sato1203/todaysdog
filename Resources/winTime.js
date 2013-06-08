@@ -165,9 +165,17 @@ exports.createWindow = function(_userData, _diaryData){
 // ---------------------------------------------------------------------
 	var timeWin = Ti.UI.createWindow(style.timeWin);
 	// タイトルの表示
-	var monthTitle = Ti.UI.createLabel(style.timeTitleLabel);	
-	monthTitle.text =  year + ' ' + monthName[month - 1] + ' ' + day;
+//	var titleView = Ti.UI.createView(style.timeTitleView);	
+	var monthTitle = Ti.UI.createLabel(style.timeTitleLabel);
+	var weekday = util.diary.weekday[new Date(year, month-1, day).getDay()];
+	monthTitle.text =  month + '/' + day + ' ' + weekday.text;
+
+//	titleView.add(monthTitle);
+//	timeWin.leftNavButton = titleView;
+	// 日別・時間別表示切り替えボタン
+//	var tabbedBar = Titanium.UI.iOS.createTabbedBar(style.timeTitleTabbedBar);
 	timeWin.titleControl = monthTitle;
+	timeWin.barImage = 'images/icon/titleback.png';
 
 	// リストボタンの表示
 	var listButton = Titanium.UI.createButton(style.timeListButton);

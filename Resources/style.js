@@ -1159,13 +1159,6 @@ exports.style = {
 	},
 
 
-// winFriends -------------------------------------------------------
-	friendsWin:{
-		backgroundColor: '#dedede',
-		barColor: '#a9a9a9',
-		title: '犬とも',
-	},
-
 // winMydog -------------------------------------------------------
 	mydogWin:{
 		backgroundColor: '#dedede',
@@ -1376,13 +1369,28 @@ exports.style = {
 		// カスタムプロパティ
 		nextWin: null,
 	},
+	diaryTitleView:{
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+
 	diaryTitleLabel:{
-		width: '200dp',
-		textAlign: 'center',
+		width: Ti.UI.SIZE,
+		left: '10dp',
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
+	},
+
+	diaryTitleTabbedBar:{
+		width: '130dp',
+		height: '30dp',
+		backgroundColor: '#b6b6b6',
+		style: Titanium.UI.iPhone.SystemButtonStyle.BAR,
+	    labels: ['Month', 'Day'],
+	    index: 1,
 	},
 
 	diaryTableView:{
@@ -1464,14 +1472,29 @@ exports.style = {
 		prevWin : null,
 		openFlag : false,
 	},
+	timeTitleView:{
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+
 	timeTitleLabel:{
-		width: '200dp',
-		textAlign: 'center',
+		width: Ti.UI.SIZE,
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
 	},
+
+	timeTitleTabbedBar:{
+		width: '130dp',
+		height: '30dp',
+		backgroundColor: '#b6b6b6',
+		style: Titanium.UI.iPhone.SystemButtonStyle.BAR,
+	    labels: ['Month', 'Day'],
+	    index: 1,
+	},
+
 	timeListButton:{
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -1568,6 +1591,200 @@ exports.style = {
 		image : 'images/icon/diary_plus.png',
 	},
 
+// winFriends -------------------------------------------------------
+	friendsWin:{
+		backgroundColor: '#dedede',
+		barColor: '#a9a9a9',
+		title: 'わんとも',
+	},
+
+	friendsTitleView:{
+		layout: 'absolute',
+		top: '0dp',
+		left: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+	},
+
+	friendsUpdateButton:{
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		textAlign: 'center',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		title: '更新する',
+	},
+
+	friendsTableView:{ 
+		separatorColor: 'transparent',
+		data: [],
+	},
+	friendsArticleTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
+	friendsNextTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
+	friendsDateTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
+
+	friendsDateView:{
+		top: '0dp',
+		width: '100%',
+		height: '30dp',
+		backgroundColor: '#eeeeee',
+	},
+	friendsDateLabel:{
+		left: '10dp',
+//		font: {fontSize:15, fontWeight:'bold'},
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+
+	friendsArticleListView:{
+		layout: 'vertical',
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	friendsArticleView:{
+		layout: 'horizontal',
+		top: '0dp',
+		bottom: '1dp',
+		left: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+	},
+	friendsPhotoImage:{
+		top: '5dp',
+		bottom: '5dp',
+		left: '10dp',
+		width: '60dp',
+		height: '60dp',
+		// カスタムプロパティ
+		articleData: null,
+	},
+	friendsTextView:{
+		layout: 'vertical',
+		top: '5dp',
+		bottom: '5dp',
+		left: '10dp',
+		right: '10dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	friendsNameLabel:{
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+	friendsTextLabel:{
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+
+	friendsTimeView:{
+		top: '5dp',
+		left: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+	},
+	friendsTimeLabel:{
+		bottom: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'right',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+
+	friendsCountView:{
+		layout: 'horizontal',
+		top: '0dp',
+		right: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	friendsLikeIconImage:{
+		left: '0dp',
+		width: '18dp',
+		height: '18dp',
+		image: 'images/icon/like.gif',
+	},
+	friendsLikeLabel:{
+		left: '6dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:11, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+	friendsCommentIconImage:{
+		left: '12dp',
+		width: '15dp',
+		height: '15dp',
+		image: 'images/icon/light_comment.png',
+	},
+	friendsCommentLabel:{
+		left: '8dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:11, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+
+	friendsNextView:{
+		top: '0dp',
+		left: '0dp',
+		width: '100%',
+		height: '40dp',
+//		backgroundColor: '#dedede',
+	},
+	friendsNextButton:{
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+		textAlign: 'center',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#000',
+		title: '続きを読む',
+	},
+	friendsNoDataLabel:{
+		top: '5dp',
+		width: '90dp',
+		height: '15dp',
+		backgroundColor: '#dedede',
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#000',
+		text: 'データがありません'
+	},
+	
 // winToay -------------------------------------------------------
 	todayWin:{
 		backgroundColor: 'white',

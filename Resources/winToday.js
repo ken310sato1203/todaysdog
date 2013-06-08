@@ -21,7 +21,7 @@ exports.createWindow = function(_userData){
 		day = now.getDate();
 		day = Math.floor(Math.random() * 2) + 1;
 		hour = now.getHours();
-		weekday = util.diary.weekday[(now).getDay()];
+		weekday = util.diary.weekday[now.getDay()];
 	};
 
 	// StampViewの取得
@@ -80,6 +80,7 @@ exports.createWindow = function(_userData){
 					// timeWinを新規オープン
 					var timeWin = win.createTimeWindow(_userData, e.row.diaryData);
 					timeWin.prevWin = targetTab.window;
+					timeWin.backButtonTitle = 'Month';
 					targetTab.open(timeWin, {animated:false});
 	
 					// diaryWinを更新
@@ -210,6 +211,7 @@ exports.createWindow = function(_userData){
 	// タイトルの表示
 	var monthTitle = Ti.UI.createLabel(style.todayTitleLabel);	
 	todayWin.titleControl = monthTitle;
+//	todayWin.barImage = 'images/icon/titleback.png';
 
 	var todayTableView = Ti.UI.createTableView(style.todayTableView);
 	todayTableView.headerPullView = getTableHeader();
@@ -270,7 +272,6 @@ exports.createWindow = function(_userData){
 	todayTableView.addEventListener('scroll',function(e){
 		// 表示部分の最上位置からのオフセット
 	    offset = e.contentOffset.y;
-        Ti.API.debug('[func]offset:' + offset + ' pulling:' + pulling + ' reloading:' + reloading);
 		// 下スクロールで、上部のヘッダが一部表示している場合
 	    if (pulling && !reloading && offset > -80 && offset < 0){
 	        pulling = false;

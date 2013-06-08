@@ -138,6 +138,8 @@ exports.createWindow = function(_userData){
 			if (e.source.objectName != "diaryPhotoImage") {
 				var timeWin = win.createTimeWindow(_userData, e.row.diaryData);
 				timeWin.prevWin = diaryWin;
+				timeWin.backButtonTitle = 'Month';
+
 				win.openTabWindow(timeWin);
 				diaryWin.nextWin = timeWin;
 			}
@@ -176,8 +178,13 @@ exports.createWindow = function(_userData){
 // ---------------------------------------------------------------------
 	var diaryWin = Ti.UI.createWindow(style.diaryWin);
 	// タイトルの表示
-	var monthTitle = Ti.UI.createLabel(style.diaryTitleLabel);	
-	monthTitle.text = year + ' ' + monthName[month-1];
+//	var titleView = Ti.UI.createView(style.diaryTitleView);	
+	var monthTitle = Ti.UI.createLabel(style.diaryTitleLabel);
+	monthTitle.text =  year + ' ' + monthName[month-1];
+//	titleView.add(monthTitle);
+//	diaryWin.leftNavButton = titleView;
+	// 日別・時間別表示切り替えボタン
+//	var tabbedBar = Titanium.UI.iOS.createTabbedBar(style.diaryTitleTabbedBar);
 	diaryWin.titleControl = monthTitle;
 
 	var thisDiaryView = null;
