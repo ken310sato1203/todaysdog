@@ -211,13 +211,14 @@ exports.createWindow = function(_userData){
 	// タイトルの表示
 	var monthTitle = Ti.UI.createLabel(style.todayTitleLabel);	
 	todayWin.titleControl = monthTitle;
-//	todayWin.barImage = 'images/icon/titleback.png';
 
 	var todayTableView = Ti.UI.createTableView(style.todayTableView);
 	todayTableView.headerPullView = getTableHeader();
 	todayWin.add(todayTableView);
+
 	// ビューの更新
 	updateTableView();
+
 
 // ---------------------------------------------------------------------
 	// 更新用イベント
@@ -227,6 +228,7 @@ exports.createWindow = function(_userData){
 		updateTableView();
 	});
 
+/*
 	// タブバーの表示／非表示
 	var start = null;
 	var end = null;
@@ -248,6 +250,7 @@ exports.createWindow = function(_userData){
 			start = null;
 		}
 	});
+*/
 
 	// 下スクロールで上部ヘッダがすべて表示するまでひっぱったかどうかのフラグ
 	var pulling = false;

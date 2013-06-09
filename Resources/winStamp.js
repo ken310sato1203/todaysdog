@@ -150,6 +150,9 @@ exports.createWindow = function(_userData, _stampData){
 	// タイトルの表示
 	var monthTitle = Ti.UI.createLabel(style.stampTitleLabel);	
 	stampWin.titleControl = monthTitle;
+	// 戻るボタンの表示
+	var backButton = Titanium.UI.createButton(style.stampBackButton);
+	stampWin.leftNavButton = backButton;
 	// 次へボタンの表示
 	var nextButton = Titanium.UI.createButton(style.stampNextButton);
 	stampWin.rightNavButton = nextButton;
@@ -165,6 +168,12 @@ exports.createWindow = function(_userData, _stampData){
 //			tabGroup.activeTab.close(stampWin);
 			stampWin.close();
 		}
+	});
+
+	// 戻るボタンをクリック
+	backButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]backButton.click:');
+		stampWin.close();
 	});
 
 	// 次へボタンをクリック

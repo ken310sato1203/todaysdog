@@ -18,7 +18,7 @@ exports.style = {
 		color: 'white',
 		message: 'Loading...',
 	},
-				
+
 	commonTableHeader:{
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
 		height: '60dp',
@@ -65,43 +65,61 @@ exports.style = {
 	},	
 	
 // tab -------------------------------------------------------
-	tabGroup:{
-//		bottom: '-50dp',
-//		navBarHidden : true,
+	tabGroupHidden:{
 		// カスタムプロパティ
-		showFlag: false,
 	},
-	todayTab:{
-		icon: 'images/icon/light_square.png',
-		title: 'today',
+	tabHidden:{
 		// カスタムプロパティ
-		objectName: "todayTab",
 	},
-	friendsTab:{
-		icon: 'images/icon/light_chat.png',
-		title: 'friends',
-		objectName: "friendsTab",
+	tabGroupView:{
+		layout: 'horizontal',
+		// ステータスバー(20)＋タイトルバー(44)が座標の開始位置なので、その分とタブバーの高さを引く
+//		top: (Ti.Platform.displayCaps.platformHeight - 108) + 'dp',
+		bottom: '0dp',
+		left: '0dp',
+		width: '100%',
+		height: '44dp',
+		backgroundColor: '#e74c3c',
+//		backgroundColor: '#d86853',
+//		backgroundColor: '#48a59b',
+//		backgroundColor: '#676769',
+//		backgroundColor: '#ed9764',
+//		backgroundColor: '#423737',
+//		backgroundColor: '#6ea1c9',
+//		backgroundColor: '#c67267',
+//		backgroundColor: '#63768a',
+//		backgroundColor: '#61594e',
 	},
-	stampTab:{
-		icon: 'images/icon/light_plus.png',
-		title: 'top',
-		objectName: "stampTab",
+	tabView:{
+//		layout: 'vertical',
+		top: '0dp',
+		left: '0dp',
+		width: '80dp',
+		height: '44dp',
 	},
-	diaryTab:{
-		icon: 'images/icon/light_diary.png',
-		title: 'diary',
-		objectName: "diaryTab",
+	tabImage:{
+//		top: '3dp',
+		width: '28dp',
+		height: '28dp',
+		bubbleParent: true,
+		// カスタムプロパティ
+		tabIndex: null,
 	},
-	profileTab:{
-		icon: 'images/icon/light_pegman.png',
-		title: 'profile',
-		objectName: "profileTab",
+	tabLabel:{
+		top: '1dp',
+		width: '60dp',
+		height: '10dp',
+		textAlign: 'center',
+		font: {fontSize:10, fontFamily:'Helvetica Neue', fontWeight:'bold'},
+		color: 'white',
 	},
 
 // winPhoto -------------------------------------------------------
 	photoWin:{
 		backgroundColor: '#dedede',
-		barColor: '#a9a9a9',
+//		barColor: '#a9a9a9',
+		barImage: 'images/icon/titlebar.png',
+		tabBarHidden: true,
 		title: 'フォト',
 		// カスタムプロパティ
 		prevWin : null,
@@ -393,6 +411,7 @@ exports.style = {
 
 	photoPhotoFullWin:{
 		backgroundColor: 'black',
+		tabBarHidden: true,
 	},
 	photoPhotoFullImage:{
 		top: '0dp',
@@ -404,7 +423,9 @@ exports.style = {
 // winProfile -------------------------------------------------------
 	profileWin:{
 		backgroundColor: '#dedede',
-		barColor: '#a9a9a9',
+//		barColor: '#a9a9a9',
+		barImage: 'images/icon/titlebar.png',
+		tabBarHidden: true,
 		title: 'プロフィール',
 	},
 
@@ -657,7 +678,9 @@ exports.style = {
 // winPhotoList -------------------------------------------------------
 	photoListWin:{
 		backgroundColor: '#dedede',
-		barColor: '#a9a9a9',
+//		barColor: '#a9a9a9',
+		barImage: 'images/icon/titlebar.png',
+		tabBarHidden: true,
 	},
 
 	photoListTitleView:{
@@ -874,7 +897,9 @@ exports.style = {
 // winUserList -------------------------------------------------------
 	userListWin:{
 		backgroundColor: '#dedede',
-		barColor: '#a9a9a9',
+//		barColor: '#a9a9a9',
+		barImage: 'images/icon/titlebar.png',
+		tabBarHidden: true,
 		// カスタムプロパティ
 		prevWin : null,
 	},
@@ -1011,7 +1036,9 @@ exports.style = {
 // winCommentList -------------------------------------------------------
 	commentListWin:{
 		backgroundColor: '#dedede',
-		barColor: '#a9a9a9',
+//		barColor: '#a9a9a9',
+		barImage: 'images/icon/titlebar.png',
+		tabBarHidden: true,
 		// カスタムプロパティ
 		prevWin : null,
 	},
@@ -1162,7 +1189,9 @@ exports.style = {
 // winMydog -------------------------------------------------------
 	mydogWin:{
 		backgroundColor: '#dedede',
-		barColor: '#a9a9a9',
+//		barColor: '#a9a9a9',
+		barImage: 'images/icon/titlebar.png',
+		tabBarHidden: true,
 	},
 	mydogTitleLabel:{
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
@@ -1236,7 +1265,9 @@ exports.style = {
 // winCalendar -------------------------------------------------------
 	calendarWin:{
 		backgroundColor: '#dedede',
-		barColor: '#a9a9a9',
+//		barColor: '#a9a9a9',
+		barImage: 'images/icon/titlebar.png',
+		tabBarHidden: true,
 	},
 	calendarTitleLabel:{
 		width: '200dp',
@@ -1309,7 +1340,9 @@ exports.style = {
 // winCamera -------------------------------------------------------
 	cameraWin:{
 		backgroundColor: '#dedede',
-		barColor: '#a9a9a9',
+//		barColor: '#a9a9a9',
+		barImage: 'images/icon/titlebar.png',
+		tabBarHidden: true,
 	},
 	cameraTitleLabel:{
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
@@ -1365,7 +1398,9 @@ exports.style = {
 // winDiary -------------------------------------------------------
 	diaryWin:{
 		backgroundColor: '#dedede',
-		barColor: '#a9a9a9',
+//		barColor: '#a9a9a9',
+		barImage: 'images/icon/titlebar.png',
+		tabBarHidden: true,
 		// カスタムプロパティ
 		nextWin: null,
 	},
@@ -1467,7 +1502,9 @@ exports.style = {
 // winTime -------------------------------------------------------
 	timeWin:{
 		backgroundColor: '#dedede',
-		barColor: '#a9a9a9',
+//		barColor: '#a9a9a9',
+		barImage: 'images/icon/titlebar.png',
+		tabBarHidden: true,
 		// カスタムプロパティ
 		prevWin : null,
 		openFlag : false,
@@ -1594,7 +1631,9 @@ exports.style = {
 // winFriends -------------------------------------------------------
 	friendsWin:{
 		backgroundColor: '#dedede',
-		barColor: '#a9a9a9',
+//		barColor: '#a9a9a9',
+		barImage: 'images/icon/titlebar.png',
+		tabBarHidden: true,
 		title: 'わんとも',
 	},
 
@@ -1788,9 +1827,12 @@ exports.style = {
 // winToay -------------------------------------------------------
 	todayWin:{
 		backgroundColor: 'white',
-		barColor: '#a9a9a9',
+//		barColor: '#a9a9a9',
+		barImage: 'images/icon/titlebar.png',
+		backButtonTitleImage: 'images/icon/titlebar.png',
 		// タイトルバーを隠す
 //		navBarHidden: true,
+		tabBarHidden: true,
 		// カスタムプロパティ
 		prevWin : null,
 	},
@@ -1801,19 +1843,10 @@ exports.style = {
 		color: 'white', 
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
-		text: '今日のわんこ', 
+//		text: '今日のわんこ', 
+		text: (Ti.Platform.displayCaps.platformHeight - 100) + 'dp',
 	},
 
-	todayScrollView:{
-		layout: 'vertical',
-//		layout: 'absolute',
-		contentWidth:'auto',
-		contentHeight:'auto',
-		top:0,
-		showVerticalScrollIndicator:true,
-		showHorizontalScrollIndicator:true,
-		backgroundColor: 'white',
-	},
 	todayTableView:{
 		top: '0dp',
 		height: Ti.UI.SIZE,
@@ -1937,7 +1970,10 @@ exports.style = {
 // winStamp -------------------------------------------------------
 	stampWin:{
 		backgroundColor: '#dedede',
-		barColor: '#a9a9a9',
+//		barColor: '#a9a9a9',
+		barImage: 'images/icon/titlebar.png',
+		backButtonTitleImage: null,
+		tabBarHidden: true,
 		// カスタムプロパティ
 		prevWin : null,
 	},
@@ -1950,13 +1986,19 @@ exports.style = {
 		shadowColor: '#696969', 
 		text: 'スタンプの選択', 
 	},
+	stampBackButton:{
+		width: '28dp',
+		height: '28dp',
+		backgroundImage:'images/icon/arrow_left.png',
+	},
 	stampNextButton:{
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
-		textAlign: 'center',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		title: '次へ',
+		width: '28dp',
+		height: '28dp',
+//		backgroundColor: '#dedede',
+		backgroundImage:'images/icon/arrow_right.png',
+//		textAlign: 'center',
+//		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+//		title: '次へ',
 		enabled: false,
 	},
 
@@ -2009,7 +2051,9 @@ exports.style = {
 // winStampPost -------------------------------------------------------
 	stampPostWin:{
 		backgroundColor: '#dedede',
-		barColor: '#a9a9a9',
+//		barColor: '#a9a9a9',
+		barImage: 'images/icon/titlebar.png',
+		tabBarHidden: true,
 		// カスタムプロパティ
 		prevWin : null,
 	},
@@ -2133,7 +2177,9 @@ exports.style = {
 // winStampText -------------------------------------------------------
 	stampTextWin:{
 		backgroundColor: '#dedede',
-		barColor: '#a9a9a9',
+//		barColor: '#a9a9a9',
+		barImage: 'images/icon/titlebar.png',
+		tabBarHidden: true,
 		// カスタムプロパティ
 		prevWin : null,
 	},
