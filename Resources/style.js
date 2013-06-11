@@ -125,20 +125,6 @@ exports.style = {
 		prevWin : null,
 	},
 
-	photoTableView:{ 
-		bottom: '10dp',
-		backgroundColor: '#dedede',
-		separatorColor: 'transparent',
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		data: [],
-	},
-	photoArticleTableRow:{ 
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
-		touchEnabled: false,
-	},
-
 	photoTitleView:{
 		layout: 'absolute',
 		top: '0dp',
@@ -163,30 +149,93 @@ exports.style = {
 //		shadowColor: '#696969', 
 	},
 
+	photoTableView:{ 
+//		bottom: '10dp',
+		backgroundColor: '#dedede',
+		separatorColor: 'transparent',
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		data: [],
+	},
+	photoArticleTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		touchEnabled: false,
+	},
+
 	photoArticleView:{
 		layout: 'vertical',
-		top: '10dp',
-	    bottom: '5dp',
-		width: '224dp',
+		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
 	},
+	photoPhotoView:{
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
+		backgroundColor: 'white',
+	},
 	photoPhotoImage:{
-		top: '10dp',
-		width: '200dp',
-		height: '200dp',
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
 		backgroundColor: 'black',
 		// カスタムプロパティ
 		articleData: null,
 	},
-	photoTextLabel:{
-		top: '10dp',
-	    bottom: '5dp',
-		width: '200dp',
+	photoArticleTextView:{
+		layout: 'horizontal',
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+	},
+	photoTextView:{
+		layout: 'vertical',
+		top: '5dp',
+		bottom: '5dp',
+		left: '10dp',
+		right: '10dp',
+		// photoLikeStampImage(10+55)と余白（10+10）を除いたサイズ
+		width: (Ti.Platform.displayCaps.platformWidth - 85) + 'dp',
+		height: Ti.UI.SIZE,
+	},
+	photoNameLabel:{
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
+	},
+	photoTextLabel:{
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+	photoTimeLabel:{
+		top: '5dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+	photoLikeStampImage:{
+//		top: '5dp',
+		bottom: '5dp',
+		right: '10dp',
+		width: '55dp',
+		height: '55dp',
+		image: 'images/icon/b_like.png',
+		// カスタムプロパティ
+		clickFlag: false,
 	},
 
 	photoButtonView:{
@@ -1708,12 +1757,12 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
 	},
-	friendsPhotoImage:{
+	friendsUserIconImage:{
 		top: '5dp',
 		bottom: '5dp',
 		left: '10dp',
-		width: '60dp',
-		height: '60dp',
+		width: '55dp',
+		height: '55dp',
 		// カスタムプロパティ
 		articleData: null,
 	},
@@ -1723,7 +1772,8 @@ exports.style = {
 		bottom: '5dp',
 		left: '10dp',
 		right: '10dp',
-		width: Ti.UI.SIZE,
+		// friendsUserIconImageの幅(10+55)と余白（10+10）を除いたサイズ
+		width: (Ti.Platform.displayCaps.platformWidth - 85) + 'dp',
 		height: Ti.UI.SIZE,
 	},
 	friendsNameLabel:{

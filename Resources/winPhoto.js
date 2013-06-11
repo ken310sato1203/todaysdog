@@ -121,21 +121,36 @@ exports.createWindow = function(_articleData){
 	photoWin.add(photoTableView);
 
 	// 記事の表示
-	var articleView = Ti.UI.createView(style.photoArticleView);
 	var articleTableRow = Ti.UI.createTableViewRow(style.photoArticleTableRow);
+	photoTableView.appendRow(articleTableRow);
+	var articleView = Ti.UI.createView(style.photoArticleView);
 	articleTableRow.add(articleView);
-	photoTableView.appendRow(articleTableRow);					
+
+	var photoView = Ti.UI.createView(style.photoPhotoView);
+	articleView.add(photoView);
 	var photoImage = Ti.UI.createImageView(style.photoPhotoImage);
 	photoImage.image = 'images/photo/' + _articleData.no + '.jpg';
 	// カスタムプロパティに記事データを格納
 	photoImage.articleData = _articleData;
-	var textLabel = Ti.UI.createLabel(style.photoTextLabel);
-	textLabel.text = _articleData.date.substring(0,10) + '\n' + _articleData.text;			
-	articleView.add(photoImage);
-	articleView.add(textLabel);
+	photoView.add(photoImage);
 
-	var photoButtonView = Ti.UI.createView(style.photoButtonView);
-	articleView.add(photoButtonView);
+	var articleTextView = Ti.UI.createView(style.photoArticleTextView);
+	articleView.add(articleTextView);
+	var textView = Ti.UI.createView(style.photoTextView);
+	articleTextView.add(textView);
+
+	var nameLabel = Ti.UI.createLabel(style.photoNameLabel);
+	nameLabel.text = _articleData.user;
+	var textLabel = Ti.UI.createLabel(style.photoTextLabel);
+	textLabel.text = _articleData.text;			
+	var timeLabel = Ti.UI.createLabel(style.photoTimeLabel);
+	timeLabel.text = _articleData.date;
+	textView.add(nameLabel);
+	textView.add(textLabel);
+	textView.add(timeLabel);
+
+	var likeStampImage = Ti.UI.createImageView(style.photoLikeStampImage);
+	articleTextView.add(likeStampImage);
 
 	// ライクボタンの表示
 	var likeButton = Ti.UI.createButton(style.photoLikeButton);
@@ -147,7 +162,7 @@ exports.createWindow = function(_articleData){
 	likeButton.add(likeButtonIconImage);
 	var likeButtonLabel = Ti.UI.createLabel(style.photoLikeButtonLabel);
 	likeButton.add(likeButtonLabel);
-	photoButtonView.add(likeButton);
+//	photoButtonView.add(likeButton);
 
 	// コメントボタンの表示
 	var commentButton = Ti.UI.createButton(style.photoCommentButton);
@@ -155,7 +170,7 @@ exports.createWindow = function(_articleData){
 	commentButton.add(commentButtonIconImage);
 	var commentButtonLabel = Ti.UI.createLabel(style.photoCommentButtonLabel);
 	commentButton.add(commentButtonLabel);
-	photoButtonView.add(commentButton);
+//	photoButtonView.add(commentButton);
 
 	// ライク数の表示
 	var likeCountTableRow = Ti.UI.createTableViewRow(style.photoLikeCountTableRow);

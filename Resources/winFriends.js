@@ -50,11 +50,11 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		for (var i=0; i<_articleList.length; i++) {	
 			var articleView = Ti.UI.createView(style.friendsArticleView);
 			articleListView.add(articleView);
-			var photoImage = Ti.UI.createImageView(style.friendsPhotoImage);
-			photoImage.image = 'images/icon/' + _articleList[i].user + '.png';
+			var userIconImage = Ti.UI.createImageView(style.friendsUserIconImage);
+			userIconImage.image = 'images/icon/' + _articleList[i].user + '.png';
 			// カスタムプロパティに記事データを格納
-			photoImage.articleData = _articleList[i];
-			articleView.add(photoImage);
+			userIconImage.articleData = _articleList[i];
+			articleView.add(userIconImage);
 
 			var textView = Ti.UI.createView(style.friendsTextView);
 			articleView.add(textView);
@@ -91,8 +91,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			refreshTarget.push({no:_articleList[i].no, likeLabel:likeLabel, commentLabel:commentLabel});
 			
 			// 各記事のタップでフォト画面へ遷移
-			photoImage.addEventListener('click',function(e){
-				Ti.API.debug('[event]photoImage.click:');
+			userIconImage.addEventListener('click',function(e){
+				Ti.API.debug('[event]userIconImage.click:');
 				e.source.opacity = 0.5;
 				var photoWin = win.createPhotoWindow(e.source.articleData);
 				photoWin.prevWin = friendsWin;
