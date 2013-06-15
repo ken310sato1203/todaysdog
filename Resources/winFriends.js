@@ -58,14 +58,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 			var textView = Ti.UI.createView(style.friendsTextView);
 			articleView.add(textView);
-
 			var nameLabel = Ti.UI.createLabel(style.friendsNameLabel);
 			nameLabel.text = _articleList[i].user;
 			textView.add(nameLabel);
 			var textLabel = Ti.UI.createLabel(style.friendsTextLabel);
 			textLabel.text = _articleList[i].text;
 			textView.add(textLabel);
-
 			var timeView = Ti.UI.createView(style.friendsTimeView);
 			textView.add(timeView);
 			var timeLabel = Ti.UI.createLabel(style.friendsTimeLabel);
