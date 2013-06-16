@@ -173,7 +173,6 @@ exports.win = {
 			tabImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]tabImage.click:');
 				tabGroup.activeTab = tabGroup.tabs[e.source.tabIndex];
-//				tabGroup.activeTab.window.barImage = 'images/icon/titlebar.png';
 			});
 		}
 

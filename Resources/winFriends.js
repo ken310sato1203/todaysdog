@@ -52,12 +52,13 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			articleListView.add(articleView);
 			var userIconImage = Ti.UI.createImageView(style.friendsUserIconImage);
 			userIconImage.image = 'images/icon/' + _articleList[i].user + '.png';
-			// カスタムプロパティに記事データを格納
-			userIconImage.articleData = _articleList[i];
 			articleView.add(userIconImage);
 
 			var textView = Ti.UI.createView(style.friendsTextView);
+			// カスタムプロパティに記事データを格納
+			textView.articleData = _articleList[i];
 			articleView.add(textView);
+
 			var nameLabel = Ti.UI.createLabel(style.friendsNameLabel);
 			nameLabel.text = _articleList[i].user;
 			textView.add(nameLabel);
@@ -89,12 +90,21 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			refreshTarget.push({no:_articleList[i].no, likeLabel:likeLabel, commentLabel:commentLabel});
 			
 			// 各記事のタップでフォト画面へ遷移
+			textView.addEventListener('click',function(e){
+				Ti.API.debug('[event]textView.click:');
+				if (e.source.objectName == 'friendsNameLabel' || e.source.objectName == 'friendsTextLabel') {
+					var photoWin = win.createPhotoWindow(e.source.getParent().articleData);
+					photoWin.prevWin = friendsWin;
+					win.openTabWindow(photoWin);
+				}
+			});
+			// ユーザアイコンのタップでプロフィール画面へ遷移
 			userIconImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]userIconImage.click:');
 				e.source.opacity = 0.5;
-				var photoWin = win.createPhotoWindow(e.source.articleData);
-				photoWin.prevWin = friendsWin;
-				win.openTabWindow(photoWin);
+				var profileWin = win.createProfileWindow(_userData);
+				profileWin.prevWin = friendsWin;
+				win.openTabWindow(profileWin);
 				e.source.opacity = 1.0;
 			});
 		}		

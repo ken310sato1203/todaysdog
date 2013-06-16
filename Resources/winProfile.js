@@ -10,6 +10,10 @@ exports.createWindow = function(_userData){
 	titleView.add(titleLabel);
 	profileWin.titleControl = titleView;
 
+	// 戻るボタンの表示
+	var backButton = Titanium.UI.createButton(style.commonBackButton);
+	profileWin.leftNavButton = backButton;
+
 	// 「保存」自分のプロフィールを編集するボタン
 	var saveButton = Titanium.UI.createButton(style.profileSaveButton);
 	// 「フォロー中」フォローユーザを解除するボタン
@@ -250,6 +254,12 @@ exports.createWindow = function(_userData){
 	});
 
 // ---------------------------------------------------------------------
+	// 戻るボタンをクリック
+	backButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]backButton.click:');
+		profileWin.close();
+	});
+
 	// 「保存」ボタン
 	saveButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]saveButton.click:');

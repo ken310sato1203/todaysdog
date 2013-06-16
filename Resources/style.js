@@ -62,7 +62,19 @@ exports.style = {
 	    bottom: '10dp',
 	    width: '23dp',
 	    height: '60dp',
-	},	
+	},
+	
+	commonBackButton:{
+		width: '28dp',
+		height: '28dp',
+		backgroundImage:'images/icon/arrow_left.png',
+	},
+	commonNextButton:{
+		width: '28dp',
+		height: '28dp',
+		backgroundImage:'images/icon/arrow_right.png',
+		enabled: false,
+	},
 	
 // tab -------------------------------------------------------
 	tabGroupHidden:{
@@ -79,6 +91,7 @@ exports.style = {
 		left: '0dp',
 		width: '100%',
 		height: '44dp',
+//		backgroundColor: '#E87C8C',
 		backgroundColor: '#e74c3c',
 //		backgroundColor: '#d86853',
 //		backgroundColor: '#48a59b',
@@ -136,7 +149,6 @@ exports.style = {
 		left: '0dp',
 		width: '28dp',
 		height: '28dp',
-		backgroundColor: 'black',
 	},
 	photoTitleNameLabel:{
 		left: '33dp',
@@ -1849,8 +1861,6 @@ exports.style = {
 		left: '10dp',
 		width: '55dp',
 		height: '55dp',
-		// カスタムプロパティ
-		articleData: null,
 	},
 	friendsTextView:{
 		layout: 'vertical',
@@ -1861,24 +1871,30 @@ exports.style = {
 		// friendsUserIconImageの幅(10+55)と余白（10+10）を除いたサイズ
 		width: (Ti.Platform.displayCaps.platformWidth - 85) + 'dp',
 		height: Ti.UI.SIZE,
+		// カスタムプロパティ
+		articleData: null,
 	},
 	friendsNameLabel:{
 		top: '0dp',
 		left: '0dp',
-		width: Ti.UI.SIZE,
+		width: '100%',
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
+		// カスタムプロパティ
+		objectName : 'friendsNameLabel',
 	},
 	friendsTextLabel:{
 		top: '0dp',
 		left: '0dp',
-		width: Ti.UI.SIZE,
+		width: '100%',
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
+		// カスタムプロパティ
+		objectName : 'friendsTextLabel',
 	},
 
 	friendsTimeView:{
@@ -1981,8 +1997,7 @@ exports.style = {
 		color: 'white', 
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
-//		text: '今日のわんこ', 
-		text: (Ti.Platform.displayCaps.platformHeight - 100) + 'dp',
+		text: '今日のわんこ', 
 	},
 
 	todayTableView:{
@@ -2127,21 +2142,6 @@ exports.style = {
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
 		text: 'スタンプの選択', 
-	},
-	stampBackButton:{
-		width: '28dp',
-		height: '28dp',
-		backgroundImage:'images/icon/arrow_left.png',
-	},
-	stampNextButton:{
-		width: '28dp',
-		height: '28dp',
-//		backgroundColor: '#dedede',
-		backgroundImage:'images/icon/arrow_right.png',
-//		textAlign: 'center',
-//		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-//		title: '次へ',
-		enabled: false,
 	},
 
 	stampScrollView:{

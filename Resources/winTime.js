@@ -175,7 +175,6 @@ exports.createWindow = function(_userData, _diaryData){
 	// 日別・時間別表示切り替えボタン
 //	var tabbedBar = Titanium.UI.iOS.createTabbedBar(style.timeTitleTabbedBar);
 	timeWin.titleControl = monthTitle;
-	timeWin.barImage = 'images/icon/titleback.png';
 
 	// リストボタンの表示
 	var listButton = Titanium.UI.createButton(style.timeListButton);

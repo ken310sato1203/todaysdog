@@ -151,10 +151,10 @@ exports.createWindow = function(_userData, _stampData){
 	var monthTitle = Ti.UI.createLabel(style.stampTitleLabel);	
 	stampWin.titleControl = monthTitle;
 	// 戻るボタンの表示
-	var backButton = Titanium.UI.createButton(style.stampBackButton);
+	var backButton = Titanium.UI.createButton(style.commonBackButton);
 	stampWin.leftNavButton = backButton;
 	// 次へボタンの表示
-	var nextButton = Titanium.UI.createButton(style.stampNextButton);
+	var nextButton = Titanium.UI.createButton(style.commonNextButton);
 	stampWin.rightNavButton = nextButton;
 
 	var stampScrollView = getStampScrollView();

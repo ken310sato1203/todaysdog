@@ -94,11 +94,10 @@ exports.createWindow = function(_articleData){
 				textLabel.text = commentList[i].text;
 				textView.add(textLabel);
 				var timeLabel = Ti.UI.createLabel(style.photoCommentTimeLabel);
-				var date = util.getDateElement(commentList[i].date);
-				timeLabel.text = date.hour + ":" + date.minute + ":" + date.second;
+//				var date = util.getDateElement(commentList[i].date);
+//				timeLabel.text = date.hour + ":" + date.minute + ":" + date.second;
+				timeLabel.text = commentList[i].date;
 				textView.add(timeLabel);
-
-
 			}
 
 		} else {
@@ -129,13 +128,17 @@ exports.createWindow = function(_articleData){
 	// タイトルの表示
 	var titleView = Ti.UI.createView(style.photoTitleView);
 	var titleIconImage = Ti.UI.createImageView(style.photoTitleIconImage);
-	titleIconImage.image = 'images/icon/' + _articleData.user + '.jpg';
+	titleIconImage.image = 'images/icon/' + _articleData.user + '.png';
 
 	var titleNameLabel = Ti.UI.createLabel(style.photoTitleNameLabel);
 	titleNameLabel.text = _articleData.user + '\n@' + _articleData.location;
 	titleView.add(titleIconImage);
 	titleView.add(titleNameLabel);
 	photoWin.titleControl = titleView;
+
+	// 戻るボタンの表示
+	var backButton = Titanium.UI.createButton(style.commonBackButton);
+	photoWin.leftNavButton = backButton;
 
 	var photoTableView = Ti.UI.createTableView(style.photoTableView);
 	photoWin.add(photoTableView);
@@ -263,7 +266,22 @@ exports.createWindow = function(_articleData){
 	// 初回読み込み時に、コメントリストの更新
 	updateComment();
 
+	// コメントフィールドの表示
+	var flexSpace = Ti.UI.createButton({systemButton:Ti.UI.iPhone.SystemButton.FLEXIBLE_SPACE});
+	var doneButton = Ti.UI.createButton({systemButton:Ti.UI.iPhone.SystemButton.DONE});
+	var commentField = Ti.UI.createTextField(style.photoCommentField);
+	var dummyField = Ti.UI.createTextField(style.photoCommentField);
+	dummyField.top = '-50dp';
+	dummyField.keyboardToolbar = [flexSpace,commentField,doneButton];
+	photoWin.add(dummyField);
+
 // ---------------------------------------------------------------------
+	// 戻るボタンをクリック
+	backButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]backButton.click:');
+		photoWin.close();
+	});
+
 	// フォトにタップでフォト拡大画面を表示
 	photoImage.addEventListener('click',function(e){
 		Ti.API.debug('[event]photoImage.click:');
@@ -286,12 +304,20 @@ exports.createWindow = function(_articleData){
 		});
 	});
 
-	var flexSpace = Ti.UI.createButton({
-		systemButton:Ti.UI.iPhone.SystemButton.FLEXIBLE_SPACE
+	// コメントボタンのクリック
+	commentActionView.addEventListener('click',function(e){
+		Ti.API.debug('[event]commentActionView.click:');
+		e.source.enabled = false;
+		e.source.backgroundColor = 'white';
+		dummyField.focus();
+		e.source.backgroundColor = '#f5f5f5';
+		e.source.enabled = true;
 	});
-	var doneButton = Ti.UI.createButton({
-		systemButton:Ti.UI.iPhone.SystemButton.DONE
-	});
+
+	dummyField.addEventListener('focus',function(e){
+		Ti.API.debug('[event]dummyField.focus:');
+		commentField.focus();
+	});	
 
 	doneButton.addEventListener('click',function(e){
 		Ti.API.debug('[event]doneButton.click:');
@@ -301,31 +327,6 @@ exports.createWindow = function(_articleData){
 		}
 		commentField.blur();			
 	});
-
-	var commentField = Ti.UI.createTextField(style.photoCommentField);
-	var dummyField = Ti.UI.createTextField(style.photoCommentField);
-	dummyField.top = '-50dp';
-	dummyField.keyboardToolbar = [flexSpace,commentField,doneButton];
-	photoWin.add(dummyField);
-
-/*
-	// コメントボタンのクリックでライクリストに追加
-	commentButton.addEventListener('click',function(e){
-		Ti.API.debug('[event]commentButton.click:');
-		e.source.enabled = false;
-		e.source.backgroundColor = '#dedede';
-
-		dummyField.focus();
-
-		e.source.backgroundColor = 'white';
-		e.source.enabled = true;
-	});
-*/
-	dummyField.addEventListener('focus',function(e){
-		Ti.API.debug('[event]dummyField.focus:');
-		commentField.focus();
-	});	
-
 
 	// コメントフィールドでキーボード確定でコメントリストに追加
 	commentField.addEventListener('return',function(e){

@@ -209,8 +209,8 @@ exports.createWindow = function(_userData){
 // ---------------------------------------------------------------------
 	var todayWin = Ti.UI.createWindow(style.todayWin);
 	// タイトルの表示
-	var monthTitle = Ti.UI.createLabel(style.todayTitleLabel);	
-	todayWin.titleControl = monthTitle;
+	var todayTitle = Ti.UI.createLabel(style.todayTitleLabel);	
+	todayWin.titleControl = todayTitle;
 
 	var todayTableView = Ti.UI.createTableView(style.todayTableView);
 	todayTableView.headerPullView = getTableHeader();
