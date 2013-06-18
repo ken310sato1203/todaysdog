@@ -43,11 +43,11 @@ articleList = [
 ];
 
 commentList = [
-	{no:"A0021", seq:"2", user:"jiro", date:"2013-03-02 09:23:45", text:"今年もよろしく。"},
 	{no:"A0021", seq:"1", user:"jiro", date:"2013-03-01 13:37:02", text:"ことよろ。"},
-	{no:"A0022", seq:"3", user:"gon", date:"2013-03-05 09:23:45", text:"今年もよろしく。"},
-	{no:"A0022", seq:"2", user:"koro", date:"2013-03-03 09:23:45", text:"今年もよろしく。"},
+	{no:"A0021", seq:"2", user:"jiro", date:"2013-03-02 09:23:45", text:"今年もよろしく。"},
 	{no:"A0022", seq:"1", user:"maki", date:"2013-03-02 09:23:45", text:"今年もよろしく。"},
+	{no:"A0022", seq:"2", user:"koro", date:"2013-03-03 09:23:45", text:"今年もよろしく。"},
+	{no:"A0022", seq:"3", user:"gon", date:"2013-03-05 09:23:45", text:"今年もよろしく。"},
 	{no:"A0023", seq:"1", user:"shiro", date:"2013-03-02 09:23:45", text:"今年もよろしく。"},
 	{no:"A0024", seq:"1", user:"kuro", date:"2013-03-10 08:14:27", text:"今年もよろしくお願いします。あけましておめでとうございます。今年もよろしくお願いします。あけましておめでとうございます。"},
 ];
@@ -551,8 +551,8 @@ exports.model = {
 				break;
 			}
 		}
-		// 先頭に追加
-		commentList.unshift(_commentList);
+		// 末尾に追加
+		commentList.push(_commentList);
 
 		for (var i=0; i<articleList.length; i++) {
 			if (articleList[i].no == _commentList.no) {

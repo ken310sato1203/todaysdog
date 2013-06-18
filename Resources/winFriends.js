@@ -52,6 +52,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			articleListView.add(articleView);
 			var userIconImage = Ti.UI.createImageView(style.friendsUserIconImage);
 			userIconImage.image = 'images/icon/' + _articleList[i].user + '.png';
+			userIconImage.user = _articleList[i].user;
 			articleView.add(userIconImage);
 
 			var textView = Ti.UI.createView(style.friendsTextView);
@@ -102,7 +103,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			userIconImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]userIconImage.click:');
 				e.source.opacity = 0.5;
-				var profileWin = win.createProfileWindow(_userData);
+				var userData = model.getUser(e.source.user);
+				var profileWin = win.createProfileWindow(userData);
 				profileWin.prevWin = friendsWin;
 				win.openTabWindow(profileWin);
 				e.source.opacity = 1.0;

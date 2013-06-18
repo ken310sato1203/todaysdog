@@ -576,30 +576,6 @@ exports.style = {
 		title: 'プロフィール',
 	},
 
-	profileScrollView:{
-		contentWidth:'auto',
-		contentHeight:'auto',
-		top:0,
-		showVerticalScrollIndicator:true,
-		showHorizontalScrollIndicator:true,
-		backgroundColor: '#dedede',
-	},
-
-	profileTableView:{ 
-		top: '10dp',
-		width: '284dp',
-		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
-		scrollable: false,
-		data: [],
-	},
-	profileCountTableRow:{ 
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		touchEnabled: false,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-	},
-
 	profileTitleView:{
 		layout: 'absolute',
 		top: '0dp',
@@ -607,7 +583,6 @@ exports.style = {
 		width: '100%',
 		height: Ti.UI.SIZE,
 	},
-
 	profileTitleLabel:{
 		left: '0dp',
 		width: Ti.UI.SIZE,
@@ -647,44 +622,82 @@ exports.style = {
 		title: '保存する',
 	},
 
+	profileScrollView:{
+		contentWidth:'auto',
+		contentHeight:'auto',
+		top:0,
+		showVerticalScrollIndicator:true,
+		showHorizontalScrollIndicator:true,
+		backgroundColor: '#dedede',
+	},
+
+	profileTableView:{ 
+		top: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		scrollable: false,
+		data: [],
+	},
+	profileIconTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
+	profileIconView:{
+		layout: 'vertical',
+		width: '100%',
+		height: '155dp',
+		backgroundColor: 'white',
+	},
+	profileIconImage:{
+		top: '15dp',
+		width: '80dp',
+		height: '80dp',
+	},
+	profileIconNameLabel:{
+		top: '7dp',
+		textAlign: 'center',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+	profileIconBreedLabel:{
+		top: '3dp',
+		textAlign: 'center',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+
+	profileCountTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
 	profileCountView:{
-		layout: 'absolute',
+		layout: 'horizontal',
 		top: '0dp',
 		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
-	profileIconView:{
-		layout: 'vertical',
-		top: '0dp',
-		left: '0dp',
-		width: '56dp',
-		height: '56dp',
-		backgroundColor: 'white',
-	},
-	profileIconImage:{
-		top: '4dp',
-		left: '4dp',
-		width: '48dp',
-		height: '48dp',
-		backgroundColor: 'black',
-	},
-
 	profileCountPhotoView:{
 		layout: 'vertical',
 		top: '0dp',
-		left: '57dp',
-		width: '56dp',
-		height: '56dp',
-		backgroundColor: 'white',
+		right: '1dp',
+		width: '79dp',
+		height: '46dp',
+		backgroundColor: '#eeeeee',
 	},
 	profileCountPhotoLabel:{
-		top: '10dp',
+		top: '5dp',
 		textAlign: 'center',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
 	profileCountPhotoUnitLabel:{
+		top: '1dp',
 		textAlign: 'center',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
@@ -694,18 +707,19 @@ exports.style = {
 	profileCountLikeView:{
 		layout: 'vertical',
 		top: '0dp',
-		left: '114dp',
-		width: '56dp',
-		height: '56dp',
-		backgroundColor: 'white',
+		right: '1dp',
+		width: '79dp',
+		height: '46dp',
+		backgroundColor: '#eeeeee',
 	},
 	profileCountLikeLabel:{
-		top: '10dp',
+		top: '5dp',
 		textAlign: 'center',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
 	profileCountLikeUnitLabel:{
+		top: '1dp',
 		textAlign: 'center',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
@@ -715,18 +729,19 @@ exports.style = {
 	profileCountFollowerView:{
 		layout: 'vertical',
 		top: '0dp',
-		left: '171dp',
-		width: '56dp',
-		height: '56dp',
-		backgroundColor: 'white',
+		right: '1dp',
+		width: '79dp',
+		height: '46dp',
+		backgroundColor: '#eeeeee',
 	},
 	profileCountFollowerLabel:{
-		top: '10dp',
+		top: '5dp',
 		textAlign: 'center',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
 	profileCountFollowerUnitLabel:{
+		top: '1dp',
 		textAlign: 'center',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
@@ -736,18 +751,19 @@ exports.style = {
 	profileCountFollowView:{
 		layout: 'vertical',
 		top: '0dp',
-		left: '228dp',
-		width: '56dp',
-		height: '56dp',
-		backgroundColor: 'white',
+		right: '0dp',
+		width: '80dp',
+		height: '46dp',
+		backgroundColor: '#eeeeee',
 	},
 	profileCountFollowLabel:{
-		top: '10dp',
+		top: '5dp',
 		textAlign: 'center',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
 	profileCountFollowUnitLabel:{
+		top: '1dp',
 		textAlign: 'center',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
@@ -1861,6 +1877,8 @@ exports.style = {
 		left: '10dp',
 		width: '55dp',
 		height: '55dp',
+		// カスタムプロパティ
+		user: null,
 	},
 	friendsTextView:{
 		layout: 'vertical',

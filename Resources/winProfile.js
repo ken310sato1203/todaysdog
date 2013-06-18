@@ -37,18 +37,27 @@ exports.createWindow = function(_userData){
 	profileWin.add(profileScrollView);
 
 	var profileRowList = [];
+
+	var profileIconRow = Titanium.UI.createTableViewRow(style.profileIconTableRow);
+	profileRowList.push(profileIconRow);
+
+	// アイコンの表示
+	var iconView = Ti.UI.createView(style.profileIconView);
+	profileIconRow.add(iconView);
+	var iconImage = Ti.UI.createImageView(style.profileIconImage);
+	iconImage.image = 'images/icon/' + _userData.user + '.png';
+	iconView.add(iconImage);
+	var iconNameLabel = Ti.UI.createLabel(style.profileIconNameLabel);
+	iconNameLabel.text = _userData.user;
+	iconView.add(iconNameLabel);
+	var iconBreedLabel = Ti.UI.createLabel(style.profileIconBreedLabel);
+	iconBreedLabel.text = _userData.breed;
+	iconView.add(iconBreedLabel);
 	
 	var profileCountRow = Titanium.UI.createTableViewRow(style.profileCountTableRow);
 	profileRowList.push(profileCountRow);
 	var countView = Ti.UI.createView(style.profileCountView);
 	profileCountRow.add(countView);
-
-	// アイコンの表示
-	var iconView = Ti.UI.createView(style.profileIconView);
-	countView.add(iconView);
-	var iconImage = Ti.UI.createImageView(style.profileIconImage);
-	iconImage.image = 'images/icon/' + _userData.user + '.jpg';
-	iconView.add(iconImage);
 
 	// フォト数の表示
 	var countPhotoView = Ti.UI.createView(style.profileCountPhotoView);
