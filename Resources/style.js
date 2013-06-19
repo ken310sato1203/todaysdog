@@ -596,23 +596,27 @@ exports.style = {
 	},
 
 	profileFollowButton:{
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
+		width: '95dp',
+		height: '25dp',
+//		backgroundColor: '#dedede',
+		backgroundImage: 'images/icon/titlebar10.png',
 		textAlign: 'center',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
 		// ヘッダのボタンのテキストの色が反映できない
-//		color: '#000',
+		color: '#e74c3c',
 		title: 'フォローする',
 	},
 	profileUnfollowButton:{
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
+		width: '95dp',
+		height: '25dp',
+//		backgroundColor: '#dedede',
+		backgroundImage: 'images/icon/titlebar10.png',
 		textAlign: 'center',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
+		color: '#e74c3c',
 		title: 'フォロー中',
 	},
+/*
 	profileSaveButton:{
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -620,6 +624,12 @@ exports.style = {
 		textAlign: 'center',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		title: '保存する',
+	},
+*/
+	profileSaveButton:{
+		width: '28dp',
+		height: '28dp',
+		backgroundImage:'images/icon/profile_edit.png',
 	},
 
 	profileScrollView:{

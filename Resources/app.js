@@ -19,6 +19,7 @@ var win1 = win.createFriendsWindow(userData);
 var win2 = win.createTodayWindow(userData, null);
 var win3 = win.createDiaryWindow(userData);
 var win4 = win.createProfileWindow(userData);
+win4.leftNavButton = null;
 
 var tab1 =  Ti.UI.createTab(style.tabHidden);
 var tab2 =  Ti.UI.createTab(style.tabHidden);

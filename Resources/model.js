@@ -62,16 +62,16 @@ likeList = [
 ];
 
 userList = [
-	{user:"sakura", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"maki", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう まき", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"koro", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう コロ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"shiro", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう しろ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"pochi", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう ポチ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"jiro", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう ジロー", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"gon", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう ゴン", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"kuro", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう クロ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"momo", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう もも", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
-	{user:"santa", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう サンタ", location:"東京", breed:"ダックスフント", sex:"女の子", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"sakura", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう さくら", location:"東京", breed:"ダックスフント", sex:"♀", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"maki", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう まき", location:"東京", breed:"ダックスフント", sex:"♀", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"koro", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう コロ", location:"東京", breed:"ダックスフント", sex:"♂", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"shiro", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう しろ", location:"東京", breed:"ダックスフント", sex:"♀", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"pochi", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう ポチ", location:"東京", breed:"ダックスフント", sex:"♂", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"jiro", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう ジロー", location:"東京", breed:"ダックスフント", sex:"♂", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"gon", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう ゴン", location:"東京", breed:"ダックスフント", sex:"♂", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"kuro", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう クロ", location:"東京", breed:"ダックスフント", sex:"♂", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"momo", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう もも", location:"東京", breed:"ダックスフント", sex:"♀", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
+	{user:"santa", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう サンタ", location:"東京", breed:"ダックスフント", sex:"♂", birth:"2005-12-07", feature:"ほうき型しっぽ", character:"びびり"},
 ];
 
 breedList = [
