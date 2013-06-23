@@ -616,7 +616,7 @@ exports.style = {
 		color: '#e74c3c',
 		title: 'フォロー中',
 	},
-/*
+
 	profileSaveButton:{
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -625,13 +625,14 @@ exports.style = {
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		title: '保存する',
 	},
-*/
-	profileSaveButton:{
+
+	profileEditButton:{
 		width: '28dp',
 		height: '28dp',
 		backgroundImage:'images/icon/profile_edit.png',
 	},
 
+/*
 	profileScrollView:{
 		contentWidth:'auto',
 		contentHeight:'auto',
@@ -640,42 +641,70 @@ exports.style = {
 		showHorizontalScrollIndicator:true,
 		backgroundColor: '#dedede',
 	},
-
+*/
 	profileTableView:{ 
 		top: '0dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
-		scrollable: false,
+//		scrollable: false,
 		data: [],
 	},
-	profileIconTableRow:{ 
+	profileInfoTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
-	profileIconView:{
-		layout: 'vertical',
+	profileInfoView:{
+		layout: 'horizontal',
 		width: '100%',
-		height: '155dp',
+		height: Ti.UI.SIZE,
+//		height: '100%',
 		backgroundColor: 'white',
 	},
 	profileIconImage:{
 		top: '15dp',
+		left: '15dp',
 		width: '80dp',
 		height: '80dp',
 	},
-	profileIconNameLabel:{
-		top: '7dp',
-		textAlign: 'center',
-		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+	profileInfoTextView:{
+		layout: 'vertical',
+		top: '15dp',
+		bottom: '10dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	profileNameLabel:{
+		top: '0dp',
+		left: '15dp',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
-	profileIconBreedLabel:{
-		top: '3dp',
-		textAlign: 'center',
-		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+	profileUserLabel:{
+		top: '2dp',
+		left: '15dp',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+	profileBreedLabel:{
+		top: '5dp',
+		left: '15dp',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+	profileBirthLabel:{
+		top: '2dp',
+		left: '15dp',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+	profileMemoLabel:{
+		top: '5dp',
+		left: '15dp',
+		right: '10dp',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
 
@@ -698,7 +727,8 @@ exports.style = {
 		right: '1dp',
 		width: '79dp',
 		height: '46dp',
-		backgroundColor: '#eeeeee',
+		backgroundColor: 'white',
+//		backgroundColor: '#eeeeee',
 	},
 	profileCountPhotoLabel:{
 		top: '5dp',
@@ -720,7 +750,8 @@ exports.style = {
 		right: '1dp',
 		width: '79dp',
 		height: '46dp',
-		backgroundColor: '#eeeeee',
+		backgroundColor: 'white',
+//		backgroundColor: '#eeeeee',
 	},
 	profileCountLikeLabel:{
 		top: '5dp',
@@ -742,7 +773,8 @@ exports.style = {
 		right: '1dp',
 		width: '79dp',
 		height: '46dp',
-		backgroundColor: '#eeeeee',
+		backgroundColor: 'white',
+//		backgroundColor: '#eeeeee',
 	},
 	profileCountFollowerLabel:{
 		top: '5dp',
@@ -764,7 +796,8 @@ exports.style = {
 		right: '0dp',
 		width: '80dp',
 		height: '46dp',
-		backgroundColor: '#eeeeee',
+		backgroundColor: 'white',
+//		backgroundColor: '#eeeeee',
 	},
 	profileCountFollowLabel:{
 		top: '5dp',
@@ -778,6 +811,24 @@ exports.style = {
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
 		text: 'フォロー',
+	},
+
+	profilePhotoTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
+	profilePhotoView:{
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
+		backgroundColor: '#eeeeee',
+	},
+	profilePhotoImage:{
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
 	},
 
 	profileListTableRow:{ 
@@ -941,17 +992,25 @@ exports.style = {
 	},
 	photoListArticleView:{
 		layout: 'vertical',
-		top: '5dp',
-		left: '5dp',
-		width: '100dp',
+//		top: '5dp',
+//		left: '5dp',
+		top: '0dp',
+		left: '0dp',
+//		width: '100dp',
+		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+//		width: '106dp',
+//		height: (106 * 3 / 4) + 'dp',
 		backgroundColor: 'white',
 	},
 	photoListPhotoImage:{
-		top: '5dp',
-		width: '90dp',
-		height: '90dp',
-		backgroundColor: 'black',
+//		top: '5dp',
+		top: '0dp',
+//		width: '90dp',
+//		height: '90dp',
+		width: '106dp',
+		height: (106 * 3 / 4) + 'dp',
+		backgroundColor: 'white',
 		// カスタムプロパティ
 		articleData: null,
 	},
@@ -1110,7 +1169,7 @@ exports.style = {
 	},
 
 	userListTableView:{ 
-		top: '10dp',
+		top: '0dp',
 		backgroundColor: '#dedede',
 		separatorColor: 'transparent',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
@@ -1135,25 +1194,26 @@ exports.style = {
 		height: Ti.UI.SIZE,
 	},
 	userListUserView:{
+		layout: 'horizontal',
 		top: '0dp',
 		bottom: '1dp',
-		width: '284dp',
+//		width: '284dp',
+		width: '100%',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
 	},
 	userListIconImage:{
-		top: '4dp',
-		bottom: '4dp',
-		left: '4dp',
-		width: '48dp',
-		height: '48dp',
-		backgroundColor: 'black',
+		top: '5dp',
+		bottom: '5dp',
+		left: '10dp',
+		width: '55dp',
+		height: '55dp',
 		// カスタムプロパティ
 		userData: null,
 	},
 	userListTextLabel:{
-		left: '60dp',
-		width: Ti.UI.SIZE,
+		left: '10dp',
+		width: '140dp',
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
@@ -1188,12 +1248,12 @@ exports.style = {
 
 	userFollowButton:{
 		right: '10dp',
-		width: '80dp',
-		height: '22dp',
+		width: '95dp',
+		height: '25dp',
 		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
 		borderColor: '#dedede',
-		borderWidth: 1.5,
-		borderRadius: 5,
+		borderWidth: 1,
+//		borderRadius: 5,
 		// カスタムプロパティ
 		user: null,
 		clickFlag: false,
@@ -1205,6 +1265,7 @@ exports.style = {
 		color: '#000',
 		text: 'フォローする',
 	},
+
 
 // winCommentList -------------------------------------------------------
 	commentListWin:{
@@ -2077,7 +2138,7 @@ exports.style = {
 	todayDayView:{
 		layout: 'vertical',
 		top: '0dp',
-		width: '80dp',
+		width: '75dp',
 		height: Ti.UI.SIZE,
 		enabled: false,
 		backgroundColor: 'white',

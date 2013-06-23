@@ -23,11 +23,11 @@ exports.createWindow = function(_type, _userData){
 			var userView = Ti.UI.createView(style.userListUserView);
 			userListView.add(userView);
 			var userImage = Ti.UI.createImageView(style.userListIconImage);
-			userImage.image = 'images/icon/' + _userList[i].user + '.jpg';
+			userImage.image = 'images/icon/' + _userList[i].user + '.png';
 			// カスタムプロパティにユーザデータを格納
 			userImage.userData = _userList[i];
 			var textLabel = Ti.UI.createLabel(style.userListTextLabel);
-			textLabel.text = _userList[i].user + '\n' + _userList[i].name;
+			textLabel.text = _userList[i].name + '\n@' + _userList[i].user;
 					
 			userView.add(userImage);
 			userView.add(textLabel);
@@ -218,6 +218,10 @@ exports.createWindow = function(_type, _userData){
 	var titleView = null;
 	var titleLabel = null;
 
+	// 戻るボタンの表示
+	var backButton = Titanium.UI.createButton(style.commonBackButton);
+	userListWin.leftNavButton = backButton;
+
 	// フォロワのユーザ一覧
 	if (_type == "follower") {
 		titleView = Ti.UI.createView(style.userListTitleView);
@@ -240,6 +244,12 @@ exports.createWindow = function(_type, _userData){
 	updateUserList();
 
 // ---------------------------------------------------------------------
+	// 戻るボタンをクリック
+	backButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]backButton.click:');
+		userListWin.close();
+	});	
+
 	// 右スワイプで前の画面に戻る
 	userListWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]userListWin.swipe:');

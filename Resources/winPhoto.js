@@ -131,7 +131,7 @@ exports.createWindow = function(_articleData){
 	titleIconImage.image = 'images/icon/' + _articleData.user + '.png';
 
 	var titleNameLabel = Ti.UI.createLabel(style.photoTitleNameLabel);
-	titleNameLabel.text = _articleData.user + '\n@' + _articleData.location;
+	titleNameLabel.text = userData.name + '\n@' + userData.user;
 	titleView.add(titleIconImage);
 	titleView.add(titleNameLabel);
 	photoWin.titleControl = titleView;

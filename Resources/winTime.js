@@ -37,8 +37,8 @@ exports.createWindow = function(_userData, _diaryData){
 	}
 
 	// Viewの取得
-	var getTimeView = function(_type) {
-		Ti.API.debug('[func]getTimeView:');
+	var getTimeTableView = function(_type) {
+		Ti.API.debug('[func]getTimeTableView:');
 		var targetView = Ti.UI.createTableView(style.timeTableView);
 		var rowList = [];
 
@@ -182,15 +182,15 @@ exports.createWindow = function(_userData, _diaryData){
 
 	// ビューの作成
 	var type = "time";
-	var timeView = getTimeView(type);
-	timeWin.add(timeView);
+	var timeTableView = getTimeTableView(type);
+	timeWin.add(timeTableView);
 
 // ---------------------------------------------------------------------
 	// リストボタンをクリック
 	listButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]listButton.click:');
 		// ビューの再作成
-		timeWin.remove(timeView);
+		timeWin.remove(timeTableView);
 		var type = null;
 		if (e.source.listFlag == false) {
 			type = "list";
@@ -201,15 +201,15 @@ exports.createWindow = function(_userData, _diaryData){
 			e.source.listFlag = false;
 			e.source.title = "リスト";
 		}
-		timeView = getTimeView(type);
-		scrollPosition(timeView);
-		timeWin.add(timeView);
+		timeTableView = getTimeTableView(type);
+		scrollPosition(timeTableView);
+		timeWin.add(timeTableView);
 	});
 
 	// windowオープン時
 	timeWin.addEventListener('open', function(e) {
 		Ti.API.debug('[event]timeWin.open:');
-		scrollPosition(timeView);
+		scrollPosition(timeTableView);
 	});
 
 	// windowクローズ時
@@ -231,12 +231,12 @@ exports.createWindow = function(_userData, _diaryData){
 	timeWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]timeWin.refresh:');
 		// ビューの再作成
-		timeWin.remove(timeView);
+		timeWin.remove(timeTableView);
 		var type = "time";
 		_diaryData = e.diaryData;
-		timeView = getTimeView(type);
-		timeWin.add(timeView);
-		timeView.scrollToIndex(e.diaryData.timeIndex + 1, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+		timeTableView = getTimeTableView(type);
+		timeWin.add(timeTableView);
+		timeTableView.scrollToIndex(e.diaryData.timeIndex + 1, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 
 		// タイトルの表示
 		monthTitle.text =  e.diaryData.year + ' ' + monthName[e.diaryData.month - 1] + ' ' + e.diaryData.day;

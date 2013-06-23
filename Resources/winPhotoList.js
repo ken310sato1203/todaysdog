@@ -28,11 +28,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			photoImage.image = 'images/photo/' + _articleList[i].no + '.jpg';
 			// カスタムプロパティに記事データを格納
 			photoImage.articleData = _articleList[i];
+			articleView.add(photoImage);
+/*
 			var textLabel = Ti.UI.createLabel(style.photoListTextLabel);
 			textLabel.text = '@' + _articleList[i].location;
-					
-			articleView.add(photoImage);
 			articleView.add(textLabel);
+*/					
 			
 			// 各記事のタップでフォト画面へ遷移
 			photoImage.addEventListener('click',function(e){
@@ -226,6 +227,10 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	var titleView = null;
 	var titleLabel = null;
 
+	// 戻るボタンの表示
+	var backButton = Titanium.UI.createButton(style.commonBackButton);
+	photoListWin.leftNavButton = backButton;
+
 	// 更新ボタン
 	var updateButton = Titanium.UI.createButton(style.photoListUpdateButton);
 	// ロード用画面
@@ -268,6 +273,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 
 // ---------------------------------------------------------------------
+	// 戻るボタンをクリック
+	backButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]backButton.click:');
+		photoListWin.close();
+	});	
+
 	// 「更新」ボタン
 	updateButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]updateButton.click:');

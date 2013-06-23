@@ -6,7 +6,6 @@ exports.createWindow = function(_userData){
 	var articleData = {
 		no:"A0023", 
 		user:"sakura", 
-		location:"Chiba", 
 		date:"2013-02-09 10:26:05", 
 		text:"★明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", 
 		like:"0", 
