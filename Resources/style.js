@@ -67,12 +67,12 @@ exports.style = {
 	commonBackButton:{
 		width: '28dp',
 		height: '28dp',
-		backgroundImage:'images/icon/arrow_left.png',
+		backgroundImage:'images/icon/w_arrow_left.png',
 	},
 	commonNextButton:{
 		width: '28dp',
 		height: '28dp',
-		backgroundImage:'images/icon/arrow_right.png',
+		backgroundImage:'images/icon/w_arrow_right.png',
 		enabled: false,
 	},
 	
@@ -616,32 +616,12 @@ exports.style = {
 		color: '#e74c3c',
 		title: 'フォロー中',
 	},
-
-	profileSaveButton:{
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
-		textAlign: 'center',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		title: '保存する',
-	},
-
 	profileEditButton:{
 		width: '28dp',
 		height: '28dp',
-		backgroundImage:'images/icon/profile_edit.png',
+		backgroundImage:'images/icon/w_profile_edit.png',
 	},
 
-/*
-	profileScrollView:{
-		contentWidth:'auto',
-		contentHeight:'auto',
-		top:0,
-		showVerticalScrollIndicator:true,
-		showHorizontalScrollIndicator:true,
-		backgroundColor: '#dedede',
-	},
-*/
 	profileTableView:{ 
 		top: '0dp',
 		width: '100%',
@@ -653,7 +633,7 @@ exports.style = {
 	profileInfoTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		touchEnabled: false,
+//		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
 	profileInfoView:{
@@ -667,7 +647,7 @@ exports.style = {
 		top: '15dp',
 		left: '15dp',
 		width: '80dp',
-		height: '80dp',
+		height: '100dp',
 	},
 	profileInfoTextView:{
 		layout: 'vertical',
@@ -831,7 +811,48 @@ exports.style = {
 		height: Ti.UI.SIZE,
 	},
 
-	profileListTableRow:{ 
+// winProfileEdit -------------------------------------------------------
+	profileEditWin:{
+		backgroundColor: '#dedede',
+//		barColor: '#a9a9a9',
+		barImage: 'images/icon/titlebar.png',
+		tabBarHidden: true,
+		title: 'プロフィール',
+	},
+
+	profileEditTitleView:{
+		layout: 'absolute',
+		top: '0dp',
+		left: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+	},
+	profileEditTitleLabel:{
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+		text: 'プロフィール', 
+	},
+	profileEditSaveButton:{
+		width: '28dp',
+		height: '28dp',
+		backgroundImage:'images/icon/w_check.png',
+	},
+
+	profileEditTableView:{ 
+		top: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+//		scrollable: false,
+		data: [],
+	},
+	profileEditListTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 //		selectedBackgroundColor: 'white',
@@ -839,21 +860,21 @@ exports.style = {
 		// カスタムプロパティ
 		objectName: null,
 	},
-	profileListItemView:{
+	profileEditListItemView:{
 		layout: 'absolute',
 		top: '0dp',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
 	},
-
-
-	profileListItemLabel:{
+	profileEditListItemLabel:{
+		top: '0dp',
 		left: '15dp',
 		height: '35dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
-	profileListValueField:{
+	profileEditListValueField:{
+		top: '0dp',
 		right: '15dp',
 		textAlign:'right',
 		width: '166dp',
@@ -864,33 +885,60 @@ exports.style = {
         returnKeyType:Ti.UI.RETURNKEY_DONE,
         borderStyle:Ti.UI.INPUT_BORDERSTYLE_NONE,
         touchEnabled: false,
-//      enabled: false,
+	},
+	profileEditListTextArea:{
+		top : '30dp',
+		bottom : '10dp',
+		left: '8dp',
+		width: '296dp',
+		height : '90dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		// hintTextはiOSで対応されていないので、focus/blur時に処理
+		hintText: '入力してください',
+        keyboardType:Ti.UI.KEYBOARD_DEFAULT,
+        returnKeyType:Ti.UI.RETURNKEY_DONE,
+        touchEnabled: false,
+//		backgroundColor: 'yellow',
+	},
+	profileEditIconImage:{
+		top: '5dp',
+		bottom: '5dp',
+		right: '15dp',
+		width: '55dp',
+		height: '55dp',
+	},
+	profileEditCoverImage:{
+		top: '5dp',
+		bottom: '5dp',
+		right: '15dp',
+		width: '100dp',
+		height: (100 * 3 / 4) + 'dp',
 	},
 
-	profileListPickerView:{
+	profileEditListPickerView:{
 		bottom: '-259dp',
 		height: '259dp',
 	},
-	profileListPickerToolbar:{
+	profileEditListPickerToolbar:{
 		top: '0dp',
 		items: null,
 	},
-	profileListCancelButton:{
+	profileEditListCancelButton:{
 		style: Ti.UI.iPhone.SystemButtonStyle.BORDERED,
 		title: 'Cancel',
 	},
-	profileListSpacerButton:{
+	profileEditListSpacerButton:{
 		systemButton:Ti.UI.iPhone.SystemButton.FLEXIBLE_SPACE,
 	},
-	profileListDoneButton:{
+	profileEditListDoneButton:{
 		style:Ti.UI.iPhone.SystemButtonStyle.DONE,
 		title: 'Done',
 	},
-	profileListPicker:{
+	profileEditListPicker:{
 		top: '43dp',
 		selectionIndicator: true,
 	},
-	profileListDatePicker:{
+	profileEditListDatePicker:{
 		top: '43dp',
 		selectionIndicator: true,
 		type:Ti.UI.PICKER_TYPE_DATE,
@@ -965,28 +1013,28 @@ exports.style = {
 	},
 
 	photoListTableView:{ 
-		backgroundColor: '#dedede',
+		backgroundColor: 'white',
 		separatorColor: 'transparent',
 		data: [],
 	},
 	photoListArticleTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
+		backgroundColor: 'white',
 		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
 	photoListNextTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
+		backgroundColor: 'white',
 		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
 
 	photoListArticleListView:{
 		layout: 'horizontal',
-		top: '0dp',
+		top: '5dp',
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
 		height: Ti.UI.SIZE,
 	},
@@ -995,7 +1043,8 @@ exports.style = {
 //		top: '5dp',
 //		left: '5dp',
 		top: '0dp',
-		left: '0dp',
+		bottom: '5dp',
+		left: '5dp',
 //		width: '100dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -1008,8 +1057,8 @@ exports.style = {
 		top: '0dp',
 //		width: '90dp',
 //		height: '90dp',
-		width: '106dp',
-		height: (106 * 3 / 4) + 'dp',
+		width: '100dp',
+		height: (100 * 3 / 4) + 'dp',
 		backgroundColor: 'white',
 		// カスタムプロパティ
 		articleData: null,
@@ -1022,6 +1071,15 @@ exports.style = {
 		textAlign: 'left',
 		font: {fontSize:11, fontFamily:'Helvetica Neue'},
 		color: '#000',
+	},
+	photoListPhotoFullWin:{
+		backgroundColor: 'black',
+		tabBarHidden: true,
+	},
+	photoListPhotoFullImage:{
+//		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
 	},
 
 	photoListFriendsArticleListView:{
@@ -1587,12 +1645,9 @@ exports.style = {
 	},
 
 	cameraPostButton:{
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
-		textAlign: 'center',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		title: '投稿',
+		width: '28dp',
+		height: '28dp',
+		backgroundImage:'images/icon/w_plus.png',
 	},
 
 	cameraArticleView:{
@@ -2297,12 +2352,9 @@ exports.style = {
 		shadowColor: '#696969', 
 	},
 	stampPostButton:{
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
-		textAlign: 'center',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		title: '投稿',
+		width: '28dp',
+		height: '28dp',
+		backgroundImage:'images/icon/w_plus.png',
 	},
 	stampPostTableView:{
 		top: '10dp',

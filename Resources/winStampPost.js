@@ -115,6 +115,10 @@ exports.createWindow = function(_userData, _stampDataList){
 	var titleLabel = Ti.UI.createLabel(style.stampPostTitleLabel);	
 	postWin.titleControl = titleLabel;
 
+	// 戻るボタンの表示
+	var backButton = Titanium.UI.createButton(style.commonBackButton);
+	postWin.leftNavButton = backButton;
+
 	// 日付
 	var dateField = Ti.UI.createTextField(style.stampPostListValueField);
 	var dateValue = util.getFormattedDate(new Date(_stampDataList[0].year, _stampDataList[0].month-1, _stampDataList[0].day));
@@ -244,6 +248,11 @@ exports.createWindow = function(_userData, _stampDataList){
 	});
 
 // ---------------------------------------------------------------------
+	// 戻るボタンをクリック
+	backButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]backButton.click:');
+		postWin.close();
+	});	
 
 	// ロード用画面
 	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);

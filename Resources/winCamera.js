@@ -17,6 +17,10 @@ exports.createWindow = function(_userData){
 	var titleLabel = Ti.UI.createLabel(style.cameraTitleLabel);	
 	cameraWin.titleControl = titleLabel;
 
+	// 戻るボタンの表示
+	var backButton = Titanium.UI.createButton(style.commonBackButton);
+	cameraWin.leftNavButton = backButton;
+
 	// 投稿ボタンの表示
 	var postButton = Titanium.UI.createButton(style.cameraPostButton);
 	cameraWin.rightNavButton = postButton;
@@ -51,6 +55,12 @@ exports.createWindow = function(_userData){
 
 
 // ---------------------------------------------------------------------
+	// 戻るボタンをクリック
+	backButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]backButton.click:');
+		cameraWin.close();
+	});	
+
 	// 投稿時のロード用画面
 	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
 

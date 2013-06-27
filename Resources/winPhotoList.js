@@ -35,14 +35,26 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			articleView.add(textLabel);
 */					
 			
-			// 各記事のタップでフォト画面へ遷移
+			// フォトにタップでフォト拡大画面を表示
 			photoImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]photoImage.click:');
-				e.source.opacity = 0.5;
-				var photoWin = win.createPhotoWindow(e.source.articleData);
-				photoWin.prevWin = photoListWin;
-				win.openTabWindow(photoWin);
-				e.source.opacity = 1.0;
+				var photoFullWin = Titanium.UI.createWindow(style.photoListPhotoFullWin);
+				var photoFullImage = Ti.UI.createImageView(style.photoListPhotoFullImage);
+				photoFullImage.image = 'images/photo/' + e.source.articleData.no + '.jpg';
+				photoFullWin.add(photoFullImage);
+		
+				photoFullWin.open({
+					modal: true,
+				    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
+				    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_CROSS_DISSOLVE,
+				    navBarHidden: true
+				});
+		
+				// フォト拡大が面にタップで戻る
+				photoFullImage.addEventListener('click',function(e){
+					Ti.API.debug('[event]photoFullImage.click:');
+					photoFullWin.close();				
+				});
 			});
 		}		
 		return articleTableRow;

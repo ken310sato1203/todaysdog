@@ -1,7 +1,7 @@
 // プロフィール
 
 exports.createWindow = function(_userData){
-	Ti.API.debug('[func]profileWinProfile.createWindow:');
+	Ti.API.debug('[func]winProfile.createWindow:');
 
 	// Viewの取得
 	var getProfileTableView = function() {
