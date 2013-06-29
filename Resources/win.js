@@ -165,6 +165,7 @@ exports.win = {
 
 		for (var i=0; i<tabData.length; i++) {
 			var tabView = Ti.UI.createView(style.tabView);
+			tabView.objectName = tabData[i].objectName;
 			tabGroupView.add(tabView);
 			var tabImage = Ti.UI.createImageView(style.tabImage);
 			tabView.add(tabImage);

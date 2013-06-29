@@ -109,6 +109,8 @@ exports.style = {
 		left: '0dp',
 		width: '80dp',
 		height: '44dp',
+		// カスタムプロパティ
+		objectName: null,
 	},
 	tabImage:{
 //		top: '3dp',
@@ -841,7 +843,7 @@ exports.style = {
 	profileEditSaveButton:{
 		width: '28dp',
 		height: '28dp',
-		backgroundImage:'images/icon/w_check.png',
+		backgroundImage:'images/icon/w_plus.png',
 	},
 
 	profileEditTableView:{ 
@@ -1707,7 +1709,7 @@ exports.style = {
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
 	},
-
+/*
 	diaryTitleTabbedBar:{
 		width: '130dp',
 		height: '30dp',
@@ -1716,7 +1718,7 @@ exports.style = {
 	    labels: ['Month', 'Day'],
 	    index: 1,
 	},
-
+*/
 	diaryTableView:{
 		top: '1dp',
 		left: '0dp',
@@ -1811,7 +1813,7 @@ exports.style = {
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
 	},
-
+/*
 	timeTitleTabbedBar:{
 		width: '130dp',
 		height: '30dp',
@@ -1820,17 +1822,25 @@ exports.style = {
 	    labels: ['Month', 'Day'],
 	    index: 1,
 	},
-
+*/
+	timeBackButton:{
+		width: '28dp',
+		height: '28dp',
+		backgroundImage: 'images/icon/w_arrow_up.png',
+	},
 	timeListButton:{
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
-		textAlign: 'center',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		title: 'リスト',
+		width: '28dp',
+		height: '28dp',
+		backgroundImage: 'images/icon/titlebar.png',
 		// カスタムプロパティ
 		listFlag : false,
 	},
+	timeListImage:{
+		width: '28dp',
+		height: '28dp',
+		image: null,
+	},
+
 	timeTableView:{
 		top: '1dp',
 		left: '0dp',

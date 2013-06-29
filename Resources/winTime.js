@@ -169,16 +169,19 @@ exports.createWindow = function(_userData, _diaryData){
 	var monthTitle = Ti.UI.createLabel(style.timeTitleLabel);
 	var weekday = util.diary.weekday[new Date(year, month-1, day).getDay()];
 	monthTitle.text =  month + '/' + day + ' ' + weekday.text;
-
-//	titleView.add(monthTitle);
-//	timeWin.leftNavButton = titleView;
-	// 日別・時間別表示切り替えボタン
-//	var tabbedBar = Titanium.UI.iOS.createTabbedBar(style.timeTitleTabbedBar);
 	timeWin.titleControl = monthTitle;
+
+	// 戻るボタンの表示
+	var backButton = Titanium.UI.createButton(style.timeBackButton);
+	timeWin.leftNavButton = backButton;
 
 	// リストボタンの表示
 	var listButton = Titanium.UI.createButton(style.timeListButton);
 	timeWin.rightNavButton = listButton;
+	// ボタンのbackgroundImageは後から変更できないのでImageViewの方で変更
+	var listImage = Ti.UI.createImageView(style.timeListImage);
+	listImage.image = "images/icon/w_arrow_listup.png";
+	listButton.add(listImage);
 
 	// ビューの作成
 	var type = "time";
@@ -186,6 +189,12 @@ exports.createWindow = function(_userData, _diaryData){
 	timeWin.add(timeTableView);
 
 // ---------------------------------------------------------------------
+	// 戻るボタンをクリック
+	backButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]backButton.click:');
+		timeWin.close();
+	});
+
 	// リストボタンをクリック
 	listButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]listButton.click:');
@@ -195,12 +204,14 @@ exports.createWindow = function(_userData, _diaryData){
 		if (e.source.listFlag == false) {
 			type = "list";
 			e.source.listFlag = true;
-			e.source.title = "時間別";
+			listImage.image = "images/icon/w_arrow_listdown.png";
+
 		} else {
 			type = "time";
 			e.source.listFlag = false;
-			e.source.title = "リスト";
+			listImage.image = "images/icon/w_arrow_listup.png";
 		}
+		timeWin.rightNavButton = e.source;
 		timeTableView = getTimeTableView(type);
 		scrollPosition(timeTableView);
 		timeWin.add(timeTableView);

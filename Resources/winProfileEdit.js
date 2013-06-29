@@ -35,9 +35,12 @@ exports.createWindow = function(_userData){
 	var iconLabel = Ti.UI.createLabel(style.profileEditListItemLabel);
 	iconLabel.text = 'アイコン';
 	var iconImage = Ti.UI.createImageView(style.profileEditIconImage);
-	iconImage.image = 'images/icon/' + _userData.user + '.png';
+	iconImage.image = 'images/icon/' + _userData.user + '.jpg';
+	var circleImage = Ti.UI.createImageView(style.profileEditIconImage);
+	circleImage.image = 'images/icon/circle.png';
 	iconView.add(iconLabel);
 	iconView.add(iconImage);
+	iconView.add(circleImage);
 
 	// カバー写真のフィールドを表示
 	var coverRow = Titanium.UI.createTableViewRow(style.profileEditListTableRow);
@@ -51,6 +54,27 @@ exports.createWindow = function(_userData){
 	coverImage.image = 'images/photo/A0010.jpg';
 	coverView.add(coverLabel);
 	coverView.add(coverImage);
+
+	// カバー写真をクリック
+	coverImage.addEventListener('click', function(e){
+		Ti.API.debug('[event]coverImage.click:');
+
+		Titanium.Media.openPhotoGallery({
+			success : function(event) {
+				var photo = event.media.imageAsThumbnail(100);//100はサムネイル写真のサイズを設定する（１００＊１００)
+			},
+			error : function(error) {
+			},
+			cancel : function() {
+				// キャンセル時の挙動
+			},
+			// 選択直後に拡大縮小移動をするか否かのフラグ
+			allowEditing : false,
+			// 選択可能なメディア種別を配列で指定
+			mediaTypes : [Ti.Media.MEDIA_TYPE_PHOTO]
+		});
+	});
+
 
 	// 名前のフィールドを表示
 	var nameRow = Titanium.UI.createTableViewRow(style.profileEditListTableRow);
@@ -88,7 +112,6 @@ exports.createWindow = function(_userData){
 	sexLabel.text = '性別';
 	var sexField = Ti.UI.createTextField(style.profileEditListValueField);
 	sexField.value = _userData.sex;
-	sexField.enabled = false;
 	sexView.add(sexLabel);
 	sexView.add(sexField);
 
@@ -102,7 +125,6 @@ exports.createWindow = function(_userData){
 	birthLabel.text = '誕生日';
 	var birthField = Ti.UI.createTextField(style.profileEditListValueField);
 	birthField.value = _userData.birth;
-	birthField.enabled = false;
 	birthView.add(birthLabel);
 	birthView.add(birthField);
 
@@ -116,7 +138,6 @@ exports.createWindow = function(_userData){
 	memoLabel.text = '自己紹介';
 	var memoField = Ti.UI.createTextArea(style.profileEditListTextArea);
 	memoField.value = _userData.memo;
-	memoField.enabled = false;
 	memoView.add(memoLabel);
 	memoView.add(memoField);
 
