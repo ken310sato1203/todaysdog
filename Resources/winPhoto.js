@@ -1,7 +1,8 @@
 // フォト
 
-exports.createWindow = function(_articleData){
+exports.createWindow = function(_type, _articleData){
 	Ti.API.debug('[func]winPhoto.createWindow:');
+	Ti.API.debug('_type:' + _type);
 
 	// ライクリストの表示件数
 	var likeCount = 5;
@@ -131,9 +132,12 @@ exports.createWindow = function(_articleData){
 	titleIconImage.image = 'images/icon/' + _articleData.user + '.png';
 
 	var titleNameLabel = Ti.UI.createLabel(style.photoTitleNameLabel);
-	titleNameLabel.text = userData.name + '\n@' + userData.user;
+	titleNameLabel.text = userData.name;
+	var titleUserLabel = Ti.UI.createLabel(style.photoTitleUserLabel);
+	titleUserLabel.text = '@' + userData.user;
 	titleView.add(titleIconImage);
 	titleView.add(titleNameLabel);
+	titleView.add(titleUserLabel);
 	photoWin.titleControl = titleView;
 
 	// 戻るボタンの表示
@@ -172,10 +176,12 @@ exports.createWindow = function(_articleData){
 	textView.add(textLabel);
 	textView.add(timeLabel);
 
-	var likeStampImage = Ti.UI.createImageView(style.photoLikeStampImage);
-	articleTextView.add(likeStampImage);
-
 	// ライクボタンの表示
+	var likeStampImage = Ti.UI.createImageView(style.photoLikeStampImage);
+	if (_type == "friends") {
+		likeStampImage.touchEnabled = true;
+	}
+	articleTextView.add(likeStampImage);
 	if (model.checkLikeList(_articleData.no, model.getLoginId())) {
 		likeStampImage.image = 'images/icon/b_like_after.png';
 		likeStampImage.clickFlag = true;
@@ -202,78 +208,82 @@ exports.createWindow = function(_articleData){
 		e.source.enabled = true;
 	});
 
-	var actionView = Ti.UI.createView(style.photoActionView);
-	articleView.add(actionView);
-	// コメント
-	var commentActionView = Ti.UI.createView(style.photoCommentActionView);
-	actionView.add(commentActionView);
-	var commentActionImage = Ti.UI.createImageView(style.photoCommentActionImage);
-	commentActionView.add(commentActionImage);
-	var commentActionLabel = Ti.UI.createLabel(style.photoCommentActionLabel);
-	commentActionView.add(commentActionLabel);
-	// シェア
-	var shareActionView = Ti.UI.createView(style.photoShareActionView);
-	actionView.add(shareActionView);
-	var shareActionImage = Ti.UI.createImageView(style.photoShareActionImage);
-	shareActionView.add(shareActionImage);
-	var shareActionLabel = Ti.UI.createLabel(style.photoShareActionLabel);
-	shareActionView.add(shareActionLabel);
+	if (_type == "friends") {
+		var actionView = Ti.UI.createView(style.photoActionView);
+		articleView.add(actionView);
+		// コメント
+		var commentActionView = Ti.UI.createView(style.photoCommentActionView);
+		actionView.add(commentActionView);
+		var commentActionImage = Ti.UI.createImageView(style.photoCommentActionImage);
+		commentActionView.add(commentActionImage);
+		var commentActionLabel = Ti.UI.createLabel(style.photoCommentActionLabel);
+		commentActionView.add(commentActionLabel);
+		// シェア
+		var shareActionView = Ti.UI.createView(style.photoShareActionView);
+		actionView.add(shareActionView);
+		var shareActionImage = Ti.UI.createImageView(style.photoShareActionImage);
+		shareActionView.add(shareActionImage);
+		var shareActionLabel = Ti.UI.createLabel(style.photoShareActionLabel);
+		shareActionView.add(shareActionLabel);		
 
-
-/*
-	// コメントボタンの表示
-	var commentButton = Ti.UI.createButton(style.photoCommentButton);
-	var commentButtonIconImage = Ti.UI.createImageView(style.photoCommentButtonIconImage);
-	commentButton.add(commentButtonIconImage);
-	var commentButtonLabel = Ti.UI.createLabel(style.photoCommentButtonLabel);
-	commentButton.add(commentButtonLabel);
-//	photoButtonView.add(commentButton);
-
-	// ライク数の表示
-	var likeCountTableRow = Ti.UI.createTableViewRow(style.photoLikeCountTableRow);
-	photoTableView.appendRow(likeCountTableRow);
-	var likeCountView = Ti.UI.createView(style.photoLikeCountView);
-	likeCountTableRow.add(likeCountView);
-	var likeCountIconImage = Ti.UI.createImageView(style.photoLikeCountIconImage);
-	likeCountView.add(likeCountIconImage);
-	var likeCountLabel = Ti.UI.createLabel(style.photoLikeCountLabel);
-	likeCountView.add(likeCountLabel);
-
-	// ライクリストの表示
-	var likeTableRow = Ti.UI.createTableViewRow(style.photoLikeTableRow);
-	photoTableView.appendRow(likeTableRow);
-	var likeListView = null;
-
-	// 初回読み込み時に、ライクリストの更新
-	updateLike();
-
-	// コメント数の表示
-	var commentCountTableRow = Ti.UI.createTableViewRow(style.photoCommentCountTableRow);
-	photoTableView.appendRow(commentCountTableRow);
-	var commentCountView = Ti.UI.createView(style.photoCommentCountView);
-	commentCountTableRow.add(commentCountView);
-	var commentCountIconImage = Ti.UI.createImageView(style.photoCommentCountIconImage);
-	commentCountView.add(commentCountIconImage);						
-	var commentCountLabel = Ti.UI.createLabel(style.photoCommentCountLabel);
-	commentCountView.add(commentCountLabel);
-*/
-
-	// コメントリストの表示
-	var commentTableRow = Ti.UI.createTableViewRow(style.photoCommentTableRow);
-	photoTableView.appendRow(commentTableRow);
-	var commentListView = null;
+		// コメントリストの表示
+		var commentTableRow = Ti.UI.createTableViewRow(style.photoCommentTableRow);
+		photoTableView.appendRow(commentTableRow);
+		var commentListView = null;
+		
+		// 初回読み込み時に、コメントリストの更新
+		updateComment();
 	
-	// 初回読み込み時に、コメントリストの更新
-	updateComment();
+		// コメントフィールドの表示
+		var flexSpace = Ti.UI.createButton({systemButton:Ti.UI.iPhone.SystemButton.FLEXIBLE_SPACE});
+		var doneButton = Ti.UI.createButton({systemButton:Ti.UI.iPhone.SystemButton.DONE});
+		var commentField = Ti.UI.createTextField(style.photoCommentField);
+		var dummyField = Ti.UI.createTextField(style.photoCommentField);
+		dummyField.top = '-50dp';
+		dummyField.keyboardToolbar = [flexSpace,commentField,doneButton];
+		photoWin.add(dummyField);
 
-	// コメントフィールドの表示
-	var flexSpace = Ti.UI.createButton({systemButton:Ti.UI.iPhone.SystemButton.FLEXIBLE_SPACE});
-	var doneButton = Ti.UI.createButton({systemButton:Ti.UI.iPhone.SystemButton.DONE});
-	var commentField = Ti.UI.createTextField(style.photoCommentField);
-	var dummyField = Ti.UI.createTextField(style.photoCommentField);
-	dummyField.top = '-50dp';
-	dummyField.keyboardToolbar = [flexSpace,commentField,doneButton];
-	photoWin.add(dummyField);
+		// コメントボタンのクリック
+		commentActionView.addEventListener('click',function(e){
+			Ti.API.debug('[event]commentActionView.click:');
+			e.source.enabled = false;
+			e.source.backgroundColor = 'white';
+			dummyField.focus();
+			e.source.backgroundColor = '#f5f5f5';
+			e.source.enabled = true;
+		});
+	
+		dummyField.addEventListener('focus',function(e){
+			Ti.API.debug('[event]dummyField.focus:');
+			commentField.focus();
+		});	
+	
+		doneButton.addEventListener('click',function(e){
+			Ti.API.debug('[event]doneButton.click:');
+			if (commentField.value != '') {
+				addComment();
+				commentField.value = '';
+			}
+			commentField.blur();			
+		});
+	
+		// コメントフィールドでキーボード確定でコメントリストに追加
+		commentField.addEventListener('return',function(e){
+			Ti.API.debug('[event]commentField.return:');
+			if (commentField.value != '') {
+				addComment();
+				commentField.value = '';
+			}
+			commentField.blur();			
+		});
+
+		// 画面クリックでコメントフィールドのフォーカスを外す
+		photoTableView.addEventListener('click',function(e){
+			Ti.API.debug('[event]photoTableView.click:');
+			commentField.blur();
+		});
+
+	}
 
 // ---------------------------------------------------------------------
 	// 戻るボタンをクリック
@@ -304,54 +314,6 @@ exports.createWindow = function(_articleData){
 		});
 	});
 
-	// コメントボタンのクリック
-	commentActionView.addEventListener('click',function(e){
-		Ti.API.debug('[event]commentActionView.click:');
-		e.source.enabled = false;
-		e.source.backgroundColor = 'white';
-		dummyField.focus();
-		e.source.backgroundColor = '#f5f5f5';
-		e.source.enabled = true;
-	});
-
-	dummyField.addEventListener('focus',function(e){
-		Ti.API.debug('[event]dummyField.focus:');
-		commentField.focus();
-	});	
-
-	doneButton.addEventListener('click',function(e){
-		Ti.API.debug('[event]doneButton.click:');
-		if (commentField.value != '') {
-			addComment();
-			commentField.value = '';
-		}
-		commentField.blur();			
-	});
-
-	// コメントフィールドでキーボード確定でコメントリストに追加
-	commentField.addEventListener('return',function(e){
-		Ti.API.debug('[event]commentField.return:');
-		if (commentField.value != '') {
-			addComment();
-			commentField.value = '';
-		}
-		commentField.blur();			
-	});
-
-	// 画面クリックでコメントフィールドのフォーカスを外す
-	photoTableView.addEventListener('click',function(e){
-		Ti.API.debug('[event]photoTableView.click:');
-		commentField.blur();
-	});
-
-/*
-	commentCountIconImage.addEventListener('click',function(e){
-		Ti.API.debug('[event]commentCountIconImage.click:');
-		var commentListWin = win.createCommentListWindow(_articleData);
-		commentListWin.prevWin = photoWin;
-		win.openTabWindow(commentListWin);
-	});
-*/
 
 	// タイトルアイコンのクリックでプロフィールを表示
 	titleIconImage.addEventListener('click',function(e){

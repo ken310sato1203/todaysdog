@@ -153,14 +153,22 @@ exports.style = {
 		height: '28dp',
 	},
 	photoTitleNameLabel:{
+		top: '3dp',
 		left: '33dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
 		color: 'white',
-//		shadowOffset: {x:0,y:-1},
-//		shadowColor: '#696969', 
+	},
+	photoTitleUserLabel:{
+		top: '18dp',
+		left: '33dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
+		color: 'white',
 	},
 
 	photoTableView:{ 
@@ -249,6 +257,7 @@ exports.style = {
 		width: '55dp',
 		height: '55dp',
 		image: 'images/icon/b_like_before.png',
+		touchEnabled: false,
 		// カスタムプロパティ
 		clickFlag: false,
 	},
@@ -315,166 +324,6 @@ exports.style = {
 		text: 'シェアする',
 	},
 
-/*
-	photoButtonView:{
-		layout: 'absolute',
-		top: '0dp',
-		width: '100%',
-		height: Ti.UI.SIZE,
-	},
-
-	photoLikeButton:{
-		layout: 'horizontal',
-		top: '0dp',
-		right: '90dp',
-	    bottom: '10dp',
-		width: Ti.UI.SIZE,
-		height: '22dp',
-		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		// iOSではbackgroundSelectedColorが対応していない
-//		backgroundSelectedColor: 'blue',
-		borderColor: '#dedede',
-		borderWidth: 1.5,
-		borderRadius: 5,
-		// カスタムプロパティ
-		clickFlag: false,
-	},
-	photoLikeButtonIconImage:{
-		left: '5dp',
-		width: '18dp',
-		height: '18dp',
-		image: 'images/icon/like.gif',
-	},
-	photoLikeButtonLabel:{
-		left: '1dp',
-		right: '5dp',
-		width: Ti.UI.SIZE,
-		height: '22dp',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-		text: 'わんポチ',
-	},
-
-	photoCommentButton:{
-		layout: 'horizontal',
-		top: '0dp',
-		right: '10dp',
-	    bottom: '10dp',
-		width: Ti.UI.SIZE,
-		height: '22dp',
-		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
-		// iOSではbackgroundSelectedColorが対応していない
-//		backgroundSelectedColor: 'blue',
-		borderColor: '#dedede',
-		borderWidth: 1.5,
-		borderRadius: 5,
-	},
-	photoCommentButtonIconImage:{
-		left: '5dp',
-		width: '15dp',
-		height: '15dp',
-		image: 'images/icon/light_comment.png',
-	},
-	photoCommentButtonLabel:{
-		left: '1dp',
-		right: '5dp',
-		width: Ti.UI.SIZE,
-		height: '22dp',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-		text: 'わんコメ',
-	},
-	
-	photoLikeCountTableRow:{ 
-		// ライクがない場合に間を詰めるため高さを1dpに指定（0dpだと指定されないので1dp）
-		height: '1dp',
-		backgroundColor: '#dedede',
-		touchEnabled: false,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-	},
-	photoLikeCountView:{
-		layout: 'horizontal',
-		top: '3dp',
-		width: '226dp',
-		height: Ti.UI.SIZE,
-	},
-	photoLikeCountIconImage:{
-		top: '0dp',
-		left: '0dp',
-		width: '18dp',
-		height: '18dp',
-		image: 'images/icon/like.gif',
-	},
-	photoLikeCountLabel:{
-		top: '5dp',
-		left: '0dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-		text: null,
-	},
-
-	photoLikeTableRow:{
-		// ライクがない場合に間を詰めるため高さを1dpに指定（0dpだと指定されないので1dp）
-		height: '1dp',
-		backgroundColor: '#dedede',
-		touchEnabled: false,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-	},
-	photoLikeListView:{
-		layout: 'horizontal',
-		top: '2dp',
-		width: '226dp',
-		height: Ti.UI.SIZE,
-	},
-	photoLikeView:{
-		top: '0dp',
-		left: '1dp',
-		width: '44dp',
-		height: '44dp',
-		backgroundColor: 'white',
-	},
-	photoLikeUserIconImage:{
-		top: '4dp',
-		bottom: '4dp',
-		width: '36dp',
-		height: '36dp',
-	},
-	photoLikeIconImage:{
-		width: '18dp',
-		height: '18dp',
-		image: 'images/icon/like.gif',
-	},
-
-	photoCommentCountTableRow:{ 
-		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
-		touchEnabled: false,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-	},
-	photoCommentCountView:{
-		layout: 'horizontal',
-		top: '5dp',
-		width: '226dp',
-		height: Ti.UI.SIZE,
-	},
-	photoCommentCountIconImage:{
-		top: '0dp',
-		left: '0dp',
-		width: '18dp',
-		height: '18dp',
-		image: 'images/icon/light_comment.png',
-	},
-	photoCommentCountLabel:{
-		top: '5dp',
-		left: '0dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-	},
-*/
 	photoCommentTableRow:{ 
 		top: '0dp',
 		height: Ti.UI.SIZE,
@@ -665,7 +514,7 @@ exports.style = {
 		color: '#000',
 	},
 	profileUserLabel:{
-		top: '2dp',
+		top: '0dp',
 		left: '15dp',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
@@ -677,7 +526,7 @@ exports.style = {
 		color: '#000',
 	},
 	profileBirthLabel:{
-		top: '2dp',
+		top: '0dp',
 		left: '15dp',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
@@ -2006,6 +1855,8 @@ exports.style = {
 		width: '100%',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
+		// カスタムプロパティ
+		articleData: null,
 	},
 	friendsUserIconImage:{
 		top: '5dp',
@@ -2013,8 +1864,8 @@ exports.style = {
 		left: '10dp',
 		width: '55dp',
 		height: '55dp',
-		// カスタムプロパティ
 		user: null,
+		touchEnabled: false,
 	},
 	friendsTextView:{
 		layout: 'vertical',
@@ -2025,8 +1876,7 @@ exports.style = {
 		// friendsUserIconImageの幅(10+55)と余白（10+10）を除いたサイズ
 		width: (Ti.Platform.displayCaps.platformWidth - 85) + 'dp',
 		height: Ti.UI.SIZE,
-		// カスタムプロパティ
-		articleData: null,
+		touchEnabled: false,
 	},
 	friendsNameLabel:{
 		top: '0dp',
@@ -2036,8 +1886,7 @@ exports.style = {
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
-		// カスタムプロパティ
-		objectName : 'friendsNameLabel',
+		touchEnabled: false,
 	},
 	friendsTextLabel:{
 		top: '0dp',
@@ -2047,8 +1896,7 @@ exports.style = {
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
-		// カスタムプロパティ
-		objectName : 'friendsTextLabel',
+		touchEnabled: false,
 	},
 
 	friendsTimeView:{

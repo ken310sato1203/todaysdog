@@ -111,8 +111,10 @@ exports.createWindow = function(_userData){
 				// フォトスタンプをクリックした時
 				stampPhotoImage.addEventListener('click', function(e) {
 					Ti.API.debug('[event]stampPhotoImage.click:');
-					var diaryPhotoWin = win.createCalendarPhotoWindow(_userData, e.source.articleData);
-					win.openTabWindow(diaryPhotoWin);
+					var type = "diary";
+					var photoWin = win.createPhotoWindow(type, e.source.articleData);
+					photoWin.prevWin = diaryWin;
+					win.openTabWindow(photoWin);
 				});
 			}
 

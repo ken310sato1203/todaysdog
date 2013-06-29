@@ -49,6 +49,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		
 		for (var i=0; i<_articleList.length; i++) {	
 			var articleView = Ti.UI.createView(style.friendsArticleView);
+			// カスタムプロパティに記事データを格納
+			articleView.articleData = _articleList[i];
 			articleListView.add(articleView);
 			var userIconImage = Ti.UI.createImageView(style.friendsUserIconImage);
 			userIconImage.image = 'images/icon/' + _articleList[i].user + '.png';
@@ -56,8 +58,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			articleView.add(userIconImage);
 
 			var textView = Ti.UI.createView(style.friendsTextView);
-			// カスタムプロパティに記事データを格納
-			textView.articleData = _articleList[i];
 			articleView.add(textView);
 
 			var nameLabel = Ti.UI.createLabel(style.friendsNameLabel);
@@ -91,25 +91,14 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			refreshTarget.push({no:_articleList[i].no, likeLabel:likeLabel, commentLabel:commentLabel});
 			
 			// 各記事のタップでフォト画面へ遷移
-			textView.addEventListener('click',function(e){
-				Ti.API.debug('[event]textView.click:');
-				if (e.source.objectName == 'friendsNameLabel' || e.source.objectName == 'friendsTextLabel') {
-					var photoWin = win.createPhotoWindow(e.source.getParent().articleData);
-					photoWin.prevWin = friendsWin;
-					win.openTabWindow(photoWin);
-				}
+			articleView.addEventListener('click',function(e){
+				Ti.API.debug('[event]articleView.click:');
+				var type = "friends";
+				var photoWin = win.createPhotoWindow(type, e.source.articleData);
+				photoWin.prevWin = friendsWin;
+				win.openTabWindow(photoWin);
 			});
-			// ユーザアイコンのタップでプロフィール画面へ遷移
-			userIconImage.addEventListener('click',function(e){
-				Ti.API.debug('[event]userIconImage.click:');
-				e.source.opacity = 0.5;
-				var userData = model.getUser(e.source.user);
-				var profileWin = win.createProfileWindow(userData);
-				profileWin.prevWin = friendsWin;
-				win.openTabWindow(profileWin);
-				e.source.opacity = 1.0;
-			});
-		}		
+		}
 		return articleTableRow;
 	};
 

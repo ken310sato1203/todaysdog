@@ -23,112 +23,94 @@ exports.win = {
 	createFriendsWindow:function(_userData){
 		Ti.API.debug('[func]createFriendsWindow:');
 		var win = friendsWin.createWindow("follow", _userData, null, null);
-//		win.add(customTab);
 		return win;
-	},
+		},
 	createMydogWindow:function(_userData){
 		Ti.API.debug('[func]createMydogWindow:');
 		var type = "random";
 		var win = mydogWin.createWindow(type, _userData, null);
-//		win.add(customTab);
 		return win;
 	},
 	createCalendarPhotoWindow:function(_userData, _articleData){
 		Ti.API.debug('[func]createCalendarPhotoWindow:');
 		var type = "date";
 		var win = mydogWin.createWindow(type, _userData, _articleData);
-//		win.add(customTab);
 		return win;
 	},
 	createCameraPhotoWindow:function(_userData, _articleData){
 		Ti.API.debug('[func]createCameraPhotoWindow:');
 		var type = "post";
 		var win = mydogWin.createWindow(type, _userData, _articleData);
-//		win.add(customTab);
 		return win;
 	},
 	createCalendarWindow:function(_articleData){
 		Ti.API.debug('[func]createCalendarWindow:');
 		var win = calendarWin.createWindow(_articleData);
-//		win.add(customTab);
 		return win;
 	},
 	createCameraWindow:function(_userData){
 		Ti.API.debug('[func]createCameraWindow:');
 		var win = cameraWin.createWindow(_userData);
-//		win.add(customTab);
 		return win;
 	},
 	createDiaryWindow:function(_userData){
 		Ti.API.debug('[func]createDiaryWindow:');
 		var win = diaryWin.createWindow(_userData);
-//		win.add(customTab);
 		return win;
 	},
 	createTimeWindow:function(_userData, _diaryData){
 		Ti.API.debug('[func]createTimeWindow:');
 		var win = timeWin.createWindow(_userData, _diaryData);
-//		win.add(customTab);
 		return win;
 	},
 	createTodayWindow:function(_userData, _stampData){
 		Ti.API.debug('[func]createTodayWindow:');
 		var win = todayWin.createWindow(_userData, _stampData);
-//		win.add(customTab);
 		return win;
 	},
 	createStampWindow:function(_userData, _stampData){
 		Ti.API.debug('[func]createStampWindow:');
 		var win = stampWin.createWindow(_userData, _stampData);
-//		win.add(customTab);
 		return win;
 	},
 	createStampPostWindow:function(_userData, _stampDataList){
 		Ti.API.debug('[func]createStampPostWindow:');
 		var win = stampPostWin.createWindow(_userData, _stampDataList);
-//		win.add(customTab);
 		return win;
 	},
 	createStampTextWindow:function(_userData, _stampData){
 		Ti.API.debug('[func]createStampTextWindow:');
 		var win = stampTextWin.createWindow(_userData, _stampData);
-//		win.add(customTab);
 		return win;
 	},
 	createProfileWindow:function(_userData){
 		Ti.API.debug('[func]createProfileWindow:');
 		var win = profileWin.createWindow(_userData);
-//		win.add(customTab);
 		return win;
 	},
 	createProfileEditWindow:function(_userData){
 		Ti.API.debug('[func]createProfileEditWindow:');
 		var win = profileEditWin.createWindow(_userData);
-//		win.add(customTab);
 		return win;
 	},
-	createPhotoWindow:function(_articleData){
+	createPhotoWindow:function(_type, _articleData){
 		Ti.API.debug('[func]createPhotoWindow:');
-		var win = photoWin.createWindow(_articleData);
-//		win.add(customTab);
+		var win = photoWin.createWindow(_type, _articleData);
 		return win;
 	},
 	createPhotoListWindow:function(_type, _userData){
 		Ti.API.debug('[func]createPhotoListWindow:');
 		var win = photoListWin.createWindow(_type, _userData, null, null);
-//		win.add(customTab);
 		return win;
 	},
 	createUserListWindow:function(_type, _userData){
 		Ti.API.debug('[func]createUserListWindow:');
 		var win = userListWin.createWindow(_type, _userData);
-//		win.add(customTab);
 		return win;
 	},
 	createCommentListWindow:function(_articleData){
 		Ti.API.debug('[func]createCommentListWindow:');
 		var win = commentListWin.createWindow(_articleData);
-//		win.add(customTab);
 		return win;
 	},
 

@@ -104,7 +104,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			photoImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]photoImage.click:');
 				e.source.opacity = 0.5;
-				var photoWin = win.createPhotoWindow(e.source.articleData);
+				var type = "photoList";
+				var photoWin = win.createPhotoWindow(type, e.source.articleData);
 				photoWin.prevWin = photoListWin;
 				win.openTabWindow(photoWin);
 				e.source.opacity = 1.0;
