@@ -65,7 +65,7 @@ exports.util = {
 		var hour = _formatedDate.substr(11,2);
 		var minute = _formatedDate.substr(14,2);
 		var second = _formatedDate.substr(17,2);
-		return {year:year, mohth:month, day:day, hour:hour, minute:minute, second:second};
+		return {year:year, month:month, day:day, hour:hour, minute:minute, second:second};
 	},
 
 }

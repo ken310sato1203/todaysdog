@@ -38,23 +38,10 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			// フォトにタップでフォト拡大画面を表示
 			photoImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]photoImage.click:');
-				var photoFullWin = Titanium.UI.createWindow(style.photoListPhotoFullWin);
-				var photoFullImage = Ti.UI.createImageView(style.photoListPhotoFullImage);
-				photoFullImage.image = 'images/photo/' + e.source.articleData.no + '.jpg';
-				photoFullWin.add(photoFullImage);
-		
-				photoFullWin.open({
-					modal: true,
-				    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
-				    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_CROSS_DISSOLVE,
-				    navBarHidden: true
-				});
-		
-				// フォト拡大が面にタップで戻る
-				photoFullImage.addEventListener('click',function(e){
-					Ti.API.debug('[event]photoFullImage.click:');
-					photoFullWin.close();				
-				});
+				var type = "photoList";
+				var photoWin = win.createPhotoWindow(type, e.source.articleData);
+				photoWin.prevWin = photoListWin;
+				win.openTabWindow(photoWin);
 			});
 		}		
 		return articleTableRow;
@@ -103,12 +90,10 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			// 各記事のタップでフォト画面へ遷移
 			photoImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]photoImage.click:');
-				e.source.opacity = 0.5;
 				var type = "photoList";
 				var photoWin = win.createPhotoWindow(type, e.source.articleData);
 				photoWin.prevWin = photoListWin;
 				win.openTabWindow(photoWin);
-				e.source.opacity = 1.0;
 			});
 		}		
 		return articleTableRow;

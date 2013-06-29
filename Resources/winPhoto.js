@@ -235,12 +235,13 @@ exports.createWindow = function(_type, _articleData){
 		updateComment();
 	
 		// コメントフィールドの表示
-		var flexSpace = Ti.UI.createButton({systemButton:Ti.UI.iPhone.SystemButton.FLEXIBLE_SPACE});
-		var doneButton = Ti.UI.createButton({systemButton:Ti.UI.iPhone.SystemButton.DONE});
+		var postButton = Ti.UI.createButton(style.photoCommentPostButton);
+		var postImage = Ti.UI.createImageView(style.photoCommentPostImage);
+		postButton.add(postImage);
 		var commentField = Ti.UI.createTextField(style.photoCommentField);
 		var dummyField = Ti.UI.createTextField(style.photoCommentField);
 		dummyField.top = '-50dp';
-		dummyField.keyboardToolbar = [flexSpace,commentField,doneButton];
+		dummyField.keyboardToolbar = [commentField, postButton];
 		photoWin.add(dummyField);
 
 		// コメントボタンのクリック
@@ -258,8 +259,8 @@ exports.createWindow = function(_type, _articleData){
 			commentField.focus();
 		});	
 	
-		doneButton.addEventListener('click',function(e){
-			Ti.API.debug('[event]doneButton.click:');
+		postButton.addEventListener('click',function(e){
+			Ti.API.debug('[event]postButton.click:');
 			if (commentField.value != '') {
 				addComment();
 				commentField.value = '';
@@ -291,29 +292,6 @@ exports.createWindow = function(_type, _articleData){
 		Ti.API.debug('[event]backButton.click:');
 		photoWin.close();
 	});
-
-	// フォトにタップでフォト拡大画面を表示
-	photoImage.addEventListener('click',function(e){
-		Ti.API.debug('[event]photoImage.click:');
-		var photoFullWin = Titanium.UI.createWindow(style.photoPhotoFullWin);
-		var photoFullImage = Ti.UI.createImageView(style.photoPhotoFullImage);
-		photoFullImage.image = 'images/photo/' + e.source.articleData.no + '.jpg';
-		photoFullWin.add(photoFullImage);
-
-		photoFullWin.open({
-			modal: true,
-		    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
-		    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_CROSS_DISSOLVE,
-		    navBarHidden: true
-		});
-
-		// フォト拡大が面にタップで戻る
-		photoFullImage.addEventListener('click',function(e){
-			Ti.API.debug('[event]photoFullImage.click:');
-			photoFullWin.close();				
-		});
-	});
-
 
 	// タイトルアイコンのクリックでプロフィールを表示
 	titleIconImage.addEventListener('click',function(e){

@@ -392,19 +392,27 @@ exports.style = {
 
 	photoCommentField:{
 		top: '0dp',
-		left: '20dp',
-	    bottom: '10dp',
-		width: '240dp',
-		height: '22dp',
+		width: '255dp',
+		height: '30dp',
 		backgroundColor: 'white',
-		borderWidth: 2,
-		borderColor:'#bbb',
-		borderRadius: 0,
+		borderColor:'#dedede',
+		borderRadius: '0',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		hintText: 'comment',
+		keyboardToolbarColor: '#f5f5f5',
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
         returnKeyType:Ti.UI.RETURNKEY_SEND,
         borderStyle:Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
+	},
+	photoCommentPostButton:{
+		width: '32dp',
+		height: '28dp',
+		backgroundImage: 'images/icon/titlebar.png',
+	},
+	photoCommentPostImage:{
+		width: '18dp',
+		height: '18dp',
+		image:'images/icon/w_plus.png',
 	},
 
 	photoPhotoFullWin:{

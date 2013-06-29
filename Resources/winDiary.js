@@ -293,17 +293,18 @@ exports.createWindow = function(_userData){
 	diaryWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]diaryWin.refresh:');
 
-		// ビューの再作成
-		diaryWin.remove(thisDiaryView);
-		diaryWin.remove(nextDiaryView);
-		diaryWin.remove(prevDiaryView);
-		// 当月・前月・翌月のカレンダー表示
-		addCalView(e.diaryData.year, e.diaryData.month);
-		thisDiaryView.scrollToIndex(e.diaryData.day - 1, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-
-		// タイトルの表示
-		monthTitle.text =  e.diaryData.year + ' ' + monthName[e.diaryData.month-1];
-
+		// photoWinから戻る場合はdiaryDataを保持してないので
+		if (e.diaryData) {
+			// ビューの再作成
+			diaryWin.remove(thisDiaryView);
+			diaryWin.remove(nextDiaryView);
+			diaryWin.remove(prevDiaryView);
+			// 当月・前月・翌月のカレンダー表示
+			addCalView(e.diaryData.year, e.diaryData.month);
+			thisDiaryView.scrollToIndex(e.diaryData.day - 1, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+			// タイトルの表示
+			monthTitle.text =  e.diaryData.year + ' ' + monthName[e.diaryData.month-1];			
+		}
 	});
 
 

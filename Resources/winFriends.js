@@ -23,21 +23,17 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 // ---------------------------------------------------------------------
 
 	// 日時の更新
-	var updateDate = function() {
+	var getDateView = function(_date) {
 		Ti.API.debug('[func]updateDate:');
-		var now = new Date();
-		year = now.getFullYear();
-		month = now.getMonth() + 1;
-		day = now.getDate();
-		weekday = util.diary.weekday[now.getDay()];
-
-		var dateTableRow = Ti.UI.createTableViewRow(style.friendsDateTableRow);
-		friendsTableView.appendRow(dateTableRow);
+//		var dateTableRow = Ti.UI.createTableViewRow(style.friendsDateTableRow);
+//		friendsTableView.appendRow(dateTableRow);
 		var dateView = Ti.UI.createView(style.friendsDateView);
-		dateTableRow.add(dateView);
+//		dateTableRow.add(dateView);
 		var dateLabel = Ti.UI.createLabel(style.friendsDateLabel);
-		dateLabel.text = year + '/' + month + '/' + day + ' ' + weekday.text;
+		dateLabel.text = _date.year + '/' + _date.month + '/' + _date.day;
 		dateView.add(dateLabel);
+		
+		return dateView;
 	};
 
 	// フォローユーザの記事の取得
@@ -47,7 +43,16 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		var articleListView = Ti.UI.createView(style.friendsArticleListView);
 		articleTableRow.add(articleListView);
 		
+		var checkDate = null;
+		
 		for (var i=0; i<_articleList.length; i++) {	
+
+			var date = util.getDateElement(_articleList[i].date);
+			if (checkDate == null || date.year != checkDate.year || date.month != checkDate.month || date.day != checkDate.day) {
+				articleListView.add(getDateView(date));
+				checkDate = {year:date.year, month:date.month, day:date.day};					
+			}
+
 			var articleView = Ti.UI.createView(style.friendsArticleView);
 			// カスタムプロパティに記事データを格納
 			articleView.articleData = _articleList[i];
@@ -69,7 +74,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			var timeView = Ti.UI.createView(style.friendsTimeView);
 			textView.add(timeView);
 			var timeLabel = Ti.UI.createLabel(style.friendsTimeLabel);
-			var date = util.getDateElement(_articleList[i].date);
 			timeLabel.text = date.hour + ":" + date.minute + ":" + date.second;
 			timeView.add(timeLabel);
 
@@ -137,22 +141,25 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// 記事の追加
 	var appendArticle = function(_articleList) {
 		Ti.API.debug('[func]appendArticle:');
+/*
 		// 「続きを読む」ボタンを押した場合、削除するボタンのインデックスを取得
 		var deleteRowIndex = null;
 		if (nextArticleFlag) {
 			deleteRowIndex = friendsTableView.data[0].rowCount - 1;
 		}
-
+*/
 		// 取得した記事が表示件数以下の場合
 		if (_articleList.length < articleCount + 1) {
 			// 取得した記事をテーブルに追加
 			friendsTableView.appendRow(getFriendsArticleTableRow(_articleList));
+/*
 			// 「続きを読む」ボタンをタップした場合、ボタンを削除
 			if (nextArticleFlag) {
 				friendsTableView.deleteRow(deleteRowIndex);
 			}
 			// 次回更新用に続きの記事がないフラグを設定
 			nextArticleFlag = false;
+*/
 
 		// 取得した記事が表示件数より1件多い場合、「続きを読む」ボタンを表示
 		} else {
@@ -160,6 +167,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			_articleList.pop();
 			// 取得した記事をテーブルに追加
 			friendsTableView.appendRow(getFriendsArticleTableRow(_articleList), {animated:true});
+/*
 			// 「続きを読む」ボタンを追加
 			appendNextButton();
 			// 「続きを読む」ボタンをタップした場合、ボタンを削除
@@ -168,6 +176,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			}
 			// 次回更新用に続きの記事があるフラグを設定
 			nextArticleFlag = true;
+*/
 		}
 	};
 
@@ -175,7 +184,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	var updateArticle = function() {
 		Ti.API.debug('[func]updateArticle:');
 
-		updateDate();
+//		updateDate();
 
 		// 前回取得した最後のインデックス以降を取得
 		// 「続きを読む」ボタンの表示判定のため、表示件数より1件多い条件で取得
@@ -189,6 +198,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			appendArticle(articleList);
 			// 次回更新用に取得した最後のインデックスを設定
 			prevArticleIndex = articleList[articleList.length-1].no;
+			nextArticleFlag = true;
 		}
 	};
 
@@ -223,11 +233,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	var titleView = null;
 	var titleLabel = null;
 
-	// 更新ボタン
-	var updateButton = Titanium.UI.createButton(style.friendsUpdateButton);
-	// ロード用画面
-	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
-
 	var friendsTableView = Ti.UI.createTableView(style.friendsTableView);
 	friendsTableView.headerPullView = getTableHeader();
 	friendsWin.add(friendsTableView);
@@ -237,22 +242,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 
 // ---------------------------------------------------------------------
-	// 「更新」ボタン
-	updateButton.addEventListener('click', function(e){
-		Ti.API.debug('[event]updateButton.click:');
-		actInd.show();
-		tabGroup.add(actInd);
-
-    	resetPullHeader();
-		friendsTableView.data = [];
-    	prevArticleIndex = null;
-    	nextArticleFlag = false;
-    	updateArticle();
-
-		setTimeout(function(){
-			actInd.hide();
-		},2000);
-	});
 
 	// ライク・コメント編集を反映
 	friendsWin.addEventListener('refresh', function(e){
@@ -335,5 +324,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	    }
 	});
 
+	friendsTableView.addEventListener('scrollEnd',function(){
+        Ti.API.debug('[event]friendsTableView.scrollEnd:');
+		if (nextArticleFlag) {
+			updateArticle();
+		}
+	});
+	
 	return friendsWin;
 }
