@@ -65,7 +65,7 @@ exports.createWindow = function(_type, _userData, _articleData){
 			// フォト拡大が面にタップで戻る
 			photoFullImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]photoFullImage.click:');
-				photoFullWin.close();				
+				photoFullWin.close({animated:true});				
 			});
 		});
 		

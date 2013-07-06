@@ -58,7 +58,7 @@ exports.createWindow = function(_userData){
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
-		cameraWin.close();
+		cameraWin.close({animated:true});
 	});	
 
 	// 投稿時のロード用画面
@@ -85,7 +85,7 @@ exports.createWindow = function(_userData){
 				if (cameraWin.prevWin != null) {
 					cameraWin.prevWin.fireEvent('refresh');
 				}
-				cameraWin.close();
+				cameraWin.close({animated:true});
 
 				setTimeout(function(){
 					actInd.hide();

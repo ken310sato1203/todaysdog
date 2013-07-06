@@ -114,7 +114,7 @@ exports.style = {
 	},
 	tabImage:{
 //		top: '3dp',
-		width: '28dp',
+//		width: '28dp',
 		height: '28dp',
 		bubbleParent: true,
 		// カスタムプロパティ
@@ -506,7 +506,7 @@ exports.style = {
 		top: '15dp',
 		left: '15dp',
 		width: '80dp',
-		height: '100dp',
+		height: '80dp',
 	},
 	profileInfoTextView:{
 		layout: 'vertical',

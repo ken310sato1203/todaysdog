@@ -259,8 +259,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	friendsWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]friendsWin.swipe:');
 		if (e.direction == 'right') {
-//			tabGroup.activeTab.close(friendsWin);
-			friendsWin.close();
+			friendsWin.close({animated:true});
 		}
 	});
 

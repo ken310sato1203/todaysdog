@@ -290,7 +290,7 @@ exports.createWindow = function(_type, _articleData){
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
-		photoWin.close();
+		photoWin.close({animated:true});
 	});
 
 	// タイトルアイコンのクリックでプロフィールを表示
@@ -313,8 +313,7 @@ exports.createWindow = function(_type, _articleData){
 	photoWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]photoWin.swipe:');
 		if (e.direction == 'right') {
-//			tabGroup.activeTab.close(photoWin);
-			photoWin.close();
+			photoWin.close({animated:true});
 		}
 	});
 

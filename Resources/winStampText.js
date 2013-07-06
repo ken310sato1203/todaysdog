@@ -44,7 +44,7 @@ exports.createWindow = function(_userData, _stampData){
 			_stampData.text = textArea.value;
 			textWin.prevWin.fireEvent('refresh', {stampData:_stampData});
 		}
-		textWin.close();
+		textWin.close({animated:true});
 	});
 
 	textArea.addEventListener('focus',function(e){

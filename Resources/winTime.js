@@ -192,7 +192,7 @@ exports.createWindow = function(_userData, _diaryData){
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
-		timeWin.close();
+		timeWin.close({animated:true});
 	});
 
 	// リストボタンをクリック
@@ -233,8 +233,7 @@ exports.createWindow = function(_userData, _diaryData){
 	timeWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]timeWin.swipe:');
 		if (e.direction == 'right') {
-			tabGroup.activeTab.close(timeWin);
-			timeWin.close();
+			timeWin.close({animated:true});
 		}
 	});
 

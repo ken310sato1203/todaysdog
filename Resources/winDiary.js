@@ -14,6 +14,8 @@ exports.createWindow = function(_userData){
 	var monthName = util.diary.monthName;
 	var weekday = util.diary.weekday;
 
+	var clickEnable = true;
+
 	// カレンダーデータの取得
 	var getCalendarRowData = function(_year, _month) {
 		Ti.API.debug('[func]getDiaryRowData:');
@@ -137,13 +139,15 @@ exports.createWindow = function(_userData){
 		calView.addEventListener('click', function(e) {
 			Ti.API.debug('[event]calView.click:');
 			Ti.API.debug('[event]e.source:', e.source);
-			if (e.source.objectName != "diaryPhotoImage") {
-				var timeWin = win.createTimeWindow(_userData, e.row.diaryData);
-				timeWin.prevWin = diaryWin;
-				timeWin.backButtonTitle = 'Month';
-
-				win.openTabWindow(timeWin);
-				diaryWin.nextWin = timeWin;
+			if (clickEnable) {
+				if (e.source.objectName != "diaryPhotoImage") {
+					var timeWin = win.createTimeWindow(_userData, e.row.diaryData);
+					timeWin.prevWin = diaryWin;
+					timeWin.backButtonTitle = 'Month';
+	
+					win.openTabWindow(timeWin);
+					diaryWin.nextWin = timeWin;
+				}
 			}
 		});
 
@@ -165,6 +169,7 @@ exports.createWindow = function(_userData){
 			nextDiaryView = getCalView(_year, _month + 1);
 		}
 		nextDiaryView.left = style.commonSize.screenWidth + 'dp';
+//		nextDiaryView.visible = false;
 		diaryWin.add(nextDiaryView);
 	
 		// 前月のカレンダー
@@ -175,6 +180,7 @@ exports.createWindow = function(_userData){
 			prevDiaryView = getCalView(_year, _month - 1);
 		}
 		prevDiaryView.left = (style.commonSize.screenWidth * -1) + 'dp';
+//		prevDiaryView.visible = false;
 		diaryWin.add(prevDiaryView);
 	};
 // ---------------------------------------------------------------------
@@ -189,6 +195,10 @@ exports.createWindow = function(_userData){
 //	var tabbedBar = Titanium.UI.iOS.createTabbedBar(style.diaryTitleTabbedBar);
 	diaryWin.titleControl = monthTitle;
 
+	// 戻るボタンの表示 ★先月翌月に移動するボタン
+	var backButton = Titanium.UI.createButton(style.timeBackButton);
+	diaryWin.leftNavButton = backButton;
+
 	var thisDiaryView = null;
 	var nextDiaryView = null;
 	var prevDiaryView = null;
@@ -199,19 +209,36 @@ exports.createWindow = function(_userData){
 	thisDiaryView.scrollToIndex(nowDay-3>0?nowDay-3:0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 
 // ---------------------------------------------------------------------
+	// 戻るボタンをクリック　★先月翌月に移動するボタン　★スワイプ時もこのやり方でできないか？
+	backButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]backButton.click:');
+		var diaryPrevWin = win.createDiaryWindow(_userData);
+		win.openTabWindow(diaryPrevWin);
+		// オープン後に閉じる
+		diaryWin.close();
+	});
 
 	// スライド用アニメーション
 	var slideNext = Ti.UI.createAnimation({
 		duration : 500,
 		left : (style.commonSize.screenWidth * -1) + 'dp',
 	});
+	var slidePrev = Ti.UI.createAnimation({
+		duration : 500,
+		left : style.commonSize.screenWidth + 'dp',
+	});
 	var slideReset = Ti.UI.createAnimation({
 		duration : 500,
 		left : '-1dp',
 	});
-	var slidePrev = Ti.UI.createAnimation({
-		duration : 500,
-		left : style.commonSize.screenWidth + 'dp',
+	// スライド中はクリックイベントを禁止
+	slideReset.addEventListener('start',function(e){
+		Ti.API.debug('[event]slideReset.start:');
+		clickEnable = false;
+	});
+	slideReset.addEventListener('complete',function(e){
+		Ti.API.debug('[event]slideReset.complete:');
+		clickEnable = true;
 	});
 
 	// 左右スワイプで前月・翌月のカレンダーを表示
@@ -229,6 +256,7 @@ exports.createWindow = function(_userData){
 			setTimeout(function() {
 				diaryWin.remove(nextDiaryView);
 				thisDiaryView.left = style.commonSize.screenWidth + 'dp';
+//				thisDiaryView.visible = false;
 				nextDiaryView = thisDiaryView;
 				thisDiaryView = prevDiaryView;
 				if (month == 1) {
@@ -238,7 +266,9 @@ exports.createWindow = function(_userData){
 				}
 				monthTitle.text = monthName[month-1] + ' ' + year;
 				prevDiaryView.left = (style.commonSize.screenWidth * -1) + 'dp';
+//				prevDiaryView.visible = false;
 				diaryWin.add(prevDiaryView);
+//				thisDiaryView.visible = true;
 			}, 500);
 
 		} else if (e.direction == 'left') {
@@ -253,6 +283,7 @@ exports.createWindow = function(_userData){
 			setTimeout(function() {
 				diaryWin.remove(prevDiaryView);
 				thisDiaryView.left = (style.commonSize.screenWidth * -1) + 'dp';
+//				thisDiaryView.visible = false;
 				prevDiaryView = thisDiaryView;
 				thisDiaryView = nextDiaryView;
 				if (month == 12) {
@@ -262,8 +293,10 @@ exports.createWindow = function(_userData){
 				}
 				monthTitle.text = monthName[month-1] + ' ' + year;
 				nextDiaryView.left = style.commonSize.screenWidth + 'dp';
+//				nextDiaryView.visible = false;
 				diaryWin.add(nextDiaryView);
-			}, 500);			
+//				thisDiaryView.visible = true;
+			}, 500);
 		}
 	});
 

@@ -182,7 +182,7 @@ exports.createWindow = function(_userData){
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
-		profileWin.close();
+		profileWin.close({animated:true});
 	});	
 
 	// 「編集」ボタン
@@ -257,8 +257,7 @@ exports.createWindow = function(_userData){
 	profileWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]profileWin.swipe:');
 		if (e.direction == 'right') {
-//			tabGroup.activeTab.close(profileWin);
-			profileWin.close();
+			profileWin.close({animated:true});
 		}
 	});
 

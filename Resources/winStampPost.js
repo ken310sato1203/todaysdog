@@ -251,7 +251,7 @@ exports.createWindow = function(_userData, _stampDataList){
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
-		postWin.close();
+		postWin.close({animated:true});
 	});	
 
 	// ロード用画面

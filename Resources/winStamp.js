@@ -165,15 +165,14 @@ exports.createWindow = function(_userData, _stampData){
 	stampWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]stampWin.swipe:');
 		if (e.direction == 'right') {
-//			tabGroup.activeTab.close(stampWin);
-			stampWin.close();
+			stampWin.close({animated:true});
 		}
 	});
 
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
-		stampWin.close();
+		stampWin.close({animated:true});
 	});
 
 	// 次へボタンをクリック

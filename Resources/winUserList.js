@@ -247,15 +247,14 @@ exports.createWindow = function(_type, _userData){
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
-		userListWin.close();
+		userListWin.close({animated:true});
 	});	
 
 	// 右スワイプで前の画面に戻る
 	userListWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]userListWin.swipe:');
 		if (e.direction == 'right') {
-//			tabGroup.activeTab.close(userListWin);
-			userListWin.close();
+			userListWin.close({animated:true});
 		}
 	});
 

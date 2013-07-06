@@ -206,7 +206,7 @@ exports.createWindow = function(_userData){
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
-		profileEditWin.close();
+		profileEditWin.close({animated:true});
 	});
 
 	// 「保存」ボタン
@@ -297,8 +297,7 @@ exports.createWindow = function(_userData){
 	profileEditWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]profileEditWin.swipe:');
 		if (e.direction == 'right') {
-//			tabGroup.activeTab.close(profileEditWin);
-			profileEditWin.close();
+			profileEditWin.close({animated:true});
 		}
 	});
 

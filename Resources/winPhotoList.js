@@ -274,7 +274,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
-		photoListWin.close();
+		photoListWin.close({animated:true});
 	});	
 
 	// 「更新」ボタン
@@ -310,8 +310,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	photoListWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]photoListWin.swipe:');
 		if (e.direction == 'right') {
-//			tabGroup.activeTab.close(photoListWin);
-			photoListWin.close();
+			photoListWin.close({animated:true});
 		}
 	});
 
