@@ -74,6 +74,11 @@ exports.style = {
 		height: '28dp',
 		backgroundImage:'images/icon/w_arrow_right.png',
 	},
+	commonPlusButton:{
+		width: '28dp',
+		height: '28dp',
+		backgroundImage:'images/icon/w_plus.png',
+	},
 	
 // tab -------------------------------------------------------
 	tabGroupHidden:{
@@ -695,11 +700,6 @@ exports.style = {
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
 		text: 'プロフィール', 
-	},
-	profileEditSaveButton:{
-		width: '28dp',
-		height: '28dp',
-		backgroundImage:'images/icon/w_plus.png',
 	},
 
 	profileEditTableView:{ 
@@ -1502,12 +1502,6 @@ exports.style = {
 		text: 'カメラ', 
 	},
 
-	cameraPostButton:{
-		width: '28dp',
-		height: '28dp',
-		backgroundImage:'images/icon/w_plus.png',
-	},
-
 	cameraArticleView:{
 		layout : 'horizontal',
 		top : '10dp',
@@ -2215,11 +2209,6 @@ exports.style = {
 		color: 'white', 
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
-	},
-	stampPostButton:{
-		width: '28dp',
-		height: '28dp',
-		backgroundImage:'images/icon/w_plus.png',
 	},
 	stampPostTableView:{
 		top: '10dp',

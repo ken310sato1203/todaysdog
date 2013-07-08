@@ -119,6 +119,10 @@ exports.createWindow = function(_userData, _stampDataList){
 	var backButton = Titanium.UI.createButton(style.commonBackButton);
 	postWin.leftNavButton = backButton;
 
+	// 投稿ボタンの表示
+	var postButton = Titanium.UI.createButton(style.commonPlusButton);
+	postWin.rightNavButton = postButton;
+
 	// 日付
 	var dateField = Ti.UI.createTextField(style.stampPostListValueField);
 	var dateValue = util.getFormattedDate(new Date(_stampDataList[0].year, _stampDataList[0].month-1, _stampDataList[0].day));
@@ -133,10 +137,6 @@ exports.createWindow = function(_userData, _stampDataList){
 	// 終日
 	var allSwitch = Ti.UI.createSwitch(style.stampPostListValueSwitch);
 	var allValue = false;
-
-	// 投稿ボタンの表示
-	var postButton = Titanium.UI.createButton(style.stampPostButton);
-	postWin.rightNavButton = postButton;
 
 	// 選択したフィールド名を保管
 	var selectedName = null;

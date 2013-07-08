@@ -184,7 +184,7 @@ exports.createWindow = function(_userData){
 			monthTitle.text = monthName[month-1] + ' ' + year;	
 			// 当月・前月・翌月のカレンダー表示
 			addCalView(year, month);
-		}, 500);
+		}, 300);
 	};
 
 	// 翌月カレンダーの表示
@@ -203,7 +203,7 @@ exports.createWindow = function(_userData){
 			monthTitle.text = monthName[month-1] + ' ' + year;	
 			// 当月・前月・翌月のカレンダー表示
 			addCalView(year, month);
-		}, 500);
+		}, 300);
 	};
 
 // ---------------------------------------------------------------------

@@ -15,7 +15,7 @@ exports.createWindow = function(_userData){
 	profileEditWin.leftNavButton = backButton;
 
 	// 「保存」自分のプロフィールを編集するボタン
-	var saveButton = Titanium.UI.createButton(style.profileEditSaveButton);
+	var saveButton = Titanium.UI.createButton(style.commonPlusButton);
 	profileEditWin.rightNavButton = saveButton;
 	// ロード用画面
 	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);

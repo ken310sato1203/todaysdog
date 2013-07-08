@@ -8,8 +8,12 @@ exports.createWindow = function(_userData, _stampData){
 	var titleLabel = Ti.UI.createLabel(style.stampTextTitleLabel);	
 	textWin.titleControl = titleLabel;
 
+	// 戻るボタンの表示
+	var backButton = Titanium.UI.createButton(style.commonBackButton);
+	textWin.leftNavButton = backButton;
+
 	// 完了ボタンの表示
-	var doneButton = Titanium.UI.createButton(style.stampTextDoneButton);
+	var doneButton = Titanium.UI.createButton(style.commonPlusButton);
 	textWin.rightNavButton = doneButton;
 	
 	var textView = Titanium.UI.createView(style.stampTextView);
@@ -36,6 +40,11 @@ exports.createWindow = function(_userData, _stampData){
 	textWin.add(historyTableView);
 
 // ---------------------------------------------------------------------
+	// 戻るボタンをクリック
+	backButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]backButton.click:');
+		textWin.close({animated:true});
+	});	
 
 	// 完了ボタンをクリック
 	doneButton.addEventListener('click', function(e){

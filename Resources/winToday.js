@@ -19,7 +19,7 @@ exports.createWindow = function(_userData){
 		year = now.getFullYear();
 		month = now.getMonth() + 1;
 		day = now.getDate();
-		day = Math.floor(Math.random() * 2) + 1;
+//		day = Math.floor(Math.random() * 2) + 1;
 		hour = now.getHours();
 		weekday = util.diary.weekday[now.getDay()];
 	};
