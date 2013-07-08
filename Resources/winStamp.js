@@ -155,6 +155,7 @@ exports.createWindow = function(_userData, _stampData){
 	stampWin.leftNavButton = backButton;
 	// 次へボタンの表示
 	var nextButton = Titanium.UI.createButton(style.commonNextButton);
+	nextButton.enabled = false;
 	stampWin.rightNavButton = nextButton;
 
 	var stampScrollView = getStampScrollView();

@@ -73,7 +73,6 @@ exports.style = {
 		width: '28dp',
 		height: '28dp',
 		backgroundImage:'images/icon/w_arrow_right.png',
-		enabled: false,
 	},
 	
 // tab -------------------------------------------------------

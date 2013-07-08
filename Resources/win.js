@@ -120,6 +120,7 @@ exports.win = {
 		// ウィンドウの表示
 		tabGroup.activeTab.open(_win, {animated:true});
 	},
+
 	// 指定したobjectNameのタブを取得
 	getTab:function(_objectName) {
 		Ti.API.debug('[func]getTab:');

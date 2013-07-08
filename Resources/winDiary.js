@@ -160,84 +160,91 @@ exports.createWindow = function(_userData){
 		// 当月のカレンダー
 		thisDiaryView = getCalView(_year, _month);
 		diaryWin.add(thisDiaryView);
-
-		// 翌月のカレンダー
-		nextDiaryView = null;
-		if (month == 12) {
-			nextDiaryView = getCalView(_year + 1, 1);
-		} else {
-			nextDiaryView = getCalView(_year, _month + 1);
-		}
-		nextDiaryView.left = style.commonSize.screenWidth + 'dp';
-//		nextDiaryView.visible = false;
-		diaryWin.add(nextDiaryView);
-	
-		// 前月のカレンダー
-		prevDiaryView = null;
-		if (month == 1) {
-			prevDiaryView = getCalView(_year - 1, 12);
-		} else {
-			prevDiaryView = getCalView(_year, _month - 1);
-		}
-		prevDiaryView.left = (style.commonSize.screenWidth * -1) + 'dp';
-//		prevDiaryView.visible = false;
-		diaryWin.add(prevDiaryView);
 	};
+
+	// スライド用アニメーション
+	var slideView = Ti.UI.createAnimation({
+		duration : 500,
+		left : style.commonSize.screenWidth + 'dp',
+	});
+
+	// 前月カレンダーの表示
+	var prevCalView = function() {
+		Ti.API.debug('[func]prevCalView:');
+		slideView.left = style.commonSize.screenWidth + 'dp';
+		thisDiaryView.animate(slideView);
+		if (month == 1) {
+			month = 12;
+			year--;
+		} else {
+			month--;
+		}		
+		setTimeout(function() {
+			// タイトルの年月
+			monthTitle.text = monthName[month-1] + ' ' + year;	
+			// 当月・前月・翌月のカレンダー表示
+			addCalView(year, month);
+		}, 500);
+	};
+
+	// 翌月カレンダーの表示
+	var nextCalView = function() {
+		Ti.API.debug('[func]nextCalView:');
+		slideView.left = (style.commonSize.screenWidth * -1) + 'dp';
+		thisDiaryView.animate(slideView);
+		if (month == 12) {
+			month = 1;
+			year++;
+		} else {
+			month++;
+		}
+		setTimeout(function() {
+			// タイトルの年月
+			monthTitle.text = monthName[month-1] + ' ' + year;	
+			// 当月・前月・翌月のカレンダー表示
+			addCalView(year, month);
+		}, 500);
+	};
+
 // ---------------------------------------------------------------------
 	var diaryWin = Ti.UI.createWindow(style.diaryWin);
 	// タイトルの表示
-//	var titleView = Ti.UI.createView(style.diaryTitleView);	
 	var monthTitle = Ti.UI.createLabel(style.diaryTitleLabel);
 	monthTitle.text =  year + ' ' + monthName[month-1];
-//	titleView.add(monthTitle);
-//	diaryWin.leftNavButton = titleView;
-	// 日別・時間別表示切り替えボタン
-//	var tabbedBar = Titanium.UI.iOS.createTabbedBar(style.diaryTitleTabbedBar);
 	diaryWin.titleControl = monthTitle;
 
-	// 戻るボタンの表示 ★先月翌月に移動するボタン
-	var backButton = Titanium.UI.createButton(style.timeBackButton);
+	// 戻るボタンの表示
+	var backButton = Titanium.UI.createButton(style.commonBackButton);
 	diaryWin.leftNavButton = backButton;
-
-	var thisDiaryView = null;
-	var nextDiaryView = null;
-	var prevDiaryView = null;
+	// 次へボタンの表示
+	var nextButton = Titanium.UI.createButton(style.commonNextButton);
+	diaryWin.rightNavButton = nextButton;
 	
-	// 当月・翌月・前月のカレンダー表示
+	// カレンダーの表示
+	var thisDiaryView = null;
 	addCalView(year, month);
 	// 今日の日にスクロール
 	thisDiaryView.scrollToIndex(nowDay-3>0?nowDay-3:0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 
 // ---------------------------------------------------------------------
-	// 戻るボタンをクリック　★先月翌月に移動するボタン　★スワイプ時もこのやり方でできないか？
+	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
-		var diaryPrevWin = win.createDiaryWindow(_userData);
-		win.openTabWindow(diaryPrevWin);
-		// オープン後に閉じる
-		diaryWin.close();
+		prevCalView();
+	});
+	// 次へボタンをクリック
+	nextButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]nextButton.click:');
+		nextCalView();
 	});
 
-	// スライド用アニメーション
-	var slideNext = Ti.UI.createAnimation({
-		duration : 500,
-		left : (style.commonSize.screenWidth * -1) + 'dp',
-	});
-	var slidePrev = Ti.UI.createAnimation({
-		duration : 500,
-		left : style.commonSize.screenWidth + 'dp',
-	});
-	var slideReset = Ti.UI.createAnimation({
-		duration : 500,
-		left : '-1dp',
-	});
 	// スライド中はクリックイベントを禁止
-	slideReset.addEventListener('start',function(e){
-		Ti.API.debug('[event]slideReset.start:');
+	slideView.addEventListener('start',function(e){
+		Ti.API.debug('[event]slideView.start:');
 		clickEnable = false;
 	});
-	slideReset.addEventListener('complete',function(e){
-		Ti.API.debug('[event]slideReset.complete:');
+	slideView.addEventListener('complete',function(e){
+		Ti.API.debug('[event]slideView.complete:');
 		clickEnable = true;
 	});
 
@@ -245,58 +252,9 @@ exports.createWindow = function(_userData){
 	diaryWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]diaryWin.swipe:');
 		if (e.direction == 'right') {
-			if (month == 1) {
-				month = 12;
-				year--;
-			} else {
-				month--;
-			}
-			thisDiaryView.animate(slidePrev);
-			prevDiaryView.animate(slideReset);
-			setTimeout(function() {
-				diaryWin.remove(nextDiaryView);
-				thisDiaryView.left = style.commonSize.screenWidth + 'dp';
-//				thisDiaryView.visible = false;
-				nextDiaryView = thisDiaryView;
-				thisDiaryView = prevDiaryView;
-				if (month == 1) {
-					prevDiaryView = getCalView(year - 1, 12);
-				} else {
-					prevDiaryView = getCalView(year, month - 1);
-				}
-				monthTitle.text = monthName[month-1] + ' ' + year;
-				prevDiaryView.left = (style.commonSize.screenWidth * -1) + 'dp';
-//				prevDiaryView.visible = false;
-				diaryWin.add(prevDiaryView);
-//				thisDiaryView.visible = true;
-			}, 500);
-
+			prevCalView();
 		} else if (e.direction == 'left') {
-			if (month == 12) {
-				month = 1;
-				year++;
-			} else {
-				month++;
-			}
-			thisDiaryView.animate(slideNext);
-			nextDiaryView.animate(slideReset);
-			setTimeout(function() {
-				diaryWin.remove(prevDiaryView);
-				thisDiaryView.left = (style.commonSize.screenWidth * -1) + 'dp';
-//				thisDiaryView.visible = false;
-				prevDiaryView = thisDiaryView;
-				thisDiaryView = nextDiaryView;
-				if (month == 12) {
-					nextDiaryView = getCalView(year + 1, 1);
-				} else {
-					nextDiaryView = getCalView(year, month + 1);
-				}
-				monthTitle.text = monthName[month-1] + ' ' + year;
-				nextDiaryView.left = style.commonSize.screenWidth + 'dp';
-//				nextDiaryView.visible = false;
-				diaryWin.add(nextDiaryView);
-//				thisDiaryView.visible = true;
-			}, 500);
+			nextCalView();
 		}
 	});
 
@@ -314,11 +272,10 @@ exports.createWindow = function(_userData){
 			
 			// タイトルの年月
 			monthTitle.text = monthName[month-1] + ' ' + year;	
-			// 当月・前月・翌月のカレンダー表示
+			// カレンダーの表示
 			addCalView(year, month);
 			// 今日の日にスクロール
-			thisDiaryView.scrollToIndex(nowDay-3 > 0? nowDay-3 : 0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-	
+			thisDiaryView.scrollToIndex(nowDay-3 > 0? nowDay-3 : 0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
 		}
 	});
 
@@ -330,8 +287,6 @@ exports.createWindow = function(_userData){
 		if (e.diaryData) {
 			// ビューの再作成
 			diaryWin.remove(thisDiaryView);
-			diaryWin.remove(nextDiaryView);
-			diaryWin.remove(prevDiaryView);
 			// 当月・前月・翌月のカレンダー表示
 			addCalView(e.diaryData.year, e.diaryData.month);
 			thisDiaryView.scrollToIndex(e.diaryData.day - 1, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
