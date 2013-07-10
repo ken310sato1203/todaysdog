@@ -1553,7 +1553,6 @@ exports.style = {
 
 	diaryTitleLabel:{
 		width: Ti.UI.SIZE,
-		left: '10dp',
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 
 		shadowOffset: {x:0,y:-1},

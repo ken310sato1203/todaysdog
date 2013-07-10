@@ -246,11 +246,13 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// ライク・コメント編集を反映
 	friendsWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]friendsWin.refresh:');
-		for (var i=0; i<refreshTarget.length; i++) {
-			if (refreshTarget[i].no == e.articleData.no) {
-				refreshTarget[i].likeLabel.text = model.getLikeCount(e.articleData.no);
-				refreshTarget[i].commentLabel.text = model.getCommentCount(e.articleData.no);
-				break;
+		if(e.articleData) {
+			for (var i=0; i<refreshTarget.length; i++) {
+				if (refreshTarget[i].no == e.articleData.no) {
+					refreshTarget[i].likeLabel.text = model.getLikeCount(e.articleData.no);
+					refreshTarget[i].commentLabel.text = model.getCommentCount(e.articleData.no);
+					break;
+				}
 			}
 		}
 	});

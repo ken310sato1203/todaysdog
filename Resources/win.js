@@ -24,7 +24,7 @@ exports.win = {
 		Ti.API.debug('[func]createFriendsWindow:');
 		var win = friendsWin.createWindow("follow", _userData, null, null);
 		return win;
-		},
+	},
 	createMydogWindow:function(_userData){
 		Ti.API.debug('[func]createMydogWindow:');
 		var type = "random";
@@ -154,11 +154,7 @@ exports.win = {
 			tabView.add(tabImage);
 			tabImage.image = tabData[i].image;
 			tabImage.tabIndex = i;
-/*
-			var tabLabel = Ti.UI.createLabel(style.tabLabel);
-			tabView.add(tabLabel);
-			tabLabel.text = tabData[i].text;
-*/
+
 			// tabImageをクリック
 			tabImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]tabImage.click:');

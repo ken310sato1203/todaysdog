@@ -36,6 +36,7 @@ tabGroup.addTab(tab2);
 tabGroup.addTab(tab3);
 tabGroup.addTab(tab4);
 
+// 初期表示のウィンドウを設定
 tabGroup.setActiveTab(tab2);
 tabGroup.open();
 
@@ -43,24 +44,15 @@ tabGroup.open();
 var customTab = win.getCustomTabView();	
 customTab.open();
 
-// ---------------------------------------------------------------------
-// プロフィールのタブをクリックで最新情報を表示
-/*
+// 最新情報を表示
+tab3.addEventListener('focus', function(e){
+	Ti.API.debug('[event]tab3.focus:');
+	tab3.window.fireEvent('refresh');
+});
+
+// 最新情報を表示
 tab4.addEventListener('focus', function(e){
 	Ti.API.debug('[event]tab4.focus:');
-	if (tab4.window != null) {
-		tab4.window.fireEvent('refresh', {stampData:null});
-		if (tab4.window.nextWin != null) {
-			tab4.window.nextWin.fireEvent('refresh', {stampData:null});			
-		}
-	}
+	tab4.window.fireEvent('refresh');
 });
-*/
-// プロフィールのタブをクリックで最新情報を表示
-tab4.addEventListener('focus', function(e){
-	Ti.API.debug('[event]tab4.focus:');
-	if (tab4.window != null) {
-		var currentData = model.getUser(loginId);
-		tab4.window.fireEvent('refresh', {userData:currentData});
-	}
-});
+ 
