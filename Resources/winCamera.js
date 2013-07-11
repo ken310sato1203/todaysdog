@@ -3,13 +3,6 @@
 exports.createWindow = function(_userData){
 	Ti.API.debug('[func]winCamera.createWindow:');
 
-	var articleData = {
-		no:"A0023", 
-		user:"sakura", 
-		date:"2013-02-09 10:26:05", 
-		text:"★明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", 
-		like:"0", 
-		comment:"0"};
 
 // ---------------------------------------------------------------------
 	var cameraWin = Ti.UI.createWindow(style.cameraWin);
@@ -29,11 +22,11 @@ exports.createWindow = function(_userData){
 	cameraWin.add(articleView);
 	articleView.hide();
 
+	var textArea = Ti.UI.createTextArea(style.cameraArticleTextArea);
+	articleView.add(textArea);
+
 	var articleImage = Titanium.UI.createImageView(style.cameraArticleImage);
 	articleView.add(articleImage);
-
-	var articleTextArea = Ti.UI.createTextArea(style.cameraArticleTextArea);
-	articleView.add(articleTextArea);
 
 	Ti.Media.openPhotoGallery({
 		success: function(e) {
@@ -61,6 +54,24 @@ exports.createWindow = function(_userData){
 		cameraWin.close({animated:true});
 	});	
 
+	textArea.addEventListener('focus',function(e){
+		if (e.source.value == e.source.hintText) {
+			e.source.value = "";
+			e.source.color = "black";
+		}
+	});
+	textArea.addEventListener('blur',function(e){
+		if (e.source.value == "") {
+			e.source.value = e.source.hintText;
+			e.source.color = "gray";
+		}
+	});
+	// 入力ボックスでリターンでフォーカスを外す
+	textArea.addEventListener('return',function(e){
+		Ti.API.debug('[event]textArea.return:');
+		textArea.blur();
+	});
+
 	// 投稿時のロード用画面
 	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
 
@@ -80,7 +91,26 @@ exports.createWindow = function(_userData){
 			if(alert.index == 0){
 				actInd.show();
 				tabGroup.add(actInd);
-				// 処理を書く
+
+				var nowDate = util.getFormattedNowDateTime();
+				var date = util.getDateElement(nowDate);
+				var fileNo = date.year + date.month + date.day + date.hour + date.minute + date.second;
+				// simはOKだが実機NG
+//				var file  = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory + 'images/photo/' + fileNo + '.jpg');
+				// simもNGだが実機NG
+				var file  = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory + 'images/photo/' + fileNo + '.jpg');
+				file.write(articleImage.toBlob());
+
+				var articleData = {
+					id:null, 
+					no:fileNo, 
+					user:_userData.user, 
+					date:nowDate, 
+					text:textArea.value, 
+					like:"0", 
+					comment:"0"};
+
+				model.addArticleList(articleData);
 				
 				if (cameraWin.prevWin != null) {
 					cameraWin.prevWin.fireEvent('refresh');
@@ -95,14 +125,14 @@ exports.createWindow = function(_userData){
 	});
 
 	// 入力ボックスにフォーカス
-	articleTextArea.addEventListener('focus',function(e){
+	textArea.addEventListener('focus',function(e){
 		if (e.source.value == e.source.hintText) {
 			e.source.value = "";
 			e.source.color = "black";
 		}
 	});
 	// 入力ボックスにフォーカスが外れる
-	articleTextArea.addEventListener('blur',function(e){
+	textArea.addEventListener('blur',function(e){
 		if (e.source.value == "") {
 			e.source.value = e.source.hintText;
 			e.source.color = "gray";
@@ -112,7 +142,7 @@ exports.createWindow = function(_userData){
 	// 画面クリックでコメントフィールドのフォーカスを外す
 	cameraWin.addEventListener('click',function(e){
 		Ti.API.debug('[event]cameraWin.click:');
-		articleTextArea.blur();
+		textArea.blur();
 	});
 
 	return cameraWin;

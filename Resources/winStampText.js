@@ -68,6 +68,11 @@ exports.createWindow = function(_userData, _stampData){
 			e.source.color = "gray";
 		}
 	});
+	// 入力ボックスでリターンでフォーカスを外す
+	textArea.addEventListener('return',function(e){
+		Ti.API.debug('[event]textArea.return:');
+		textArea.blur();
+	});
 
 	// 履歴クリックでチェックし入力テキストにコピー
 	historyTableView.addEventListener('click',function(e){
@@ -82,11 +87,6 @@ exports.createWindow = function(_userData, _stampData){
 		textArea.value = historyList[e.index];
 	});
 
-	// 入力ボックスでリターンでフォーカスを外す
-	textArea.addEventListener('return',function(e){
-		Ti.API.debug('[event]textWin.return:');
-		textArea.blur();
-	});
 	// 画面クリックでコメントフィールドのフォーカスを外す
 	textWin.addEventListener('click',function(e){
 		Ti.API.debug('[event]textWin.click:');

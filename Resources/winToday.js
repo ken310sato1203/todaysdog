@@ -111,7 +111,11 @@ exports.createWindow = function(_userData){
 		// 今日の投稿が既にされている場合
 		if (articleList.length > 0) {
 			var photoImage = Ti.UI.createImageView(style.todayPhotoImage);
-			photoImage.image = 'images/photo/' + articleList[0].no + '.jpg';
+			// simはOKだが実機NG
+//			photoImage.image = Ti.Filesystem.resourcesDirectory + 'images/photo/' + articleList[0].no + '.jpg';
+			// simもNGだが実機NG
+//			photoImage.image = Ti.Filesystem.applicationDataDirectory + 'images/photo/' + articleList[0].no + '.jpg';
+			photoImage.image = 'images/photo/today_sakura.jpg';
 			photoView.add(photoImage);
 	
 			// photoImageをクリック
