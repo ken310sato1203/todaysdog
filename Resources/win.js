@@ -48,9 +48,9 @@ exports.win = {
 		var win = calendarWin.createWindow(_articleData);
 		return win;
 	},
-	createCameraWindow:function(_userData){
+	createCameraWindow:function(_type, _userData){
 		Ti.API.debug('[func]createCameraWindow:');
-		var win = cameraWin.createWindow(_userData);
+		var win = cameraWin.createWindow(_type, _userData);
 		return win;
 	},
 	createDiaryWindow:function(_userData){

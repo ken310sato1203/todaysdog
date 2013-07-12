@@ -122,6 +122,11 @@ exports.createWindow = function(_userData){
 			rowList.push(row);
 		}
 
+		// 下のタブで表示されない分の余白
+		var spaceRow = Ti.UI.createTableViewRow(style.diaryTableRow);
+		spaceRow.height = '44dp';
+		rowList.push(spaceRow);
+
 		targetView.setData(rowList);
 		return targetView;
 	}

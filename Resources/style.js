@@ -2042,8 +2042,8 @@ exports.style = {
 		top: '0dp',
 		left: '0dp',
 		width: Ti.UI.SIZE,
-		// 画面の最下部まで表示
-		height: Ti.Platform.displayCaps.platformHeight - (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
+		// スタンプの登録が３個以下の場合、３個分＋タブで表示されない余白分
+		height: (3 * 40 + 44) + 'dp',
 		enabled: false,
 		backgroundColor: 'white',
 	},
@@ -2091,7 +2091,7 @@ exports.style = {
 	todayTimeTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
+		backgroundColor: 'white',
 		// カスタムプロパティ
 		timeData: null,
 	},

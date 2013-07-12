@@ -45,12 +45,14 @@ var customTab = win.getCustomTabView();
 customTab.open();
 
 // 最新情報を表示
+tab2.addEventListener('focus', function(e){
+	Ti.API.debug('[event]tab2.focus:');
+	tab2.window.fireEvent('refresh');
+});
 tab3.addEventListener('focus', function(e){
 	Ti.API.debug('[event]tab3.focus:');
 	tab3.window.fireEvent('refresh');
 });
-
-// 最新情報を表示
 tab4.addEventListener('focus', function(e){
 	Ti.API.debug('[event]tab4.focus:');
 	tab4.window.fireEvent('refresh');

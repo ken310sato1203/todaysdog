@@ -25,7 +25,14 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			var articleView = Ti.UI.createView(style.photoListArticleView);
 			articleListView.add(articleView);
 			var photoImage = Ti.UI.createImageView(style.photoListPhotoImage);
-			photoImage.image = 'images/photo/' + _articleList[i].no + '.jpg';
+
+			var photoFile  = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory + 'photo/' + _articleList[i].no + '.jpg');
+			if (photoFile.exists()) {
+				photoImage.image = photoFile.nativePath;
+			} else {
+				photoImage.image = 'images/photo/' + _articleList[i].no + '.jpg';
+			}
+
 			// カスタムプロパティに記事データを格納
 			photoImage.articleData = _articleList[i];
 			articleView.add(photoImage);

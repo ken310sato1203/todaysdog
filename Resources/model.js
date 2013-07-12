@@ -53,12 +53,12 @@ commentList = [
 ];
 
 likeList = [
-	{no:"A0021", seq:"2", user:"maki", date:"2013-03-02 09:23:45"},
-	{no:"A0021", seq:"1", user:"sakura", date:"2013-03-01 08:14:27"},
-	{no:"A0022", seq:"1", user:"pochi", date:"2013-03-03 13:37:02"},
-	{no:"A0023", seq:"2", user:"momo", date:"2013-03-05 11:37:02"},
-	{no:"A0023", seq:"1", user:"sakura", date:"2013-03-04 12:37:02"},
-	{no:"A0024", seq:"1", user:"sakura", date:"2013-03-06 10:37:02"},
+	{no:"A0020", seq:"2", user:"maki", date:"2013-03-02 09:23:45"},
+	{no:"A0020", seq:"1", user:"sakura", date:"2013-03-01 08:14:27"},
+	{no:"A0021", seq:"1", user:"pochi", date:"2013-03-03 13:37:02"},
+	{no:"A0022", seq:"2", user:"momo", date:"2013-03-05 11:37:02"},
+	{no:"A0022", seq:"1", user:"sakura", date:"2013-03-04 12:37:02"},
+	{no:"A0023", seq:"1", user:"sakura", date:"2013-03-06 10:37:02"},
 ];
 
 userList = [
@@ -195,6 +195,12 @@ exports.model = {
 		Ti.API.debug('[func]addArticleList:');
 		_articleData.id = parseInt(articleList[0].id, 10) + 1;
 		articleList.unshift(_articleData);
+		for (var i=0; i<userList.length; i++) {
+			if (userList[i].user == _articleData.user) {
+				userList[i].photo++;
+				break;
+			}
+		}
 	},
 
 	// 記事の取得

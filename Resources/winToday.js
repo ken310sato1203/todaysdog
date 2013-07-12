@@ -111,11 +111,7 @@ exports.createWindow = function(_userData){
 		// 今日の投稿が既にされている場合
 		if (articleList.length > 0) {
 			var photoImage = Ti.UI.createImageView(style.todayPhotoImage);
-			// simはOKだが実機NG
-//			photoImage.image = Ti.Filesystem.resourcesDirectory + 'images/photo/' + articleList[0].no + '.jpg';
-			// simもNGだが実機NG
-//			photoImage.image = Ti.Filesystem.applicationDataDirectory + 'images/photo/' + articleList[0].no + '.jpg';
-			photoImage.image = 'images/photo/today_sakura.jpg';
+			photoImage.image = Ti.Filesystem.applicationDataDirectory + 'photo/' + articleList[0].no + '.jpg';
 			photoView.add(photoImage);
 	
 			// photoImageをクリック
@@ -140,9 +136,29 @@ exports.createWindow = function(_userData){
 			// cameraImageをクリック
 			cameraImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]cameraImage.click:');
-				var cameraWin = win.createCameraWindow(_userData);
-				cameraWin.prevWin = todayWin;
-				win.openTabWindow(cameraWin);
+
+				var sourceSelect = Titanium.UI.createOptionDialog({
+					options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
+					cancel:2,
+					title:'写真を添付'
+				});
+				sourceSelect.show();
+
+				sourceSelect.addEventListener('click',function(e) {
+					Ti.API.debug('[event]sourceSelect.click:');
+					switch( e.index ) {
+						case 0:
+							var cameraWin = win.createCameraWindow("camera", _userData);
+							cameraWin.prevWin = todayWin;
+							win.openTabWindow(cameraWin);
+							break;
+						case 1:
+							var cameraWin = win.createCameraWindow("photo", _userData);
+							cameraWin.prevWin = todayWin;
+							win.openTabWindow(cameraWin);
+							break;
+					}
+				});
 			});			
 		}
 
@@ -172,6 +188,12 @@ exports.createWindow = function(_userData){
 		});
 
 		var timeView = getTimeTableView();
+		// スタンプの登録が３個より大きい場合、行数分＋タブで表示されない余白分
+		if (timeView.data[0]) {
+			if (timeView.data[0].rowCount > 3) {
+				diaryView.height = (timeView.data[0].rowCount * 40 + 44) + 'dp';
+			}
+		}
 		diaryView.add(timeView);
 
 		return rowList;

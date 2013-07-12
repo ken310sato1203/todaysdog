@@ -156,7 +156,14 @@ exports.createWindow = function(_type, _articleData){
 	var photoView = Ti.UI.createView(style.photoPhotoView);
 	articleView.add(photoView);
 	var photoImage = Ti.UI.createImageView(style.photoPhotoImage);
-	photoImage.image = 'images/photo/' + _articleData.no + '.jpg';
+
+	var photoFile  = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory + 'photo/' + _articleData.no + '.jpg');
+	if (photoFile.exists()) {
+		photoImage.image = photoFile.nativePath;
+	} else {
+		photoImage.image = 'images/photo/' + _articleData.no + '.jpg';		
+	}
+
 	// カスタムプロパティに記事データを格納
 	photoImage.articleData = _articleData;
 	photoView.add(photoImage);

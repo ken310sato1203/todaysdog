@@ -1,7 +1,68 @@
 // カメラ
 
-exports.createWindow = function(_userData){
+exports.createWindow = function(_type, _userData){
 	Ti.API.debug('[func]winCamera.createWindow:');
+	Ti.API.debug('_type:' + _type);
+
+	// 画像のリサイズ・切り抜き
+	var editImage = function(_image) {
+		Ti.API.debug('[func]editImage:');
+		var resizedImage = _image.imageAsResized(
+			Ti.Platform.displayCaps.platformWidth, 
+			Ti.Platform.displayCaps.platformWidth * (_image.height / _image.width)
+		);
+		var croppedImage = resizedImage.imageAsCropped({
+			width: Ti.Platform.displayCaps.platformWidth, 
+			height: (Ti.Platform.displayCaps.platformWidth * 3 / 4)
+		});
+		return croppedImage;
+	};
+
+	// 写真撮影
+	var startCamera = function() {
+		Ti.API.debug('[func]startCamera:');
+		Titanium.Media.showCamera({
+			success:function(e) {
+				Ti.API.debug('success:');
+				articleImage.image = editImage(e.media);
+				articleView.show();
+			},
+			cancel: function(e) {
+				Ti.API.debug('cancel:');
+				cameraWin.close({animated:true});
+			},
+			error: function(e) {
+				Ti.API.debug('error:');
+			},
+			saveToPhotoGallery:true,
+			allowEditing:true,
+			mediaTypes: Ti.Media.MEDIA_TYPE_PHOTO,
+		});
+	};
+
+	// アルバムから取得
+	var pickupPhoto = function() {
+		Ti.API.debug('[func]pickupPhoto:');
+
+		Ti.Media.openPhotoGallery({
+			success: function(e) {
+				Ti.API.debug('success:');
+				articleImage.image = editImage(e.media);
+				articleView.show();
+			},
+			cancel: function(e) {
+				Ti.API.debug('cancel:');
+				articleImage.image = 'images/photo/today_sakura2.jpg';
+				articleImage.image = editImage(articleImage.toBlob());
+				articleView.show();
+			},
+			error: function(e) {
+				Ti.API.debug('error:');
+			},
+			allowEditing: false,
+			mediaTypes: Ti.Media.MEDIA_TYPE_PHOTO,
+		});
+	};
 
 
 // ---------------------------------------------------------------------
@@ -28,23 +89,12 @@ exports.createWindow = function(_userData){
 	var articleImage = Titanium.UI.createImageView(style.cameraArticleImage);
 	articleView.add(articleImage);
 
-	Ti.Media.openPhotoGallery({
-		success: function(e) {
-			Ti.API.debug('sucess:');
-			articleImage.image = e.media;
-			articleView.show();
-		 },
-		cancel: function(e) {
-			Ti.API.debug('cancel:');
-			articleImage.image = 'images/photo/today_sakura.jpg';
-			articleView.show();
-		 },
-		error: function(e) {
-			Ti.API.debug('error:');
-		 },
-		allowEditing: false,
-		mediaTypes: Ti.Media.MEDIA_TYPE_PHOTO,
-	});
+	if (_type == "camera") {
+		startCamera();
+		
+	} else if (_type == "photo") {
+		pickupPhoto();
+	}
 
 
 // ---------------------------------------------------------------------
@@ -95,11 +145,12 @@ exports.createWindow = function(_userData){
 				var nowDate = util.getFormattedNowDateTime();
 				var date = util.getDateElement(nowDate);
 				var fileNo = date.year + date.month + date.day + date.hour + date.minute + date.second;
-				// simはOKだが実機NG
-//				var file  = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory + 'images/photo/' + fileNo + '.jpg');
-				// simもNGだが実機NG
-				var file  = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory + 'images/photo/' + fileNo + '.jpg');
-				file.write(articleImage.toBlob());
+				var photoDir  = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory + 'photo/');
+				if (! photoDir.exists()) {
+					photoDir.createDirectory();
+				}
+				var photoFile  = Ti.Filesystem.getFile(photoDir.nativePath + fileNo + '.jpg');
+				photoFile.write(articleImage.toBlob());
 
 				var articleData = {
 					id:null, 
