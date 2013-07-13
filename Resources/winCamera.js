@@ -34,9 +34,13 @@ exports.createWindow = function(_type, _userData){
 			error: function(e) {
 				Ti.API.debug('error:');
 			},
-			saveToPhotoGallery:true,
-			allowEditing:true,
 			mediaTypes: Ti.Media.MEDIA_TYPE_PHOTO,
+			showControls: true,
+			overlay: overlayView,
+			// 縦サイズが撮影前後で変わらないように設定
+			transform: Ti.UI.create2DMatrix().scale(1),
+			allowEditing:false,
+			saveToPhotoGallery:true,
 		});
 	};
 
@@ -78,6 +82,13 @@ exports.createWindow = function(_type, _userData){
 	// 投稿ボタンの表示
 	var postButton = Titanium.UI.createButton(style.commonPlusButton);
 	cameraWin.rightNavButton = postButton;
+
+	// 撮影時のオーバーレイ
+	var overlayView = Titanium.UI.createView(style.cameraOverlayView);
+	var displayView = Titanium.UI.createView(style.cameraDisplayView);
+	overlayView.add(displayView);
+	var frameView = Titanium.UI.createView(style.cameraFrameView);
+	displayView.add(frameView);
 
 	var articleView = Titanium.UI.createView(style.cameraArticleView);
 	cameraWin.add(articleView);

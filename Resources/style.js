@@ -1502,6 +1502,24 @@ exports.style = {
 		text: 'カメラ', 
 	},
 
+	cameraOverlayView:{
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	cameraDisplayView:{
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		// 下のタブの余白分を引く
+		height: (Ti.Platform.displayCaps.platformHeight - 53) + 'dp',
+	},
+	cameraFrameView:{
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
+        borderColor: 'red',
+        borderWidth: 1,
+	},
+
 	cameraArticleView:{
 		layout : 'vertical',
 		top : '10dp',
@@ -1509,7 +1527,6 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
 	},
-
 	cameraArticleTextArea:{
 		top : '10dp',
 		left: '10dp',
