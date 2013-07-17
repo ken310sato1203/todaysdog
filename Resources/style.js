@@ -1501,37 +1501,88 @@ exports.style = {
 		shadowColor: '#696969', 
 		text: 'カメラ', 
 	},
-
 	cameraOverlayView:{
 		top: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
-	cameraDisplayView:{
-		top: '0dp',
-		width: Ti.UI.SIZE,
-		// 下のタブの余白分を引く
-		height: (Ti.Platform.displayCaps.platformHeight - 53) + 'dp',
-	},
 	cameraFrameView:{
+		top: '100dp',
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
 		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
         borderColor: 'red',
         borderWidth: 1,
 	},
+	cameraArticleScrollView:{
+		top: '0dp',
+		width: Ti.Platform.displayCaps.platformWidth,
+		height: Ti.Platform.displayCaps.platformWidth * 3 / 4,
+//		contentWidth:'auto',
+		contentWidth:Ti.Platform.displayCaps.platformWidth,
+		contentHeight:'auto',
+		showVerticalScrollIndicator:true,
+		showHorizontalScrollIndicator:true,
+		maxZoomScale:50,
+		minZoomScale:1,
+	},
+	cameraArticleImage:{
+//		top : '0dp',
+//		left: '0dp',
+		image : null,
+	},
+	cameraSpaceView:{
+		top: Ti.Platform.displayCaps.platformWidth * 3 / 4,
+		width: Ti.Platform.displayCaps.platformWidth,
+		height: '100%',
+		backgroundColor: 'white',
+	},
 
-	cameraArticleView:{
+// winCameraPost -------------------------------------------------------
+	cameraPostWin:{
+		backgroundColor: '#dedede',
+//		barColor: '#a9a9a9',
+		barImage: 'images/icon/titlebar.png',
+		tabBarHidden: true,
+	},
+	cameraPostTitleLabel:{
+		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+		text: 'カメラ', 
+	},
+
+	cameraPostArticleScrollView:{
+		layout: 'vertical',
+		top:0,
+		contentWidth:'auto',
+		contentHeight:'auto',
+		showVerticalScrollIndicator:true,
+		showHorizontalScrollIndicator:true,
+		backgroundColor: '#dedede',
+	},
+	cameraPostArticleView:{
 		layout : 'vertical',
 		top : '10dp',
 		width : '284dp',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
 	},
-	cameraArticleTextArea:{
+
+	cameraPostArticleImage:{
 		top : '10dp',
 		left: '10dp',
 		width: '264dp',
-		height : '70dp',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'black',
+		image : null,
+	},
+	cameraPostArticleTextArea:{
+		top : '5dp',
+		bottom : '5dp',
+		left: '10dp',
+		width: '264dp',
+		height : '90dp',
 		backgroundColor: 'white',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
@@ -1542,16 +1593,7 @@ exports.style = {
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
         returnKeyType:Ti.UI.RETURNKEY_DONE,
 	},
-	cameraArticleImage:{
-		top : '5dp',
-		bottom : '10dp',
-		left: '10dp',
-		width: '264dp',
-		height: Ti.UI.SIZE,
-		backgroundColor: 'black',
-		image : null,
-	},
-
+	
 // winDiary -------------------------------------------------------
 	diaryWin:{
 		backgroundColor: '#dedede',
