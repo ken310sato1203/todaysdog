@@ -100,7 +100,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				var type = "friends";
 				var photoWin = win.createPhotoWindow(type, e.source.articleData);
 				photoWin.prevWin = friendsWin;
-				win.openTabWindow(photoWin);
+				win.openTabWindow(photoWin, {animated:true});
 			});
 		}
 		return articleTableRow;

@@ -285,9 +285,9 @@ exports.createWindow = function(_type, _articleData){
 			commentField.blur();			
 		});
 
-		// 画面クリックでコメントフィールドのフォーカスを外す
-		photoTableView.addEventListener('click',function(e){
-			Ti.API.debug('[event]photoTableView.click:');
+		// 画像クリックでコメントフィールドのフォーカスを外す
+		photoView.addEventListener('click',function(e){
+			Ti.API.debug('[event]articleView.click:');
 			commentField.blur();
 		});
 
@@ -305,7 +305,7 @@ exports.createWindow = function(_type, _articleData){
 		Ti.API.debug('[event]titleIconImage.click:');
 		e.source.opacity = 0.5;
 		var profileWin = win.createProfileWindow(userData);
-		win.openTabWindow(profileWin);
+		win.openTabWindow(profileWin, {animated:true});
 		e.source.opacity = 1.0;
 	});
 

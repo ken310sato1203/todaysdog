@@ -1524,6 +1524,7 @@ exports.style = {
 		showHorizontalScrollIndicator:true,
 		maxZoomScale:50,
 		minZoomScale:1,
+		backgroundColor: '#dedede',
 	},
 	cameraArticleImage:{
 //		top : '0dp',

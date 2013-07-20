@@ -37,7 +37,7 @@ exports.createWindow = function(_type, _userData){
 				Ti.API.debug('[event]userImage.click:');
 				e.source.opacity = 0.5;
 				var profileWin = win.createProfileWindow(e.source.userData);
-				win.openTabWindow(profileWin);
+				win.openTabWindow(profileWin, {animated:true});
 				e.source.opacity = 1.0;
 			});
 

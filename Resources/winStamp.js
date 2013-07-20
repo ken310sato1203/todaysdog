@@ -201,7 +201,7 @@ exports.createWindow = function(_userData, _stampData){
 	
 			var postWin = win.createStampPostWindow(_userData, stampDataList);	
 			postWin.prevWin = stampWin;
-			win.openTabWindow(postWin);
+			win.openTabWindow(postWin, {animated:true});
 	});
 
 	// 更新用イベント

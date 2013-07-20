@@ -114,7 +114,7 @@ exports.createWindow = function(_type, _userData, _articleData){
 	calendarButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]calendarButton.click:');
 		var calendarWin = win.createCalendarWindow(articleList[articleIndex]);
-		win.openTabWindow(calendarWin);
+		win.openTabWindow(calendarWin, {animated:true});
 	});
 
 	// カメラボタンの表示
@@ -124,7 +124,7 @@ exports.createWindow = function(_type, _userData, _articleData){
 	cameraButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]cameraButton.click:');
 		var cameraWin = win.createCameraWindow(_userData);
-		win.openTabWindow(cameraWin);
+		win.openTabWindow(cameraWin, {animated:true});
 	});
 
 	if (_type == "random") {

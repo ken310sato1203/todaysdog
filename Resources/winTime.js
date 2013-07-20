@@ -83,7 +83,7 @@ exports.createWindow = function(_userData, _diaryData){
 					if (e.source.objectName == "timeStampImage" || e.source.objectName == "timeStampLabel") {
 						var postWin = win.createStampPostWindow(_userData, [e.source.getParent().stampData]);
 						postWin.prevWin = timeWin;
-						win.openTabWindow(postWin);
+						win.openTabWindow(postWin, {animated:true});
 						// timWinからの遷移でイベントが複数回実行（原因不明）されないようにするためのフラグ
 						timeWin.openFlag = true;
 					}
@@ -129,7 +129,7 @@ exports.createWindow = function(_userData, _diaryData){
 				Ti.API.debug('[event]plusImage.click:');
 				var stampWin = win.createStampWindow(_userData, e.row.stampData);
 				stampWin.prevWin = timeWin;
-				win.openTabWindow(stampWin);
+				win.openTabWindow(stampWin, {animated:true});
 			});
 			
 			if (_type == "time" || (_type == "list" && rowStampList.length > 0)) {

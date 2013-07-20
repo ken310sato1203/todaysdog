@@ -48,7 +48,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				var type = "photoList";
 				var photoWin = win.createPhotoWindow(type, e.source.articleData);
 				photoWin.prevWin = photoListWin;
-				win.openTabWindow(photoWin);
+				win.openTabWindow(photoWin, {animated:true});
 			});
 		}		
 		return articleTableRow;
@@ -100,7 +100,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				var type = "photoList";
 				var photoWin = win.createPhotoWindow(type, e.source.articleData);
 				photoWin.prevWin = photoListWin;
-				win.openTabWindow(photoWin);
+				win.openTabWindow(photoWin, {animated:true});
 			});
 		}		
 		return articleTableRow;

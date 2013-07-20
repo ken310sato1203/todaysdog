@@ -77,7 +77,7 @@ exports.createWindow = function(_userData, _stampDataList){
 				if (targetName == "stamp"){
 					var textWin = win.createStampTextWindow(_userData, e.rowData.stampData);
 					textWin.prevWin = postWin;
-					win.openTabWindow(textWin);
+					win.openTabWindow(textWin, {animated:true});
 	
 				} else if (targetName == "date"){
 					datePicker.value = util.getDate(dateField.value);

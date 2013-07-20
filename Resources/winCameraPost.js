@@ -33,6 +33,9 @@ exports.createWindow = function(_userData, _photoImage){
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
+		if (cameraPostWin.prevWin != null) {
+			cameraPostWin.prevWin.fireEvent('openCamera');
+		}
 		cameraPostWin.close({animated:true});
 	});	
 
@@ -83,6 +86,16 @@ exports.createWindow = function(_userData, _photoImage){
 				}
 				var photoFile  = Ti.Filesystem.getFile(photoDir.nativePath + fileNo + '.jpg');
 				photoFile.write(articleImage.toBlob());
+
+				// カメラロールに画像を保存する
+				Titanium.Media.saveToPhotoGallery(articleImage.toBlob(), {
+					success : function(e) {
+						Ti.API.debug('success:');
+					},
+					error : function(e) {
+						Ti.API.debug('error:');
+					}
+				})
 
 				var articleData = {
 					id:null, 

@@ -115,7 +115,7 @@ exports.createWindow = function(_userData){
 					Ti.API.debug('[event]stampPhotoImage.click:');
 					var type = "diary";
 					var photoWin = win.createPhotoWindow(type, e.source.articleData);
-					win.openTabWindow(photoWin);
+					win.openTabWindow(photoWin, {animated:true});
 				});
 			}
 
@@ -149,7 +149,7 @@ exports.createWindow = function(_userData){
 					timeWin.prevWin = diaryWin;
 					timeWin.backButtonTitle = 'Month';
 	
-					win.openTabWindow(timeWin);
+					win.openTabWindow(timeWin, {animated:true});
 					diaryWin.nextWin = timeWin;
 				}
 			}

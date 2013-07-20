@@ -150,12 +150,12 @@ exports.createWindow = function(_userData){
 						case 0:
 							var cameraWin = win.createCameraWindow("camera", _userData);
 							cameraWin.prevWin = todayWin;
-							win.openTabWindow(cameraWin);
+							win.openTabWindow(cameraWin, {animated:true});
 							break;
 						case 1:
 							var cameraWin = win.createCameraWindow("photo", _userData);
 							cameraWin.prevWin = todayWin;
-							win.openTabWindow(cameraWin);
+							win.openTabWindow(cameraWin, {animated:true});
 							break;
 					}
 				});
@@ -184,7 +184,7 @@ exports.createWindow = function(_userData){
 			Ti.API.debug('[event]editImage.click:');
 			var stampWin = win.createStampWindow(_userData, null);	
 			stampWin.prevWin = todayWin;
-			win.openTabWindow(stampWin);
+			win.openTabWindow(stampWin, {animated:true});
 		});
 
 		var timeView = getTimeTableView();

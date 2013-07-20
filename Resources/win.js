@@ -115,10 +115,10 @@ exports.win = {
 	},
 
 	// タブでウィンドウを開く
-	openTabWindow:function(_win) {
+	openTabWindow:function(_win, _animated) {
 		Ti.API.debug('[func]openTabWindow:');
 		// ウィンドウの表示
-		tabGroup.activeTab.open(_win, {animated:true});
+		tabGroup.activeTab.open(_win, _animated);
 	},
 
 	// 指定したobjectNameのタブを取得

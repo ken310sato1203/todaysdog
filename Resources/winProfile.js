@@ -31,7 +31,7 @@ exports.createWindow = function(_userData){
 				countPhotoView.backgroundColor = '#dedede';
 				var type = "user";
 				var photoListWin = win.createPhotoListWindow(type, _userData);
-				win.openTabWindow(photoListWin);
+				win.openTabWindow(photoListWin, {animated:true});
 				countPhotoView.backgroundColor = 'white';
 			}
 		});
@@ -52,7 +52,7 @@ exports.createWindow = function(_userData){
 				countLikeView.backgroundColor = '#dedede';
 				var type = "like";
 				var photoListWin = win.createPhotoListWindow(type, _userData);
-				win.openTabWindow(photoListWin);
+				win.openTabWindow(photoListWin, {animated:true});
 				countLikeView.backgroundColor = 'white';
 			}
 		});
@@ -74,7 +74,7 @@ exports.createWindow = function(_userData){
 				var type = "follower";
 				var userListWin = win.createUserListWindow(type, _userData);
 				userListWin.prevWin = profileWin;
-				win.openTabWindow(userListWin);
+				win.openTabWindow(userListWin, {animated:true});
 				countFollowerView.backgroundColor = 'white';
 			}
 		});
@@ -96,7 +96,7 @@ exports.createWindow = function(_userData){
 				var type = "follow";
 				var userListWin = win.createUserListWindow(type, _userData);
 				userListWin.prevWin = profileWin;
-				win.openTabWindow(userListWin);
+				win.openTabWindow(userListWin, {animated:true});
 				countFollowView.backgroundColor = 'white';
 			}
 		});
@@ -190,7 +190,7 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]editButton.click:');
 		var profileEditWin = win.createProfileEditWindow(_userData);
 		profileEditWin.prevWin = profileWin;
-		win.openTabWindow(profileEditWin);
+		win.openTabWindow(profileEditWin, {animated:true});
 
 	});
 
