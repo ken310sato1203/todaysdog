@@ -30,7 +30,7 @@ exports.createWindow = function(_userData, _diaryData){
 		targetView.add(stampLabel);
 
 		var stampImage = Ti.UI.createImageView(style.timeStampImage);
-		stampImage.image = 'images/icon/diary_' + _rowStamp.stamp + '.png';
+		stampImage.image = 'images/icon/' + _rowStamp.stamp + '.png';
 		targetView.add(stampImage);
 
 		return targetView;

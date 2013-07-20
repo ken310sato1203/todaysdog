@@ -18,7 +18,7 @@ exports.createWindow = function(_userData, _stampDataList){
 			stampRow.add(stampView);
 	
 			var postImage = Titanium.UI.createImageView(style.stampPostImage);
-			postImage.image = 'images/icon/diary_' + _stampDataList[i].stamp + '.png';
+			postImage.image = 'images/icon/' + _stampDataList[i].stamp + '.png';
 			stampView.add(postImage);		
 			var postLabel = Ti.UI.createLabel(style.stampPostTextLabel);
 			postLabel.text = _stampDataList[i].text;

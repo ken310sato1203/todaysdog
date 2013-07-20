@@ -488,6 +488,8 @@ exports.style = {
 
 	profileTableView:{ 
 		top: '0dp',
+		// 下のタブで表示されない余白分
+		bottom: '44dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
@@ -2255,7 +2257,7 @@ exports.style = {
 		width : '32dp',
 		height : '32dp',
 		image : null,
-		opacity : 0.2,
+		opacity : 0.3,
 		// カスタムプロパティ
 		index : null,
 		objectName: 'stampImage',

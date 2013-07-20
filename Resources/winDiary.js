@@ -98,7 +98,7 @@ exports.createWindow = function(_userData){
 
 				for (var j=0; j<rowStampList.length; j++) {
 					var stampImage = Ti.UI.createImageView(style.diaryStampImage);
-					stampImage.image = 'images/icon/diary_' + rowStampList[j].stamp + '.png';
+					stampImage.image = 'images/icon/' + rowStampList[j].stamp + '.png';
 					stampView.add(stampImage);
 				}
 			}

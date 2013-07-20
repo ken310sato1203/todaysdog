@@ -66,7 +66,7 @@ exports.createWindow = function(_userData, _stampData){
 				var stampImage = Ti.UI.createImageView(style.stampImage);
 				stampImage.index = stampIndex;
 				stampIndex++;
-				stampImage.image = 'images/icon/diary_' + stamp + '.png';		
+				stampImage.image = 'images/icon/' + stamp + '.png';		
 				stampView.add(stampImage);
 				
 				// スタンプをクリック
@@ -93,7 +93,7 @@ exports.createWindow = function(_userData, _stampData){
 								selectedCount++;
 							}
 						} else {
-							selectedChild.opacity = 0.2;
+							selectedChild.opacity = 0.3;
 							selectedIndex[selectedChild.index].selected = false;
 							if (selectedChild.index == e.source.index) {
 								selectedCount--;
@@ -105,7 +105,7 @@ exports.createWindow = function(_userData, _stampData){
 	
 					} else {
 						if (selectedIndex[e.source.index].selected) {
-							e.source.opacity = 0.2;
+							e.source.opacity = 0.3;
 							selectedIndex[e.source.index].selected = false;
 							selectedCount--;
 						} else {
