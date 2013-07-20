@@ -176,7 +176,8 @@ exports.style = {
 	},
 
 	photoTableView:{ 
-//		bottom: '10dp',
+		// 下のタブで表示されない余白分
+		bottom: '44dp',
 		backgroundColor: '#dedede',
 		separatorColor: 'transparent',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
@@ -871,6 +872,8 @@ exports.style = {
 	},
 
 	photoListTableView:{ 
+		// 下のタブで表示されない余白分
+		bottom: '44dp',
 		backgroundColor: 'white',
 		separatorColor: 'transparent',
 		data: [],
@@ -1086,6 +1089,8 @@ exports.style = {
 
 	userListTableView:{ 
 		top: '0dp',
+		// 下のタブで表示されない余白分
+		bottom: '44dp',
 		backgroundColor: '#dedede',
 		separatorColor: 'transparent',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
@@ -1629,6 +1634,8 @@ exports.style = {
 */
 	diaryTableView:{
 		top: '1dp',
+		// 下のタブで表示されない余白分
+		bottom: '44dp',
 		left: '0dp',
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
 		backgroundColor: '#dedede',
@@ -1751,6 +1758,8 @@ exports.style = {
 
 	timeTableView:{
 		top: '1dp',
+		// 下のタブで表示されない余白分
+		bottom: '44dp',
 		left: '0dp',
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
 		backgroundColor: '#dedede',
@@ -1862,6 +1871,9 @@ exports.style = {
 	},
 
 	friendsTableView:{ 
+		// 下のタブで表示されない余白分
+		bottom: '44dp',
+		backgroundColor: '#dedede',
 		separatorColor: 'transparent',
 		data: [],
 	},
@@ -1872,6 +1884,7 @@ exports.style = {
 		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
+/*
 	friendsNextTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -1879,14 +1892,7 @@ exports.style = {
 		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
-	friendsDateTableRow:{ 
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
-		touchEnabled: false,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-	},
-
+*/
 	friendsDateView:{
 		top: '0dp',
 		width: '100%',
@@ -2011,13 +2017,13 @@ exports.style = {
 		font: {fontSize:11, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
-
+/*
 	friendsNextView:{
 		top: '0dp',
 		left: '0dp',
 		width: '100%',
-		height: '80dp',
-//		backgroundColor: '#dedede',
+		height: '40dp',
+		backgroundColor: '#dedede',
 	},
 	friendsNextButton:{
 		width: Ti.UI.SIZE,
@@ -2038,7 +2044,7 @@ exports.style = {
 		color: '#000',
 		text: 'データがありません'
 	},
-	
+*/
 // winToay -------------------------------------------------------
 	todayWin:{
 		backgroundColor: 'white',
@@ -2063,6 +2069,8 @@ exports.style = {
 
 	todayTableView:{
 		top: '0dp',
+		// 下のタブで表示されない余白分
+		bottom: '44dp',
 		height: Ti.UI.SIZE,
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
@@ -2207,6 +2215,8 @@ exports.style = {
 
 	stampScrollView:{
 		layout: 'vertical',
+		// 下のタブで表示されない余白分
+		bottom: '44dp',
 		contentWidth:'auto',
 		contentHeight:'auto',
 		top:0,
@@ -2214,10 +2224,10 @@ exports.style = {
 		showHorizontalScrollIndicator:true,
 		backgroundColor: '#dedede',
 	},
-
 	stampListView:{
 		layout: 'vertical',
 		top: '10dp',
+		bottom: '10dp',
 		width: '284dp',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
@@ -2270,9 +2280,12 @@ exports.style = {
 	},
 	stampPostTableView:{
 		top: '10dp',
+		// 下のタブで表示されない余白分
+		bottom: '44dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
+		scrollable: false,
 		data: [],
 	},
 	stampPostTableRow:{ 
@@ -2395,13 +2408,24 @@ exports.style = {
 		title: '完了',
 	},
 
+	stampTextScrollView:{
+		layout: 'vertical',
+		// 下のタブで表示されない余白分
+		bottom: '44dp',
+		contentWidth:'auto',
+		contentHeight:'auto',
+		top:0,
+		showVerticalScrollIndicator:true,
+		showHorizontalScrollIndicator:true,
+		backgroundColor: '#dedede',
+	},
+
 	stampTextView:{
 		top : '10dp',
 		width : '284dp',
 		height: '140dp',
 		backgroundColor: 'white',
 	},
-
 	stampTextArea:{
 		top : '5dp',
 		left: '8dp',
@@ -2418,7 +2442,8 @@ exports.style = {
         returnKeyType:Ti.UI.RETURNKEY_DONE,
 	},
 	stampHistoryTableView:{ 
-		top: '160dp',
+		top: '10dp',
+		bottom: '10dp',
 		width: '284dp',
 		height: Ti.UI.SIZE,
 //		scrollable: false,

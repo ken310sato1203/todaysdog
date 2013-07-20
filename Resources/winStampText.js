@@ -15,9 +15,12 @@ exports.createWindow = function(_userData, _stampData){
 	// 完了ボタンの表示
 	var doneButton = Titanium.UI.createButton(style.commonPlusButton);
 	textWin.rightNavButton = doneButton;
+
+	var textScrollView = Ti.UI.createScrollView(style.stampTextScrollView);
+	textWin.add(textScrollView);
 	
 	var textView = Titanium.UI.createView(style.stampTextView);
-	textWin.add(textView);
+	textScrollView.add(textView);
 
 	var textArea = Ti.UI.createTextArea(style.stampTextArea);
 	textArea.value = _stampData.text;
@@ -37,7 +40,7 @@ exports.createWindow = function(_userData, _stampData){
 
 	var historyTableView = Ti.UI.createTableView(style.stampHistoryTableView);
 	historyTableView.data = historyRowList;
-	textWin.add(historyTableView);
+	textScrollView.add(historyTableView);
 
 // ---------------------------------------------------------------------
 	// 戻るボタンをクリック

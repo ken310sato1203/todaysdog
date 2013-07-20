@@ -134,7 +134,7 @@ stampHistoryList = [
 	{stamp:"water",textList:["雨模様","ちょっと元気ないね"]},
 	{stamp:"star",textList:["ごほうび"]},
 	{stamp:"favorite",textList:["お薬","病院"]},
-	{stamp:"time",textList:["シャンプー予約"]}
+	{stamp:"time",textList:["シャンプー予約"]},
 ];
 
 

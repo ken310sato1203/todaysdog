@@ -14,9 +14,9 @@ exports.createWindow = function(_type, _userData){
 	// ユーザ一覧の行の追加
 	var getUserTableRow = function(_userList) {
 		Ti.API.debug('[func]getUserTableRow:');
-		var userTableRow = Ti.UI.createTableViewRow(style.userListUserTableRow);
+		var userRow = Ti.UI.createTableViewRow(style.userListUserTableRow);
 		var userListView = Ti.UI.createView(style.userListUserListView);
-		userTableRow.add(userListView);
+		userRow.add(userListView);
 		
 		for (var i=0; i<_userList.length; i++) {	
 			Ti.API.debug('_userList[i].user:' + _userList[i].user);
@@ -108,17 +108,17 @@ exports.createWindow = function(_type, _userData){
 			}
 		}
 		
-		return userTableRow;
+		return userRow;
 	};
 
 	// 「続きを読む」ボタンの追加
 	var appendNextButton = function() {
 		Ti.API.debug('[func]appendNextButton:');
-		var nextTableRow = Ti.UI.createTableViewRow(style.userListNextTableRow);
-		userListTableView.appendRow(nextTableRow);
+		var nextRow = Ti.UI.createTableViewRow(style.userListNextTableRow);
+		userListTableView.appendRow(nextRow);
 	
 		var nextView = Ti.UI.createView(style.userListNextView);
-		nextTableRow.add(nextView);
+		nextRow.add(nextView);
 	
 		// 「続きを読む」ボタンをテーブルに追加	
 		var nextButton = Ti.UI.createButton(style.userListNextButton);
@@ -133,11 +133,11 @@ exports.createWindow = function(_type, _userData){
 	// データなしラベルの追加	
 	var appendNoDataLabel = function() {
 		Ti.API.debug('[func]appendNoDataLabel:');
-		var nextTableRow = Ti.UI.createTableViewRow(style.userListNextTableRow);
-		userListTableView.appendRow(nextTableRow);
+		var nextRow = Ti.UI.createTableViewRow(style.userListNextTableRow);
+		userListTableView.appendRow(nextRow);
 	
 		var nextView = Ti.UI.createView(style.userListNextView);
-		nextTableRow.add(nextView);
+		nextRow.add(nextView);
 	
 		var noDataLabel = Ti.UI.createLabel(style.userListNoDataLabel);
 		nextView.add(noDataLabel);

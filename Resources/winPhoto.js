@@ -60,19 +60,19 @@ exports.createWindow = function(_type, _articleData){
 	var updateComment = function() {
 		Ti.API.debug('[func]updateComment:');
 		var count = model.getCommentCount(_articleData.no);
-		var children = commentTableRow.getChildren();
+		var children = commentRow.getChildren();
 
 		if (count > 0) {
 			var commentList = model.getCommentList(_articleData.no, null, commentCount);
 /*
 			commentCountLabel.text = ' x ' + count;
 			if (children.length > 0) {
-				commentTableRow.remove(commentListView);				
+				commentRow.remove(commentListView);				
 			}
 			commentCountView.show();
 */
 			commentListView = Ti.UI.createView(style.photoCommentListView);
-			commentTableRow.add(commentListView);
+			commentRow.add(commentListView);
 
 			for (var i=0; i<commentList.length; i++) {
 				var commentView = Ti.UI.createView(style.photoCommentView);
@@ -104,7 +104,7 @@ exports.createWindow = function(_type, _articleData){
 		} else {
 //			commentCountView.hide();
 			if (children.length > 0) {
-				commentTableRow.remove(commentListView);				
+				commentRow.remove(commentListView);				
 			}
 		}
 	};
@@ -148,10 +148,10 @@ exports.createWindow = function(_type, _articleData){
 	photoWin.add(photoTableView);
 
 	// 記事の表示
-	var articleTableRow = Ti.UI.createTableViewRow(style.photoArticleTableRow);
-	photoTableView.appendRow(articleTableRow);
+	var articleRow = Ti.UI.createTableViewRow(style.photoArticleTableRow);
+	photoTableView.appendRow(articleRow);
 	var articleView = Ti.UI.createView(style.photoArticleView);
-	articleTableRow.add(articleView);
+	articleRow.add(articleView);
 
 	var photoView = Ti.UI.createView(style.photoPhotoView);
 	articleView.add(photoView);
@@ -234,8 +234,8 @@ exports.createWindow = function(_type, _articleData){
 		shareActionView.add(shareActionLabel);		
 
 		// コメントリストの表示
-		var commentTableRow = Ti.UI.createTableViewRow(style.photoCommentTableRow);
-		photoTableView.appendRow(commentTableRow);
+		var commentRow = Ti.UI.createTableViewRow(style.photoCommentTableRow);
+		photoTableView.appendRow(commentRow);
 		var commentListView = null;
 		
 		// 初回読み込み時に、コメントリストの更新

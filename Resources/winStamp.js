@@ -34,7 +34,6 @@ exports.createWindow = function(_userData, _stampData){
 		Ti.API.debug('[func]getStampScrollView:');
 
 		var targetView = Ti.UI.createScrollView(style.stampScrollView);
-		
 		var stampListView = Ti.UI.createView(style.stampListView);
 		targetView.add(stampListView);
 		

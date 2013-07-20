@@ -17,9 +17,9 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// 記事の取得
 	var getArticleTableRow = function(_articleList) {
 		Ti.API.debug('[func]getArticleTableRow:');
-		var articleTableRow = Ti.UI.createTableViewRow(style.photoListArticleTableRow);
+		var articleRow = Ti.UI.createTableViewRow(style.photoListArticleTableRow);
 		var articleListView = Ti.UI.createView(style.photoListArticleListView);
-		articleTableRow.add(articleListView);
+		articleRow.add(articleListView);
 		
 		for (var i=0; i<_articleList.length; i++) {	
 			var articleView = Ti.UI.createView(style.photoListArticleView);
@@ -51,15 +51,15 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				win.openTabWindow(photoWin, {animated:true});
 			});
 		}		
-		return articleTableRow;
+		return articleRow;
 	};
 
 	// フォローユーザの記事の取得
 	var getFriendsArticleTableRow = function(_articleList) {
 		Ti.API.debug('[func]getFriendsArticleTableRow:');
-		var articleTableRow = Ti.UI.createTableViewRow(style.photoListArticleTableRow);
+		var articleRow = Ti.UI.createTableViewRow(style.photoListArticleTableRow);
 		var articleListView = Ti.UI.createView(style.photoListFriendsArticleListView);
-		articleTableRow.add(articleListView);
+		articleRow.add(articleListView);
 		
 		for (var i=0; i<_articleList.length; i++) {	
 			var articleView = Ti.UI.createView(style.photoListFriendsArticleView);
@@ -103,17 +103,17 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				win.openTabWindow(photoWin, {animated:true});
 			});
 		}		
-		return articleTableRow;
+		return articleRow;
 	};
 
 	// 「続きを読む」ボタンの追加
 	var appendNextButton = function() {
 		Ti.API.debug('[func]appendNextButton:');
-		var nextTableRow = Ti.UI.createTableViewRow(style.photoListNextTableRow);
-		photoListTableView.appendRow(nextTableRow);
+		var nextRow = Ti.UI.createTableViewRow(style.photoListNextTableRow);
+		photoListTableView.appendRow(nextRow);
 	
 		var nextView = Ti.UI.createView(style.photoListNextView);
-		nextTableRow.add(nextView);
+		nextRow.add(nextView);
 	
 		// 「続きを読む」ボタンをテーブルに追加	
 		var nextButton = Ti.UI.createButton(style.photoListNextButton);
@@ -128,11 +128,11 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// データなしラベルの追加	
 	var appendNoDataLabel = function() {
 		Ti.API.debug('[func]appendNoDataLabel:');
-		var nextTableRow = Ti.UI.createTableViewRow(style.photoListNextTableRow);
-		photoListTableView.appendRow(nextTableRow);
+		var nextRow = Ti.UI.createTableViewRow(style.photoListNextTableRow);
+		photoListTableView.appendRow(nextRow);
 	
 		var nextView = Ti.UI.createView(style.photoListNextView);
-		nextTableRow.add(nextView);
+		nextRow.add(nextView);
 	
 		var noDataLabel = Ti.UI.createLabel(style.photoListNoDataLabel);
 		nextView.add(noDataLabel);
@@ -275,7 +275,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 	// ビューの更新
 	updateArticle();
-
 
 // ---------------------------------------------------------------------
 	// 戻るボタンをクリック

@@ -25,10 +25,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// 日時の更新
 	var getDateView = function(_date) {
 		Ti.API.debug('[func]updateDate:');
-//		var dateTableRow = Ti.UI.createTableViewRow(style.friendsDateTableRow);
-//		friendsTableView.appendRow(dateTableRow);
 		var dateView = Ti.UI.createView(style.friendsDateView);
-//		dateTableRow.add(dateView);
 		var dateLabel = Ti.UI.createLabel(style.friendsDateLabel);
 		dateLabel.text = _date.year + '/' + _date.month + '/' + _date.day;
 		dateView.add(dateLabel);
@@ -39,9 +36,9 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// フォローユーザの記事の取得
 	var getFriendsArticleTableRow = function(_articleList) {
 		Ti.API.debug('[func]getFriendsArticleTableRow:');
-		var articleTableRow = Ti.UI.createTableViewRow(style.friendsArticleTableRow);
+		var articleRow = Ti.UI.createTableViewRow(style.friendsArticleTableRow);
 		var articleListView = Ti.UI.createView(style.friendsArticleListView);
-		articleTableRow.add(articleListView);
+		articleRow.add(articleListView);
 		
 		var checkDate = null;
 		
@@ -103,9 +100,10 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				win.openTabWindow(photoWin, {animated:true});
 			});
 		}
-		return articleTableRow;
+		return articleRow;
 	};
 
+/*
 	// 「続きを読む」ボタンの追加
 	var appendNextButton = function() {
 		Ti.API.debug('[func]appendNextButton:');
@@ -137,6 +135,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		var noDataLabel = Ti.UI.createLabel(style.friendsNoDataLabel);
 		nextView.add(noDataLabel);
 	};
+*/
 
 	// 記事の追加
 	var appendArticle = function(_articleList) {
@@ -191,9 +190,10 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		var articleList = model.getArticleList(_type, _userData, prevArticleIndex, articleCount + 1);
 		if (articleList == null || articleList.length == 0) {
 			// 1件も取得できなかった場合
-			appendNoDataLabel();		
+//			appendNoDataLabel();
 			// 次回更新用に続きの記事がないフラグを設定
 			nextArticleFlag = false;
+
 		} else {
 			appendArticle(articleList);
 			// 次回更新用に取得した最後のインデックスを設定
@@ -239,7 +239,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 	// ビューの更新
 	updateArticle();
-
 
 // ---------------------------------------------------------------------
 

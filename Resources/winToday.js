@@ -188,10 +188,10 @@ exports.createWindow = function(_userData){
 		});
 
 		var timeView = getTimeTableView();
-		// スタンプの登録が３個より大きい場合、行数分＋タブで表示されない余白分
+		// スタンプの登録が３個より大きい場合、行数分の高さを追加
 		if (timeView.data[0]) {
 			if (timeView.data[0].rowCount > 3) {
-				diaryView.height = (timeView.data[0].rowCount * 40 + 44) + 'dp';
+				diaryView.height = (timeView.data[0].rowCount * 40) + 'dp';
 			}
 		}
 		diaryView.add(timeView);
