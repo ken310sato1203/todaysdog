@@ -3,6 +3,7 @@
 exports.createWindow = function(_userData, _stampData){
 	Ti.API.debug('[func]winStamp.createWindow:');
 
+	var now = null;
 	var user = null;
 	var year = null;
 	var month = null;
@@ -11,7 +12,7 @@ exports.createWindow = function(_userData, _stampData){
 
 	if (_stampData == null) {
 		user = model.getLoginId();
-		var now = new Date();
+		now = new Date();
 		year = now.getFullYear();
 		month = now.getMonth() + 1;
 		day = now.getDate();
@@ -216,11 +217,21 @@ exports.createWindow = function(_userData, _stampData){
 			month: e.stampDataList[0].month,
 			day: e.stampDataList[0].day,
 			weekday: null,
-			todayFlag: null,
+			todayFlag: false,
 			stampList: null,
 			articleData: null,
 			timeIndex: e.stampDataList[0].hour,
 		};
+
+		// 今日の日付
+		now = new Date();
+		year = now.getFullYear();
+		month = now.getMonth() + 1;
+		day = now.getDate();
+
+		if (diaryData.year == year && diaryData.month == month && diaryData.day == day) {
+			diaryData.todayFlag = true;
+		}
 
 		// timeWinから遷移してきた場合
 		if (stampWin.prevWin != null) {

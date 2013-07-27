@@ -1645,6 +1645,7 @@ exports.style = {
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		data: [],
+		visible: false,
 	},
 	diaryTableRow:{ 
 		width: Ti.UI.SIZE,
@@ -1701,7 +1702,7 @@ exports.style = {
 		right: '8dp',
 		width : '32dp',
 		height : '32dp',
-		image : 'images/icon/diary_camera.png',
+		image : 'images/icon/stamp_camera.png',
 		// カスタムプロパティ
 		articleData: null,
 		objectName : 'diaryPhotoImage',
@@ -1755,7 +1756,7 @@ exports.style = {
 	timeListImage:{
 		width: '28dp',
 		height: '28dp',
-		image: null,
+		image: 'images/icon/w_arrow_listup.png',
 	},
 
 	timeTableView:{
@@ -1769,6 +1770,7 @@ exports.style = {
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		data: [],
+		visible: false,
 	},
 	timeTableRow:{ 
 		width: Ti.UI.SIZE,
@@ -1798,7 +1800,8 @@ exports.style = {
 		top: '0dp',
 		left: '0dp',
 		width: '7dp',
-		height: '100%',
+		// heigth100%指定だと実機でサイズが最大になるため、最小サイズで登録数によって拡張
+		height: '44dp',
 		backgroundColor : '#87CEFA',
 	},
 	timeStampListView:{

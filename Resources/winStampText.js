@@ -12,10 +12,11 @@ exports.createWindow = function(_userData, _stampData){
 	var backButton = Titanium.UI.createButton(style.commonBackButton);
 	textWin.leftNavButton = backButton;
 
+/*
 	// 完了ボタンの表示
 	var doneButton = Titanium.UI.createButton(style.commonPlusButton);
 	textWin.rightNavButton = doneButton;
-
+*/
 	var textScrollView = Ti.UI.createScrollView(style.stampTextScrollView);
 	textWin.add(textScrollView);
 	
@@ -46,9 +47,14 @@ exports.createWindow = function(_userData, _stampData){
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
+		if (textWin.prevWin != null) {
+			_stampData.text = textArea.value;
+			textWin.prevWin.fireEvent('refresh', {stampData:_stampData});
+		}
 		textWin.close({animated:true});
 	});	
 
+/*
 	// 完了ボタンをクリック
 	doneButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]doneButton.click:');
@@ -58,7 +64,7 @@ exports.createWindow = function(_userData, _stampData){
 		}
 		textWin.close({animated:true});
 	});
-
+*/
 	textArea.addEventListener('focus',function(e){
 		if (e.source.value == e.source.hintText) {
 			e.source.value = "";

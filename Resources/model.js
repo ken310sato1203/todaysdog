@@ -106,8 +106,8 @@ stampList = [
 	{no:"10", user:"sakura", stamp:"stamp_walking1", text:"朝のさんぽ、いいうんち。朝のさんぽ、いいうんち。朝のさんぽ、いい", year:2013, month:6, day:1, hour:-1, repeat:"0", date:"2013-03-04 10:23:45"},
 	{no:"9", user:"sakura", stamp:"stamp_restaurant1", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:2013, month:6, day:1, hour:-1, repeat:"0", date:"2013-03-04 15:23:45"},
 	{no:"8", user:"sakura", stamp:"stamp_warning", text:"シャンプー予約", year:2013, month:4, day:10, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"7", user:"sakura", stamp:"stamp_sun", text:"公園でBBQ", year:2013, month:4, day:8, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"6", user:"sakura", stamp:"stamp_water", text:"のみだに薬", year:2013, month:4, day:8, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"7", user:"sakura", stamp:"stamp_star", text:"公園でBBQ", year:2013, month:4, day:8, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"6", user:"sakura", stamp:"stamp_injection", text:"のみだに薬", year:2013, month:4, day:8, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
 	{no:"5", user:"sakura", stamp:"stamp_restaurant1", text:"お昼ごはん、がっつり食べた", year:2013, month:4, day:7, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
 	{no:"4", user:"sakura", stamp:"stamp_walking1", text:"朝のさんぽ、いいうんち", year:2013, month:4, day:5, hour:10, repeat:"0", date:"2013-03-04 10:23:45"},
 	{no:"3", user:"sakura", stamp:"stamp_walking1", text:"朝のさんぽ、いいうんち", year:2013, month:4, day:24, hour:9, repeat:"0", date:"2013-03-04 10:23:45"},
@@ -116,16 +116,20 @@ stampList = [
 ];
 
 stampSelectList = [
+	{type:"one", title:"お天気",stampList:["stamp_sun","stamp_cloud","stamp_rain"]},
 	{type:"one", title:"体調",stampList:["stamp_barking1","stamp_barking2","stamp_barking3"]},
 	{type:"one", title:"ご飯",stampList:["stamp_restaurant1","stamp_restaurant2","stamp_restaurant3"]},
 	{type:"one", title:"うんち",stampList:["stamp_favorite1","stamp_favorite2","stamp_favorite3"]},
 	{type:"one", title:"散歩",stampList:["stamp_walking1","stamp_walking2","stamp_walking3"]},
-	{type:"all", title:"薬・病院",stampList:["stamp_star","stamp_water","stamp_plus"]},
+	{type:"all", title:"薬・病院",stampList:["stamp_medicine","stamp_injection","stamp_plus"]},
 	{type:"all", title:"シャンプー\nホテル",stampList:["stamp_warning","stamp_home","stamp_cart"]},
-	{type:"all", title:"おでかけ\nイベント",stampList:["stamp_sun","stamp_trip","stamp_calendar"]},
+	{type:"all", title:"おでかけ\nイベント",stampList:["stamp_star","stamp_trip","stamp_calendar"]},
 ];
 
 stampHistoryList = [
+	{stamp:"stamp_sun",textList:["本日は晴れなり","いいお天気"]},
+	{stamp:"stamp_cloud",textList:["本日は曇りなり","過ごしやすい天気"]},
+	{stamp:"stamp_rain",textList:["本日は雨なり","雨で散歩いけないね"]},
 	{stamp:"stamp_barking1",textList:["テンション高！","元気です！"]},
 	{stamp:"stamp_barking2",textList:["いつもどおり","まぁまぁかな"]},
 	{stamp:"stamp_barking3",textList:["おつかれ","元気ないね"]},
@@ -138,13 +142,13 @@ stampHistoryList = [
 	{stamp:"stamp_walking1",textList:["朝のお散歩元気！","昼のお散歩元気！","夜のお散歩元気！"]},
 	{stamp:"stamp_walking2",textList:["朝のお散歩普通","昼のお散歩普通","夜のお散歩普通"]},
 	{stamp:"stamp_walking3",textList:["朝のお散歩即帰り","昼のお散歩即帰り","夜のお散歩即帰り"]},
-	{stamp:"stamp_star",textList:["フィラリア"]},
-	{stamp:"stamp_water",textList:["のみだに"]},
+	{stamp:"stamp_medicine",textList:["フィラリア","のみだに"]},
+	{stamp:"stamp_injection",textList:["注射"]},
 	{stamp:"stamp_plus",textList:["病院"]},
 	{stamp:"stamp_warning",textList:["シャンプー"]},
 	{stamp:"stamp_home",textList:["お泊まり"]},
 	{stamp:"stamp_cart",textList:["買い物"]},
-	{stamp:"stamp_sun",textList:["イベント"]},
+	{stamp:"stamp_star",textList:["イベント"]},
 	{stamp:"stamp_trip",textList:["旅行"]},
 	{stamp:"stamp_calendar",textList:["記念日"]},
 ];

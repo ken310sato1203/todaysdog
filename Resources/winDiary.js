@@ -15,6 +15,8 @@ exports.createWindow = function(_userData){
 	var weekday = util.diary.weekday;
 
 	var clickEnable = true;
+	// スタンプの最大表示件数
+	var stampListMax = 6;
 
 	// カレンダーデータの取得
 	var getCalendarRowData = function(_year, _month) {
@@ -97,16 +99,17 @@ exports.createWindow = function(_userData){
 				dayView.add(stampView);
 
 				for (var j=0; j<rowStampList.length; j++) {
-					var stampImage = Ti.UI.createImageView(style.diaryStampImage);
-					stampImage.image = 'images/icon/' + rowStampList[j].stamp + '.png';
-					stampView.add(stampImage);
+					if (j < stampListMax) {
+						var stampImage = Ti.UI.createImageView(style.diaryStampImage);
+						stampImage.image = 'images/icon/' + rowStampList[j].stamp + '.png';
+						stampView.add(stampImage);
+					}
 				}
 			}
 
 			var rowArticleData = _rowData[i].articleData;
 			if (rowArticleData != null) {
 				var stampPhotoImage = Ti.UI.createImageView(style.diaryPhotoImage);
-				stampPhotoImage.image = 'images/icon/diary_camera.png';
 				stampPhotoImage.articleData = rowArticleData;
 				dayView.add(stampPhotoImage);
 
@@ -153,14 +156,6 @@ exports.createWindow = function(_userData){
 		return calView;
 	};
 
-	// 当月・翌月・前月のカレンダー表示
-	var addCalView = function(_year, _month) {
-		Ti.API.debug('[func]addCalView:');
-		// 当月のカレンダー
-		thisDiaryView = getCalView(_year, _month);
-		diaryWin.add(thisDiaryView);
-	};
-
 	// スライド用アニメーション
 	var slideView = Ti.UI.createAnimation({
 		duration : 500,
@@ -181,8 +176,10 @@ exports.createWindow = function(_userData){
 		setTimeout(function() {
 			// タイトルの年月
 			monthTitle.text =  year + ' ' + monthName[month-1];
-			// 当月・前月・翌月のカレンダー表示
-			addCalView(year, month);
+			// カレンダーの表示
+			thisDiaryView = getCalView(year, month);
+			diaryWin.add(thisDiaryView);
+			thisDiaryView.visible = true;
 		}, 300);
 	};
 
@@ -199,9 +196,11 @@ exports.createWindow = function(_userData){
 		}
 		setTimeout(function() {
 			// タイトルの年月
-			monthTitle.text = monthName[month-1] + ' ' + year;	
-			// 当月・前月・翌月のカレンダー表示
-			addCalView(year, month);
+			monthTitle.text =  year + ' ' + monthName[month-1];
+			// カレンダーの表示
+			thisDiaryView = getCalView(year, month);
+			diaryWin.add(thisDiaryView);
+			thisDiaryView.visible = true;
 		}, 300);
 	};
 
@@ -216,9 +215,12 @@ exports.createWindow = function(_userData){
 		// ビューの再作成
 		diaryWin.remove(thisDiaryView);
 		// カレンダーの表示
-		addCalView(year, month);
+		thisDiaryView = getCalView(year, month);
+//		thisDiaryView.hide();
+		diaryWin.add(thisDiaryView);
 		// 今日の日にスクロール
 		thisDiaryView.scrollToIndex(_day-3 > 0? _day-3 : 0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
+		thisDiaryView.visible = true;
 	};
 
 // ---------------------------------------------------------------------
@@ -236,10 +238,12 @@ exports.createWindow = function(_userData){
 	diaryWin.rightNavButton = nextButton;
 	
 	// カレンダーの表示
-	var thisDiaryView = null;
-	addCalView(year, month);
+	var thisDiaryView = getCalView(year, month);
+//	thisDiaryView.hide();
+	diaryWin.add(thisDiaryView);
 	// 今日の日にスクロール
 	thisDiaryView.scrollToIndex(nowDay-3>0?nowDay-3:0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+	thisDiaryView.visible = true;
 
 // ---------------------------------------------------------------------
 	// 戻るボタンをクリック

@@ -5,6 +5,8 @@ exports.createWindow = function(_userData, _diaryData){
 
 	// 今日の日付
 	var now = new Date();
+	var nowYear = now.getFullYear();
+	var nowMonth = now.getMonth() + 1;
 	var nowDay = now.getDate();
 	var nowHour = now.getHours();
 
@@ -101,9 +103,16 @@ exports.createWindow = function(_userData, _diaryData){
 			}
 			hourView.add(timeLabel);
 	
+			var rowStampList = stampHour[i].data;
+
 			if (_diaryData.todayFlag) {
 				if (timeRange[i] == nowHour) {
 					var todayView = Ti.UI.createView(style.timeTodayView);
+					if (rowStampList.length > 1) {
+						// heigth100%指定だと実機でサイズが最大になるため、最小サイズで登録数によって拡張
+						// 上間下余白6dp+スタンプ32dp
+						todayView.height = (rowStampList.length * 38 + 6) + 'dp';
+					}
 					hourView.add(todayView);
 				}
 			}
@@ -111,7 +120,6 @@ exports.createWindow = function(_userData, _diaryData){
 			var stampListView = Ti.UI.createView(style.timeStampListView);
 			hourView.add(stampListView);
 	
-			var rowStampList = stampHour[i].data;
 			if (rowStampList.length > 0) {
 				for (var j=0; j<rowStampList.length; j++) {
 					var stampView = getStampView(rowStampList[j]);
@@ -180,7 +188,6 @@ exports.createWindow = function(_userData, _diaryData){
 	timeWin.rightNavButton = listButton;
 	// ボタンのbackgroundImageは後から変更できないのでImageViewの方で変更
 	var listImage = Ti.UI.createImageView(style.timeListImage);
-	listImage.image = "images/icon/w_arrow_listup.png";
 	listButton.add(listImage);
 
 	// ビューの作成
@@ -214,6 +221,7 @@ exports.createWindow = function(_userData, _diaryData){
 		timeWin.rightNavButton = e.source;
 		timeTableView = getTimeTableView(type);
 		scrollPosition(timeTableView);
+		timeTableView.visible = true;
 		timeWin.add(timeTableView);
 	});
 
@@ -221,6 +229,7 @@ exports.createWindow = function(_userData, _diaryData){
 	timeWin.addEventListener('open', function(e) {
 		Ti.API.debug('[event]timeWin.open:');
 		scrollPosition(timeTableView);
+		timeTableView.visible = true;
 	});
 
 	// windowクローズ時
@@ -247,6 +256,7 @@ exports.createWindow = function(_userData, _diaryData){
 		timeTableView = getTimeTableView(type);
 		timeWin.add(timeTableView);
 		timeTableView.scrollToIndex(e.diaryData.timeIndex + 1, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+		timeTableView.visible = true;
 
 		// タイトルの表示
 		monthTitle.text =  e.diaryData.year + ' ' + monthName[e.diaryData.month - 1] + ' ' + e.diaryData.day;
