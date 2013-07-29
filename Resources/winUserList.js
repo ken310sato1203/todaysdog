@@ -4,6 +4,8 @@ exports.createWindow = function(_type, _userData){
 	Ti.API.debug('[func]winUserList.createWindow:');
 	Ti.API.debug('_type:' + _type);
 
+	var loginId = model.getLoginId();
+
 	// ユーザ一覧の表示件数
 	var userCount = 9;
 	// 前回更新時に読み込んだ記事の最終インデックス

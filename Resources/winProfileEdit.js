@@ -3,6 +3,8 @@
 exports.createWindow = function(_userData){
 	Ti.API.debug('[func]winProfileEdit.createWindow:');
 
+	var loginId = model.getLoginId();
+
 	var profileEditWin = Ti.UI.createWindow(style.profileEditWin);
 	// タイトルの表示
 	var titleView = Ti.UI.createView(style.profileEditTitleView);

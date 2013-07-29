@@ -14,18 +14,18 @@ var stampSelectList = [];
 var stampHistoryList = [];
 
 // ---------------------------------------------------------------------
-loginId = "sakura";
+//loginId = "maki.oshika.9";
 
 articleList = [
-	{id:"23", no:"A0023", user:"sakura", date:"2013-04-09 10:26:05", text:"3明けましておめでとうございます。", like:"0", comment:"0"},
-	{id:"22", no:"A0022", user:"maki", date:"2013-04-09 08:26:05", text:"2明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{id:"23", no:"A0023", user:"maki.oshika.9", date:"2013-04-09 10:26:05", text:"3明けましておめでとうございます。", like:"0", comment:"0"},
+	{id:"22", no:"A0022", user:"ken.sato.39750", date:"2013-04-09 08:26:05", text:"2明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{id:"21", no:"A0021", user:"kuro", date:"2013-04-09 07:26:05", text:"1明けましておめでとうございます。今年もよい年になりますように。", like:"0", comment:"0"},
 	{id:"20", no:"A0020", user:"santa", date:"2013-04-06 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{id:"19", no:"A0019", user:"gon", date:"2013-04-06 06:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{id:"18", no:"A0018", user:"jiro", date:"2013-04-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{id:"17", no:"A0017", user:"momo", date:"2013-03-27 12:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"16", no:"A0016", user:"sakura", date:"2013-03-27 10:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"15", no:"A0015", user:"maki", date:"2013-03-27 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{id:"16", no:"A0016", user:"maki.oshika.9", date:"2013-03-27 10:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{id:"15", no:"A0015", user:"ken.sato.39750", date:"2013-03-27 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{id:"14", no:"A0014", user:"momo", date:"2013-03-24 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{id:"13", no:"A0013", user:"kuro", date:"2013-03-23 15:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{id:"12", no:"A0012", user:"gon", date:"2013-03-23 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
@@ -35,17 +35,17 @@ articleList = [
 	{id:"8", no:"A0008", user:"kuro", date:"2013-03-17 11:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{id:"7", no:"A0007", user:"gon", date:"2013-03-17 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 	{id:"6", no:"A0006", user:"jiro", date:"2013-03-13 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"5", no:"A0005", user:"sakura", date:"2013-03-03 09:26:05", text:"3明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"4", no:"A0004", user:"sakura", date:"2013-03-03 08:26:05", text:"2明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"3", no:"A0003", user:"sakura", date:"2013-03-03 07:26:05", text:"1明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"2", no:"A0002", user:"maki", date:"2013-03-02 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"1", no:"A0001", user:"sakura", date:"2013-03-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{id:"5", no:"A0005", user:"maki.oshika.9", date:"2013-03-03 09:26:05", text:"3明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{id:"4", no:"A0004", user:"maki.oshika.9", date:"2013-03-03 08:26:05", text:"2明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{id:"3", no:"A0003", user:"maki.oshika.9", date:"2013-03-03 07:26:05", text:"1明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{id:"2", no:"A0002", user:"ken.sato.39750", date:"2013-03-02 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
+	{id:"1", no:"A0001", user:"maki.oshika.9", date:"2013-03-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
 ];
 
 commentList = [
 	{no:"A0021", seq:"1", user:"jiro", date:"2013-03-01 13:37:02", text:"ことよろ。"},
 	{no:"A0021", seq:"2", user:"jiro", date:"2013-03-02 09:23:45", text:"今年もよろしく。"},
-	{no:"A0022", seq:"1", user:"maki", date:"2013-03-02 09:23:45", text:"今年もよろしく。"},
+	{no:"A0022", seq:"1", user:"ken.sato.39750", date:"2013-03-02 09:23:45", text:"今年もよろしく。"},
 	{no:"A0022", seq:"2", user:"koro", date:"2013-03-03 09:23:45", text:"今年もよろしく。"},
 	{no:"A0022", seq:"3", user:"gon", date:"2013-03-05 09:23:45", text:"今年もよろしく。"},
 	{no:"A0023", seq:"1", user:"shiro", date:"2013-03-02 09:23:45", text:"今年もよろしく。"},
@@ -53,17 +53,17 @@ commentList = [
 ];
 
 likeList = [
-	{no:"A0020", seq:"2", user:"maki", date:"2013-03-02 09:23:45"},
-	{no:"A0020", seq:"1", user:"sakura", date:"2013-03-01 08:14:27"},
+	{no:"A0020", seq:"2", user:"ken.sato.39750", date:"2013-03-02 09:23:45"},
+	{no:"A0020", seq:"1", user:"maki.oshika.9", date:"2013-03-01 08:14:27"},
 	{no:"A0021", seq:"1", user:"pochi", date:"2013-03-03 13:37:02"},
 	{no:"A0022", seq:"2", user:"momo", date:"2013-03-05 11:37:02"},
-	{no:"A0022", seq:"1", user:"sakura", date:"2013-03-04 12:37:02"},
-	{no:"A0023", seq:"1", user:"sakura", date:"2013-03-06 10:37:02"},
+	{no:"A0022", seq:"1", user:"maki.oshika.9", date:"2013-03-04 12:37:02"},
+	{no:"A0023", seq:"1", user:"maki.oshika.9", date:"2013-03-06 10:37:02"},
 ];
 
 userList = [
-	{user:"sakura", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう さくら", breed:"ダックスフント", sex:"♀", birth:"2005-12-07", memo:"東京在住、びびり。東京在住、びびり。東京在住、びびり。東京在住、びびり。東京在住、びびり。"},
-	{user:"maki", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう まき", breed:"ダックスフント", sex:"♀", birth:"2005-12-07", memo:"東京在住、ビール党。東京在住、ビール党。東京在住、ビール党。東京在住、ビール党。東京在住、ビール党。"},
+	{user:"maki.oshika.9", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう さくら", breed:"ダックスフント", sex:"♀", birth:"2005-12-07", memo:"東京在住、ビール党。東京在住、ビール党。東京在住、ビール党。東京在住、ビール党。東京在住、ビール党。"},
+	{user:"ken.sato.39750", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう けん", breed:"ダックスフント", sex:"♂", birth:"2005-12-07", memo:"東京在住、びびり。東京在住、びびり。東京在住、びびり。東京在住、びびり。東京在住、びびり。"},
 	{user:"koro", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう コロ", breed:"ダックスフント", sex:"♂", birth:"2005-12-07", memo:"びびり"},
 	{user:"shiro", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう しろ", breed:"ダックスフント", sex:"♀", birth:"2005-12-07", memo:"びびり"},
 	{user:"pochi", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう ポチ", breed:"ダックスフント", sex:"♂", birth:"2005-12-07", memo:"びびり"},
@@ -88,31 +88,31 @@ sexList = [
 ];
 
 followList = [
-	{user:"sakura", follow:"maki"},
-	{user:"sakura", follow:"kuro"},
-	{user:"sakura", follow:"santa"},
-	{user:"sakura", follow:"gon"},
-	{user:"sakura", follow:"jiro"},
-	{user:"sakura", follow:"momo"},
-	{user:"maki", follow:"sakura"},
-	{user:"maki", follow:"koro"},
-	{user:"maki", follow:"shiro"},
-	{user:"shiro", follow:"sakura"},
+	{user:"maki.oshika.9", follow:"ken.sato.39750"},
+	{user:"maki.oshika.9", follow:"kuro"},
+	{user:"maki.oshika.9", follow:"santa"},
+	{user:"maki.oshika.9", follow:"gon"},
+	{user:"maki.oshika.9", follow:"jiro"},
+	{user:"maki.oshika.9", follow:"momo"},
+	{user:"ken.sato.39750", follow:"maki.oshika.9"},
+	{user:"ken.sato.39750", follow:"koro"},
+	{user:"ken.sato.39750", follow:"shiro"},
+	{user:"shiro", follow:"maki.oshika.9"},
 ];
 
 stampList = [
-	{no:"12", user:"sakura", stamp:"stamp_walking1", text:"朝のさんぽ、いいうんち", year:2013, month:6, day:1, hour:16, repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"11", user:"sakura", stamp:"stamp_restaurant1", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:2013, month:6, day:1, hour:15, repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"10", user:"sakura", stamp:"stamp_walking1", text:"朝のさんぽ、いいうんち。朝のさんぽ、いいうんち。朝のさんぽ、いい", year:2013, month:6, day:1, hour:-1, repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"9", user:"sakura", stamp:"stamp_restaurant1", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:2013, month:6, day:1, hour:-1, repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"8", user:"sakura", stamp:"stamp_warning", text:"シャンプー予約", year:2013, month:4, day:10, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"7", user:"sakura", stamp:"stamp_star", text:"公園でBBQ", year:2013, month:4, day:8, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"6", user:"sakura", stamp:"stamp_injection", text:"のみだに薬", year:2013, month:4, day:8, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"5", user:"sakura", stamp:"stamp_restaurant1", text:"お昼ごはん、がっつり食べた", year:2013, month:4, day:7, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"4", user:"sakura", stamp:"stamp_walking1", text:"朝のさんぽ、いいうんち", year:2013, month:4, day:5, hour:10, repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"3", user:"sakura", stamp:"stamp_walking1", text:"朝のさんぽ、いいうんち", year:2013, month:4, day:24, hour:9, repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"2", user:"sakura", stamp:"stamp_restaurant1", text:"お昼ごはん、がっつり食べた", year:2013, month:3, day:4, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"1", user:"sakura", stamp:"stamp_walking1", text:"朝のさんぽ、いいうんち", year:2013, month:3, day:4, hour:9, repeat:"0", date:"2013-03-04 10:23:45"},
+	{no:"12", user:"maki.oshika.9", stamp:"stamp_walking1", text:"朝のさんぽ、いいうんち", year:2013, month:6, day:1, hour:16, repeat:"0", date:"2013-03-04 10:23:45"},
+	{no:"11", user:"maki.oshika.9", stamp:"stamp_restaurant1", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:2013, month:6, day:1, hour:15, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"10", user:"maki.oshika.9", stamp:"stamp_walking1", text:"朝のさんぽ、いいうんち。朝のさんぽ、いいうんち。朝のさんぽ、いい", year:2013, month:6, day:1, hour:-1, repeat:"0", date:"2013-03-04 10:23:45"},
+	{no:"9", user:"maki.oshika.9", stamp:"stamp_restaurant1", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:2013, month:6, day:1, hour:-1, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"8", user:"maki.oshika.9", stamp:"stamp_warning", text:"シャンプー予約", year:2013, month:4, day:10, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"7", user:"maki.oshika.9", stamp:"stamp_star", text:"公園でBBQ", year:2013, month:4, day:8, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"6", user:"maki.oshika.9", stamp:"stamp_injection", text:"のみだに薬", year:2013, month:4, day:8, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"5", user:"maki.oshika.9", stamp:"stamp_restaurant1", text:"お昼ごはん、がっつり食べた", year:2013, month:4, day:7, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"4", user:"maki.oshika.9", stamp:"stamp_walking1", text:"朝のさんぽ、いいうんち", year:2013, month:4, day:5, hour:10, repeat:"0", date:"2013-03-04 10:23:45"},
+	{no:"3", user:"maki.oshika.9", stamp:"stamp_walking1", text:"朝のさんぽ、いいうんち", year:2013, month:4, day:24, hour:9, repeat:"0", date:"2013-03-04 10:23:45"},
+	{no:"2", user:"maki.oshika.9", stamp:"stamp_restaurant1", text:"お昼ごはん、がっつり食べた", year:2013, month:3, day:4, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
+	{no:"1", user:"maki.oshika.9", stamp:"stamp_walking1", text:"朝のさんぽ、いいうんち", year:2013, month:3, day:4, hour:9, repeat:"0", date:"2013-03-04 10:23:45"},
 ];
 
 stampSelectList = [

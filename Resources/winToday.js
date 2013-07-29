@@ -3,7 +3,6 @@
 exports.createWindow = function(_userData){
 	Ti.API.debug('[func]winToday.createWindow:');
 
-	var user = model.getLoginId();
 	var year = null;
 	var month = null;
 	var day = null;
@@ -107,7 +106,7 @@ exports.createWindow = function(_userData){
 		photoRow.add(photoView);
 
 		var calendarDate = new Date(year, month-1, day);
-		var articleList = model.getDateArticle(userData, calendarDate);
+		var articleList = model.getDateArticle(_userData, calendarDate);
 		// 今日の投稿が既にされている場合
 		if (articleList.length > 0) {
 			var photoImage = Ti.UI.createImageView(style.todayPhotoImage);

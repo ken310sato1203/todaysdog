@@ -3,6 +3,8 @@
 exports.createWindow = function(_userData){
 	Ti.API.debug('[func]winProfile.createWindow:');
 
+	var loginId = model.getLoginId();
+
 	// Viewの取得
 	var getProfileTableView = function() {
 		Ti.API.debug('[func]getProfileTableView:');

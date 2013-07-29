@@ -4,6 +4,8 @@ exports.createWindow = function(_type, _articleData){
 	Ti.API.debug('[func]winPhoto.createWindow:');
 	Ti.API.debug('_type:' + _type);
 
+	var loginId = model.getLoginId();
+
 	// ライクリストの表示件数
 	var likeCount = 5;
 	// コメントリストの表示件数
@@ -114,7 +116,7 @@ exports.createWindow = function(_type, _articleData){
 		var commentData = {
 			no:_articleData.no, 
 			seq:null, 
-			user:model.getLoginId(), 
+			user:loginId, 
 			date:util.getFormattedNowDateTime(), 
 			text:commentField.getValue()
 		};
@@ -189,7 +191,7 @@ exports.createWindow = function(_type, _articleData){
 		likeStampImage.touchEnabled = true;
 	}
 	articleTextView.add(likeStampImage);
-	if (model.checkLikeList(_articleData.no, model.getLoginId())) {
+	if (model.checkLikeList(_articleData.no, loginId)) {
 		likeStampImage.image = 'images/icon/b_like_after.png';
 		likeStampImage.clickFlag = true;
 	}
@@ -201,11 +203,11 @@ exports.createWindow = function(_type, _articleData){
 
 		if (e.source.clickFlag) {
 			// ライクを解除する処理を書く
-			model.removeLikeList(_articleData.no, model.getLoginId());
+			model.removeLikeList(_articleData.no, loginId);
 			likeStampImage.image = 'images/icon/b_like_before.png';
 			e.source.clickFlag = false;
 		} else {
-			var likeData = {no:_articleData.no, user:model.getLoginId(), date:util.getFormattedNowDateTime()};			
+			var likeData = {no:_articleData.no, user:loginId, date:util.getFormattedNowDateTime()};			
 			model.addLikeList(likeData);
 			likeStampImage.image = 'images/icon/b_like_after.png';
 			e.source.clickFlag = true;

@@ -3,6 +3,8 @@
 exports.createWindow = function(_articleData){
 	Ti.API.debug('[func]winCommentList.createWindow:');
 
+	var loginId = model.getLoginId();
+
 	// コメント一覧の表示件数
 	var commentCount = 5;
 	// 前回更新時に読み込んだ記事の最終インデックス
