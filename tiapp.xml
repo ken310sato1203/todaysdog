@@ -54,5 +54,8 @@
     </mobileweb>
     <modules>
         <module platform="commonjs" version="2.3.0">ti.cloud</module>
+        <module platform="android">facebook</module>
+        <module platform="iphone">facebook</module>
     </modules>
+    <property name="ti.facebook.appid">159833880868916</property>
 </ti:app>
