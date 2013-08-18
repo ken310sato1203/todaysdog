@@ -269,6 +269,7 @@ exports.createWindow = function(_userData, _stampDataList){
 		alertDialog.show();
 
 		alertDialog.addEventListener('click',function(alert){
+			Ti.API.debug('[event]alertDialog.click:');						
 			// OKの場合
 			if(alert.index == 0){
 				actInd.show();
@@ -293,16 +294,24 @@ exports.createWindow = function(_userData, _stampDataList){
 					}
 				}
 
-				if (postWin.prevWin != null) {
-					postWin.prevWin.fireEvent('refresh', {stampDataList:_stampDataList});
-				}
-				// 複数の画面を同時にアニメーションさせるとエラーになるのでアニメーションさせない
-				postWin.close({animated:false});
+				model.addCloudStampList(_stampDataList, function(e) {
+					Ti.API.debug('[func]cloudAddStampList.callback:');						
+					if (e.success) {
+						Ti.API.debug('Success:');
+						if (postWin.prevWin != null) {
+							postWin.prevWin.fireEvent('refresh', {stampDataList:_stampDataList});
+						}
+						// 複数の画面を同時にアニメーションさせるとエラーになるのでアニメーションさせない
+						postWin.close({animated:false});
+		
+					} else {
+						util.errorDialog();
+					}
 
-				setTimeout(function(){
-					actInd.hide();
-				},2000);
-
+					setTimeout(function(){
+						actInd.hide();
+					},2000);
+				});
 			}
 		});
 	});
@@ -327,4 +336,4 @@ exports.createWindow = function(_userData, _stampDataList){
 	});
 
 	return postWin;
-}
+};

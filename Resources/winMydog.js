@@ -245,7 +245,7 @@ exports.createWindow = function(_type, _userData, _articleData){
 	    updateArrowImage.show();
 	    pullLabel.text = 'Pull down to refresh...';
 	    articleTableView.setContentInsets({top:0}, {animated:true});
-	}
+	};
 	 
 	// スクロールで発生するイベント
 	articleTableView.addEventListener('scroll',function(e){
@@ -292,4 +292,4 @@ exports.createWindow = function(_type, _userData, _articleData){
 	});
 
 	return mydogWin;
-}
+};

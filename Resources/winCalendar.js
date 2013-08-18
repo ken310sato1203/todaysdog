@@ -4,7 +4,7 @@ exports.createWindow = function(_articleData){
 	Ti.API.debug('[func]winCalendar.createWindow:');
 
 	// ユーザデータの取得
-	var userData = model.getUser(_articleData.user);
+	var userData = model.getUser(_articleData.userId);
 
 	// 記事の日付
 	var articleDate = util.getDate(_articleData.date);
@@ -278,5 +278,5 @@ exports.createWindow = function(_articleData){
 	});
 
 	return calendarWin;
-}
+};
 

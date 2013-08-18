@@ -29,11 +29,12 @@ exports.style = {
 		height: '0dp',
 	},	    
 	commonUpdateArrowImage:{
-	    image:'images/whiteArrow.png',
 	    left: '20dp',
 	    bottom: '10dp',
 	    width: '23dp',
 	    height: '60dp',
+		defaultImage: '',
+	    image:'images/whiteArrow.png',
 	},
 	commonPullLabel:{
 	    left: '55dp', 
@@ -120,6 +121,7 @@ exports.style = {
 //		top: '3dp',
 //		width: '28dp',
 		height: '28dp',
+		defaultImage: '',
 		bubbleParent: true,
 		// カスタムプロパティ
 		tabIndex: null,
@@ -131,6 +133,16 @@ exports.style = {
 		textAlign: 'center',
 		font: {fontSize:10, fontFamily:'Helvetica Neue', fontWeight:'bold'},
 		color: 'white',
+	},
+
+// winLogin -------------------------------------------------------
+	loginWin:{
+		backgroundColor: 'white',
+	},
+
+	loginFacebookButton:{
+		top : '100dp',
+		style : Ti.Facebook.BUTTON_STYLE_WIDE,
 	},
 
 // winPhoto -------------------------------------------------------
@@ -151,10 +163,16 @@ exports.style = {
 		width: '100%',
 		height: Ti.UI.SIZE,
 	},
-	photoTitleIconImage:{
+	photoTitleIconView:{
 		left: '0dp',
 		width: '28dp',
 		height: '28dp',
+		borderRadius: '14dp',
+	},
+	photoTitleIconImage:{
+		width: '28dp',
+		height: '28dp',
+		defaultImage: '',
 	},
 	photoTitleNameLabel:{
 		top: '3dp',
@@ -205,6 +223,7 @@ exports.style = {
 		top: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		defaultImage: '',
 		backgroundColor: 'black',
 		// カスタムプロパティ
 		articleData: null,
@@ -259,8 +278,9 @@ exports.style = {
 //		top: '5dp',
 		bottom: '5dp',
 		right: '10dp',
-		width: '55dp',
-		height: '55dp',
+		width: '54dp',
+		height: '54dp',
+		defaultImage: '',
 		image: 'images/icon/b_like_before.png',
 		touchEnabled: false,
 		// カスタムプロパティ
@@ -288,6 +308,7 @@ exports.style = {
 		left: '5dp',
 		width: '28dp',
 		height: '28dp',
+		defaultImage: '',
 		image: 'images/icon/b_comment_square.png',
 	},
 	photoCommentActionLabel:{
@@ -315,6 +336,7 @@ exports.style = {
 		left: '5dp',
 		width: '28dp',
 		height: '28dp',
+		defaultImage: '',
 		image: 'images/icon/b_arrow.png',
 	},
 	photoShareActionLabel:{
@@ -350,12 +372,18 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
 	},
-	photoCommentUserIconImage:{
+	photoCommentUserIconView:{
 		top: '5dp',
 		bottom: '5dp',
 		left: '10dp',
 		width: '36dp',
 		height: '36dp',
+		borderRadius: '18dp',
+	},
+	photoCommentUserIconImage:{
+		width: '36dp',
+		height: '36dp',
+		defaultImage: '',
 	},
 	photoCommentTextView:{
 		layout: 'vertical',
@@ -417,6 +445,7 @@ exports.style = {
 	photoCommentPostImage:{
 		width: '18dp',
 		height: '18dp',
+		defaultImage: '',
 		image:'images/icon/w_plus.png',
 	},
 
@@ -428,6 +457,7 @@ exports.style = {
 		top: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		defaultImage: '',
 		backgroundColor: 'black',
 	},
 
@@ -509,11 +539,17 @@ exports.style = {
 //		height: '100%',
 		backgroundColor: 'white',
 	},
-	profileIconImage:{
+	profileIconView:{
 		top: '15dp',
 		left: '15dp',
-		width: '80dp',
-		height: '80dp',
+		width: '54dp',
+		height: '54dp',
+		borderRadius: '27dp',
+	},
+	profileIconImage:{
+		width: '54dp',
+		height: '54dp',
+		defaultImage: '',
 	},
 	profileInfoTextView:{
 		layout: 'vertical',
@@ -675,6 +711,7 @@ exports.style = {
 		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		defaultImage: '',
 	},
 
 // winProfileEdit -------------------------------------------------------
@@ -761,12 +798,18 @@ exports.style = {
         touchEnabled: false,
 //		backgroundColor: 'yellow',
 	},
-	profileEditIconImage:{
+	profileEditIconView:{
 		top: '5dp',
 		bottom: '5dp',
 		right: '15dp',
-		width: '55dp',
-		height: '55dp',
+		width: '54dp',
+		height: '54dp',
+		borderRadius: '27dp',
+	},
+	profileEditIconImage:{
+		width: '54dp',
+		height: '54dp',
+		defaultImage: '',
 	},
 	profileEditCoverImage:{
 		top: '5dp',
@@ -922,6 +965,7 @@ exports.style = {
 //		height: '90dp',
 		width: '100dp',
 		height: (100 * 3 / 4) + 'dp',
+		defaultImage: '',
 		backgroundColor: 'white',
 		// カスタムプロパティ
 		articleData: null,
@@ -943,6 +987,7 @@ exports.style = {
 //		top: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		defaultImage: '',
 	},
 
 	photoListFriendsArticleListView:{
@@ -964,6 +1009,7 @@ exports.style = {
 		top: '6dp',
 		width: '113dp',
 		height: '113dp',
+		defaultImage: '',
 		backgroundColor: 'black',
 		// カスタムプロパティ
 		articleData: null,
@@ -995,6 +1041,7 @@ exports.style = {
 		left: '0dp',
 		width: '18dp',
 		height: '18dp',
+		defaultImage: '',
 		image: 'images/icon/like.gif',
 	},
 	photoListFriendsLikeLabel:{
@@ -1009,6 +1056,7 @@ exports.style = {
 		left: '12dp',
 		width: '15dp',
 		height: '15dp',
+		defaultImage: '',
 		image: 'images/icon/light_comment.png',
 	},
 	photoListFriendsCommentLabel:{
@@ -1125,14 +1173,21 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
 	},
-	userListIconImage:{
+	userListIconView:{
 		top: '5dp',
 		bottom: '5dp',
 		left: '10dp',
-		width: '55dp',
-		height: '55dp',
+		width: '54dp',
+		height: '54dp',
+		borderRadius: '27dp',
 		// カスタムプロパティ
 		userData: null,
+	},
+	userListIconImage:{
+		width: '54dp',
+		height: '54dp',
+		defaultImage: '',
+		touchEnabled: false,
 	},
 	userListTextLabel:{
 		left: '10dp',
@@ -1262,6 +1317,7 @@ exports.style = {
 		left: '4dp',
 		width: '48dp',
 		height: '48dp',
+		defaultImage: '',
 		backgroundColor: 'black',
 		// カスタムプロパティ
 		objectName: 'commentListIconImage',
@@ -1404,6 +1460,7 @@ exports.style = {
 		top: '10dp',
 		width: '200dp',
 		height: '200dp',
+		defaultImage: '',
 		backgroundColor: 'black',
 		// カスタムプロパティ
 		articleData: null,
@@ -1472,6 +1529,7 @@ exports.style = {
 		top : '3dp',
 		width : '40dp',
 		height : '40dp',
+		defaultImage: '',
 		backgroundColor: 'black',
 		image : null,
 		// カスタムプロパティ
@@ -1514,16 +1572,16 @@ exports.style = {
 		height: Ti.UI.SIZE,
 	},
 	cameraFrameView:{
-		top: '100dp',
-		width: Ti.Platform.displayCaps.platformWidth + 'dp',
-		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
+//		top: '100dp',
+//		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+//		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
         borderColor: 'red',
         borderWidth: 1,
 	},
 	cameraArticleScrollView:{
 		top: '0dp',
-		width: Ti.Platform.displayCaps.platformWidth,
-		height: Ti.Platform.displayCaps.platformWidth * 3 / 4,
+//		width: Ti.Platform.displayCaps.platformWidth,
+//		height: Ti.Platform.displayCaps.platformWidth * 3 / 4,
 //		contentWidth:'auto',
 		contentWidth:Ti.Platform.displayCaps.platformWidth,
 		contentHeight:'auto',
@@ -1536,6 +1594,7 @@ exports.style = {
 	cameraArticleImage:{
 //		top : '0dp',
 //		left: '0dp',
+		defaultImage: '',
 		image : null,
 	},
 	cameraSpaceView:{
@@ -1560,7 +1619,7 @@ exports.style = {
 		text: 'カメラ', 
 	},
 
-	cameraPostArticleScrollView:{
+	cameraPostScrollView:{
 		layout: 'vertical',
 		top:0,
 		contentWidth:'auto',
@@ -1569,24 +1628,46 @@ exports.style = {
 		showHorizontalScrollIndicator:true,
 		backgroundColor: '#dedede',
 	},
-	cameraPostArticleView:{
+	cameraPostView:{
 		layout : 'vertical',
 		top : '10dp',
-		width : '284dp',
+//		width : '284dp',
+		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
 	},
 
-	cameraPostArticleImage:{
+	cameraPostIconView:{
+		top: '20dp',
+/*
+		width: '54dp',
+		height: '54dp',
+		borderRadius: '27dp',
+*/
+		width: '108dp',
+		height: '108dp',
+		borderRadius: '54dp',
+	},
+	cameraPostIconImage:{
+//		width: '54dp',
+//		height: '54dp',
+		width: '108dp',
+		height: '108dp',
+		defaultImage: '',
+	},
+
+	cameraPostImage:{
 		top : '10dp',
+		bottom : '5dp',
 		left: '10dp',
+		right: '10dp',
 		width: '264dp',
 		height: Ti.UI.SIZE,
+		defaultImage: '',
 		backgroundColor: 'black',
-		image : null,
 	},
-	cameraPostArticleTextArea:{
-		top : '5dp',
+	cameraPostTextArea:{
+		top : '0dp',
 		bottom : '5dp',
 		left: '10dp',
 		width: '264dp',
@@ -1695,6 +1776,7 @@ exports.style = {
 	diaryStampImage:{
 		width : '32dp',
 		height : '32dp',
+		defaultImage: '',
 		image : null,
 	},
 	diaryPhotoImage:{
@@ -1702,6 +1784,7 @@ exports.style = {
 		right: '8dp',
 		width : '32dp',
 		height : '32dp',
+		defaultImage: '',
 		image : 'images/icon/stamp_camera.png',
 		// カスタムプロパティ
 		articleData: null,
@@ -1756,6 +1839,7 @@ exports.style = {
 	timeListImage:{
 		width: '28dp',
 		height: '28dp',
+		defaultImage: '',
 		image: 'images/icon/w_arrow_listup.png',
 	},
 
@@ -1828,6 +1912,7 @@ exports.style = {
 		left: '0dp',
 		width : '32dp',
 		height : '32dp',
+		defaultImage: '',
 		image : null,
 		// カスタムプロパティ
 		objectName : 'timeStampImage',
@@ -1846,6 +1931,7 @@ exports.style = {
 		right: '8dp',
 		width : '28dp',
 		height : '28dp',
+		defaultImage: '',
 		image : 'images/icon/diary_plus.png',
 	},
 
@@ -1928,13 +2014,19 @@ exports.style = {
 		// カスタムプロパティ
 		articleData: null,
 	},
-	friendsUserIconImage:{
+	friendsUserIconView:{
 		top: '5dp',
 		bottom: '5dp',
 		left: '10dp',
-		width: '55dp',
-		height: '55dp',
-		user: null,
+		width: '54dp',
+		height: '54dp',
+		borderRadius: '27dp',
+		touchEnabled: false,
+	},
+	friendsUserIconImage:{
+		width: '54dp',
+		height: '54dp',
+		defaultImage: '',
 		touchEnabled: false,
 	},
 	friendsTextView:{
@@ -1996,7 +2088,7 @@ exports.style = {
 		left: '0dp',
 		width: '18dp',
 		height: '18dp',
-//		image: 'images/icon/like.gif',
+		defaultImage: '',
 		image: 'images/icon/b_like.png',
 	},
 	friendsLikeLabel:{
@@ -2011,7 +2103,7 @@ exports.style = {
 		left: '12dp',
 		width: '18dp',
 		height: '18dp',
-//		image: 'images/icon/light_comment.png',
+		defaultImage: '',
 		image: 'images/icon/b_comment_square.png',
 	},
 	friendsCommentLabel:{
@@ -2099,6 +2191,7 @@ exports.style = {
 //		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		defaultImage: '',
 		image : null,
 		// カスタムプロパティ
 		displayFlag: false,
@@ -2106,8 +2199,9 @@ exports.style = {
 	todayCameraImage:{
 //		width: '64dp',
 //		height: '64dp',
-		width: '55dp',
-		height: '55dp',
+		width: '54dp',
+		height: '54dp',
+		defaultImage: '',
 		image: 'images/icon/b_camera.png',
 	},
 	todayDiaryView:{
@@ -2147,8 +2241,9 @@ exports.style = {
 		top: '3dp',
 //		width: '64dp',
 //		height: '64dp',
-		width: '55dp',
-		height: '55dp',
+		width: '54dp',
+		height: '54dp',
+		defaultImage: '',
 		image : 'images/icon/b_edit.png',
 		backgroundColor: 'white',
 	},
@@ -2182,6 +2277,7 @@ exports.style = {
 		left: '0dp',
 		width : '32dp',
 		height : '32dp',
+		defaultImage: '',
 		image : null,
 		// カスタムプロパティ
 		objectName : 'todayTimeStampImage',
@@ -2259,6 +2355,7 @@ exports.style = {
 		left: '20dp',
 		width : '32dp',
 		height : '32dp',
+		defaultImage: '',
 		image : null,
 		opacity : 0.3,
 		// カスタムプロパティ
@@ -2313,6 +2410,7 @@ exports.style = {
 		left: '10dp',
 		width : '32dp',
 		height : '32dp',
+		defaultImage: '',
 		image : null,
 	},
 	stampPostTextLabel:{

@@ -25,16 +25,16 @@ exports.createWindow = function(_articleData){
 			var userView = Ti.UI.createView(style.commentListUserView);
 			commentListView.add(userView);
 			var userImage = Ti.UI.createImageView(style.commentListIconImage);
-			userImage.image = 'images/icon/' + _commentList[i].user + '.jpg';
+			userImage.image = 'images/icon/i_' + _commentList[i].userId + '.jpg';
 			// カスタムプロパティにコメントデータを格納
 			userImage.commentData = _commentList[i];
 			var textLabel = Ti.UI.createLabel(style.commentListTextLabel);
-			textLabel.text = _commentList[i].user + '\n' + _commentList[i].text;
+			textLabel.text = _commentList[i].userId + '\n' + _commentList[i].text;
 					
 			userView.add(userImage);
 			userView.add(textLabel);
 
-			if (_articleData.user == loginId || _commentList[i].user == loginId) {
+			if (_articleData.userId == loginId || _commentList[i].userId == loginId) {
 				// 削除ボタン
 				var deleteButton = Ti.UI.createButton(style.commentListDeleteButton);
 				// カスタムプロパティにコメントデータを格納
@@ -85,7 +85,7 @@ exports.createWindow = function(_articleData){
 		}
 		
 		return userTableRow;
-	}
+	};
 
 	// 「続きを読む」ボタンの追加
 	var appendNextButton = function() {
@@ -104,7 +104,7 @@ exports.createWindow = function(_articleData){
 		nextButton.addEventListener('click', function(e) {
 			updateCommentList();
 		});		
-	}
+	};
 
 	// データなしラベルの追加	
 	var appendNoDataLabel = function() {
@@ -117,7 +117,7 @@ exports.createWindow = function(_articleData){
 	
 		var noDataLabel = Ti.UI.createLabel(style.commentListNoDataLabel);
 		nextView.add(noDataLabel);
-	}	
+	};
 
 	// コメント一覧の追加
 	var appendComment = function(_commentList) {
@@ -154,7 +154,7 @@ exports.createWindow = function(_articleData){
 			// 次回更新用に続きのコメント一覧があるフラグを設定
 			nextUserFlag = true;
 		}
-	}
+	};
 
 	// コメント一覧の更新
 	var updateCommentList = function() {
@@ -177,7 +177,7 @@ exports.createWindow = function(_articleData){
 			Ti.API.debug('commentList.length:' + commentList.length);
 			prevCommentIndex = commentList[commentList.length-1].no;
 		}
-	}
+	};
 
 
 // ---------------------------------------------------------------------
@@ -217,4 +217,4 @@ exports.createWindow = function(_articleData){
 	});	
 
 	return commentListWin;
-}
+};

@@ -1,6 +1,8 @@
 // アプリ
 
 // モジュール読み込み
+var Cloud = require('ti.cloud');
+
 var win = require('win').win;
 var style = require('style').style;
 var model = require('model').model;
@@ -60,36 +62,91 @@ var openTabWindow = function(_userData) {
 
 // ---------------------------------------------------------------------
 
-// facebook側で登録したアプリ
+// facebook側で登録したアプリID
 Ti.Facebook.appid = '159833880868916';
 Ti.Facebook.permissions = ['publish_stream'];
 Ti.Facebook.forceDialogAuth = false;
 
-var loginWin = Ti.UI.createWindow(style.todayWin);
-var fbLoginButton = Ti.Facebook.createLoginButton({
-	top : '100dp',
-	style : Ti.Facebook.BUTTON_STYLE_WIDE
-});
-loginWin.add(fbLoginButton);
+var loginWin = Ti.UI.createWindow(style.loginWin);
+var loginFbButton = Ti.Facebook.createLoginButton(style.loginFacebookButton);
+loginWin.add(loginFbButton);
 loginWin.open();
 
 Ti.Facebook.addEventListener('login', function(e) {
 	Ti.API.debug('[event]Ti.Facebook.login:');
 	if (e.success) {
-		Ti.Facebook.requestWithGraphPath('me', {}, 'GET', function (e) {
+		var type = 'facebook';
+		model.loginCloudUser(type, Ti.Facebook.accessToken, function (e) {
 			if (e.success) {
-				var json = JSON.parse(e.result);
-				var userData = model.getUser(json.username);
-				if (userData) {
-					model.setLoginId(json.username);
-					openTabWindow(userData);
+				var userData = e.userData;
+				if (userData.icon == null) {
+					// デフォルトアイコンの登録
+					userData.icon = 'images/icon/i_circle.png';
+					var defaultIcon = Ti.UI.createImageView({image: userData.icon});
+					model.updateCloudUserIcon(defaultIcon.toBlob(), function(e) {
+						Ti.API.debug('[func]updateCloudUserIcon.callback:');
+						if (e.success) {
+							model.addUserList(userData);
+							model.setLoginId(userData.id);
+							openTabWindow(userData);
+	
+						} else {
+							util.errorDialog();
+						}
+					});					
+
 				} else {
-					alert('Not found user');
+					model.addUserList(userData);
+					model.setLoginId(userData.id);
+					openTabWindow(userData);
 				}
+
+			} else {
+				util.errorDialog();
 			}
 		});
+	} else {
+		util.errorDialog();
 	}
 });
+
+/*
+Cloud.Photos.create({
+	photo: imageView.toBlob(),
+	tags: 'icon'
+}, function (e) {
+	if (e.success) {
+		var photo = e.photos[0];
+		alert('Success:\n' +
+			'id: ' + photo.id + '\n' +
+			'filename: ' + photo.filename + '\n' +
+			'size: ' + photo.size,
+			'updated_at: ' + photo.updated_at);
+	} else {
+		alert('Error:\n' +
+			((e.error && e.message) || JSON.stringify(e)));
+	}
+});
+
+Cloud.Photos.query({
+	user: userData.id,
+	where: {tags_array: 'icon'}
+}, function (e) {
+	if (e.success) {
+		alert('Success:\n' + 'Count: ' + e.photos.length);
+		for (var i = 0; i < e.photos.length; i++) {
+			var photo = e.photos[i];
+		}
+		userData.icon = e.photos[0].urls.square_75;
+		
+	} else {
+		alert('Error:\n' +
+		((e.error && e.message) || JSON.stringify(e)));
+	}
+});
+*/
+
+	
 
 Ti.Facebook.addEventListener('logout', function(e) {
 	Ti.API.debug('[event]Ti.Facebook.logout:');

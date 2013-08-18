@@ -71,7 +71,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			articleView.add(photoImage);
 
 			var nameLabel = Ti.UI.createLabel(style.photoListFriendsNameLabel);
-			nameLabel.text = _articleList[i].user;
+			nameLabel.text = _articleList[i].name;
 			var textLabel = Ti.UI.createLabel(style.photoListFriendsTextLabel);
 			textLabel.text = _articleList[i].text;
 			articleView.add(nameLabel);
@@ -381,4 +381,4 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	});
 
 	return photoListWin;
-}
+};

@@ -48,9 +48,9 @@ exports.win = {
 		var win = cameraWin.createWindow(_type, _userData);
 		return win;
 	},
-	createCameraPostWindow:function(_userData, _photoImage){
+	createCameraPostWindow:function(_type, _userData, _photoImage){
 		Ti.API.debug('[func]createCameraPostWindow:');
-		var win = cameraPostWin.createWindow(_userData, _photoImage);
+		var win = cameraPostWin.createWindow(_type, _userData, _photoImage);
 		return win;
 	},
 	createDiaryWindow:function(_userData){
@@ -165,5 +165,5 @@ exports.win = {
 		return tabGroupView;
 	},
 
-}
+};
 

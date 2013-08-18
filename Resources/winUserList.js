@@ -24,34 +24,36 @@ exports.createWindow = function(_type, _userData){
 			Ti.API.debug('_userList[i].user:' + _userList[i].user);
 			var userView = Ti.UI.createView(style.userListUserView);
 			userListView.add(userView);
-			var userImage = Ti.UI.createImageView(style.userListIconImage);
-			userImage.image = 'images/icon/' + _userList[i].user + '.png';
+			var iconView = Ti.UI.createView(style.userListIconView);
 			// カスタムプロパティにユーザデータを格納
-			userImage.userData = _userList[i];
+			iconView.userData = _userList[i];
+			userView.add(iconView);
+			var iconImage = Ti.UI.createImageView(style.userListIconImage);
+			iconImage.image = 'images/icon/i_' + _userList[i].id + '.png';
+			iconView.add(iconImage);
 			var textLabel = Ti.UI.createLabel(style.userListTextLabel);
 			textLabel.text = _userList[i].name + '\n@' + _userList[i].user;
 					
-			userView.add(userImage);
 			userView.add(textLabel);
 
 			// 各ユーザ一覧のタップでプロフィール画面へ遷移
-			userImage.addEventListener('click',function(e){
-				Ti.API.debug('[event]userImage.click:');
+			iconView.addEventListener('click',function(e){
+				Ti.API.debug('[event]iconView.click:');
 				e.source.opacity = 0.5;
 				var profileWin = win.createProfileWindow(e.source.userData);
 				win.openTabWindow(profileWin, {animated:true});
 				e.source.opacity = 1.0;
 			});
 
-			if (_userList[i].user != loginId) {
+			if (_userList[i].id != loginId) {
 				// 「フォローする」未フォローユーザをフォローするボタン
 				var followButton = Titanium.UI.createButton(style.userFollowButton);
 				userView.add(followButton);
-				followButton.user = _userList[i].user;
+				followButton.user = _userList[i].id;
 				var followButtonLabel = Ti.UI.createLabel(style.userFollowButtonLabel);
 				followButton.add(followButtonLabel);
 	
-				if (model.checkFollowList(loginId, _userList[i].user)) {
+				if (model.checkFollowList(loginId, _userList[i].id)) {
 					followButton.backgroundColor = '#dedede';
 					followButton.clickFlag = true;
 					followButtonLabel.text = 'フォロー中';
@@ -78,7 +80,7 @@ exports.createWindow = function(_type, _userData){
 								tabGroup.add(actInd);
 								// プロフィールのフォロー数を更新
 								var loginData = model.getUser(loginId);
-								model.removeFollowList(loginId, e.source.user);
+								model.removeFollowList(loginId, e.source.id);
 										
 								setTimeout(function(){
 									actInd.hide();
@@ -95,7 +97,7 @@ exports.createWindow = function(_type, _userData){
 						tabGroup.add(actInd);
 						// プロフィールのフォロー数を更新
 						var loginData = model.getUser(loginId);
-						model.addFollowList(loginId, e.source.user);
+						model.addFollowList(loginId, e.source.id);
 				
 						setTimeout(function(){
 							actInd.hide();
@@ -191,11 +193,11 @@ exports.createWindow = function(_type, _userData){
 
 		// フォロワのユーザ一覧
 		if (_type == "follower") {
-			userList = model.getFollowerList(_userData.user, prevUserIndex, userCount);
+			userList = model.getFollowerList(_userData.id, prevUserIndex, userCount);
 
 		// フォローのユーザ一覧
 		} else if (_type == "follow") {
-			userList = model.getFollowList(_userData.user, prevUserIndex, userCount);
+			userList = model.getFollowList(_userData.id, prevUserIndex, userCount);
 		}
 
 		if (userList == null || userList.length == 0) {
@@ -264,10 +266,10 @@ exports.createWindow = function(_type, _userData){
 	userListWin.addEventListener('close',function(e){
 		Ti.API.debug('[event]userListWin.close:');
 		if (userListWin.prevWin != null) {
-			var currentData = model.getUser(_userData.user);
+			var currentData = model.getUser(_userData.id);
 			userListWin.prevWin.fireEvent('refresh', {userData:currentData});
 		}
 	});	
 
 	return userListWin;
-}
+};

@@ -27,22 +27,21 @@ exports.createWindow = function(_userData){
 
 	var profileEditRowList = [];
 
-
+/*
 	// アイコンのフィールドを表示
 	var iconRow = Titanium.UI.createTableViewRow(style.profileEditListTableRow);
 	profileEditRowList.push(iconRow);
 	iconRow.objectName = 'icon';
-	var iconView = Ti.UI.createView(style.profileEditListItemView);
-	iconRow.add(iconView);
+	var iconItemView = Ti.UI.createView(style.profileEditListItemView);
+	iconRow.add(iconItemView);
 	var iconLabel = Ti.UI.createLabel(style.profileEditListItemLabel);
 	iconLabel.text = 'アイコン';
+	iconItemView.add(iconLabel);
+	var iconView = Ti.UI.createImageView(style.profileEditIconView);
+	iconItemView.add(iconView);
 	var iconImage = Ti.UI.createImageView(style.profileEditIconImage);
-	iconImage.image = 'images/icon/' + _userData.user + '.jpg';
-	var circleImage = Ti.UI.createImageView(style.profileEditIconImage);
-	circleImage.image = 'images/icon/circle.png';
-	iconView.add(iconLabel);
+	iconImage.image = _userData.icon;
 	iconView.add(iconImage);
-	iconView.add(circleImage);
 
 	// カバー写真のフィールドを表示
 	var coverRow = Titanium.UI.createTableViewRow(style.profileEditListTableRow);
@@ -76,6 +75,7 @@ exports.createWindow = function(_userData){
 			mediaTypes : [Ti.Media.MEDIA_TYPE_PHOTO]
 		});
 	});
+*/
 
 
 	// 名前のフィールドを表示
@@ -224,11 +224,21 @@ exports.createWindow = function(_userData){
 		_userData.memo = memoField.value;
 
 		// _userDataは、modelのuserListの参照なので上記の値セットで反映される。下記はDBに反映するようの処理。
-		model.updateUserList(_userData);
+		model.updateCloudUser(_userData, function(e) {
+			if (e.success) {
+				Ti.API.debug('[func]updateCloudUser.callback:');
+				model.updateUserList(_userData);
+				if (profileEditWin.prevWin != null) {
+					profileEditWin.prevWin.fireEvent('refresh');
+				}
+				profileEditWin.close({animated:true});
 
-		setTimeout(function(){
+			} else {
+				util.errorDialog();
+			}
 			actInd.hide();
-		},2000);
+		});
+
 	});
 
 	// 選択したフィールド名を保管
@@ -238,7 +248,7 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]profileEditTableView.click:');
 
 		// 自分のプロフィールは編集できる
-		if (loginId == _userData.user) {
+		if (loginId == _userData.id) {
 			if (e.rowData.objectName != null){
 				var targetName = e.rowData.objectName;
 				Ti.API.debug('targetName:' + targetName);
@@ -309,4 +319,4 @@ exports.createWindow = function(_userData){
 	});
 
 	return profileEditWin;
-}
+};

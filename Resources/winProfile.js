@@ -110,11 +110,40 @@ exports.createWindow = function(_userData){
 		var infoView = Ti.UI.createView(style.profileInfoView);
 		profileInfoRow.add(infoView);
 	
+		var iconView = Ti.UI.createView(style.profileIconView);
+		infoView.add(iconView);
 		var iconImage = Ti.UI.createImageView(style.profileIconImage);
-		iconImage.image = 'images/icon/' + _userData.user + '.png';
-		infoView.add(iconImage);
+		iconImage.image = _userData.icon;
+		iconView.add(iconImage);
 		var infoTextView = Ti.UI.createView(style.profileInfoTextView);
 		infoView.add(infoTextView);
+
+		// アイコンをクリック
+		iconView.addEventListener('click',function(e){
+			Ti.API.debug('[event]iconView.click:');
+
+			var dialog = Titanium.UI.createOptionDialog({
+				options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
+				cancel:2
+			});
+			dialog.show();
+
+			dialog.addEventListener('click',function(e) {
+				Ti.API.debug('[event]dialog.click:');
+				switch( e.index ) {
+					case 0:
+						var cameraWin = win.createCameraWindow('icon_camera', _userData);
+						cameraWin.prevWin = profileWin;
+						win.openTabWindow(cameraWin, {animated:true});
+						break;
+					case 1:
+						var cameraWin = win.createCameraWindow('icon_select', _userData);
+						cameraWin.prevWin = profileWin;
+						win.openTabWindow(cameraWin, {animated:true});
+						break;
+				}
+			});
+		});			
 	
 		var nameLabel = Ti.UI.createLabel(style.profileNameLabel);
 		nameLabel.text = _userData.name;
@@ -169,9 +198,9 @@ exports.createWindow = function(_userData){
 	// ロード用画面
 	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
 
-	if (loginId == _userData.user) {
+	if (loginId == _userData.id) {
 		profileWin.rightNavButton = editButton;
-	} else if (model.checkFollowList(loginId, _userData.user)) {
+	} else if (model.checkFollowList(loginId, _userData.id)) {
 		profileWin.rightNavButton = unfollowButton;
 	} else {
 		profileWin.rightNavButton = followButton;
@@ -214,7 +243,7 @@ exports.createWindow = function(_userData){
 		    if(alert.index == 0){
 				actInd.show();
 				tabGroup.add(actInd);
-				model.removeFollowList(loginId, _userData.user);
+				model.removeFollowList(loginId, _userData.id);
 		
 				setTimeout(function(){
 					profileWin.rightNavButton = followButton;
@@ -231,7 +260,7 @@ exports.createWindow = function(_userData){
 		followButton.enabled = false;
 		actInd.show();
 		tabGroup.add(actInd);
-		model.addFollowList(loginId, _userData.user);
+		model.addFollowList(loginId, _userData.id);
 
 		setTimeout(function(){
 			unfollowButton.enabled = true;
@@ -269,4 +298,4 @@ exports.createWindow = function(_userData){
 	});
 
 	return profileWin;
-}
+};

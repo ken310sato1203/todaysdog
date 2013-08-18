@@ -15,6 +15,16 @@ exports.util = {
 		timeRange:['-1','0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23'],
 
 	},
+	// 現在日を日時フォーマットに変換
+	getFormattedNowDate:function(){
+	    var now = new Date();
+	    var year = now.getFullYear();
+	    var month = now.getMonth() + 1;
+	    var date = now.getDate();
+	    var hour = 0;
+	    var minute = 0;
+	    return String.format("%04.0f-%02.0f-%02.0f %02.0f:%02.0f", year, month, date, hour, minute);
+	},
 	// 現在日時を日時フォーマットに変換
 	getFormattedNowDateTime:function(){
 	    var now = new Date();
@@ -32,6 +42,15 @@ exports.util = {
 	    var month = _date.getMonth() + 1;
 	    var date = _date.getDate();
 	    return String.format("%04.0f-%02.0f-%02.0f", year, month, date);
+	},
+	// Date型を日時フォーマットに変換
+	getFormattedDateTime:function(_date){
+	    var year = _date.getFullYear();
+	    var month = _date.getMonth() + 1;
+	    var date = _date.getDate();
+	    var hour = _date.getHours();
+	    var minute = _date.getMinutes();
+	    return String.format("%04.0f-%02.0f-%02.0f %02.0f:%02.0f", year, month, date, hour, minute);
 	},
 	// フォーマットされた日付をDate型に変換
 	getDate:function(_formatedDate){
@@ -53,7 +72,7 @@ exports.util = {
 		if (_formatedHour == "-1") {
 			return _formatedHour;
 		} else {
-			return parseInt(_formatedHour.substr(0,2));			
+			return parseInt(_formatedHour.substr(0,2));
 		}		
 	},
 
@@ -68,5 +87,14 @@ exports.util = {
 		return {year:year, month:month, day:day, hour:hour, minute:minute, second:second};
 	},
 
-}
+	// エラー時のアラート表示
+	errorDialog:function(_title){
+		var dialog = Titanium.UI.createAlertDialog({
+			title: (_title == null) ? 'エラーが発生しました。' : _title,
+			buttonNames: ['OK'],
+		});
+		dialog.show();
+	},
+
+};
 

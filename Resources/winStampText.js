@@ -103,4 +103,4 @@ exports.createWindow = function(_userData, _stampData){
 	});
 
 	return textWin;
-}
+};

@@ -11,7 +11,7 @@ exports.createWindow = function(_type, _articleData){
 	// コメントリストの表示件数
 	var commentCount = 5;
 
-	var userData = model.getUser(_articleData.user);
+	var userData = model.getUser(_articleData.userId);
 
 /*
 	// ライクリストの更新
@@ -79,19 +79,21 @@ exports.createWindow = function(_type, _articleData){
 			for (var i=0; i<commentList.length; i++) {
 				var commentView = Ti.UI.createView(style.photoCommentView);
 				commentListView.add(commentView);
+				var commentUserIconView = Ti.UI.createView(style.photoCommentUserIconView);
+				commentView.add(commentUserIconView);
 				var commentUserIconImage = Ti.UI.createImageView(style.photoCommentUserIconImage);
-				commentUserIconImage.image = 'images/icon/' + commentList[i].user + '.png';						
-				commentView.add(commentUserIconImage);					
+				commentUserIconImage.image = 'images/icon/i_' + commentList[i].userId + '.png';						
+				commentUserIconView.add(commentUserIconImage);
 
 /*
 				var commentLabel = Ti.UI.createLabel(style.photoCommentLabel);
-				commentLabel.text = commentList[i].user + '\n' + commentList[i].text;
+				commentLabel.text = commentList[i].name + '\n' + commentList[i].text;
 				commentView.add(commentLabel);
 */
 				var textView = Ti.UI.createView(style.photoCommentTextView);
 				commentView.add(textView);
 				var nameLabel = Ti.UI.createLabel(style.photoCommentNameLabel);
-				nameLabel.text = commentList[i].user;
+				nameLabel.text = commentList[i].name;
 				textView.add(nameLabel);
 				var textLabel = Ti.UI.createLabel(style.photoCommentTextLabel);
 				textLabel.text = commentList[i].text;
@@ -130,14 +132,16 @@ exports.createWindow = function(_type, _articleData){
 
 	// タイトルの表示
 	var titleView = Ti.UI.createView(style.photoTitleView);
+	var titleIconView = Ti.UI.createView(style.photoTitleIconView);
+	titleView.add(titleIconView);
 	var titleIconImage = Ti.UI.createImageView(style.photoTitleIconImage);
-	titleIconImage.image = 'images/icon/' + _articleData.user + '.png';
+	titleIconImage.image = 'images/icon/i_' + _articleData.userId + '.png';
+	titleIconView.add(titleIconImage);
 
 	var titleNameLabel = Ti.UI.createLabel(style.photoTitleNameLabel);
 	titleNameLabel.text = userData.name;
 	var titleUserLabel = Ti.UI.createLabel(style.photoTitleUserLabel);
 	titleUserLabel.text = '@' + userData.user;
-	titleView.add(titleIconImage);
 	titleView.add(titleNameLabel);
 	titleView.add(titleUserLabel);
 	photoWin.titleControl = titleView;
@@ -176,7 +180,7 @@ exports.createWindow = function(_type, _articleData){
 	articleTextView.add(textView);
 
 	var nameLabel = Ti.UI.createLabel(style.photoNameLabel);
-	nameLabel.text = _articleData.user;
+	nameLabel.text = _articleData.name;
 	var textLabel = Ti.UI.createLabel(style.photoTextLabel);
 	textLabel.text = _articleData.text;			
 	var timeLabel = Ti.UI.createLabel(style.photoTimeLabel);
@@ -335,4 +339,4 @@ exports.createWindow = function(_type, _articleData){
 	});	
 
 	return photoWin;
-}
+};

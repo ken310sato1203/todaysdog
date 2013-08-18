@@ -54,16 +54,23 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			// カスタムプロパティに記事データを格納
 			articleView.articleData = _articleList[i];
 			articleListView.add(articleView);
+			var userIconView = Ti.UI.createView(style.friendsUserIconView);
+			articleView.add(userIconView);
 			var userIconImage = Ti.UI.createImageView(style.friendsUserIconImage);
-			userIconImage.image = 'images/icon/' + _articleList[i].user + '.png';
-			userIconImage.user = _articleList[i].user;
-			articleView.add(userIconImage);
+//			userIconImage.image = 'images/icon/i_' + _articleList[i].user + '.png';
+			userIconImage.image = model.getUser(_articleList[i].userId).icon;
+//			userIconImage.user = _articleList[i].userId;
+			userIconView.add(userIconImage);
 
 			var textView = Ti.UI.createView(style.friendsTextView);
 			articleView.add(textView);
 
 			var nameLabel = Ti.UI.createLabel(style.friendsNameLabel);
-			nameLabel.text = _articleList[i].user;
+			if (_articleList[i].name == null || _articleList[i].name == '') {
+				nameLabel.text = _articleList[i].user;
+			} else {
+				nameLabel.text = _articleList[i].name;				
+			}
 			textView.add(nameLabel);
 			var textLabel = Ti.UI.createLabel(style.friendsTextLabel);
 			textLabel.text = _articleList[i].text;
@@ -332,4 +339,4 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	});
 	
 	return friendsWin;
-}
+};

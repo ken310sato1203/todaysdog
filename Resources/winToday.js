@@ -42,28 +42,28 @@ exports.createWindow = function(_userData){
 	};
 
 	// Viewの取得
-	var getTimeTableView = function() {
+	var getTimeTableView = function(_stampList) {
 		Ti.API.debug('[func]getTimeTableView:');
 		var targetView = Ti.UI.createTableView(style.todayTimeTableView);
 		var rowList = [];
 
 		// 当日のデータ
-		var stampList = model.getStampDayList(_userData, year, month, day);			
+//		var _stampList = model.getStampDayList(_userData, year, month, day);
 		
-		for (var i=0; i<stampList.length; i++) {
+		for (var i=0; i<_stampList.length; i++) {
 			var row = Ti.UI.createTableViewRow(style.todayTimeTableRow);
 			row.diaryData = {
 				year: year,
 				month: month,
 				day: day,
 				weekday: weekday,
-				todayFlag: true,
-				stampList: null,
+				todayFlag: false,
+				stampList: _stampList,
 				articleData: null,
-				timeIndex: stampList[i].hour,
+				timeIndex: _stampList[i].hour,
 			};
 			
-			var stampView = getStampView(stampList[i]);
+			var stampView = getStampView(_stampList[i]);
 			row.add(stampView);
 			rowList.push(row);
 
@@ -72,19 +72,13 @@ exports.createWindow = function(_userData){
 				var targetTab = win.getTab("diaryTab");
 				// timeWinがオープンしている場合
 				if (targetTab.window.nextWin != null) {
-					// timeWinを更新
-					targetTab.window.nextWin.fireEvent('refresh', {diaryData:e.row.diaryData});
-	
-				} else {
-					// timeWinを新規オープン
-					var timeWin = win.createTimeWindow(_userData, e.row.diaryData);
-					timeWin.prevWin = targetTab.window;
-					timeWin.backButtonTitle = 'Month';
-					targetTab.open(timeWin, {animated:false});
-	
-					// diaryWinを更新
-					targetTab.window.fireEvent('refresh', {diaryData:e.row.diaryData});
+					// timeWinをクローズ
+					targetTab.window.nextWin.close({animated:false});
 				}
+				// timeWinを新規オープン
+				var timeWin = win.createTimeWindow(_userData, e.row.diaryData);
+				timeWin.prevWin = targetTab.window;
+				targetTab.open(timeWin, {animated:false});	
 				tabGroup.activeTab = targetTab;
 			});
 
@@ -94,23 +88,18 @@ exports.createWindow = function(_userData){
 		return targetView;
 	};
 
-	// TableViewのデータ取得
-	var getTodayTableRowList = function() {
-		Ti.API.debug('[func]getTodayTableRowList:');
-
-		var rowList = [];
+	// photoRowの取得
+	var getTodayPhotoRow = function(_articleList) {
+		Ti.API.debug('[func]getTodayPhotoRow:');
 
 		var photoRow = Ti.UI.createTableViewRow(style.todayTableRow);
-		rowList.push(photoRow);
 		var photoView = Ti.UI.createView(style.todayPhotoView);
 		photoRow.add(photoView);
 
-		var calendarDate = new Date(year, month-1, day);
-		var articleList = model.getDateArticle(_userData, calendarDate);
 		// 今日の投稿が既にされている場合
-		if (articleList.length > 0) {
+		if (_articleList.length > 0) {
 			var photoImage = Ti.UI.createImageView(style.todayPhotoImage);
-			photoImage.image = Ti.Filesystem.applicationDataDirectory + 'photo/' + articleList[0].no + '.jpg';
+			photoImage.image = _articleList[0].photo;
 			photoView.add(photoImage);
 	
 			// photoImageをクリック
@@ -136,23 +125,23 @@ exports.createWindow = function(_userData){
 			cameraImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]cameraImage.click:');
 
-				var sourceSelect = Titanium.UI.createOptionDialog({
+				var dialog = Titanium.UI.createOptionDialog({
 					options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
-					cancel:2,
-					title:'写真を添付'
+					cancel:2
+//					title:'写真を添付'
 				});
-				sourceSelect.show();
+				dialog.show();
 
-				sourceSelect.addEventListener('click',function(e) {
-					Ti.API.debug('[event]sourceSelect.click:');
+				dialog.addEventListener('click',function(e) {
+					Ti.API.debug('[event]dialog.click:');
 					switch( e.index ) {
 						case 0:
-							var cameraWin = win.createCameraWindow("camera", _userData);
+							var cameraWin = win.createCameraWindow('photo_camera', _userData);
 							cameraWin.prevWin = todayWin;
 							win.openTabWindow(cameraWin, {animated:true});
 							break;
 						case 1:
-							var cameraWin = win.createCameraWindow("photo", _userData);
+							var cameraWin = win.createCameraWindow('photo_select', _userData);
 							cameraWin.prevWin = todayWin;
 							win.openTabWindow(cameraWin, {animated:true});
 							break;
@@ -160,9 +149,14 @@ exports.createWindow = function(_userData){
 				});
 			});			
 		}
+		return photoRow;
+	};
+
+	// DiaryRowの取得
+	var getTodayDiaryRow = function(_stampList) {
+		Ti.API.debug('[func]getTodayDiaryRow:');
 
 		var diaryRow = Ti.UI.createTableViewRow(style.todayTableRow);
-		rowList.push(diaryRow);
 		var diaryView = Ti.UI.createView(style.todayDiaryView);
 		diaryRow.add(diaryView);
 		var dayView = Ti.UI.createView(style.todayDayView);
@@ -186,7 +180,7 @@ exports.createWindow = function(_userData){
 			win.openTabWindow(stampWin, {animated:true});
 		});
 
-		var timeView = getTimeTableView();
+		var timeView = getTimeTableView(_stampList);
 		// スタンプの登録が３個より大きい場合、行数分の高さを追加
 		if (timeView.data[0]) {
 			if (timeView.data[0].rowCount > 3) {
@@ -195,7 +189,7 @@ exports.createWindow = function(_userData){
 		}
 		diaryView.add(timeView);
 
-		return rowList;
+		return diaryRow;
 	};
 
 	// 最上部から下スクロールで最新データを更新する用のヘッダを作成
@@ -227,8 +221,44 @@ exports.createWindow = function(_userData){
 	// ビューの更新
 	var updateTableView = function() {
 		Ti.API.debug('[func]updateTableView:');
+		// 日時の更新
 		updateTime();
-		todayTableView.setData(getTodayTableRowList());
+
+		var rowList = [];
+		var nowDate = new Date(year, month-1, day);
+		var articleList = model.getDateArticle(_userData, nowDate);
+
+		// 今日の記事データ取得
+		model.getCloudArticle({
+			userIdList: [_userData.id],
+			startDate: nowDate,
+			endDate: nowDate
+		}, function(e) {
+			Ti.API.debug('[func]getCloudArticle.callback:');
+			if (e.success) {
+				rowList.push(getTodayPhotoRow(e.articleList));
+
+				// 今日のスタンプデータ取得
+				model.getCloudStampList({
+					userId: _userData.id,
+					year: year,
+					month: month,
+					day: day
+				}, function(e) {
+					Ti.API.debug('[func]getCloudStampList.callback:');
+					if (e.success) {
+						rowList.push(getTodayDiaryRow(e.stampList));
+						todayTableView.setData(rowList);
+			
+					} else {
+						util.errorDialog();
+					}
+				});
+
+			} else {
+				util.errorDialog();
+			}
+		});
 	};
 
 // ---------------------------------------------------------------------
@@ -335,5 +365,5 @@ exports.createWindow = function(_userData){
 	});
 
 	return todayWin;
-}
+};
 

@@ -36,10 +36,10 @@ exports.createWindow = function(_userData, _diaryData){
 		targetView.add(stampImage);
 
 		return targetView;
-	}
+	};
 
 	// Viewの取得
-	var getTimeTableView = function(_type) {
+	var getTimeTableView = function(_type, _stampList) {
 		Ti.API.debug('[func]getTimeTableView:');
 		var targetView = Ti.UI.createTableView(style.timeTableView);
 		var rowList = [];
@@ -49,13 +49,15 @@ exports.createWindow = function(_userData, _diaryData){
 		for (var i=0; i<stampHour.length; i++) {
 			stampHour[i] = {data: []};
 		}
+/*
 		// 当日のデータ
 		var stampList = _diaryData.stampList;
 		if (stampList == null) {
 			stampList = model.getStampDayList(_userData, _diaryData.year, _diaryData.month, _diaryData.day);			
 		}
-		for (var i=0; i<stampList.length; i++) {
-			stampHour[stampList[i].hour + 1].data.push(stampList[i]);
+*/
+		for (var i=0; i<_stampList.length; i++) {
+			stampHour[_stampList[i].hour + 1].data.push(_stampList[i]);
 		}	
 		// 表示位置のリセット	
 		firstHour = null;
@@ -170,6 +172,52 @@ exports.createWindow = function(_userData, _diaryData){
 		}		
 	};
 
+	// ビューの更新
+	var updateTableView = function() {
+		Ti.API.debug('[func]updateTableView:');
+		var type = "time";
+		// 当日のデータ
+		var stampList = _diaryData.stampList;
+		if (stampList == null) {
+			// 当月のスタンプデータ取得
+			model.getCloudStampList({
+				userData: _userData,
+				year: year,
+				month: month,
+				day: day
+			}, function(e) {
+				if (e.success) {
+					Ti.API.debug('[func]getCloudStampList.callback:');
+					timeTableView = getTimeTableView(type, e.stampList);
+					timeTableView.visible = true;
+					scrollPosition(timeTableView);
+					timeWin.add(timeTableView);
+					if (timeWin.prevWin != null) {
+						timeWin.prevWin.fireEvent('refresh', {diaryData:_diaryData});
+					}
+					// タイトルの表示
+					monthTitle.text =  _diaryData.year + ' ' + monthName[_diaryData.month - 1] + ' ' + _diaryData.day;	
+		
+				} else {
+					util.errorDialog();
+				}
+			});
+	
+		} else {
+			timeTableView = getTimeTableView(type, stampList);
+			timeTableView.visible = true;
+			scrollPosition(timeTableView);
+			timeWin.add(timeTableView);		
+			if (timeWin.prevWin != null) {
+				timeWin.prevWin.fireEvent('refresh', {diaryData:_diaryData});
+			}
+			// タイトルの表示
+			monthTitle.text =  _diaryData.year + ' ' + monthName[_diaryData.month - 1] + ' ' + _diaryData.day;	
+		}
+
+	};
+
+
 // ---------------------------------------------------------------------
 	var timeWin = Ti.UI.createWindow(style.timeWin);
 	// タイトルの表示
@@ -191,9 +239,9 @@ exports.createWindow = function(_userData, _diaryData){
 	listButton.add(listImage);
 
 	// ビューの作成
-	var type = "time";
-	var timeTableView = getTimeTableView(type);
-	timeWin.add(timeTableView);
+	var timeTableView = null;
+	updateTableView();
+
 
 // ---------------------------------------------------------------------
 	// 戻るボタンをクリック
@@ -219,7 +267,7 @@ exports.createWindow = function(_userData, _diaryData){
 			listImage.image = "images/icon/w_arrow_listup.png";
 		}
 		timeWin.rightNavButton = e.source;
-		timeTableView = getTimeTableView(type);
+		timeTableView = getTimeTableView(type, _diaryData.stampList);
 		scrollPosition(timeTableView);
 		timeTableView.visible = true;
 		timeWin.add(timeTableView);
@@ -228,8 +276,10 @@ exports.createWindow = function(_userData, _diaryData){
 	// windowオープン時
 	timeWin.addEventListener('open', function(e) {
 		Ti.API.debug('[event]timeWin.open:');
-		scrollPosition(timeTableView);
-		timeTableView.visible = true;
+		if (timeTableView != null) {
+//			scrollPosition(timeTableView);
+//			timeTableView.visible = true;
+		}
 	});
 
 	// windowクローズ時
@@ -251,19 +301,12 @@ exports.createWindow = function(_userData, _diaryData){
 		Ti.API.debug('[event]timeWin.refresh:');
 		// ビューの再作成
 		timeWin.remove(timeTableView);
-		var type = "time";
 		_diaryData = e.diaryData;
-		timeTableView = getTimeTableView(type);
-		timeWin.add(timeTableView);
-		timeTableView.scrollToIndex(e.diaryData.timeIndex + 1, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-		timeTableView.visible = true;
+		updateTableView();
 
-		// タイトルの表示
-		monthTitle.text =  e.diaryData.year + ' ' + monthName[e.diaryData.month - 1] + ' ' + e.diaryData.day;
+//		timeTableView.scrollToIndex(e.diaryData.timeIndex + 1, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+//		timeTableView.visible = true;
 
-		if (timeWin.prevWin != null) {
-			timeWin.prevWin.fireEvent('refresh', {diaryData:e.diaryData});
-		}
 	});
 
 	// timWinからstampPostWinへの遷移でイベントが複数回実行（原因不明）されないようにするためのフラグ
@@ -273,5 +316,5 @@ exports.createWindow = function(_userData, _diaryData){
 	});
 
 	return timeWin;
-}
+};
 
