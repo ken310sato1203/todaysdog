@@ -228,37 +228,63 @@ exports.createWindow = function(_userData){
 		var nowDate = new Date(year, month-1, day);
 		var articleList = model.getDateArticle(_userData, nowDate);
 
-		// 今日の記事データ取得
-		model.getCloudArticle({
-			userIdList: [_userData.id],
-			startDate: nowDate,
-			endDate: nowDate
-		}, function(e) {
-			Ti.API.debug('[func]getCloudArticle.callback:');
-			if (e.success) {
-				rowList.push(getTodayPhotoRow(e.articleList));
+		var today = null;
+		if (_userData.today) {
+			today = util.getDateElement(_userData.today.date);
+		}
+		
+		// すでに今日の記事データを保持している場合
+		if (_userData.today && today.year == year && today.month == month && today.day == day) {
+			// 今日の記事データ取得
+			rowList.push(getTodayPhotoRow([_userData.today]));
+			// 今日のスタンプデータ取得
+			model.getCloudStampList({
+				userId: _userData.id,
+				year: year,
+				month: month,
+				day: day
+			}, function(e) {
+				Ti.API.debug('[func]getCloudStampList.callback:');
+				if (e.success) {
+					rowList.push(getTodayDiaryRow(e.stampList));
+					todayTableView.setData(rowList);
+		
+				} else {
+					util.errorDialog();
+				}
+			});
+		} else {
+			// 今日の記事データ取得
+			model.getCloudArticle({
+				userIdList: [_userData.id],
+				startDate: nowDate,
+				endDate: nowDate
+			}, function(e) {
+				Ti.API.debug('[func]getCloudArticle.callback:');
+				if (e.success) {
+					rowList.push(getTodayPhotoRow(e.articleList));
+					// 今日のスタンプデータ取得
+					model.getCloudStampList({
+						userId: _userData.id,
+						year: year,
+						month: month,
+						day: day
+					}, function(e) {
+						Ti.API.debug('[func]getCloudStampList.callback:');
+						if (e.success) {
+							rowList.push(getTodayDiaryRow(e.stampList));
+							todayTableView.setData(rowList);
+				
+						} else {
+							util.errorDialog();
+						}
+					});
 
-				// 今日のスタンプデータ取得
-				model.getCloudStampList({
-					userId: _userData.id,
-					year: year,
-					month: month,
-					day: day
-				}, function(e) {
-					Ti.API.debug('[func]getCloudStampList.callback:');
-					if (e.success) {
-						rowList.push(getTodayDiaryRow(e.stampList));
-						todayTableView.setData(rowList);
-			
-					} else {
-						util.errorDialog();
-					}
-				});
-
-			} else {
-				util.errorDialog();
-			}
-		});
+				} else {
+					util.errorDialog();
+				}
+			});
+		}
 	};
 
 // ---------------------------------------------------------------------

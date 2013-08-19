@@ -118,7 +118,8 @@ exports.createWindow = function(_type, _userData, _photoImage){
 					model.postCloudArticle(articleData, postImage.toBlob(), function(e) {
 						Ti.API.debug('[func]postCloudArticle.callback:');
 						if (e.success) {
-							model.addArticleList(articleData);
+//							model.addArticleList(articleData);
+							_userData.today = articleData;
 							if (cameraPostWin.prevWin != null) {
 								cameraPostWin.prevWin.fireEvent('refresh');
 								cameraPostWin.prevWin.close();
