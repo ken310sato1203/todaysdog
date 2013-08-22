@@ -192,32 +192,6 @@ exports.createWindow = function(_userData){
 		return diaryRow;
 	};
 
-	// 最上部から下スクロールで最新データを更新する用のヘッダを作成
-	var getTableHeader = function() {
-		Ti.API.debug('[func]getTableHeader:');
-
-		var tableHeader = Ti.UI.createView(style.commonTableHeader);
-		var headerBorder = Ti.UI.createView(style.commonHeaderBorder);
-		tableHeader.add(headerBorder);
-		var updateArrowImage = Ti.UI.createImageView(style.commonUpdateArrowImage);
-		tableHeader.add(updateArrowImage);
-		var pullLabel = Ti.UI.createLabel(style.commonPullLabel);
-		tableHeader.add(pullLabel);
-		var lastUpdatedLabel = Ti.UI.createLabel(style.commonLastUpdatedLabel);
-		lastUpdatedLabel.text = 'Last Updated: ' + util.getFormattedNowDateTime();
-		tableHeader.add(lastUpdatedLabel);
-		var updateIndicator = Ti.UI.createActivityIndicator(style.commonUpdateIndicator);
-		tableHeader.add(updateIndicator);
-
-		// 参照用
-		tableHeader.updateArrowImage = updateArrowImage;
-		tableHeader.pullLabel = pullLabel;
-		tableHeader.lastUpdatedLabel = lastUpdatedLabel;
-		tableHeader.updateIndicator = updateIndicator;
-		
-		return tableHeader;
-	};
-
 	// ビューの更新
 	var updateTableView = function() {
 		Ti.API.debug('[func]updateTableView:');
@@ -254,6 +228,8 @@ exports.createWindow = function(_userData){
 				}
 			});
 		} else {
+			// 過去の記事データを保持している場合のリセット
+			_userData.today = null;
 			// 今日の記事データ取得
 			model.getCloudArticle({
 				userIdList: [_userData.id],
@@ -287,6 +263,32 @@ exports.createWindow = function(_userData){
 		}
 	};
 
+	// 最上部から下スクロールで最新データを更新する用のヘッダを作成
+	var getTableHeader = function() {
+		Ti.API.debug('[func]getTableHeader:');
+
+		var tableHeader = Ti.UI.createView(style.commonTableHeader);
+		var headerBorder = Ti.UI.createView(style.commonHeaderBorder);
+		tableHeader.add(headerBorder);
+		var updateArrowImage = Ti.UI.createImageView(style.commonUpdateArrowImage);
+		tableHeader.add(updateArrowImage);
+		var pullLabel = Ti.UI.createLabel(style.commonPullLabel);
+		tableHeader.add(pullLabel);
+		var lastUpdatedLabel = Ti.UI.createLabel(style.commonLastUpdatedLabel);
+		lastUpdatedLabel.text = 'Last Updated: ' + util.getFormattedNowDateTime();
+		tableHeader.add(lastUpdatedLabel);
+		var updateIndicator = Ti.UI.createActivityIndicator(style.commonUpdateIndicator);
+		tableHeader.add(updateIndicator);
+
+		// 参照用
+		tableHeader.updateArrowImage = updateArrowImage;
+		tableHeader.pullLabel = pullLabel;
+		tableHeader.lastUpdatedLabel = lastUpdatedLabel;
+		tableHeader.updateIndicator = updateIndicator;
+		
+		return tableHeader;
+	};
+
 // ---------------------------------------------------------------------
 	var todayWin = Ti.UI.createWindow(style.todayWin);
 	// タイトルの表示
@@ -307,6 +309,14 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]todayWin.refresh:');
 		// ビューの更新
 		updateTableView();
+
+		var targetTab = win.getTab("diaryTab");
+		// timeWinがオープンしている場合
+		if (targetTab.window.nextWin != null) {
+			// timeWinをクローズ
+			targetTab.window.nextWin.close({animated:false});
+		}
+		targetTab.window.fireEvent('refresh');
 	});
 
 /*

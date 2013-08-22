@@ -341,12 +341,15 @@ exports.createWindow = function(_userData){
 		nowMonth = now.getMonth() + 1;
 		nowDay = now.getDate();
 
+		refreshCalView(nowYear, nowMonth, nowDay);
+/*
 		if (year == nowYear && month == nowMonth) {
 			// 今日の日にスクロール
 			thisDiaryView.scrollToIndex(nowDay-3 > 0? nowDay-3 : 0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 		} else {
 			refreshCalView(nowYear, nowMonth, nowDay);
 		}
+*/
 	});
 
 	// 更新用イベント

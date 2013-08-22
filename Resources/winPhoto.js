@@ -135,7 +135,8 @@ exports.createWindow = function(_type, _articleData){
 	var titleIconView = Ti.UI.createView(style.photoTitleIconView);
 	titleView.add(titleIconView);
 	var titleIconImage = Ti.UI.createImageView(style.photoTitleIconImage);
-	titleIconImage.image = 'images/icon/i_' + _articleData.userId + '.png';
+//	titleIconImage.image = 'images/icon/i_' + _articleData.userId + '.png';
+	titleIconImage.image = _articleData.icon;
 	titleIconView.add(titleIconImage);
 
 	var titleNameLabel = Ti.UI.createLabel(style.photoTitleNameLabel);
@@ -163,12 +164,15 @@ exports.createWindow = function(_type, _articleData){
 	articleView.add(photoView);
 	var photoImage = Ti.UI.createImageView(style.photoPhotoImage);
 
+/*
 	var photoFile  = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory + 'photo/' + _articleData.no + '.jpg');
 	if (photoFile.exists()) {
 		photoImage.image = photoFile.nativePath;
 	} else {
 		photoImage.image = 'images/photo/' + _articleData.no + '.jpg';		
 	}
+*/	
+	photoImage.image = _articleData.photo;
 
 	// カスタムプロパティに記事データを格納
 	photoImage.articleData = _articleData;

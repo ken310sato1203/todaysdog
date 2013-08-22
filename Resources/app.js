@@ -45,6 +45,7 @@ var openTabWindow = function(_userData) {
 	customTab = win.getCustomTabView();
 	customTab.open();
 	
+/*
 	// 最新情報を表示
 	tab2.addEventListener('focus', function(e){
 		Ti.API.debug('[event]tab2.focus:');
@@ -58,6 +59,7 @@ var openTabWindow = function(_userData) {
 		Ti.API.debug('[event]tab4.focus:');
 		tab4.window.fireEvent('refresh');
 	});
+*/
 };
 
 // ---------------------------------------------------------------------

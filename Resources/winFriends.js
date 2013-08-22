@@ -23,8 +23,20 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 // ---------------------------------------------------------------------
 
 	// 日時の更新
+	var updateTime = function() {
+		Ti.API.debug('[func]updateTime:');
+		var now = new Date();
+		year = now.getFullYear();
+		month = now.getMonth() + 1;
+		day = now.getDate();
+//		day = Math.floor(Math.random() * 2) + 1;
+		hour = now.getHours();
+		weekday = util.diary.weekday[now.getDay()];
+	};
+
+	// 日時の更新
 	var getDateView = function(_date) {
-		Ti.API.debug('[func]updateDate:');
+		Ti.API.debug('[func]getDateView:');
 		var dateView = Ti.UI.createView(style.friendsDateView);
 		var dateLabel = Ti.UI.createLabel(style.friendsDateLabel);
 		dateLabel.text = _date.year + '/' + _date.month + '/' + _date.day;
@@ -58,7 +70,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			articleView.add(userIconView);
 			var userIconImage = Ti.UI.createImageView(style.friendsUserIconImage);
 //			userIconImage.image = 'images/icon/i_' + _articleList[i].user + '.png';
-			userIconImage.image = model.getUser(_articleList[i].userId).icon;
+			userIconImage.image = _articleList[i].icon;
 //			userIconImage.user = _articleList[i].userId;
 			userIconView.add(userIconImage);
 
@@ -78,7 +90,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			var timeView = Ti.UI.createView(style.friendsTimeView);
 			textView.add(timeView);
 			var timeLabel = Ti.UI.createLabel(style.friendsTimeLabel);
-			timeLabel.text = date.hour + ":" + date.minute + ":" + date.second;
+			timeLabel.text = date.hour + ":" + date.minute;
 			timeView.add(timeLabel);
 
 			var countView = Ti.UI.createView(style.friendsCountView);
@@ -190,23 +202,52 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	var updateArticle = function() {
 		Ti.API.debug('[func]updateArticle:');
 
-//		updateDate();
+		// 日時の更新
+		updateTime();
 
 		// 前回取得した最後のインデックス以降を取得
 		// 「続きを読む」ボタンの表示判定のため、表示件数より1件多い条件で取得
-		var articleList = model.getArticleList(_type, _userData, prevArticleIndex, articleCount + 1);
-		if (articleList == null || articleList.length == 0) {
-			// 1件も取得できなかった場合
-//			appendNoDataLabel();
-			// 次回更新用に続きの記事がないフラグを設定
-			nextArticleFlag = false;
+//		var articleList = model.getArticleList(_type, _userData, prevArticleIndex, articleCount + 1);
 
-		} else {
-			appendArticle(articleList);
-			// 次回更新用に取得した最後のインデックスを設定
-			prevArticleIndex = articleList[articleList.length-1].no;
-			nextArticleFlag = true;
-		}
+		var nowDate = new Date(year, month-1, day);
+
+		// 今日の友人データ取得
+		model.getCloudFriends(_userData.id, function(e) {
+			Ti.API.debug('[func]getCloudFriends.callback:');
+			if (e.success) {
+				var userList = e.userList;
+				userList.push(_userData.id);
+				// 今日の記事データ取得
+				model.getCloudArticle({
+					userIdList: userList,
+					startDate: nowDate,
+					endDate: nowDate
+				}, function(e) {
+					Ti.API.debug('[func]getCloudArticle.callback:');
+					if (e.success) {
+
+						if (e.articleList == null || e.articleList.length == 0) {
+							// 1件も取得できなかった場合
+				//			appendNoDataLabel();
+							// 次回更新用に続きの記事がないフラグを設定
+							nextArticleFlag = false;
+				
+						} else {
+							appendArticle(e.articleList);
+							// 次回更新用に取得した最後のインデックスを設定
+							prevArticleIndex = e.articleList[e.articleList.length-1].no;
+							nextArticleFlag = true;
+						}
+			
+					} else {
+						util.errorDialog();
+					}
+				});
+
+			} else {
+				util.errorDialog();
+			}
+		});
 	};
 
 	// 最上部から下スクロールで最新データを更新する用のヘッダを作成

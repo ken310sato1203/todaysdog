@@ -213,11 +213,11 @@ exports.model = {
 					like: 0,
 					follow: 0,
 					follower: 0, 
-					name: '',
-					breed: '',
-					sex: '',
-					birth: '', 
-					memo: '',
+					name: user.custom_fields.name,
+					breed: user.custom_fields.breed,
+					sex: user.custom_fields.sex,
+					birth: user.custom_fields.birth, 
+					memo: user.custom_fields.memo,
 					icon: user.photo ? user.photo.urls.square_75 : null,
 //						icon: 'http://graph.facebook.com/' + custom_fields.external_accounts[0].external_id + '/picture?type=normal',
 //						icon: 'http://graph.facebook.com/maki.oshika.9/picture?type=normal',
@@ -264,6 +264,41 @@ exports.model = {
 		});
 	},
 
+	// 友人の取得
+	getCloudFriends:function(_id, callback){
+		Ti.API.debug('[func]getCloudFriends:');
+
+		Cloud.Friends.search({
+			user_id: _id
+		}, function (e) {
+			var userList = [];
+			if (e.success) {
+				Ti.API.debug('success:');
+				for (var i = 0; i < e.users.length; i++) {
+					var user = e.users[i];
+					var userData = {
+						id: user.id,
+						user: user.first_name + '_' + user.last_name,
+						photo: 0,
+						like: 0,
+						follow: 0,
+						follower: 0, 
+						name: user.custom_fields.name,
+						breed: user.custom_fields.breed,
+						sex: user.custom_fields.sex,
+						birth: user.custom_fields.birth, 
+						memo: user.custom_fields.memo,
+						icon: user.photo ? user.photo.urls.square_75 : null,
+						cover: '',
+					};
+					userList.push(userData);
+				}				
+			}
+			e.userList = userList; 
+			callback(e);
+		});
+	},
+
 	// 記事の取得
 	getCloudArticle:function(params, callback){
 		Ti.API.debug('[func]getCloudArticle:');
@@ -271,8 +306,10 @@ exports.model = {
 		var offset = (new Date()).getTimezoneOffset() / 60 * -1;
 		var startDate = params.startDate;
 		var endDate = params.endDate;
-		startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), offset);
-		endDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()+1, offset);
+//		startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), offset);
+//		endDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()+1, offset);
+		startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+		endDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()+1);
 
 		Cloud.Statuses.query({
 			where: {
@@ -297,7 +334,10 @@ exports.model = {
 						userId: status.user.id,
 						text: status.message,
 						date: util.getFormattedDateTime(createDate),
-						photo: status.photo.urls.original
+						photo: status.photo.urls.original,
+						like: 0,
+						comment: 0,
+						icon: status.user.photo.urls.square_75
 					};
 					articleList.push(articleData);
 				}				
