@@ -251,14 +251,13 @@ exports.model = {
 	postCloudArticle:function(_articleData, _imageBlob, callback){
 		Ti.API.debug('[func]postCloudArticle:');
 		
-		var articleDate = util.getDate(_articleData.date);
-		// ACSではUTC標準時間で登録されるため、日本時間との時差を加算して登録
-		var utcDate = new Date(articleDate.getTime() - articleDate.getTimezoneOffset()*60*1000);
-		
-		Cloud.Statuses.create({
-			message: _articleData.text,
+		var articleDate = util.getDate(_articleData.date);		
+		Cloud.Posts.create({
+			content: _articleData.text,
 			photo: _imageBlob,
-			created_at: utcDate
+			custom_fields: {
+				postDate: util.getCloudFormattedDateTime(articleDate)
+			}
 		}, function (e) {
 			callback(e);
 		});
@@ -303,18 +302,17 @@ exports.model = {
 	getCloudArticle:function(params, callback){
 		Ti.API.debug('[func]getCloudArticle:');
 
+		// ACSではUTC標準時間で登録されるため、日本時間との時差を加算
 		var offset = (new Date()).getTimezoneOffset() / 60 * -1;
 		var startDate = params.startDate;
 		var endDate = params.endDate;
-//		startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), offset);
-//		endDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()+1, offset);
-		startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
-		endDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()+1);
+		startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), offset);
+		endDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()+1, offset);
 
-		Cloud.Statuses.query({
+		Cloud.Posts.query({
 			where: {
 				user_id: { "$in": params.userIdList },
-				created_at : {
+				'postDate': {
 					"$gte": startDate,
 					"$lt": endDate
 				}
@@ -326,18 +324,18 @@ exports.model = {
 			var articleList = [];
 			if (e.success) {
 				Ti.API.debug('success:');
-				for (var i = 0; i < e.statuses.length; i++) {
-					var status = e.statuses[i];
-					var createDate = util.getDate(status.created_at);
+				for (var i = 0; i < e.posts.length; i++) {
+					var post = e.posts[i];
+					var postDate = util.getDate(post.custom_fields.postDate);
 					var articleData = {
-						id: status.id,
-						userId: status.user.id,
-						text: status.message,
-						date: util.getFormattedDateTime(createDate),
-						photo: status.photo.urls.original,
+						id: post.id,
+						userId: post.user.id,
+						text: post.content,
+						date: util.getFormattedDateTime(postDate),
+						photo: post.photo.urls.original,
 						like: 0,
 						comment: 0,
-						icon: status.user.photo.urls.square_75
+						icon: post.user.photo.urls.square_75
 					};
 					articleList.push(articleData);
 				}				
@@ -589,6 +587,7 @@ exports.model = {
 	getCloudStampList:function(params, callback){
 		Ti.API.debug('[func]getCloudStampList:');
 		
+		// ACSではUTC標準時間で登録されるため、日本時間との時差を加算
 		var offset = (new Date()).getTimezoneOffset() / 60 * -1;
 		var startDate = null;
 		var endDate = null;
@@ -684,8 +683,6 @@ exports.model = {
 			_stampDataList[0].month-1, 
 			_stampDataList[0].day, 
 			_stampDataList[0].hour);
-		// ACSではUTC標準時間で登録されるため、日本時間との時差を加算して登録
-		var utcDate = new Date(stampDate.getTime() - stampDate.getTimezoneOffset()*60*1000);
 		var allday = false;
 		if (_stampDataList[0].hour == -1) {
 			allday = true;
@@ -701,7 +698,7 @@ exports.model = {
 
 		Cloud.Events.create({
 			name: 'diary',
-			start_time: utcDate,
+			start_time: util.getCloudFormattedDateTime(stampDate),
 			custom_fields: {
 				allday: allday,
 				stampList: stampList

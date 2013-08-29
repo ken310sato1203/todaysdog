@@ -52,6 +52,16 @@ exports.util = {
 	    var minute = _date.getMinutes();
 	    return String.format("%04.0f-%02.0f-%02.0f %02.0f:%02.0f", year, month, date, hour, minute);
 	},
+	// Date型を日時フォーマットに変換
+	getCloudFormattedDateTime:function(_date){
+	    var year = _date.getFullYear();
+	    var month = _date.getMonth() + 1;
+	    var date = _date.getDate();
+	    var hour = _date.getHours();
+	    var minute = _date.getMinutes();
+	    var second = _date.getSeconds();
+	    return String.format("%04.0f-%02.0f-%02.0f %02.0f:%02.0f:%02.0f +0000", year, month, date, hour, minute, second);
+	},
 	// フォーマットされた日付をDate型に変換
 	getDate:function(_formatedDate){
 		var year = _formatedDate.substr(0,4);
