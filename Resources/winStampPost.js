@@ -263,7 +263,7 @@ exports.createWindow = function(_userData, _stampDataList){
 
 		var alertDialog = Titanium.UI.createAlertDialog({
 			title: '投稿しますか？',
-			buttonNames: ['OK','キャンセル'],
+			buttonNames: ['キャンセル','OK'],
 			cancel: 1
 		});
 		alertDialog.show();

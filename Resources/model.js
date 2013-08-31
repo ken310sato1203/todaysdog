@@ -213,11 +213,11 @@ exports.model = {
 					like: 0,
 					follow: 0,
 					follower: 0, 
-					name: user.custom_fields.name,
-					breed: user.custom_fields.breed,
-					sex: user.custom_fields.sex,
-					birth: user.custom_fields.birth, 
-					memo: user.custom_fields.memo,
+					name: '',
+					breed: '',
+					sex: '',
+					birth: '', 
+					memo: '',
 					icon: user.photo ? user.photo.urls.square_75 : null,
 //						icon: 'http://graph.facebook.com/' + custom_fields.external_accounts[0].external_id + '/picture?type=normal',
 //						icon: 'http://graph.facebook.com/maki.oshika.9/picture?type=normal',
@@ -282,14 +282,21 @@ exports.model = {
 						like: 0,
 						follow: 0,
 						follower: 0, 
-						name: user.custom_fields.name,
-						breed: user.custom_fields.breed,
-						sex: user.custom_fields.sex,
-						birth: user.custom_fields.birth, 
-						memo: user.custom_fields.memo,
+						name: '',
+						breed: '',
+						sex: '',
+						birth: '', 
+						memo: '',
 						icon: user.photo ? user.photo.urls.square_75 : null,
 						cover: '',
 					};
+					if (user.custom_fields) {
+						userData.name = user.custom_fields.name ? user.custom_fields.name : '';
+						userData.breed = user.custom_fields.breed ? user.custom_fields.breed : '';
+						userData.sex = user.custom_fields.sex ? user.custom_fields.sex : '';
+						userData.birth = user.custom_fields.birth ? user.custom_fields.birth : '';
+						userData.memo = user.custom_fields.memo ? user.custom_fields.memo : '';
+					}
 					userList.push(userData);
 				}				
 			}
@@ -301,25 +308,18 @@ exports.model = {
 	// 記事の取得
 	getCloudArticle:function(params, callback){
 		Ti.API.debug('[func]getCloudArticle:');
-
-		// ACSではUTC標準時間で登録されるため、日本時間との時差を加算
-		var offset = (new Date()).getTimezoneOffset() / 60 * -1;
-		var startDate = params.startDate;
-		var endDate = params.endDate;
-		startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), offset);
-		endDate = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate()+1, offset);
+		var startDate = new Date(params.year, params.month-1, params.day);
 
 		Cloud.Posts.query({
 			where: {
 				user_id: { "$in": params.userIdList },
 				'postDate': {
-					"$gte": startDate,
-					"$lt": endDate
+					"$gte": util.getCloudFormattedDateTime(startDate)
 				}
 			},
-			order: '-created_at',
-			page : 1,
-			per_page : 5000
+			order: '-postDate',
+			page : params.page,
+			per_page : params.count,
 		}, function (e) {
 			var articleList = [];
 			if (e.success) {
@@ -586,25 +586,22 @@ exports.model = {
 	// 指定ユーザのスタンプリストから指定月のデータを取得
 	getCloudStampList:function(params, callback){
 		Ti.API.debug('[func]getCloudStampList:');
-		
-		// ACSではUTC標準時間で登録されるため、日本時間との時差を加算
-		var offset = (new Date()).getTimezoneOffset() / 60 * -1;
 		var startDate = null;
 		var endDate = null;
 		if (params.day == null) {
-			startDate = new Date(params.year, params.month-1, 1, offset);
-			endDate = new Date(params.year, params.month, 1, offset);
+			startDate = new Date(params.year, params.month-1, 1);
+			endDate = new Date(params.year, params.month, 1);
 		} else {
-			startDate = new Date(params.year, params.month-1, params.day, offset);
-			endDate = new Date(params.year, params.month-1, params.day+1, offset);
+			startDate = new Date(params.year, params.month-1, params.day);
+			endDate = new Date(params.year, params.month-1, params.day+1);
 		}
 
 		Cloud.Events.query({
 			where: {
 				user_id: params.userId,
 				start_time : {
-					"$gte": startDate,
-					"$lt": endDate
+					"$gte": util.getCloudFormattedDateTime(startDate),
+					"$lt": util.getCloudFormattedDateTime(endDate)
 				}
 			},
 			order: 'start_time',

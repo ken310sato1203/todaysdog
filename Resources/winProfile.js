@@ -258,7 +258,7 @@ exports.createWindow = function(_userData){
 		var alertDialog = Titanium.UI.createAlertDialog({
 		    title: 'フォローを解除しますか？',
 //		    message: 'フォローを解除しますか？',
-		    buttonNames: ['OK','キャンセル'],
+			buttonNames: ['キャンセル','OK'],
 		    cancel: 1
 		});
 		alertDialog.show();

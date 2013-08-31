@@ -1964,7 +1964,8 @@ exports.style = {
 	friendsTableView:{ 
 		// 下のタブで表示されない余白分
 		bottom: '44dp',
-		backgroundColor: '#dedede',
+//		backgroundColor: '#dedede',
+		backgroundColor: 'white',
 		separatorColor: 'transparent',
 		data: [],
 	},
@@ -1975,15 +1976,6 @@ exports.style = {
 		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
-/*
-	friendsNextTableRow:{ 
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		backgroundColor: 'white',
-		touchEnabled: false,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-	},
-*/
 	friendsDateView:{
 		top: '0dp',
 		width: '100%',
@@ -2114,34 +2106,25 @@ exports.style = {
 		font: {fontSize:11, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
-/*
-	friendsNextView:{
+
+	friendsNoDataTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
+	friendsNoDataView:{
 		top: '0dp',
 		left: '0dp',
 		width: '100%',
-		height: '40dp',
-		backgroundColor: '#dedede',
-	},
-	friendsNextButton:{
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		backgroundColor: 'white',
-		textAlign: 'center',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-		title: '続きを読む',
+		height: '100%',
 	},
 	friendsNoDataLabel:{
-		top: '5dp',
-		width: '90dp',
-		height: '15dp',
-		backgroundColor: '#dedede',
-		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
-		text: 'データがありません'
+		text: 'まだ投稿された記事はありません'
 	},
-*/
+
 // winToay -------------------------------------------------------
 	todayWin:{
 		backgroundColor: 'white',

@@ -10,12 +10,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	var hour = null;
 	var weekday = null;
 
-	// 記事リストの表示件数
-	var articleCount = 9;
-	// 前回更新時に読み込んだ記事の最終インデックス
-	var prevArticleIndex = null;
-	// 次回更新時に読み込むべき記事があるかどうかのフラグ
-	var nextArticleFlag = false;
+	// 記事データの取得ページ
+	var articlePage = 1;
+	// 記事データの取得件数
+	var articleCount = 2;
+	// 更新時に読み込むフラグ
+	var nextArticleFlag = true;
 
 	// リフレッシュ時用格納リスト
 	var refreshTarget = [];
@@ -69,9 +69,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			var userIconView = Ti.UI.createView(style.friendsUserIconView);
 			articleView.add(userIconView);
 			var userIconImage = Ti.UI.createImageView(style.friendsUserIconImage);
-//			userIconImage.image = 'images/icon/i_' + _articleList[i].user + '.png';
 			userIconImage.image = _articleList[i].icon;
-//			userIconImage.user = _articleList[i].userId;
 			userIconView.add(userIconImage);
 
 			var textView = Ti.UI.createView(style.friendsTextView);
@@ -122,94 +120,25 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		return articleRow;
 	};
 
-/*
-	// 「続きを読む」ボタンの追加
-	var appendNextButton = function() {
-		Ti.API.debug('[func]appendNextButton:');
-		var nextTableRow = Ti.UI.createTableViewRow(style.friendsNextTableRow);
-		friendsTableView.appendRow(nextTableRow);
-	
-		var nextView = Ti.UI.createView(style.friendsNextView);
-		nextTableRow.add(nextView);
-	
-		// 「続きを読む」ボタンをテーブルに追加	
-		var nextButton = Ti.UI.createButton(style.friendsNextButton);
-		nextView.add(nextButton);
-		
-		// 「続きを読む」ボタンをタップした場合、続きの記事を追加してからボタンを削除
-		nextButton.addEventListener('click', function(e) {
-			updateArticle();
-		});		
-	};
 
 	// データなしラベルの追加	
 	var appendNoDataLabel = function() {
 		Ti.API.debug('[func]appendNoDataLabel:');
-		var nextTableRow = Ti.UI.createTableViewRow(style.friendsNextTableRow);
-		friendsTableView.appendRow(nextTableRow);
-	
-		var nextView = Ti.UI.createView(style.friendsNextView);
-		nextTableRow.add(nextView);
-	
+		var noDataTableRow = Ti.UI.createTableViewRow(style.friendsNoDataTableRow);
+		var noDataView = Ti.UI.createView(style.friendsNoDataView);
+		noDataTableRow.add(noDataView);	
 		var noDataLabel = Ti.UI.createLabel(style.friendsNoDataLabel);
-		nextView.add(noDataLabel);
-	};
-*/
+		noDataView.add(noDataLabel);
 
-	// 記事の追加
-	var appendArticle = function(_articleList) {
-		Ti.API.debug('[func]appendArticle:');
-/*
-		// 「続きを読む」ボタンを押した場合、削除するボタンのインデックスを取得
-		var deleteRowIndex = null;
-		if (nextArticleFlag) {
-			deleteRowIndex = friendsTableView.data[0].rowCount - 1;
-		}
-*/
-		// 取得した記事が表示件数以下の場合
-		if (_articleList.length < articleCount + 1) {
-			// 取得した記事をテーブルに追加
-			friendsTableView.appendRow(getFriendsArticleTableRow(_articleList));
-/*
-			// 「続きを読む」ボタンをタップした場合、ボタンを削除
-			if (nextArticleFlag) {
-				friendsTableView.deleteRow(deleteRowIndex);
-			}
-			// 次回更新用に続きの記事がないフラグを設定
-			nextArticleFlag = false;
-*/
-
-		// 取得した記事が表示件数より1件多い場合、「続きを読む」ボタンを表示
-		} else {
-			// 多く取得した1件のデータを削除
-			_articleList.pop();
-			// 取得した記事をテーブルに追加
-			friendsTableView.appendRow(getFriendsArticleTableRow(_articleList), {animated:true});
-/*
-			// 「続きを読む」ボタンを追加
-			appendNextButton();
-			// 「続きを読む」ボタンをタップした場合、ボタンを削除
-			if (nextArticleFlag) {
-				friendsTableView.deleteRow(deleteRowIndex);
-			}
-			// 次回更新用に続きの記事があるフラグを設定
-			nextArticleFlag = true;
-*/
-		}
+		friendsTableView.appendRow(noDataTableRow);
 	};
+
 
 	// 記事の更新
 	var updateArticle = function() {
 		Ti.API.debug('[func]updateArticle:');
-
 		// 日時の更新
 		updateTime();
-
-		// 前回取得した最後のインデックス以降を取得
-		// 「続きを読む」ボタンの表示判定のため、表示件数より1件多い条件で取得
-//		var articleList = model.getArticleList(_type, _userData, prevArticleIndex, articleCount + 1);
-
-		var nowDate = new Date(year, month-1, day);
 
 		// 今日の友人データ取得
 		model.getCloudFriends(_userData.id, function(e) {
@@ -220,23 +149,23 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				// 今日の記事データ取得
 				model.getCloudArticle({
 					userIdList: userList,
-					startDate: nowDate,
-					endDate: nowDate
+					year: year,
+					month: month,
+					day: day,
+					page: articlePage,
+					count: articleCount
 				}, function(e) {
 					Ti.API.debug('[func]getCloudArticle.callback:');
 					if (e.success) {
-
-						if (e.articleList == null || e.articleList.length == 0) {
-							// 1件も取得できなかった場合
-				//			appendNoDataLabel();
-							// 次回更新用に続きの記事がないフラグを設定
-							nextArticleFlag = false;
-				
+						if (e.articleList.length > 0) {
+							// 取得した記事をテーブルに追加
+							friendsTableView.appendRow(getFriendsArticleTableRow(e.articleList), {animated:true});
+							articlePage++;
 						} else {
-							appendArticle(e.articleList);
-							// 次回更新用に取得した最後のインデックスを設定
-							prevArticleIndex = e.articleList[e.articleList.length-1].no;
-							nextArticleFlag = true;
+							if (articlePage == 1) {
+								appendNoDataLabel();
+							}
+							nextArticleFlag = false;							
 						}
 			
 					} else {
@@ -365,8 +294,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	        	resetPullHeader(e.source);
 				// ビューの更新
 				friendsTableView.data = [];
-		    	prevArticleIndex = null;
-		    	nextArticleFlag = false;
+		    	articlePage = 1;
+		    	nextArticleFlag = true;
 	        	updateArticle();
 	        }, 2000);
 	    }

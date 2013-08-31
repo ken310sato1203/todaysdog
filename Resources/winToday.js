@@ -208,7 +208,7 @@ exports.createWindow = function(_userData){
 		}
 		
 		// すでに今日の記事データを保持している場合
-		if (_userData.today && today.year == year && today.month == month && today.day == day) {
+		if (today && today.year == year && today.month == month && today.day == day) {
 			// 今日の記事データ取得
 			rowList.push(getTodayPhotoRow([_userData.today]));
 			// 今日のスタンプデータ取得
@@ -233,8 +233,11 @@ exports.createWindow = function(_userData){
 			// 今日の記事データ取得
 			model.getCloudArticle({
 				userIdList: [_userData.id],
-				startDate: nowDate,
-				endDate: nowDate
+				year: year,
+				month: month,
+				day: day,
+				page: 1,
+				count: 1
 			}, function(e) {
 				Ti.API.debug('[func]getCloudArticle.callback:');
 				if (e.success) {
