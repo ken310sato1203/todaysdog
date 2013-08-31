@@ -224,7 +224,7 @@ exports.createWindow = function(_userData){
 					todayTableView.setData(rowList);
 		
 				} else {
-					util.errorDialog();
+					util.errorDialog(e);
 				}
 			});
 		} else {
@@ -255,12 +255,12 @@ exports.createWindow = function(_userData){
 							todayTableView.setData(rowList);
 				
 						} else {
-							util.errorDialog();
+							util.errorDialog(e);
 						}
 					});
 
 				} else {
-					util.errorDialog();
+					util.errorDialog(e);
 				}
 			});
 		}

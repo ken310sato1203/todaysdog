@@ -275,7 +275,7 @@ exports.style = {
 		color: '#696969',
 	},
 	photoLikeStampImage:{
-//		top: '5dp',
+		top: '5dp',
 		bottom: '5dp',
 		right: '10dp',
 		width: '54dp',
@@ -354,7 +354,7 @@ exports.style = {
 	photoCommentTableRow:{ 
 		top: '0dp',
 		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
+		backgroundColor: 'white',
 		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
@@ -522,7 +522,7 @@ exports.style = {
 		bottom: '44dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
+		backgroundColor: 'white',
 //		scrollable: false,
 		data: [],
 	},
@@ -541,6 +541,7 @@ exports.style = {
 	},
 	profileIconView:{
 		top: '15dp',
+		bottom: '18dp',
 		left: '15dp',
 		width: '54dp',
 		height: '54dp',
@@ -704,7 +705,7 @@ exports.style = {
 	profilePhotoView:{
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
 		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
-		backgroundColor: '#eeeeee',
+		backgroundColor: 'white',
 	},
 	profilePhotoImage:{
 		top: '0dp',
@@ -1097,6 +1098,7 @@ exports.style = {
 
 // winUserList -------------------------------------------------------
 	userListWin:{
+		layout: 'vertical',
 		backgroundColor: '#dedede',
 //		barColor: '#a9a9a9',
 		barImage: 'images/icon/titlebar.png',
@@ -1112,8 +1114,7 @@ exports.style = {
 		width: '100%',
 		height: Ti.UI.SIZE,
 	},
-
-	userListFollowerTitleLabel:{
+	userListTitleLabel:{
 		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -1122,19 +1123,6 @@ exports.style = {
 		color: 'white', 
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
-		text: 'フォロワー', 
-	},
-
-	userListFollowTitleLabel:{
-		left: '0dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		textAlign: 'left',
-		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
-		color: 'white', 
-		shadowOffset: {x:0,y:-1},
-		shadowColor: '#696969', 
-		text: 'フォロー', 
 	},
 
 	userListTableView:{ 
@@ -1243,7 +1231,38 @@ exports.style = {
 		color: '#000',
 		text: 'フォローする',
 	},
-
+	userListSearchTableView:{ 
+		top: '0dp',
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		separatorColor: 'transparent',
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		data: [],
+	},
+	userListSearchTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+		touchEnabled: false,
+	},
+	userListSearchView:{
+		top: '0dp',
+		left: '10dp',	
+		right: '10dp',
+		height: Ti.UI.SIZE,
+	},
+	userListSearchField:{
+		top: '0dp',
+		textAlign:'left',
+		width: '100%',
+		height: '35dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		hintText: '入力してください',
+        keyboardType:Ti.UI.KEYBOARD_DEFAULT,
+        returnKeyType:Ti.UI.RETURNKEY_SEND,
+        borderStyle:Ti.UI.INPUT_BORDERSTYLE_NONE,
+//        touchEnabled: false,
+	},
 
 // winCommentList -------------------------------------------------------
 	commentListWin:{
@@ -1942,6 +1961,11 @@ exports.style = {
 		barImage: 'images/icon/titlebar.png',
 		tabBarHidden: true,
 		title: 'わんとも',
+	},
+	friendsSearchButton:{
+		width: '28dp',
+		height: '28dp',
+		backgroundImage:'images/icon/w_friends_search.png',
 	},
 
 	friendsTitleView:{

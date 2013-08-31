@@ -271,7 +271,7 @@ exports.createWindow = function(_userData, _stampDataList){
 		alertDialog.addEventListener('click',function(alert){
 			Ti.API.debug('[event]alertDialog.click:');						
 			// OKの場合
-			if(alert.index == 0){
+			if(alert.index == 1){
 				actInd.show();
 				tabGroup.add(actInd);
 				
@@ -305,7 +305,7 @@ exports.createWindow = function(_userData, _stampDataList){
 						postWin.close({animated:false});
 		
 					} else {
-						util.errorDialog();
+						util.errorDialog(e);
 					}
 
 					setTimeout(function(){

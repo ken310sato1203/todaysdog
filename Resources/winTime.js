@@ -181,7 +181,7 @@ exports.createWindow = function(_userData, _diaryData){
 		if (stampList == null) {
 			// 当月のスタンプデータ取得
 			model.getCloudStampList({
-				userData: _userData,
+				userId: _userData.id,
 				year: year,
 				month: month,
 				day: day
@@ -199,7 +199,7 @@ exports.createWindow = function(_userData, _diaryData){
 					monthTitle.text =  _diaryData.year + ' ' + monthName[_diaryData.month - 1] + ' ' + _diaryData.day;	
 		
 				} else {
-					util.errorDialog();
+					util.errorDialog(e);
 				}
 			});
 	

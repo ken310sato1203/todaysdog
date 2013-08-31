@@ -85,7 +85,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 
 		alertDialog.addEventListener('click',function(alert){
 			// OKの場合
-			if(alert.index == 0){
+			if(alert.index == 1){
 				actInd.show();
 				tabGroup.add(actInd);
 
@@ -106,6 +106,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 					var dirPath = Ti.Filesystem.applicationDataDirectory + 'photo/';
 					var fileName = _userData.id;
 					model.saveLocalImage(postImage.toBlob(), dirPath, fileName);
+
 					var articleData = {
 						id: null, 
 						no: _userData.id, 
@@ -115,7 +116,12 @@ exports.createWindow = function(_type, _userData, _photoImage){
 						photo: dirPath + fileName + '.png',
 						like: "0",
 						comment: "0"};
-					model.postCloudArticle(articleData, postImage.toBlob(), function(e) {
+					model.postCloudArticle({
+						date: articleData.date, 
+						text: articleData.text,
+						photo: postImage.toBlob(),
+						post: _userData.post
+					}, function(e) {
 						Ti.API.debug('[func]postCloudArticle.callback:');
 						if (e.success) {
 //							model.addArticleList(articleData);
@@ -127,7 +133,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 							cameraPostWin.close({animated:true});
 
 						} else {
-							util.errorDialog();
+							util.errorDialog(e);
 						}
 						actInd.hide();
 					});
@@ -137,7 +143,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 					var dirPath = Ti.Filesystem.applicationDataDirectory + 'icon/';
 					var fileName = _userData.id;
 					model.saveLocalImage(postImage.toBlob(), dirPath, fileName);
-					model.updateCloudUserIcon(postImage.toBlob(), function(e) {
+					model.updateCloudUserIcon({icon: postImage.toBlob()}, function(e) {
 						Ti.API.debug('[func]updateCloudUserIcon.callback:');
 						if (e.success) {
 							_userData.icon = dirPath + fileName + '.png';
@@ -148,7 +154,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 							cameraPostWin.close({animated:true});
 
 						} else {
-							util.errorDialog();
+							util.errorDialog(e);
 						}
 						actInd.hide();
 					});

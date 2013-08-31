@@ -98,9 +98,10 @@ exports.util = {
 	},
 
 	// エラー時のアラート表示
-	errorDialog:function(_title){
+	errorDialog:function(e){
 		var dialog = Titanium.UI.createAlertDialog({
-			title: (_title == null) ? 'エラーが発生しました。' : _title,
+			title: 'エラーが発生しました',
+			message: '[' + e.type + ']' + e.error,
 			buttonNames: ['OK'],
 		});
 		dialog.show();

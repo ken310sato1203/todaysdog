@@ -12,8 +12,11 @@ var tabGroup = null;
 var customTab = null;	
 
 // ---------------------------------------------------------------------
-var openTabWindow = function(_userData) {
-	Ti.API.debug('[func]openTabWindow:');
+var openMainWindow = function(_userData) {
+	Ti.API.debug('[func]openMainWindow:');
+
+	model.addUserList(_userData);
+	model.setLoginId(_userData.id);
 	
 	tabGroup = Ti.UI.createTabGroup(style.tabGroupHidden);
 	var win1 = win.createFriendsWindow(_userData);
@@ -81,74 +84,64 @@ Ti.Facebook.addEventListener('login', function(e) {
 		model.loginCloudUser(type, Ti.Facebook.accessToken, function (e) {
 			if (e.success) {
 				var userData = e.userData;
+				// 初回アイコンの登録
 				if (userData.icon == null) {
-					// デフォルトアイコンの登録
 					userData.icon = 'images/icon/i_circle.png';
 					var defaultIcon = Ti.UI.createImageView({image: userData.icon});
-					model.updateCloudUserIcon(defaultIcon.toBlob(), function(e) {
+					model.updateCloudUserIcon({icon: defaultIcon.toBlob()}, function(e) {
 						Ti.API.debug('[func]updateCloudUserIcon.callback:');
-						if (e.success) {
-							model.addUserList(userData);
-							model.setLoginId(userData.id);
-							openTabWindow(userData);
-	
-						} else {
-							util.errorDialog();
+						if (! e.success) {
+							util.errorDialog(e);
 						}
-					});					
-
-				} else {
-					model.addUserList(userData);
-					model.setLoginId(userData.id);
-					openTabWindow(userData);
+					});
 				}
+				// 初回フォトコレクションの作成
+				if (userData.post == null || userData.like == null) {
+					userData.post = 0;
+					userData.like = 0;
+					// フォトコレクションの作成
+					model.createCloudPhotoCollection({
+						name: 'post'
+					}, function(e) {
+						Ti.API.debug('[func]createCloudPhotoCollection.callback:');
+						if (e.success) {
+							// フォトコレクションの作成
+							model.createCloudPhotoCollection({
+								name: 'like'
+							}, function(e) {
+								Ti.API.debug('[func]createCloudPhotoCollection.callback:');
+								if (e.success) {
+									// コレクションの更新
+									model.updateCloudUserCollection({
+										post: userData.post,
+										like: userData.like,
+									}, function(e) {
+										if (! e.success) {
+											util.errorDialog(e);
+										}
+									});
+			
+								} else {
+									util.errorDialog(e);
+								}
+							});
+
+						} else {
+							util.errorDialog(e);
+						}
+					});
+				}
+				// メインウィンドウの表示
+				openMainWindow(userData);
 
 			} else {
-				util.errorDialog();
+				util.errorDialog(e);
 			}
 		});
 	} else {
-		util.errorDialog();
+		util.errorDialog(e);
 	}
-});
-
-/*
-Cloud.Photos.create({
-	photo: imageView.toBlob(),
-	tags: 'icon'
-}, function (e) {
-	if (e.success) {
-		var photo = e.photos[0];
-		alert('Success:\n' +
-			'id: ' + photo.id + '\n' +
-			'filename: ' + photo.filename + '\n' +
-			'size: ' + photo.size,
-			'updated_at: ' + photo.updated_at);
-	} else {
-		alert('Error:\n' +
-			((e.error && e.message) || JSON.stringify(e)));
-	}
-});
-
-Cloud.Photos.query({
-	user: userData.id,
-	where: {tags_array: 'icon'}
-}, function (e) {
-	if (e.success) {
-		alert('Success:\n' + 'Count: ' + e.photos.length);
-		for (var i = 0; i < e.photos.length; i++) {
-			var photo = e.photos[i];
-		}
-		userData.icon = e.photos[0].urls.square_75;
-		
-	} else {
-		alert('Error:\n' +
-		((e.error && e.message) || JSON.stringify(e)));
-	}
-});
-*/
-
-	
+});	
 
 Ti.Facebook.addEventListener('logout', function(e) {
 	Ti.API.debug('[event]Ti.Facebook.logout:');

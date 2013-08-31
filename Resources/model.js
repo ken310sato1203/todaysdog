@@ -122,8 +122,8 @@ stampSelectList = [
 	{type:"one", title:"うんち",stampList:["stamp_favorite1","stamp_favorite2","stamp_favorite3"]},
 	{type:"one", title:"散歩",stampList:["stamp_walking1","stamp_walking2","stamp_walking3"]},
 	{type:"all", title:"薬・病院",stampList:["stamp_medicine","stamp_injection","stamp_plus"]},
-	{type:"all", title:"シャンプー\nホテル",stampList:["stamp_warning","stamp_home","stamp_cart"]},
-	{type:"all", title:"おでかけ\nイベント",stampList:["stamp_star","stamp_trip","stamp_calendar"]},
+	{type:"all", title:"シャンプー\nホテル",stampList:["stamp_wash","stamp_cut","stamp_home"]},
+	{type:"all", title:"おでかけ\nイベント",stampList:["stamp_alarm","stamp_trip","stamp_star"]},
 ];
 
 stampHistoryList = [
@@ -145,12 +145,12 @@ stampHistoryList = [
 	{stamp:"stamp_medicine",textList:["フィラリア","のみだに"]},
 	{stamp:"stamp_injection",textList:["注射"]},
 	{stamp:"stamp_plus",textList:["病院"]},
-	{stamp:"stamp_warning",textList:["シャンプー"]},
+	{stamp:"stamp_wash",textList:["シャンプー"]},
+	{stamp:"stamp_cut",textList:["カット"]},
 	{stamp:"stamp_home",textList:["お泊まり"]},
-	{stamp:"stamp_cart",textList:["買い物"]},
-	{stamp:"stamp_star",textList:["イベント"]},
+	{stamp:"stamp_alarm",textList:["イベント"]},
 	{stamp:"stamp_trip",textList:["旅行"]},
-	{stamp:"stamp_calendar",textList:["記念日"]},
+	{stamp:"stamp_star",textList:["記念日"]},
 ];
 
 
@@ -218,17 +218,23 @@ exports.model = {
 					sex: '',
 					birth: '', 
 					memo: '',
-					icon: user.photo ? user.photo.urls.square_75 : null,
-//						icon: 'http://graph.facebook.com/' + custom_fields.external_accounts[0].external_id + '/picture?type=normal',
-//						icon: 'http://graph.facebook.com/maki.oshika.9/picture?type=normal',
-					cover: '',
+					post: null,
+					like: null,
+					icon: null,
+//					icon: 'http://graph.facebook.com/' + custom_fields.external_accounts[0].external_id + '/picture?type=normal',
+//					icon: 'http://graph.facebook.com/maki.oshika.9/picture?type=normal',
 				};
 				if (user.custom_fields) {
-					userData.name = user.custom_fields.name ? user.custom_fields.name : '';
-					userData.breed = user.custom_fields.breed ? user.custom_fields.breed : '';
-					userData.sex = user.custom_fields.sex ? user.custom_fields.sex : '';
-					userData.birth = user.custom_fields.birth ? user.custom_fields.birth : '';
-					userData.memo = user.custom_fields.memo ? user.custom_fields.memo : '';
+					if (user.custom_fields.name != null)  { userData.name = user.custom_fields.name; }
+					if (user.custom_fields.breed != null) { userData.breed = user.custom_fields.breed; }
+					if (user.custom_fields.sex != null)   { userData.sex = user.custom_fields.sex; }
+					if (user.custom_fields.birth != null) { userData.birth = user.custom_fields.birth; }
+					if (user.custom_fields.memo != null)  { userData.memo = user.custom_fields.memo; }
+					if (user.custom_fields.post != null)  { userData.post = user.custom_fields.post; }
+					if (user.custom_fields.like != null)  { userData.like = user.custom_fields.like; }
+				}
+				if (user.photo) {
+					userData.icon = user.photo.urls.square_75;
 				}
 				e.userData = userData;
 			}
@@ -247,19 +253,64 @@ exports.model = {
 		photoFile.write(_imageBlob);
 	},
 
-	// 記事の投稿
-	postCloudArticle:function(_articleData, _imageBlob, callback){
-		Ti.API.debug('[func]postCloudArticle:');
-		
-		var articleDate = util.getDate(_articleData.date);		
-		Cloud.Posts.create({
-			content: _articleData.text,
-			photo: _imageBlob,
-			custom_fields: {
-				postDate: util.getCloudFormattedDateTime(articleDate)
-			}
+	// フォトコレクションの作成
+	createCloudPhotoCollection:function(params, callback){
+		Ti.API.debug('[func]createCloudPhotoCollection:');
+
+		Cloud.PhotoCollections.create({
+			name: params.name,
 		}, function (e) {
 			callback(e);
+		});
+	},
+
+	// フォトコレクションの取得
+	getCloudPhotoCollection:function(params, callback){
+		Ti.API.debug('[func]getCloudPhotoCollection:');
+
+		Cloud.PhotoCollections.search({
+			user_id: params.userId,
+		}, function (e) {
+			callback(e);
+		});
+	},
+
+	// フォトの取得
+	getCloudPhoto:function(params, callback){
+		Ti.API.debug('[func]getCloudPhoto:');
+
+		Cloud.PhotoCollections.showPhotos({
+			collection_id: params.collection,
+			page: params.page,
+			per_page: 1,
+		}, function (e) {
+			callback(e);
+		});
+	},
+
+	// 記事の投稿
+	postCloudArticle:function(params, callback){
+		Ti.API.debug('[func]postCloudArticle:');		
+		var articleDate = util.getDate(params.date);
+
+		Cloud.Photos.create({
+			photo: params.photo,
+			collection_name: 'post'
+		}, function (e) {
+			if (e.success) {
+				Ti.API.debug('success:');
+				Cloud.Posts.create({
+					content: params.text,
+					photo_id: e.photos[0].id,
+					custom_fields: {
+						postDate: util.getCloudFormattedDateTime(articleDate)
+					}
+				}, function (e) {
+					callback(e);
+				});
+			} else {
+				callback(e);				
+			}
 		});
 	},
 
@@ -287,20 +338,77 @@ exports.model = {
 						sex: '',
 						birth: '', 
 						memo: '',
-						icon: user.photo ? user.photo.urls.square_75 : null,
-						cover: '',
+						post: null,
+						like: null,
+						icon: null,
 					};
 					if (user.custom_fields) {
-						userData.name = user.custom_fields.name ? user.custom_fields.name : '';
-						userData.breed = user.custom_fields.breed ? user.custom_fields.breed : '';
-						userData.sex = user.custom_fields.sex ? user.custom_fields.sex : '';
-						userData.birth = user.custom_fields.birth ? user.custom_fields.birth : '';
-						userData.memo = user.custom_fields.memo ? user.custom_fields.memo : '';
+						if (user.custom_fields.name != null)  { userData.name = user.custom_fields.name; }
+						if (user.custom_fields.breed != null) { userData.breed = user.custom_fields.breed; }
+						if (user.custom_fields.sex != null)   { userData.sex = user.custom_fields.sex; }
+						if (user.custom_fields.birth != null) { userData.birth = user.custom_fields.birth; }
+						if (user.custom_fields.memo != null)  { userData.memo = user.custom_fields.memo; }
+						if (user.custom_fields.post != null)  { userData.post = user.custom_fields.post; }
+						if (user.custom_fields.like != null)  { userData.like = user.custom_fields.like; }
+					}
+					if (user.photo) {
+						userData.icon = user.photo.urls.square_75;
 					}
 					userList.push(userData);
 				}				
 			}
 			e.userList = userList; 
+			callback(e);
+		});
+	},
+
+	// 友人の検索
+	searchCloudFriends:function(params, callback){
+		Ti.API.debug('[func]searchCloudFriends:');
+
+		Cloud.Users.search({
+			q: params.name,
+			page : params.page,
+			per_page : params.count
+		}, function (e) {
+			if (e.success) {
+				Ti.API.debug('success:');
+				var userList = [];
+				for (var i = 0; i < e.users.length; i++) {
+					var user = e.users[i];
+					var userData = {
+						id: user.id,
+						user: user.first_name + '_' + user.last_name,
+						photo: 0,
+						like: 0,
+						follow: 0,
+						follower: 0,
+						name: '',
+						breed: '',
+						sex: '',
+						birth: '', 
+						memo: '',
+						post: null,
+						like: null,
+						icon: null
+					};
+	
+					if (user.custom_fields) {
+						if (user.custom_fields.name != null)  { userData.name = user.custom_fields.name; }
+						if (user.custom_fields.breed != null) { userData.breed = user.custom_fields.breed; }
+						if (user.custom_fields.sex != null)   { userData.sex = user.custom_fields.sex; }
+						if (user.custom_fields.birth != null) { userData.birth = user.custom_fields.birth; }
+						if (user.custom_fields.memo != null)  { userData.memo = user.custom_fields.memo; }
+						if (user.custom_fields.post != null)  { userData.post = user.custom_fields.post; }
+						if (user.custom_fields.like != null)  { userData.like = user.custom_fields.like; }
+					}
+					if (user.photo) {
+						userData.icon = user.photo.urls.square_75;
+					}
+					userList.push(userData);
+				}
+			}
+			e.userList = userList;
 			callback(e);
 		});
 	},
@@ -319,23 +427,31 @@ exports.model = {
 			},
 			order: '-postDate',
 			page : params.page,
-			per_page : params.count,
+			per_page : params.count
 		}, function (e) {
 			var articleList = [];
 			if (e.success) {
 				Ti.API.debug('success:');
 				for (var i = 0; i < e.posts.length; i++) {
 					var post = e.posts[i];
+					var user = post.user;
 					var postDate = util.getDate(post.custom_fields.postDate);
+					var name = null;
+					if (user.custom_fields && user.custom_fields.name) {
+						name = user.custom_fields.name;
+					} else {
+						name = user.first_name + '_' + user.last_name;
+					}
 					var articleData = {
 						id: post.id,
-						userId: post.user.id,
+						userId: user.id,
+						user: name,
 						text: post.content,
 						date: util.getFormattedDateTime(postDate),
 						photo: post.photo.urls.original,
 						like: 0,
 						comment: 0,
-						icon: post.user.photo.urls.square_75
+						icon: user.photo.urls.square_75
 					};
 					articleList.push(articleData);
 				}				
@@ -917,20 +1033,42 @@ exports.model = {
 	},
 
 	// ユーザデータの更新
-	updateCloudUser:function(_userData, callback){
+	updateCloudUser:function(params, callback){
 		Ti.API.debug('[func]updateCloudUser:');
 		Cloud.Users.update({
 			custom_fields: {
-				name: _userData.name,
-				breed: _userData.breed,
-				sex: _userData.sex,
-				birth: _userData.birth,
-				memo: _userData.memo
+				name: params.name,
+				breed: params.breed,
+				sex: params.sex,
+				birth: params.birth,
+				memo: params.memo
 			}
 		}, function (e) {
 			callback(e);
 		});
 		
+	},
+	// コレクションの更新
+	updateCloudUserCollection:function(params, callback){
+		Ti.API.debug('[func]updateCloudUserCollection:');
+		Cloud.Users.update({
+			custom_fields: {
+				post: params.post,
+				like: params.like
+			}
+		}, function (e) {
+			callback(e);
+		});
+		
+	},
+	// アイコンの更新
+	updateCloudUserIcon:function(params, callback){
+		Ti.API.debug('[func]updateCloudUserIcon:');
+		Cloud.Users.update({
+			photo: params.icon,
+		}, function (e) {
+			callback(e);
+		});
 	},
 
 	// ユーザデータの取得
@@ -944,43 +1082,6 @@ exports.model = {
 			}
 		}
 		return target;
-	},
-
-	// アイコンの登録
-	updateCloudUserIcon:function(_iconBlob, callback){
-		Ti.API.debug('[func]updateCloudUserIcon:');
-		Cloud.Users.update({
-			photo: _iconBlob,
-		}, function (e) {
-			callback(e);
-/*
-			if (e.success) {
-				// 更新後の情報を取得
-				Cloud.Users.showMe(function (e) {
-					callback(e);
-				});
-			} else {
-				callback(e);
-			}
-*/
-		});
-	},
-
-	// アイコンの取得
-	getCloudUserIcon:function(_userData, callback){
-		Ti.API.debug('[func]getCloudUserIcon:');
-		Cloud.Users.query({
-			id: _userData.id,
-		}, function (e) {
-			if (e.success) {
-				Cloud.Photos.query({
-					id : e.users[0].photo.id
-				}, function (e) {
-					callback(e);
-				});					
-			}
-			callback(e);
-		});
 	},
 
 	// 犬種リストの取得

@@ -160,16 +160,55 @@ exports.createWindow = function(_userData){
 		var memoLabel = Ti.UI.createLabel(style.profileMemoLabel);
 		memoLabel.text = _userData.memo;
 		infoTextView.add(memoLabel);
-	
-		// カバー写真の表示
+
 		var profilePhotoRow = Titanium.UI.createTableViewRow(style.profilePhotoTableRow);
 		rowList.push(profilePhotoRow);
 		var photoView = Ti.UI.createView(style.profilePhotoView);
-		profilePhotoRow.add(photoView);
-	
+		profilePhotoRow.add(photoView);				
 		var photoImage = Ti.UI.createImageView(style.profilePhotoImage);
-		photoImage.image = 'images/photo/A0010.jpg';
 		photoView.add(photoImage);
+	
+		// フォトコレクションの取得
+		model.getCloudPhotoCollection({
+			userId: _userData.id
+		}, function(e) {
+			Ti.API.debug('[func]getCloudPhotoCollection.callback:');
+			if (e.success) {
+				for (var i = 0; i < e.collections.length; i++) {
+					var collection = e.collections[i];
+					if (collection.name == 'post') {
+						// フォト数の更新
+						_userData.photo = collection.counts.total_photos;
+						countPhotoLabel.text = _userData.photo;
+
+						// カバー写真の更新
+						if (_userData.photo > 0) {
+							var coverIndex = Math.floor(Math.random() * _userData.photo);
+							model.getCloudPhoto({
+								collection: collection.id,
+								page: coverIndex+1
+							}, function(e) {
+								Ti.API.debug('[func]getCloudPhoto.callback:');
+								if (e.success) {
+									if (e.photos) {
+										photoImage.image = e.photos[0].urls.original;
+									}
+								} else {
+									util.errorDialog(e);
+								}
+							});
+						}
+
+					} else if (collection.name == 'like') {
+						_userData.like = collection.counts.total_photos;
+						countLikeLabel.text = _userData.like;
+					}
+				}
+
+			} else {
+				util.errorDialog(e);
+			}
+		});
 
 		return rowList;
 	};
@@ -266,7 +305,7 @@ exports.createWindow = function(_userData){
 
 		alertDialog.addEventListener('click',function(alert){
 		    // OKの場合
-		    if(alert.index == 0){
+		    if(alert.index == 1){
 				actInd.show();
 				tabGroup.add(actInd);
 				model.removeFollowList(loginId, _userData.id);

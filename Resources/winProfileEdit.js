@@ -223,8 +223,14 @@ exports.createWindow = function(_userData){
 		_userData.birth = birthField.value;
 		_userData.memo = memoField.value;
 
-		// _userDataは、modelのuserListの参照なので上記の値セットで反映される。下記はDBに反映するようの処理。
-		model.updateCloudUser(_userData, function(e) {
+		// ユーザデータの更新
+		model.updateCloudUser({
+			name: _userData.name,
+			breed: _userData.breed,
+			sex: _userData.sex,
+			birth: _userData.birth,
+			memo: _userData.memo
+		}, function(e) {
 			if (e.success) {
 				Ti.API.debug('[func]updateCloudUser.callback:');
 				model.updateUserList(_userData);
@@ -234,7 +240,7 @@ exports.createWindow = function(_userData){
 				profileEditWin.close({animated:true});
 
 			} else {
-				util.errorDialog();
+				util.errorDialog(e);
 			}
 			actInd.hide();
 		});

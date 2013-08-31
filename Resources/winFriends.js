@@ -97,11 +97,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			var likeImage = Ti.UI.createImageView(style.friendsLikeIconImage);
 			var likeLabel = Ti.UI.createLabel(style.friendsLikeLabel);
 			likeLabel.text = _articleList[i].like;
+			countView.add(likeImage);
+			countView.add(likeLabel);
+
 			var commentImage = Ti.UI.createImageView(style.friendsCommentIconImage);				
 			var commentLabel = Ti.UI.createLabel(style.friendsCommentLabel);
 			commentLabel.text = _articleList[i].comment;
-			countView.add(likeImage);
-			countView.add(likeLabel);
 			countView.add(commentImage);
 			countView.add(commentLabel);
 
@@ -151,7 +152,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 					userIdList: userList,
 					year: year,
 					month: month,
-					day: day,
+					day: day-6,
 					page: articlePage,
 					count: articleCount
 				}, function(e) {
@@ -169,12 +170,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 						}
 			
 					} else {
-						util.errorDialog();
+						util.errorDialog(e);
 					}
 				});
 
 			} else {
-				util.errorDialog();
+				util.errorDialog(e);
 			}
 		});
 	};
@@ -210,6 +211,10 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	var titleView = null;
 	var titleLabel = null;
 
+	// 友人を検索するボタン
+	var searchButton = Titanium.UI.createButton(style.friendsSearchButton);
+	friendsWin.rightNavButton = searchButton;
+
 	var friendsTableView = Ti.UI.createTableView(style.friendsTableView);
 	friendsTableView.headerPullView = getTableHeader();
 	friendsWin.add(friendsTableView);
@@ -218,6 +223,15 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	updateArticle();
 
 // ---------------------------------------------------------------------
+
+	// 「検索」ボタン
+	searchButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]searchButton.click:');
+		var type = "search";
+		var userListWin = win.createUserListWindow(type, _userData);
+		userListWin.prevWin = friendsWin;
+		win.openTabWindow(userListWin, {animated:true});
+	});
 
 	// ライク・コメント編集を反映
 	friendsWin.addEventListener('refresh', function(e){

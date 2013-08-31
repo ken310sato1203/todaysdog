@@ -179,7 +179,7 @@ exports.createWindow = function(_userData){
 			monthTitle.text =  year + ' ' + monthName[month-1];
 			// 当月のスタンプデータ取得
 			model.getCloudStampList({
-				userData: _userData,
+				userId: _userData.id,
 				year: year,
 				month: month,
 				day: null
@@ -191,7 +191,7 @@ exports.createWindow = function(_userData){
 					diaryWin.add(thisDiaryView);
 					thisDiaryView.visible = true;
 				} else {
-					util.errorDialog();
+					util.errorDialog(e);
 				}
 			});
 //		}, 300);
@@ -213,7 +213,7 @@ exports.createWindow = function(_userData){
 			monthTitle.text =  year + ' ' + monthName[month-1];
 			// 当月のスタンプデータ取得
 			model.getCloudStampList({
-				userData: _userData,
+				userId: _userData.id,
 				year: year,
 				month: month,
 				day: null
@@ -225,7 +225,7 @@ exports.createWindow = function(_userData){
 					diaryWin.add(thisDiaryView);
 					thisDiaryView.visible = true;
 				} else {
-					util.errorDialog();
+					util.errorDialog(e);
 				}
 			});
 //		}, 300);
@@ -244,7 +244,7 @@ exports.createWindow = function(_userData){
 
 		// 当月のスタンプデータ取得
 		model.getCloudStampList({
-			userData: _userData,
+			userId: _userData.id,
 			year: year,
 			month: month,
 			day: null
@@ -258,7 +258,7 @@ exports.createWindow = function(_userData){
 				thisDiaryView.scrollToIndex(_day-3 > 0? _day-3 : 0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
 				thisDiaryView.visible = true;
 			} else {
-				util.errorDialog();
+				util.errorDialog(e);
 			}
 		});
 	};
@@ -281,7 +281,7 @@ exports.createWindow = function(_userData){
 	
 	// 当月のスタンプデータ取得
 	model.getCloudStampList({
-		userData: _userData,
+		userId: _userData.id,
 		year: year,
 		month: month,
 		day: null
@@ -295,7 +295,7 @@ exports.createWindow = function(_userData){
 			thisDiaryView.scrollToIndex(nowDay-3>0?nowDay-3:0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 			thisDiaryView.visible = true;
 		} else {
-			util.errorDialog();
+			util.errorDialog(e);
 		}
 	});
 

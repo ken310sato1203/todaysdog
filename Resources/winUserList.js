@@ -12,6 +12,13 @@ exports.createWindow = function(_type, _userData){
 	var prevUserIndex = null;
 	// 次回更新時に読み込むべきユーザ一覧があるかどうかのフラグ
 	var nextUserFlag = false;
+
+	// 記事データの取得ページ
+	var searchPage = 1;
+	// 記事データの取得件数
+	var searchCount = 2;
+	// 更新時に読み込むフラグ
+	var nextSearchFlag = true;
 	
 	// ユーザ一覧の行の追加
 	var getUserTableRow = function(_userList) {
@@ -29,7 +36,7 @@ exports.createWindow = function(_type, _userData){
 			iconView.userData = _userList[i];
 			userView.add(iconView);
 			var iconImage = Ti.UI.createImageView(style.userListIconImage);
-			iconImage.image = 'images/icon/i_' + _userList[i].id + '.png';
+			iconImage.image = _userList[i].icon;
 			iconView.add(iconImage);
 			var textLabel = Ti.UI.createLabel(style.userListTextLabel);
 			textLabel.text = _userList[i].name + '\n@' + _userList[i].user;
@@ -75,7 +82,7 @@ exports.createWindow = function(_type, _userData){
 						});
 						alertDialog.addEventListener('click',function(alert){
 							// OKの場合
-							if(alert.index == 0){
+							if(alert.index == 1){
 								actInd.show();
 								tabGroup.add(actInd);
 								// プロフィールのフォロー数を更新
@@ -184,6 +191,48 @@ exports.createWindow = function(_type, _userData){
 		}
 	};
 
+	// 検索入力欄の追加	
+	var appendSearchInput = function() {
+		Ti.API.debug('[func]appendSearchInput:');
+		var userListSearchTableView = Ti.UI.createTableView(style.userListSearchTableView);
+		userListWin.add(userListSearchTableView);
+		var searchRow = Ti.UI.createTableViewRow(style.userListSearchTableRow);
+		userListSearchTableView.appendRow(searchRow);	
+		var searchView = Ti.UI.createView(style.userListSearchView);
+		searchRow.add(searchView);
+		var searchField = Ti.UI.createTextField(style.userListSearchField);
+		searchView.add(searchField);
+
+		searchField.addEventListener('return',function(e){
+			Ti.API.debug('[event]searchField.return:');
+			userListTableView.data = [];
+	    	searchPage = 1;
+	    	nextSearchFlag = true;
+
+			model.searchCloudFriends({
+				name: searchField.value,
+				page: searchPage,
+				count: searchCount
+			}, function(e) {
+				Ti.API.debug('[func]searchCloudFriends.callback:');
+				if (e.success) {
+					if (e.userList.length > 0) {
+						appendUser(e.userList);
+						searchPage++;
+					} else {
+						if (searchPage == 1) {
+							appendNoDataLabel();
+						}
+						nextSearchFlag = false;							
+					}
+		
+				} else {
+					util.errorDialog(e);
+				}
+			});
+		});
+	};
+
 	// ユーザ一覧の更新
 	var updateUserList = function() {
 		Ti.API.debug('[func]updateUserList:');
@@ -194,11 +243,10 @@ exports.createWindow = function(_type, _userData){
 		// フォロワのユーザ一覧
 		if (_type == "follower") {
 			userList = model.getFollowerList(_userData.id, prevUserIndex, userCount);
-
 		// フォローのユーザ一覧
 		} else if (_type == "follow") {
 			userList = model.getFollowList(_userData.id, prevUserIndex, userCount);
-		}
+		}	
 
 		if (userList == null || userList.length == 0) {
 			// 1件も取得できなかった場合
@@ -219,27 +267,28 @@ exports.createWindow = function(_type, _userData){
 	// ロード用画面
 	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
 
-	var titleView = null;
-	var titleLabel = null;
+	var titleView = Ti.UI.createView(style.userListTitleView);
+	var titleLabel = Ti.UI.createLabel(style.userListTitleLabel);
+	titleView.add(titleLabel);
+	userListWin.titleControl = titleView;
+
+	// フォロワのユーザ一覧
+	if (_type == "follower") {
+		titleLabel.text = 'わんともフォロワー';
+
+	// フォローのユーザ一覧
+	} else 	if (_type == "follow") {
+		titleLabel.text = 'わんともフォロー';
+
+	// 検索のユーザ一覧
+	} else 	if (_type == "search") {
+		titleLabel.text = 'わんとも検索';
+		appendSearchInput();
+	}
 
 	// 戻るボタンの表示
 	var backButton = Titanium.UI.createButton(style.commonBackButton);
 	userListWin.leftNavButton = backButton;
-
-	// フォロワのユーザ一覧
-	if (_type == "follower") {
-		titleView = Ti.UI.createView(style.userListTitleView);
-		titleLabel = Ti.UI.createLabel(style.userListFollowerTitleLabel);	
-		titleView.add(titleLabel);		
-		userListWin.titleControl = titleView;
-
-	// フォローのユーザ一覧
-	} else 	if (_type == "follow") {
-		titleView = Ti.UI.createView(style.userListTitleView);
-		titleLabel = Ti.UI.createLabel(style.userListFollowTitleLabel);	
-		titleView.add(titleLabel);		
-		userListWin.titleControl = titleView;
-	}
 
 	var userListTableView = Ti.UI.createTableView(style.userListTableView);
 	userListWin.add(userListTableView);
