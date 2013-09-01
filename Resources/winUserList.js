@@ -16,7 +16,7 @@ exports.createWindow = function(_type, _userData){
 	// 記事データの取得ページ
 	var searchPage = 1;
 	// 記事データの取得件数
-	var searchCount = 1;
+	var searchCount = 6;
 	// 更新時に読み込むフラグ
 	var nextSearchFlag = true;
 	
@@ -60,7 +60,7 @@ exports.createWindow = function(_type, _userData){
 				// 「フォローする」未フォローユーザをフォローするボタン
 				var followButton = Titanium.UI.createButton(style.userFollowButton);
 				userView.add(followButton);
-				followButton.user = _userList[i].id;
+				followButton.id = _userList[i].id;
 				var followButtonLabel = Ti.UI.createLabel(style.userFollowButtonLabel);
 				followButton.add(followButtonLabel);
 	
@@ -89,16 +89,23 @@ exports.createWindow = function(_type, _userData){
 							if(alert.index == 1){
 								actInd.show();
 								tabGroup.add(actInd);
-								// プロフィールのフォロー数を更新
-								var loginData = model.getUser(loginId);
-								model.removeFollowList(loginId, e.source.id);
-										
-								setTimeout(function(){
+
+								var source = e.source;
+								// 友人の削除
+								model.removeCloudFriends(source.id, function(e) {
+									Ti.API.debug('[func]removeCloudFriends.callback:');
+									if (e.success) {
+										// プロフィールのフォロー数を更新
+										var loginData = model.getUser(loginId);
+										model.removeFollowList(loginId, source.id);
+										source.backgroundColor = 'white';
+										source.clickFlag = false;
+										source.getChildren()[0].text = 'フォローする';
+									} else {
+										util.errorDialog(e);
+									}
 									actInd.hide();
-									e.source.backgroundColor = 'white';
-									e.source.clickFlag = false;
-									e.source.getChildren()[0].text = 'フォローする';
-								},2000);		        
+								});
 							}
 						});
 						alertDialog.show();	
@@ -106,16 +113,23 @@ exports.createWindow = function(_type, _userData){
 					} else {
 						actInd.show();
 						tabGroup.add(actInd);
-						// プロフィールのフォロー数を更新
-						var loginData = model.getUser(loginId);
-						model.addFollowList(loginId, e.source.id);
-				
-						setTimeout(function(){
+						
+						var source = e.source;
+						// 友人の追加
+						model.addCloudFriends(source.id, function(e) {
+							Ti.API.debug('[func]addCloudFriends.callback:');
+							if (e.success) {
+								// プロフィールのフォロー数を更新
+								var loginData = model.getUser(loginId);
+								model.addFollowList(loginId, source.id);
+								source.backgroundColor = '#dedede';
+								source.clickFlag = true;
+								source.getChildren()[0].text = 'フォロー中';
+							} else {
+								util.errorDialog(e);
+							}
 							actInd.hide();
-							e.source.backgroundColor = '#dedede';
-							e.source.clickFlag = true;
-							e.source.getChildren()[0].text = 'フォロー中';
-						},2000);					
+						});
 					}
 
 					e.source.enabled = true;

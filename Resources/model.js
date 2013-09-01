@@ -314,6 +314,27 @@ exports.model = {
 		});
 	},
 
+	// 友人の追加
+	addCloudFriends:function(_id, callback){
+		Ti.API.debug('[func]addCloudFriends:');
+		// 承認なしの追加の場合、ACS管理画面でone-wayに設定し、下記approval_requiredは文字列でfalseを指定
+		Cloud.Friends.add({
+			user_ids: _id,
+			approval_required: 'false',
+		}, function (e) {
+			callback(e);
+		});
+	},
+	// 友人の削除
+	removeCloudFriends:function(_id, callback){
+		Ti.API.debug('[func]removeCloudFriends:');
+		Cloud.Friends.remove({
+			user_ids: _id
+		}, function (e) {
+			callback(e);
+		});
+	},
+
 	// 友人の取得
 	getCloudFriends:function(_id, callback){
 		Ti.API.debug('[func]getCloudFriends:');
@@ -424,7 +445,7 @@ exports.model = {
 
 		Cloud.Posts.query({
 			where: {
-				user_id: { "$in": params.userIdList },
+				user_id: { "$in": params.idList },
 				'postDate': {
 					"$gte": util.getCloudFormattedDateTime(startDate)
 				}
@@ -1109,7 +1130,13 @@ exports.model = {
 		return sexList;
 	},
 
-	// フォローしているユーザリストの取得
+	// フォローリストの登録
+	setFollowList:function(_followList){
+		Ti.API.debug('[func]setFollowList:');
+		followList = _followList;
+	},
+
+	// フォローリストの取得
 	getFollowList:function(_id, _prevUserIndex, _followCount){
 		Ti.API.debug('[func]getFollowList:');
 		var target = [];
@@ -1139,7 +1166,7 @@ exports.model = {
 		}
 		return target;
 	},
-	// フォロワのユーザリストの取得
+	// フォロワーリストの取得
 	getFollowerList:function(_id, _prevUserIndex, _followerCount){
 		Ti.API.debug('[func]getFollowerList:');
 		var target = [];

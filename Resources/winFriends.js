@@ -13,7 +13,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// 記事データの取得ページ
 	var articlePage = 1;
 	// 記事データの取得件数
-	var articleCount = 2;
+	var articleCount = 6;
 	// 更新時に読み込むフラグ
 	var nextArticleFlag = true;
 
@@ -148,11 +148,20 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		model.getCloudFriends(_userData.id, function(e) {
 			Ti.API.debug('[func]getCloudFriends.callback:');
 			if (e.success) {
-				var userList = e.userList;
-				userList.push(_userData.id);
+				// 友人リストを保管
+				var idList = [];
+				var followList = [];
+				for (var i=0; i<e.userList.length; i++) {
+					idList.push(e.userList[i].id);
+					followList.push({userId: _userData.id, follow: e.userList[i].id});
+				}
+				model.setFollowList(followList);
+				_userData.follow = followList.length;
+				// 自分を追加
+				idList.push(_userData.id);
 				// 今日の記事データ取得
 				model.getCloudArticle({
-					userIdList: userList,
+					idList: idList,
 					year: year,
 					month: month,
 					day: day-6,

@@ -232,7 +232,7 @@ exports.createWindow = function(_userData){
 			_userData.today = null;
 			// 今日の記事データ取得
 			model.getCloudArticle({
-				userIdList: [_userData.id],
+				idList: [_userData.id],
 				year: year,
 				month: month,
 				day: day,
