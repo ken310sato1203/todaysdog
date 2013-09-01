@@ -144,9 +144,11 @@ exports.createWindow = function(_userData){
 			});
 		});			
 	
-		var nameLabel = Ti.UI.createLabel(style.profileNameLabel);
-		nameLabel.text = _userData.name;
-		infoTextView.add(nameLabel);
+		if (_userData.name != '') {
+			var nameLabel = Ti.UI.createLabel(style.profileNameLabel);
+			nameLabel.text = _userData.name;
+			infoTextView.add(nameLabel);
+		}
 		var userLabel = Ti.UI.createLabel(style.profileUserLabel);
 		userLabel.text = '@' + _userData.user;
 		infoTextView.add(userLabel);

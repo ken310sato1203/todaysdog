@@ -132,6 +132,8 @@ exports.createWindow = function(_type, _articleData){
 
 	// タイトルの表示
 	var titleView = Ti.UI.createView(style.photoTitleView);
+	photoWin.titleControl = titleView;
+
 	var titleIconView = Ti.UI.createView(style.photoTitleIconView);
 	titleView.add(titleIconView);
 	var titleIconImage = Ti.UI.createImageView(style.photoTitleIconImage);
@@ -139,13 +141,17 @@ exports.createWindow = function(_type, _articleData){
 	titleIconImage.image = _articleData.icon;
 	titleIconView.add(titleIconImage);
 
-	var titleNameLabel = Ti.UI.createLabel(style.photoTitleNameLabel);
-	titleNameLabel.text = userData.name;
+	var nameView = Ti.UI.createView(style.photoTitleNameView);
+	titleView.add(nameView);
+	if (userData.name != '') {
+		var titleNameLabel = Ti.UI.createLabel(style.photoTitleNameLabel);
+		titleNameLabel.text = userData.name;
+		nameView.add(titleNameLabel);
+	}
 	var titleUserLabel = Ti.UI.createLabel(style.photoTitleUserLabel);
 	titleUserLabel.text = '@' + userData.user;
-	titleView.add(titleNameLabel);
-	titleView.add(titleUserLabel);
-	photoWin.titleControl = titleView;
+	nameView.add(titleUserLabel);
+
 
 	// 戻るボタンの表示
 	var backButton = Titanium.UI.createButton(style.commonBackButton);
@@ -183,13 +189,15 @@ exports.createWindow = function(_type, _articleData){
 	var textView = Ti.UI.createView(style.photoTextView);
 	articleTextView.add(textView);
 
+/*
 	var nameLabel = Ti.UI.createLabel(style.photoNameLabel);
 	nameLabel.text = _articleData.name;
+	textView.add(nameLabel);
+*/
 	var textLabel = Ti.UI.createLabel(style.photoTextLabel);
 	textLabel.text = _articleData.text;			
 	var timeLabel = Ti.UI.createLabel(style.photoTimeLabel);
 	timeLabel.text = _articleData.date;
-	textView.add(nameLabel);
 	textView.add(textLabel);
 	textView.add(timeLabel);
 

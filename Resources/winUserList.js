@@ -16,7 +16,7 @@ exports.createWindow = function(_type, _userData){
 	// 記事データの取得ページ
 	var searchPage = 1;
 	// 記事データの取得件数
-	var searchCount = 2;
+	var searchCount = 1;
 	// 更新時に読み込むフラグ
 	var nextSearchFlag = true;
 	
@@ -39,8 +39,12 @@ exports.createWindow = function(_type, _userData){
 			iconImage.image = _userList[i].icon;
 			iconView.add(iconImage);
 			var textLabel = Ti.UI.createLabel(style.userListTextLabel);
-			textLabel.text = _userList[i].name + '\n@' + _userList[i].user;
-					
+			if (_userList[i].name != '') {
+				textLabel.text = _userList[i].name + '\n@' + _userList[i].user;
+			} else {
+				textLabel.text = '@' + _userList[i].user;				
+			}
+			
 			userView.add(textLabel);
 
 			// 各ユーザ一覧のタップでプロフィール画面へ遷移
@@ -144,14 +148,12 @@ exports.createWindow = function(_type, _userData){
 	// データなしラベルの追加	
 	var appendNoDataLabel = function() {
 		Ti.API.debug('[func]appendNoDataLabel:');
-		var nextRow = Ti.UI.createTableViewRow(style.userListNextTableRow);
-		userListTableView.appendRow(nextRow);
-	
-		var nextView = Ti.UI.createView(style.userListNextView);
-		nextRow.add(nextView);
-	
+		var noDataTableRow = Ti.UI.createTableViewRow(style.userListNoDataTableRow);
+		var noDataView = Ti.UI.createView(style.userListNoDataView);
+		noDataTableRow.add(noDataView);	
 		var noDataLabel = Ti.UI.createLabel(style.userListNoDataLabel);
-		nextView.add(noDataLabel);
+		noDataView.add(noDataLabel);
+		userListTableView.appendRow(noDataTableRow);
 	};
 
 	// ユーザ一覧の追加
@@ -191,74 +193,61 @@ exports.createWindow = function(_type, _userData){
 		}
 	};
 
-	// 検索入力欄の追加	
-	var appendSearchInput = function() {
-		Ti.API.debug('[func]appendSearchInput:');
-		var userListSearchTableView = Ti.UI.createTableView(style.userListSearchTableView);
-		userListWin.add(userListSearchTableView);
-		var searchRow = Ti.UI.createTableViewRow(style.userListSearchTableRow);
-		userListSearchTableView.appendRow(searchRow);	
-		var searchView = Ti.UI.createView(style.userListSearchView);
-		searchRow.add(searchView);
-		var searchField = Ti.UI.createTextField(style.userListSearchField);
-		searchView.add(searchField);
-
-		searchField.addEventListener('return',function(e){
-			Ti.API.debug('[event]searchField.return:');
-			userListTableView.data = [];
-	    	searchPage = 1;
-	    	nextSearchFlag = true;
-
-			model.searchCloudFriends({
-				name: searchField.value,
-				page: searchPage,
-				count: searchCount
-			}, function(e) {
-				Ti.API.debug('[func]searchCloudFriends.callback:');
-				if (e.success) {
-					if (e.userList.length > 0) {
-						appendUser(e.userList);
-						searchPage++;
-					} else {
-						if (searchPage == 1) {
-							appendNoDataLabel();
-						}
-						nextSearchFlag = false;							
-					}
-		
-				} else {
-					util.errorDialog(e);
-				}
-			});
-		});
-	};
-
 	// ユーザ一覧の更新
 	var updateUserList = function() {
 		Ti.API.debug('[func]updateUserList:');
-		// 前回取得した最後のインデックス以降を取得
-		// 「続きを読む」ボタンの表示判定のため、表示件数より1件多い条件で取得
-		var userList = null;
 
-		// フォロワのユーザ一覧
-		if (_type == "follower") {
-			userList = model.getFollowerList(_userData.id, prevUserIndex, userCount);
-		// フォローのユーザ一覧
-		} else if (_type == "follow") {
-			userList = model.getFollowList(_userData.id, prevUserIndex, userCount);
-		}	
+		// 検索のユーザ一覧
+		if (_type == "search") {
+			if (searchField.value != '') {
+				model.searchCloudFriends({
+					name: searchField.value,
+					page: searchPage,
+					count: searchCount
+				}, function(e) {
+					Ti.API.debug('[func]searchCloudFriends.callback:');
+					if (e.success) {
+						if (e.userList.length > 0) {
+							appendUser(e.userList);
+							searchPage++;
+						} else {
+							if (searchPage == 1) {
+								appendNoDataLabel();
+							}
+							nextSearchFlag = false;							
+						}
+			
+					} else {
+						util.errorDialog(e);
+					}
+				});				
+			}
 
-		if (userList == null || userList.length == 0) {
-			// 1件も取得できなかった場合
-			appendNoDataLabel();		
-			// 次回更新用に続きのユーザ一覧がないフラグを設定
-			nextUserFlag = false;
 		} else {
-			appendUser(userList);
-			// 次回更新用に取得した最後のインデックスを設定
-			Ti.API.debug('userList:' + userList);
-			Ti.API.debug('userList.length:' + userList.length);
-			prevUserIndex = userList[userList.length-1].no;
+			// 前回取得した最後のインデックス以降を取得
+			// 「続きを読む」ボタンの表示判定のため、表示件数より1件多い条件で取得
+			var userList = null;
+	
+			// フォロワのユーザ一覧
+			if (_type == "follower") {
+				userList = model.getFollowerList(_userData.id, prevUserIndex, userCount);
+			// フォローのユーザ一覧
+			} else if (_type == "follow") {
+				userList = model.getFollowList(_userData.id, prevUserIndex, userCount);
+			}	
+	
+			if (userList == null || userList.length == 0) {
+				// 1件も取得できなかった場合
+				appendNoDataLabel();		
+				// 次回更新用に続きのユーザ一覧がないフラグを設定
+				nextUserFlag = false;
+			} else {
+				appendUser(userList);
+				// 次回更新用に取得した最後のインデックスを設定
+				Ti.API.debug('userList:' + userList);
+				Ti.API.debug('userList.length:' + userList.length);
+				prevUserIndex = userList[userList.length-1].no;
+			}
 		}
 	};
 	
@@ -272,6 +261,15 @@ exports.createWindow = function(_type, _userData){
 	titleView.add(titleLabel);
 	userListWin.titleControl = titleView;
 
+	// 検索入力欄
+	var userListSearchTableView = Ti.UI.createTableView(style.userListSearchTableView);
+	var searchRow = Ti.UI.createTableViewRow(style.userListSearchTableRow);
+	userListSearchTableView.appendRow(searchRow);	
+	var searchView = Ti.UI.createView(style.userListSearchView);
+	searchRow.add(searchView);
+	var searchField = Ti.UI.createTextField(style.userListSearchField);
+	searchView.add(searchField);
+
 	// フォロワのユーザ一覧
 	if (_type == "follower") {
 		titleLabel.text = 'わんともフォロワー';
@@ -283,7 +281,8 @@ exports.createWindow = function(_type, _userData){
 	// 検索のユーザ一覧
 	} else 	if (_type == "search") {
 		titleLabel.text = 'わんとも検索';
-		appendSearchInput();
+		// 検索入力欄を表示
+		userListWin.add(userListSearchTableView);
 	}
 
 	// 戻るボタンの表示
@@ -319,6 +318,23 @@ exports.createWindow = function(_type, _userData){
 			userListWin.prevWin.fireEvent('refresh', {userData:currentData});
 		}
 	});	
+
+	// 検索入力の送信ボタンをクリック
+	searchField.addEventListener('return',function(e){
+		Ti.API.debug('[event]searchField.return:');
+		userListTableView.data = [];
+    	searchPage = 1;
+    	nextSearchFlag = true;
+		updateUserList();
+	});
+
+	// スクロールの一番下で発生するイベント
+	userListTableView.addEventListener('scrollEnd',function(){
+        Ti.API.debug('[event]userListTableView.scrollEnd:');
+		if (nextSearchFlag) {
+			updateUserList();
+		}
+	});
 
 	return userListWin;
 };

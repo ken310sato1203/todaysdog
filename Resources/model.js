@@ -208,7 +208,7 @@ exports.model = {
 				var user = e.users[0];
 				var userData = {
 					id: user.id,
-					user: user.first_name + '_' + user.last_name,
+					user: user.first_name + ' ' + user.last_name,
 					photo: 0,
 					like: 0,
 					follow: 0,
@@ -328,7 +328,7 @@ exports.model = {
 					var user = e.users[i];
 					var userData = {
 						id: user.id,
-						user: user.first_name + '_' + user.last_name,
+						user: user.first_name + ' ' + user.last_name,
 						photo: 0,
 						like: 0,
 						follow: 0,
@@ -366,8 +366,12 @@ exports.model = {
 	searchCloudFriends:function(params, callback){
 		Ti.API.debug('[func]searchCloudFriends:');
 
-		Cloud.Users.search({
-			q: params.name,
+		Cloud.Users.query({
+			where:{ $or: [
+				{ username: {$regex: '^' + params.name} }, 
+				{ first_name: {$regex: '^' + params.name} }, 
+				{ last_name: {$regex: '^' + params.name} }
+			] },
 			page : params.page,
 			per_page : params.count
 		}, function (e) {
@@ -378,7 +382,7 @@ exports.model = {
 					var user = e.users[i];
 					var userData = {
 						id: user.id,
-						user: user.first_name + '_' + user.last_name,
+						user: user.first_name + ' ' + user.last_name,
 						photo: 0,
 						like: 0,
 						follow: 0,
@@ -436,16 +440,15 @@ exports.model = {
 					var post = e.posts[i];
 					var user = post.user;
 					var postDate = util.getDate(post.custom_fields.postDate);
-					var name = null;
+					var name = '';
 					if (user.custom_fields && user.custom_fields.name) {
 						name = user.custom_fields.name;
-					} else {
-						name = user.first_name + '_' + user.last_name;
 					}
 					var articleData = {
 						id: post.id,
 						userId: user.id,
-						user: name,
+						user: user.first_name + ' ' + user.last_name,
+						name: name,
 						text: post.content,
 						date: util.getFormattedDateTime(postDate),
 						photo: post.photo.urls.original,
@@ -1065,6 +1068,7 @@ exports.model = {
 	updateCloudUserIcon:function(params, callback){
 		Ti.API.debug('[func]updateCloudUserIcon:');
 		Cloud.Users.update({
+			username: params.user,
 			photo: params.icon,
 		}, function (e) {
 			callback(e);

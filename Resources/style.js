@@ -168,15 +168,23 @@ exports.style = {
 		width: '28dp',
 		height: '28dp',
 		borderRadius: '14dp',
+		backgroundColor: 'white',
 	},
 	photoTitleIconImage:{
 		width: '28dp',
 		height: '28dp',
 		defaultImage: '',
 	},
-	photoTitleNameLabel:{
+	photoTitleNameView:{
+		layout: 'vertical',
 		top: '3dp',
 		left: '33dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	photoTitleNameLabel:{
+		top: '0dp',
+		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
@@ -184,8 +192,8 @@ exports.style = {
 		color: 'white',
 	},
 	photoTitleUserLabel:{
-		top: '18dp',
-		left: '33dp',
+		top: '0dp',
+		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
@@ -797,7 +805,6 @@ exports.style = {
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
         returnKeyType:Ti.UI.RETURNKEY_DONE,
         touchEnabled: false,
-//		backgroundColor: 'yellow',
 	},
 	profileEditIconView:{
 		top: '5dp',
@@ -1129,7 +1136,7 @@ exports.style = {
 		top: '0dp',
 		// 下のタブで表示されない余白分
 		bottom: '44dp',
-		backgroundColor: '#dedede',
+		backgroundColor: 'white',
 		separatorColor: 'transparent',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		data: [],
@@ -1178,6 +1185,7 @@ exports.style = {
 		touchEnabled: false,
 	},
 	userListTextLabel:{
+		top: '10dp',
 		left: '10dp',
 		width: '140dp',
 		height: Ti.UI.SIZE,
@@ -1201,15 +1209,23 @@ exports.style = {
 		color: '#000',
 		title: '続きを読む',
 	},
+
+	userListNoDataTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
+	userListNoDataView:{
+		top: '0dp',
+		left: '0dp',
+		width: '100%',
+		height: '100%',
+	},
 	userListNoDataLabel:{
-		top: '5dp',
-		width: '90dp',
-		height: '15dp',
-		backgroundColor: '#dedede',
-		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
-		text: 'データがありません'
+		text: '検索結果はありませんでした'
 	},
 
 	userFollowButton:{
@@ -1233,13 +1249,13 @@ exports.style = {
 	},
 	userListSearchTableView:{ 
 		top: '0dp',
+		bottom: '1dp',
 		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
 		separatorColor: 'transparent',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		data: [],
 	},
-	userListSearchTableRow:{ 
+	userListSearchTableRow:{
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
@@ -1247,7 +1263,7 @@ exports.style = {
 	},
 	userListSearchView:{
 		top: '0dp',
-		left: '10dp',	
+		left: '10dp',
 		right: '10dp',
 		height: Ti.UI.SIZE,
 	},
@@ -2056,14 +2072,32 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		touchEnabled: false,
 	},
+	friendsNameView:{
+		layout: 'horizontal',
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
 	friendsNameLabel:{
 		top: '0dp',
 		left: '0dp',
-		width: '100%',
+		right: '5dp',
+		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
+		touchEnabled: false,
+	},
+	friendsUserLabel:{
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#696969',
 		touchEnabled: false,
 	},
 	friendsTextLabel:{
@@ -2146,7 +2180,7 @@ exports.style = {
 	friendsNoDataLabel:{
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
-		text: 'まだ投稿された記事はありません'
+		text: '投稿された記事はありませんでした'
 	},
 
 // winToay -------------------------------------------------------

@@ -88,7 +88,10 @@ Ti.Facebook.addEventListener('login', function(e) {
 				if (userData.icon == null) {
 					userData.icon = 'images/icon/i_circle.png';
 					var defaultIcon = Ti.UI.createImageView({image: userData.icon});
-					model.updateCloudUserIcon({icon: defaultIcon.toBlob()}, function(e) {
+					model.updateCloudUserIcon({
+						user: userData.user,
+						icon: defaultIcon.toBlob()
+					}, function(e) {
 						Ti.API.debug('[func]updateCloudUserIcon.callback:');
 						if (! e.success) {
 							util.errorDialog(e);

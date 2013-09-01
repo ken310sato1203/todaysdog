@@ -75,13 +75,17 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			var textView = Ti.UI.createView(style.friendsTextView);
 			articleView.add(textView);
 
-			var nameLabel = Ti.UI.createLabel(style.friendsNameLabel);
-			if (_articleList[i].name == null || _articleList[i].name == '') {
-				nameLabel.text = _articleList[i].user;
-			} else {
-				nameLabel.text = _articleList[i].name;				
+			var nameView = Ti.UI.createView(style.friendsNameView);
+			textView.add(nameView);
+			if (_articleList[i].name != '') {
+				var nameLabel = Ti.UI.createLabel(style.friendsNameLabel);
+				nameLabel.text = _articleList[i].name;
+				nameView.add(nameLabel);
 			}
-			textView.add(nameLabel);
+			var userLabel = Ti.UI.createLabel(style.friendsUserLabel);
+			userLabel.text = '@' + _articleList[i].user;
+			nameView.add(userLabel);
+
 			var textLabel = Ti.UI.createLabel(style.friendsTextLabel);
 			textLabel.text = _articleList[i].text;
 			textView.add(textLabel);
@@ -130,7 +134,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		noDataTableRow.add(noDataView);	
 		var noDataLabel = Ti.UI.createLabel(style.friendsNoDataLabel);
 		noDataView.add(noDataLabel);
-
 		friendsTableView.appendRow(noDataTableRow);
 	};
 
@@ -315,6 +318,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	    }
 	});
 
+	// スクロールの一番下で発生するイベント
 	friendsTableView.addEventListener('scrollEnd',function(){
         Ti.API.debug('[event]friendsTableView.scrollEnd:');
 		if (nextArticleFlag) {
