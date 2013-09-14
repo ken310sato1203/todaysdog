@@ -305,7 +305,6 @@ exports.createWindow = function(_userData){
 	// ビューの更新
 	updateTableView();
 
-
 // ---------------------------------------------------------------------
 	// 更新用イベント
 	todayWin.addEventListener('refresh', function(e){

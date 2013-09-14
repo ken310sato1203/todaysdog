@@ -759,16 +759,15 @@ exports.model = {
 
 					var startDate = util.getDate(event.start_time);
 					var hour = startDate.getHours();
-					if (event.custom_fields.allday) {
+					if (event.duration == 0) {
 						hour = -1;
 					}
 
-					var cloudStampList = event.custom_fields.stampList;
-					for (var j = 0; j < cloudStampList.length; j++) {
+					for( var stamp in event.custom_fields ){
 						var stampData = {
-							userId: event.user_id,
-							stamp: cloudStampList[j].stamp,
-							text: cloudStampList[j].text,
+							userId: event.user.id,
+							stamp: stamp,
+							text: event.custom_fields[stamp],
 							year: startDate.getFullYear(),
 							month: startDate.getMonth() + 1,
 							day: startDate.getDate(),
@@ -820,9 +819,9 @@ exports.model = {
 			_stampDataList[0].month-1, 
 			_stampDataList[0].day, 
 			_stampDataList[0].hour);
-		var allday = false;
+		var duration = 3600;
 		if (_stampDataList[0].hour == -1) {
-			allday = true;
+			duration = 0;
 			_stampDataList[0].hour = 0;
 		}
 
@@ -833,13 +832,16 @@ exports.model = {
 				text: _stampDataList[i].text});
 		}
 
+		var custom_fields = {};
+		for (var i=0; i<_stampDataList.length; i++) {
+			custom_fields[_stampDataList[i].stamp] = _stampDataList[i].text.replace(/\n+$/g,'').replace(/\s+$/g,'');
+		}
+		
 		Cloud.Events.create({
 			name: 'diary',
 			start_time: util.getCloudFormattedDateTime(stampDate),
-			custom_fields: {
-				allday: allday,
-				stampList: stampList
-			}
+			duration: duration,
+			custom_fields: custom_fields
 		}, function (e) {
 			callback(e);
 		});
@@ -870,6 +872,35 @@ exports.model = {
 				return stampHistoryList[i].textList;
 			}
 		}
+	},
+
+	// 指定スタンプの履歴データを取得
+	getCloudStampHistoryList:function(params, callback){
+		Ti.API.debug('[func]getCloudStampHistoryList:');
+		var where_items = {};
+		where_items['user_id'] = params.userId;
+		where_items[params.stamp] = {'$exists' : true};
+
+		Cloud.Events.query({
+			where: where_items,
+			order: '-created_at',
+			page : 1,
+			per_page : 10
+		}, function (e) {
+			var stampHistory = {
+				stamp: params.stamp,
+				textList: [],
+			};
+			if (e.success) {
+				Ti.API.debug('success:');
+				for (var i = 0; i < e.events.length; i++) {
+					var event = e.events[i];
+					stampHistory.textList.push(event.custom_fields[params.stamp]);
+				}
+			}
+			e.stampHistory = stampHistory;
+			callback(e);
+		});
 	},
 
 	// ライクリストに追加
@@ -1056,6 +1087,54 @@ exports.model = {
 		}
 	},
 
+	// ユーザデータの取得
+	getCloudUser:function(_id, callback){
+		Ti.API.debug('[func]getCloudUser:');
+
+		Cloud.Users.show({
+			user_id: _id
+		}, function (e) {
+			var userList = [];
+			if (e.success) {
+				Ti.API.debug('success:');
+				for (var i = 0; i < e.users.length; i++) {
+					var user = e.users[i];
+					var userData = {
+						id: user.id,
+						user: user.first_name + ' ' + user.last_name,
+						photo: 0,
+						like: 0,
+						follow: 0,
+						follower: 0, 
+						name: '',
+						breed: '',
+						sex: '',
+						birth: '', 
+						memo: '',
+						post: null,
+						like: null,
+						icon: null,
+					};
+					if (user.custom_fields) {
+						if (user.custom_fields.name != null)  { userData.name = user.custom_fields.name; }
+						if (user.custom_fields.breed != null) { userData.breed = user.custom_fields.breed; }
+						if (user.custom_fields.sex != null)   { userData.sex = user.custom_fields.sex; }
+						if (user.custom_fields.birth != null) { userData.birth = user.custom_fields.birth; }
+						if (user.custom_fields.memo != null)  { userData.memo = user.custom_fields.memo; }
+						if (user.custom_fields.post != null)  { userData.post = user.custom_fields.post; }
+						if (user.custom_fields.like != null)  { userData.like = user.custom_fields.like; }
+					}
+					if (user.photo) {
+						userData.icon = user.photo.urls.square_75;
+					}
+					userList.push(userData);
+				}				
+			}
+			e.userList = userList; 
+			callback(e);
+		});
+	},
+	
 	// ユーザデータの更新
 	updateCloudUser:function(params, callback){
 		Ti.API.debug('[func]updateCloudUser:');

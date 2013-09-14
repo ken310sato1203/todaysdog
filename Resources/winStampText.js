@@ -27,21 +27,37 @@ exports.createWindow = function(_userData, _stampData){
 	textArea.value = _stampData.text;
 	textView.add(textArea);
 
-	var historyList = model.getStampHistoryList(_stampData.stamp);
-	var historyRowList = [];
-	if (historyList != null) {
-		for (var i=0; i<historyList.length; i++) {
-			var historyRow = Titanium.UI.createTableViewRow(style.stampHistoryTableRow);
-			historyRowList.push(historyRow);
-			var historyLabel = Ti.UI.createLabel(style.stampHistoryLabel);
-			historyLabel.text = historyList[i];
-			historyRow.add(historyLabel);
-		}
-	}
-
 	var historyTableView = Ti.UI.createTableView(style.stampHistoryTableView);
-	historyTableView.data = historyRowList;
-	textScrollView.add(historyTableView);
+
+	// スタンプの履歴データ取得
+	model.getCloudStampHistoryList({
+		userId: _userData.id,
+		stamp: _stampData.stamp
+	}, function(e) {
+		Ti.API.debug('[func]getCloudStampHistoryList.callback:');
+		if (e.success) {
+			var cloudHistoryList = e.stampHistory.textList;
+			var defaultHistoryList = model.getStampHistoryList(_stampData.stamp);
+			var historyList = cloudHistoryList.concat(defaultHistoryList);
+			historyList = util.unique(historyList).slice(0,5);
+						
+			var historyRowList = [];
+			if (historyList != null) {
+				for (var i=0; i<historyList.length; i++) {
+					var historyRow = Titanium.UI.createTableViewRow(style.stampHistoryTableRow);
+					historyRowList.push(historyRow);
+					var historyLabel = Ti.UI.createLabel(style.stampHistoryLabel);
+					historyLabel.text = historyList[i];
+					historyRow.add(historyLabel);
+				}
+			}
+			historyTableView.data = historyRowList;
+			textScrollView.add(historyTableView);
+
+		} else {
+			util.errorDialog(e);
+		}
+	});
 
 // ---------------------------------------------------------------------
 	// 戻るボタンをクリック
@@ -93,7 +109,7 @@ exports.createWindow = function(_userData, _stampData){
 			}
 		}
 		e.row.hasCheck = true;
-		textArea.value = historyList[e.index];
+		textArea.value = e.source.text;
 	});
 
 	// 画面クリックでコメントフィールドのフォーカスを外す

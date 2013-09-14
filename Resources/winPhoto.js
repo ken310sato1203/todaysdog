@@ -11,7 +11,18 @@ exports.createWindow = function(_type, _articleData){
 	// コメントリストの表示件数
 	var commentCount = 5;
 
-	var userData = model.getUser(_articleData.userId);
+//	var userData = model.getUser(_articleData.userId);
+	var userData = null;
+
+	// 友人データ取得
+	model.getCloudUser(_articleData.userId, function(e) {
+		Ti.API.debug('[func]getCloudUser.callback:');
+		if (e.success) {
+			userData = e.userList[0];
+		} else {
+			util.errorDialog(e);
+		}
+	});
 
 /*
 	// ライクリストの更新
@@ -143,13 +154,13 @@ exports.createWindow = function(_type, _articleData){
 
 	var nameView = Ti.UI.createView(style.photoTitleNameView);
 	titleView.add(nameView);
-	if (userData.name != '') {
+	if (_articleData.name != '') {
 		var titleNameLabel = Ti.UI.createLabel(style.photoTitleNameLabel);
-		titleNameLabel.text = userData.name;
+		titleNameLabel.text = _articleData.name;
 		nameView.add(titleNameLabel);
 	}
 	var titleUserLabel = Ti.UI.createLabel(style.photoTitleUserLabel);
-	titleUserLabel.text = '@' + userData.user;
+	titleUserLabel.text = '@' + _articleData.user;
 	nameView.add(titleUserLabel);
 
 

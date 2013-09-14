@@ -107,5 +107,18 @@ exports.util = {
 		dialog.show();
 	},
 
+	// 重複を取り除く
+	unique:function(array) {
+		var storage = {};
+		var uniqueArray = [];
+		for ( var i=0; i<array.length; i++) {
+			var value = array[i];
+			if (!(value in storage)) {
+				storage[value] = true;
+				uniqueArray.push(value);
+			}
+		}
+		return uniqueArray;
+	},
 };
 
