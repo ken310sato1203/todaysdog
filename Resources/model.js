@@ -767,7 +767,7 @@ exports.model = {
 						var stampData = {
 							userId: event.user.id,
 							stamp: stamp,
-							text: event.custom_fields[stamp],
+							text: (event.custom_fields[stamp])[0],
 							year: startDate.getFullYear(),
 							month: startDate.getMonth() + 1,
 							day: startDate.getDate(),
@@ -825,16 +825,9 @@ exports.model = {
 			_stampDataList[0].hour = 0;
 		}
 
-		var stampList = [];
-		for (var i=0; i<_stampDataList.length; i++) {
-			stampList.push({
-				stamp: _stampDataList[i].stamp,
-				text: _stampDataList[i].text});
-		}
-
 		var custom_fields = {};
 		for (var i=0; i<_stampDataList.length; i++) {
-			custom_fields[_stampDataList[i].stamp] = _stampDataList[i].text.replace(/\n+$/g,'').replace(/\s+$/g,'');
+			custom_fields[_stampDataList[i].stamp] = _stampDataList[i].historyList;
 		}
 		
 		Cloud.Events.create({
@@ -885,17 +878,17 @@ exports.model = {
 			where: where_items,
 			order: '-created_at',
 			page : 1,
-			per_page : 10
+			per_page : 1
 		}, function (e) {
 			var stampHistory = {
 				stamp: params.stamp,
-				textList: [],
+				historyList: []
 			};
 			if (e.success) {
 				Ti.API.debug('success:');
-				for (var i = 0; i < e.events.length; i++) {
-					var event = e.events[i];
-					stampHistory.textList.push(event.custom_fields[params.stamp]);
+				if (e.events.length > 0) {
+					var event = e.events[0];
+					stampHistory.historyList = event.custom_fields[params.stamp];
 				}
 			}
 			e.stampHistory = stampHistory;

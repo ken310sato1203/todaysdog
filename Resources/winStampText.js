@@ -28,6 +28,7 @@ exports.createWindow = function(_userData, _stampData){
 	textView.add(textArea);
 
 	var historyTableView = Ti.UI.createTableView(style.stampHistoryTableView);
+	var historyList = [];
 
 	// スタンプの履歴データ取得
 	model.getCloudStampHistoryList({
@@ -36,9 +37,9 @@ exports.createWindow = function(_userData, _stampData){
 	}, function(e) {
 		Ti.API.debug('[func]getCloudStampHistoryList.callback:');
 		if (e.success) {
-			var cloudHistoryList = e.stampHistory.textList;
+			var cloudHistoryList = e.stampHistory.historyList;
 			var defaultHistoryList = model.getStampHistoryList(_stampData.stamp);
-			var historyList = cloudHistoryList.concat(defaultHistoryList);
+			historyList = cloudHistoryList.concat(defaultHistoryList);
 			historyList = util.unique(historyList).slice(0,5);
 						
 			var historyRowList = [];
@@ -64,7 +65,13 @@ exports.createWindow = function(_userData, _stampData){
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
 		if (textWin.prevWin != null) {
-			_stampData.text = textArea.value;
+			_stampData.text = textArea.value.replace(/\n+$/g,'').replace(/\s+$/g,'');
+			if (_stampData.text != "") {
+				historyList.unshift(_stampData.text);				
+			}
+			historyList = util.unique(historyList).slice(0,5);
+			_stampData.historyList = historyList;
+
 			textWin.prevWin.fireEvent('refresh', {stampData:_stampData});
 		}
 		textWin.close({animated:true});

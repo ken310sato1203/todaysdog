@@ -323,6 +323,7 @@ exports.createWindow = function(_userData, _stampDataList){
 		for (var i=0; i<_stampDataList.length; i++) {
 			if (_stampDataList[i].stamp == e.stampData.stamp) {
 				_stampDataList[i].text = e.stampData.text;
+				_stampDataList[i].historyList = e.stampData.historyList;
 			}
 		}
 		// ビューの再作成
