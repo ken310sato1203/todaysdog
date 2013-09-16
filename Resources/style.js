@@ -371,6 +371,7 @@ exports.style = {
 		top: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
 	},
 	photoCommentView:{
 		layout: 'horizontal',

@@ -388,10 +388,10 @@ exports.model = {
 		Ti.API.debug('[func]searchCloudFriends:');
 
 		Cloud.Users.query({
-			where:{ $or: [
-				{ username: {$regex: '^' + params.name} }, 
-				{ first_name: {$regex: '^' + params.name} }, 
-				{ last_name: {$regex: '^' + params.name} }
+			where:{ '$or': [
+				{ username: {'$regex': '^' + params.name} }, 
+				{ first_name: {'$regex': '^' + params.name} }, 
+				{ last_name: {'$regex': '^' + params.name} }
 			] },
 			page : params.page,
 			per_page : params.count
@@ -445,12 +445,12 @@ exports.model = {
 
 		Cloud.Posts.query({
 			where: {
-				user_id: { "$in": params.idList },
+				user_id: { '$in': params.idList },
 				'postDate': {
-					"$gte": util.getCloudFormattedDateTime(startDate)
+					'$gte': util.getCloudFormattedDateTime(startDate)
 				}
 			},
-			order: '-postDate',
+			order: '-created_at',
 			page : params.page,
 			per_page : params.count
 		}, function (e) {
@@ -473,8 +473,8 @@ exports.model = {
 						text: post.content,
 						date: util.getFormattedDateTime(postDate),
 						photo: post.photo.urls.original,
-						like: 0,
-						comment: 0,
+						like: post.ratings_count,
+						comment: post.reviews_count - post.ratings_count,
 						icon: user.photo.urls.square_75
 					};
 					articleList.push(articleData);
@@ -740,8 +740,8 @@ exports.model = {
 			where: {
 				user_id: params.userId,
 				start_time : {
-					"$gte": util.getCloudFormattedDateTime(startDate),
-					"$lt": util.getCloudFormattedDateTime(endDate)
+					'$gte': util.getCloudFormattedDateTime(startDate),
+					'$lt': util.getCloudFormattedDateTime(endDate)
 				}
 			},
 			order: 'start_time',
@@ -872,7 +872,7 @@ exports.model = {
 		Ti.API.debug('[func]getCloudStampHistoryList:');
 		var where_items = {};
 		where_items['user_id'] = params.userId;
-		where_items[params.stamp] = {'$exists' : true};
+		where_items[params.stamp] = {'$exists': true};
 
 		Cloud.Events.query({
 			where: where_items,
@@ -979,6 +979,72 @@ exports.model = {
 		return count;
 	},
 
+	// ライクリストに追加
+	addCloudLikeList:function(_postId, callback){
+		Ti.API.debug('[func]addCloudLikeList:');
+		Cloud.Reviews.create({
+			post_id: _postId,
+    		rating: 1,
+		}, function (e) {
+			callback(e);
+		});
+	},
+	// ライクリストから削除
+	removeCloudLikeList:function(params, callback){
+		Ti.API.debug('[func]removeCloudLikeList:');
+		Cloud.Reviews.remove({
+			post_id: params.postId,
+			review_id: params.reviewId
+		}, function (e) {
+			callback(e);
+		});
+	},
+	// ライクリストの取得
+	getCloudLikeList:function(params, callback){
+		Ti.API.debug('[func]getCloudLikeList:');
+		Cloud.Reviews.query({
+			user_id: params.userId,
+			post_id: params.postId,
+			where: {
+				rating: 1
+			},
+			page : 1,
+			per_page : 1
+		}, function (e) {
+			callback(e);
+		});
+	},
+
+	// コメントリストに追加
+	addCloudCommentList:function(params, callback){
+		Ti.API.debug('[func]addCloudCommentList:');
+		var commentDate = util.getDate(params.date);
+		Cloud.Reviews.create({
+			post_id: params.postId,
+    		content: params.comment,
+    		allow_duplicate: true,
+			custom_fields: {
+				postDate: util.getCloudFormattedDateTime(commentDate)
+			}
+		}, function (e) {
+			callback(e);
+		});
+	},
+	// コメントリストの取得
+	getCloudCommentList:function(params, callback){
+		Ti.API.debug('[func]getCloudCommentList:');
+		Cloud.Reviews.query({
+			user_id: params.userId,
+			post_id: params.postId,
+			where: {content: {'$exists': true}},
+			order: 'created_at',
+			page : 1,
+			per_page : 10
+		}, function (e) {
+			callback(e);
+		});
+	},
+	
 	// コメントリストに追加
 	addCommentList:function(_commentList){
 		Ti.API.debug('[func]addCommentList:');

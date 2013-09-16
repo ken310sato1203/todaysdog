@@ -72,69 +72,91 @@ exports.createWindow = function(_type, _articleData){
 	// コメントリストの更新
 	var updateComment = function() {
 		Ti.API.debug('[func]updateComment:');
-		var count = model.getCommentCount(_articleData.no);
-		var children = commentRow.getChildren();
 
-		if (count > 0) {
-			var commentList = model.getCommentList(_articleData.no, null, commentCount);
-/*
-			commentCountLabel.text = ' x ' + count;
-			if (children.length > 0) {
-				commentRow.remove(commentListView);				
+		// コメントリストの取得
+		model.getCloudCommentList({
+			userId: loginId,
+			postId: _articleData.id
+		}, function(e) {
+			if (e.success) {
+				Ti.API.debug('[func]getCloudCommentList.callback:');
+				if (e.reviews.length > 0) {
+//					var commentList = model.getCommentList(_articleData.no, null, commentCount);
+					commentListView = Ti.UI.createView(style.photoCommentListView);
+					commentRow.add(commentListView);
+					for (var i=0; i<e.reviews.length; i++) {
+						var review = e.reviews[i];
+						var user = review.user;
+						var commentView = Ti.UI.createView(style.photoCommentView);
+						commentListView.add(commentView);
+						var commentUserIconView = Ti.UI.createView(style.photoCommentUserIconView);
+						commentView.add(commentUserIconView);
+						var commentUserIconImage = Ti.UI.createImageView(style.photoCommentUserIconImage);
+						commentUserIconImage.image = user.photo.urls.square_75;
+						commentUserIconView.add(commentUserIconImage);
+						var textView = Ti.UI.createView(style.photoCommentTextView);
+						commentView.add(textView);
+						var nameLabel = Ti.UI.createLabel(style.photoCommentNameLabel);
+						if (user.custom_fields && user.custom_fields.name != null) {
+							nameLabel.text = user.custom_fields.name; 
+						} else {
+							nameLabel.text = user.first_name + ' ' + user.last_name;
+						}
+						textView.add(nameLabel);
+						var textLabel = Ti.UI.createLabel(style.photoCommentTextLabel);
+						textLabel.text = review.content;
+						textView.add(textLabel);
+						var timeLabel = Ti.UI.createLabel(style.photoCommentTimeLabel);
+						if (review.custom_fields && review.custom_fields.postDate != null) {
+							timeLabel.text = util.getFormattedDateTime(util.getDate(review.custom_fields.postDate));
+						}
+						textView.add(timeLabel);
+					}
+
+				} else {
+					if (commentRow.getChildren().length > 0) {
+						commentRow.remove(commentListView);				
+					}
+				}
+	
+			} else {
+				util.errorDialog(e);
 			}
-			commentCountView.show();
-*/
-			commentListView = Ti.UI.createView(style.photoCommentListView);
-			commentRow.add(commentListView);
-
-			for (var i=0; i<commentList.length; i++) {
-				var commentView = Ti.UI.createView(style.photoCommentView);
-				commentListView.add(commentView);
-				var commentUserIconView = Ti.UI.createView(style.photoCommentUserIconView);
-				commentView.add(commentUserIconView);
-				var commentUserIconImage = Ti.UI.createImageView(style.photoCommentUserIconImage);
-				commentUserIconImage.image = 'images/icon/i_' + commentList[i].userId + '.png';						
-				commentUserIconView.add(commentUserIconImage);
-
-/*
-				var commentLabel = Ti.UI.createLabel(style.photoCommentLabel);
-				commentLabel.text = commentList[i].name + '\n' + commentList[i].text;
-				commentView.add(commentLabel);
-*/
-				var textView = Ti.UI.createView(style.photoCommentTextView);
-				commentView.add(textView);
-				var nameLabel = Ti.UI.createLabel(style.photoCommentNameLabel);
-				nameLabel.text = commentList[i].name;
-				textView.add(nameLabel);
-				var textLabel = Ti.UI.createLabel(style.photoCommentTextLabel);
-				textLabel.text = commentList[i].text;
-				textView.add(textLabel);
-				var timeLabel = Ti.UI.createLabel(style.photoCommentTimeLabel);
-//				var date = util.getDateElement(commentList[i].date);
-//				timeLabel.text = date.hour + ":" + date.minute + ":" + date.second;
-				timeLabel.text = commentList[i].date;
-				textView.add(timeLabel);
-			}
-
-		} else {
-//			commentCountView.hide();
-			if (children.length > 0) {
-				commentRow.remove(commentListView);				
-			}
-		}
+		});
 	};
 
 	// コメントの追加
 	var addComment = function() {
-		var commentData = {
-			no:_articleData.no, 
-			seq:null, 
-			user:loginId, 
-			date:util.getFormattedNowDateTime(), 
-			text:commentField.getValue()
-		};
-		model.addCommentList(commentData);
-		updateComment();
+		if (commentField.value != '') {
+			var date = util.getFormattedNowDateTime();
+			var commentData = {
+				no: _articleData.no, 
+				seq: null, 
+				user: loginId, 
+				date: date, 
+				text: commentField.value
+			};
+			// コメントリストに追加
+			model.addCloudCommentList({
+				postId: _articleData.id,
+				comment: commentField.value,
+				date: date
+			}, function(e) {
+				Ti.API.debug('[func]addCommentList.callback:');						
+				if (e.success) {
+					Ti.API.debug('Success:');
+					model.addCommentList(commentData);
+					updateComment();
+					commentField.value = '';
+					commentField.blur();
+				} else {
+					util.errorDialog(e);
+				}
+			});
+
+		} else {
+			commentField.blur();
+		}
 	};
 
 // ---------------------------------------------------------------------
@@ -218,30 +240,23 @@ exports.createWindow = function(_type, _articleData){
 		likeStampImage.touchEnabled = true;
 	}
 	articleTextView.add(likeStampImage);
-	if (model.checkLikeList(_articleData.no, loginId)) {
-		likeStampImage.image = 'images/icon/b_like_after.png';
-		likeStampImage.clickFlag = true;
-	}
 
-	// ライクボタンのクリックでライクリストに追加
-	likeStampImage.addEventListener('click',function(e){
-		Ti.API.debug('[event]likeStampImage.click:');
-		e.source.enabled = false;
+	// ライクリストの取得
+	model.getCloudLikeList({
+		userId: loginId,
+		postId: _articleData.id
+	}, function(e) {
+		if (e.success) {
+			Ti.API.debug('[func]getCloudLikeList.callback:');			
+			if (e.reviews.length > 0) {
+				likeStampImage.image = 'images/icon/b_like_after.png';
+				likeStampImage.clickFlag = true;
+				likeStampImage.reviewId = e.reviews[0].id;
+			}
 
-		if (e.source.clickFlag) {
-			// ライクを解除する処理を書く
-			model.removeLikeList(_articleData.no, loginId);
-			likeStampImage.image = 'images/icon/b_like_before.png';
-			e.source.clickFlag = false;
 		} else {
-			var likeData = {no:_articleData.no, user:loginId, date:util.getFormattedNowDateTime()};			
-			model.addLikeList(likeData);
-			likeStampImage.image = 'images/icon/b_like_after.png';
-			e.source.clickFlag = true;
+			util.errorDialog(e);
 		}
-
-//		updateLike();
-		e.source.enabled = true;
 	});
 
 	if (_type == "friends") {
@@ -297,21 +312,13 @@ exports.createWindow = function(_type, _articleData){
 	
 		postButton.addEventListener('click',function(e){
 			Ti.API.debug('[event]postButton.click:');
-			if (commentField.value != '') {
-				addComment();
-				commentField.value = '';
-			}
-			commentField.blur();			
+			addComment();
 		});
 	
 		// コメントフィールドでキーボード確定でコメントリストに追加
 		commentField.addEventListener('return',function(e){
 			Ti.API.debug('[event]commentField.return:');
-			if (commentField.value != '') {
-				addComment();
-				commentField.value = '';
-			}
-			commentField.blur();			
+			addComment();
 		});
 
 		// 画像クリックでコメントフィールドのフォーカスを外す
@@ -323,6 +330,50 @@ exports.createWindow = function(_type, _articleData){
 	}
 
 // ---------------------------------------------------------------------
+
+	// ライクボタンのクリックでライクリストに追加
+	likeStampImage.addEventListener('click',function(e){
+		Ti.API.debug('[event]likeStampImage.click:');
+		e.source.enabled = false;
+
+		if (e.source.clickFlag) {
+			// ライクの削除
+			model.removeCloudLikeList({
+				postId: _articleData.id,
+				reviewId: e.source.reviewId
+			}, function(e) {
+				Ti.API.debug('[func]removeCloudLikeList.callback:');						
+				if (e.success) {
+					Ti.API.debug('Success:');
+					model.removeLikeList(_articleData.no, loginId);
+					likeStampImage.image = 'images/icon/b_like_before.png';
+			
+				} else {
+					util.errorDialog(e);
+				}
+			});
+			e.source.clickFlag = false;
+
+		} else {
+			// ライクの追加
+			model.addCloudLikeList(_articleData.id, function(e) {
+				Ti.API.debug('[func]addCloudLikeList.callback:');						
+				if (e.success) {
+					Ti.API.debug('Success:');
+					var likeData = {no:_articleData.no, user:loginId, date:util.getFormattedNowDateTime()};			
+					model.addLikeList(likeData);
+					likeStampImage.image = 'images/icon/b_like_after.png';
+	
+				} else {
+					util.errorDialog(e);
+				}
+			});
+			e.source.clickFlag = true;
+		}
+
+		e.source.enabled = true;
+	});
+
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
