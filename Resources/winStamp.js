@@ -186,6 +186,7 @@ exports.createWindow = function(_userData, _stampData){
 				if (selectedIndex[i].selected) {
 					var stampData = {
 						no: null,
+						event: null,
 						user: user,
 						stamp: selectedIndex[i].stamp,
 						text: null,
@@ -215,35 +216,16 @@ exports.createWindow = function(_userData, _stampData){
 		stampScrollView = getStampScrollView();
 		stampWin.add(stampScrollView);
 
-		var diaryData = {
-			year: e.stampDataList[0].year,
-			month: e.stampDataList[0].month,
-			day: e.stampDataList[0].day,
-			weekday: null,
-			todayFlag: false,
-			stampList: null,
-			articleData: null,
-			timeIndex: e.stampDataList[0].hour,
-		};
-
-		// 今日の日付
-		now = new Date();
-		year = now.getFullYear();
-		month = now.getMonth() + 1;
-		day = now.getDate();
-
-		if (diaryData.year == year && diaryData.month == month && diaryData.day == day) {
-			diaryData.todayFlag = true;
-		}
-
 		// timeWinから遷移してきた場合
 		if (stampWin.prevWin != null) {
 			// timeWinを更新
-			stampWin.prevWin.fireEvent('refresh', {diaryData:diaryData});
+			stampWin.prevWin.fireEvent('refresh', {diaryData:e.diaryData});
 			// 複数の画面を同時にアニメーションさせるとエラーになるのでアニメーションさせない
 			stampWin.close({animated:false});
 
 		} else {
+			util.errorDialog({error: 'winStamp.refreshでエラー'});
+/*
 			var targetTab = win.getTab("diaryTab");
 			// timeWinがオープンしている場合
 			if (targetTab.window.nextWin != null) {
@@ -260,6 +242,7 @@ exports.createWindow = function(_userData, _stampData){
 				targetTab.window.fireEvent('refresh', {diaryData:diaryData});
 			}	
 			tabGroup.activeTab = targetTab;
+*/
 		}		
 
 	});

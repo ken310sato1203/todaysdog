@@ -61,6 +61,7 @@ exports.createWindow = function(_userData, _diaryData){
 			var row = Ti.UI.createTableViewRow(style.timeTableRow);		
 			row.stampData = {
 				no: null,
+				event: null,
 				user: _userData.user,
 				stamp: null,
 				text: null,

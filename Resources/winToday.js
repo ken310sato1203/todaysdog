@@ -57,7 +57,7 @@ exports.createWindow = function(_userData){
 				month: month,
 				day: day,
 				weekday: weekday,
-				todayFlag: false,
+				todayFlag: true,
 				stampList: _stampList,
 				articleData: null,
 				timeIndex: _stampList[i].hour,

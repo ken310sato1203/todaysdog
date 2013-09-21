@@ -299,7 +299,28 @@ exports.createWindow = function(_userData, _stampDataList){
 					if (e.success) {
 						Ti.API.debug('Success:');
 						if (postWin.prevWin != null) {
-							postWin.prevWin.fireEvent('refresh', {stampDataList:_stampDataList});
+							var diaryData = {
+								year: _stampDataList[0].year,
+								month: _stampDataList[0].month,
+								day: _stampDataList[0].day,
+								weekday: null,
+								todayFlag: false,
+								stampList: null,
+								articleData: null,
+								timeIndex: _stampDataList[0].hour,
+							};
+					
+							// 今日の日付
+							var now = new Date();
+							var year = now.getFullYear();
+							var month = now.getMonth() + 1;
+							var day = now.getDate();
+					
+							if (diaryData.year == year && diaryData.month == month && diaryData.day == day) {
+								diaryData.todayFlag = true;
+							}
+
+							postWin.prevWin.fireEvent('refresh', {diaryData:diaryData});
 						}
 						// 複数の画面を同時にアニメーションさせるとエラーになるのでアニメーションさせない
 						postWin.close({animated:false});

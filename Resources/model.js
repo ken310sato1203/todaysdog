@@ -773,7 +773,8 @@ exports.model = {
 
 					for( var stamp in event.custom_fields ){
 						var stampData = {
-							userId: event.user.id,
+							event: event.id,
+							user: event.user.id,
 							stamp: stamp,
 							text: (event.custom_fields[stamp])[0],
 							year: startDate.getFullYear(),
@@ -838,16 +839,29 @@ exports.model = {
 			custom_fields[_stampDataList[i].stamp] = _stampDataList[i].historyList;
 		}
 		
-		Cloud.Events.create({
-			name: 'diary',
-			start_time: util.getCloudFormattedDateTime(stampDate),
-			duration: duration,
-			custom_fields: custom_fields
-		}, function (e) {
-			callback(e);
-		});
-
+		if(_stampDataList[0].event == null) {
+			Cloud.Events.create({
+				name: 'diary',
+				start_time: util.getCloudFormattedDateTime(stampDate),
+				duration: duration,
+				custom_fields: custom_fields
+			}, function (e) {
+				callback(e);
+			});
+		} else {
+			Cloud.Events.update({
+				event_id: _stampDataList[0].event,
+				name: 'diary',
+				start_time: util.getCloudFormattedDateTime(stampDate),
+				duration: duration,
+				custom_fields: custom_fields
+			}, function (e) {
+				callback(e);
+			});
+		}
 	},
+
+
 	// スタンプデータの更新
 	updateStampList:function(_stampData){
 		Ti.API.debug('[func]updateStampList:');
