@@ -66,10 +66,12 @@ exports.createWindow = function(_userData, _stampData){
 		Ti.API.debug('[event]backButton.click:');
 		if (textWin.prevWin != null) {
 			_stampData.text = textArea.value.replace(/\n+$/g,'').replace(/\s+$/g,'');
-			if (_stampData.text != "") {
-				historyList.unshift(_stampData.text);				
+			if (_stampData.text == '') {
+				historyList = [_stampData.text];
+			} else {
+				historyList.unshift(_stampData.text);
+				historyList = util.unique(historyList).slice(0,5);
 			}
-			historyList = util.unique(historyList).slice(0,5);
 			_stampData.historyList = historyList;
 
 			textWin.prevWin.fireEvent('refresh', {stampData:_stampData});

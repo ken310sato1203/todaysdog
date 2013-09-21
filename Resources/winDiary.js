@@ -8,6 +8,7 @@ exports.createWindow = function(_userData){
 	var nowYear = now.getFullYear();
 	var nowMonth = now.getMonth() + 1;
 	var nowDay = now.getDate();
+	var nowHour = now.getHours();
 
 	var year = nowYear;
 	var month = nowMonth;
@@ -43,11 +44,6 @@ exports.createWindow = function(_userData){
 		var rowData = [];
 		for (var i=0; i<months[_month-1]; i++) {
 			var dayOfWeek = (new Date(_year, _month-1, i+1, 0, 0, 0)).getDay();
-			// timeWinの表示位置
-			var firstStampHour = 9;
-			if (stampDay[i].data.length > 0) {
-				firstStampHour = stampDay[i].data[0].hour;
-			}
 			var diaryData = {
 				year: _year,
 				month: _month,
@@ -56,11 +52,16 @@ exports.createWindow = function(_userData){
 				todayFlag: false,
 				stampList: stampDay[i].data,
 				articleData: articleList[i],
-				timeIndex: firstStampHour,
+				timeIndex: 9,
 			};
 
 			if (_year == nowYear && _month == nowMonth && i+1 == nowDay) {
 				diaryData.todayFlag = true;
+				diaryData.timeIndex = nowHour;
+			} else {
+				if (stampDay[i].data.length > 0) {
+					diaryData.timeIndex = stampDay[i].data[0].hour;
+				}
 			}
 
 			rowData.push(diaryData);

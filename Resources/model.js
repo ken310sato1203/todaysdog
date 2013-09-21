@@ -465,6 +465,14 @@ exports.model = {
 					if (user.custom_fields && user.custom_fields.name) {
 						name = user.custom_fields.name;
 					}
+					var likeCount = 0;
+					var commentCount = 0;
+					if (post.ratings_count && post.ratings_count > 0) {
+						likeCount = post.ratings_count;
+						if (post.reviews_count && post.reviews_count > 0) {
+							commentCount = post.reviews_count - post.ratings_count;
+						}
+					}
 					var articleData = {
 						id: post.id,
 						userId: user.id,
@@ -473,8 +481,8 @@ exports.model = {
 						text: post.content,
 						date: util.getFormattedDateTime(postDate),
 						photo: post.photo.urls.original,
-						like: post.ratings_count,
-						comment: post.reviews_count - post.ratings_count,
+						like: likeCount,
+						comment: commentCount,
 						icon: user.photo.urls.square_75
 					};
 					articleList.push(articleData);
@@ -744,7 +752,7 @@ exports.model = {
 					'$lt': util.getCloudFormattedDateTime(endDate)
 				}
 			},
-			order: 'start_time',
+			order: 'start_time, created_at',
 			page : 1,
 			per_page : 5000
 		}, function (e) {
@@ -872,7 +880,8 @@ exports.model = {
 		Ti.API.debug('[func]getCloudStampHistoryList:');
 		var where_items = {};
 		where_items['user_id'] = params.userId;
-		where_items[params.stamp] = {'$exists': true};
+//		where_items[params.stamp] = {'$exists': true};
+		where_items[params.stamp] = {'$ne': ''};
 
 		Cloud.Events.query({
 			where: where_items,
@@ -1003,9 +1012,9 @@ exports.model = {
 	getCloudLikeList:function(params, callback){
 		Ti.API.debug('[func]getCloudLikeList:');
 		Cloud.Reviews.query({
-			user_id: params.userId,
 			post_id: params.postId,
 			where: {
+				user_id: params.userId,
 				rating: 1
 			},
 			page : 1,

@@ -17,9 +17,6 @@ exports.createWindow = function(_userData, _diaryData){
 	var monthName = util.diary.monthName;
 	var timeRange = util.diary.timeRange;
 
-	// 一番早い時間帯に登録されているデータの時間帯
-	var firstHour = null;
-
 	// StampViewの取得
 	var getStampView = function(_rowStamp) {
 		Ti.API.debug('[func]getStampView:');
@@ -59,8 +56,6 @@ exports.createWindow = function(_userData, _diaryData){
 		for (var i=0; i<_stampList.length; i++) {
 			stampHour[_stampList[i].hour + 1].data.push(_stampList[i]);
 		}	
-		// 表示位置のリセット	
-		firstHour = null;
 
 		for (var i=0; i<timeRange.length; i++) {
 			var row = Ti.UI.createTableViewRow(style.timeTableRow);		
@@ -127,9 +122,6 @@ exports.createWindow = function(_userData, _diaryData){
 					var stampView = getStampView(rowStampList[j]);
 					stampListView.add(stampView);	
 				}
-				if (firstHour == null) {
-					firstHour = i;				
-				}
 			}
 	
 			var plusImage = Ti.UI.createImageView(style.timePlusImage);
@@ -154,22 +146,7 @@ exports.createWindow = function(_userData, _diaryData){
 	// 表示位置にスクロール
 	var scrollPosition = function(_view) {
 		Ti.API.debug('[func]scrollPosition:');
-		// view作成後にスクロールさせると下の方のインデックスの場合、最下層より下を表示してしまうため、オープン時にスクロールさせる
-		if (_diaryData.todayFlag) {
-			// 今日の場合、今の時間帯にスクロール
-			_view.scrollToIndex(nowHour + 1, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-		} else {
-			_view.scrollToIndex(_diaryData.timeIndex + 1, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-/*			
-			if (firstHour == null) {
-				// 登録がない場合、9時にスクロール
-				_view.scrollToIndex(10, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-			} else {
-				// 登録がある場合、一番早い時間帯に登録されているデータの時間帯にスクロール
-				_view.scrollToIndex(firstHour, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-			}
-*/
-		}		
+		_view.scrollToIndex(_diaryData.timeIndex + 1, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 	};
 
 	// ビューの更新
@@ -196,7 +173,7 @@ exports.createWindow = function(_userData, _diaryData){
 						timeWin.prevWin.fireEvent('refresh', {diaryData:_diaryData});
 					}
 					// タイトルの表示
-					monthTitle.text =  _diaryData.year + ' ' + monthName[_diaryData.month - 1] + ' ' + _diaryData.day;	
+					monthTitle.text =  monthName[_diaryData.month - 1] + ' ' + _diaryData.day;	
 		
 				} else {
 					util.errorDialog(e);
@@ -212,7 +189,7 @@ exports.createWindow = function(_userData, _diaryData){
 				timeWin.prevWin.fireEvent('refresh', {diaryData:_diaryData});
 			}
 			// タイトルの表示
-			monthTitle.text =  _diaryData.year + ' ' + monthName[_diaryData.month - 1] + ' ' + _diaryData.day;	
+			monthTitle.text =   monthName[_diaryData.month - 1] + ' ' + _diaryData.day;	
 		}
 
 	};
@@ -273,15 +250,6 @@ exports.createWindow = function(_userData, _diaryData){
 		timeWin.add(timeTableView);
 	});
 
-	// windowオープン時
-	timeWin.addEventListener('open', function(e) {
-		Ti.API.debug('[event]timeWin.open:');
-		if (timeTableView != null) {
-//			scrollPosition(timeTableView);
-//			timeTableView.visible = true;
-		}
-	});
-
 	// windowクローズ時
 	timeWin.addEventListener('close', function(e) {
 		Ti.API.debug('[event]timeWin.close:');
@@ -303,10 +271,6 @@ exports.createWindow = function(_userData, _diaryData){
 		timeWin.remove(timeTableView);
 		_diaryData = e.diaryData;
 		updateTableView();
-
-//		timeTableView.scrollToIndex(e.diaryData.timeIndex + 1, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-//		timeTableView.visible = true;
-
 	});
 
 	// timWinからstampPostWinへの遷移でイベントが複数回実行（原因不明）されないようにするためのフラグ

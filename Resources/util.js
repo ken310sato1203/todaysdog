@@ -82,7 +82,7 @@ exports.util = {
 		if (_formatedHour == "-1") {
 			return _formatedHour;
 		} else {
-			return parseInt(_formatedHour.substr(0,2));
+			return parseInt(_formatedHour.substr(0,2), 10);
 		}		
 	},
 
@@ -107,13 +107,13 @@ exports.util = {
 		dialog.show();
 	},
 
-	// 重複を取り除く
+	// 空と重複を取り除く
 	unique:function(array) {
 		var storage = {};
 		var uniqueArray = [];
 		for ( var i=0; i<array.length; i++) {
 			var value = array[i];
-			if (!(value in storage)) {
+			if (value != '' && !(value in storage)) {
 				storage[value] = true;
 				uniqueArray.push(value);
 			}

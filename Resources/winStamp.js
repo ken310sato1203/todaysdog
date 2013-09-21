@@ -196,6 +196,7 @@ exports.createWindow = function(_userData, _stampData){
 						all: null,
 						report: null,
 						date: null,
+						historyList: ['']
 					};
 					stampDataList.push(stampData);
 				}
