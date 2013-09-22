@@ -148,9 +148,8 @@ exports.createWindow = function(_userData){
 				if (e.source.objectName != "diaryPhotoImage") {
 					var timeWin = win.createTimeWindow(_userData, e.row.diaryData);
 					timeWin.prevWin = diaryWin;
-	
-					win.openTabWindow(timeWin, {animated:true});
 					diaryWin.nextWin = timeWin;
+					win.openTabWindow(timeWin, {animated:true});
 				}
 			}
 		});
@@ -356,7 +355,6 @@ exports.createWindow = function(_userData){
 	// 更新用イベント
 	diaryWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]diaryWin.refresh:');
-
 		// ビューの再作成
 		if (e.diaryData) {
 			refreshCalView(e.diaryData.year, e.diaryData.month, e.diaryData.day);			

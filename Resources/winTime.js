@@ -79,15 +79,15 @@ exports.createWindow = function(_userData, _diaryData){
 	
 			hourView.addEventListener('click',function(e){
 				Ti.API.debug('[event]hourView.click:');
-				if (timeWin.openFlag == false) {
-					if (e.source.objectName == "timeStampImage" || e.source.objectName == "timeStampLabel") {
-						var postWin = win.createStampPostWindow(_userData, [e.source.getParent().stampData]);
+//				if (timeWin.openFlag == false) {
+					if (e.source.objectName == 'timeStampView') {
+						var postWin = win.createStampPostWindow(_userData, [e.source.stampData]);
 						postWin.prevWin = timeWin;
 						win.openTabWindow(postWin, {animated:true});
 						// timWinからの遷移でイベントが複数回実行（原因不明）されないようにするためのフラグ
 						timeWin.openFlag = true;
 					}
-				}
+//				}
 			});
 	
 			var timeLabel = Ti.UI.createLabel(style.timeHourLabel);
@@ -170,9 +170,6 @@ exports.createWindow = function(_userData, _diaryData){
 					timeTableView.visible = true;
 					scrollPosition(timeTableView);
 					timeWin.add(timeTableView);
-					if (timeWin.prevWin != null) {
-						timeWin.prevWin.fireEvent('refresh', {diaryData:_diaryData});
-					}
 					// タイトルの表示
 					monthTitle.text =  monthName[_diaryData.month - 1] + ' ' + _diaryData.day;	
 		
@@ -186,9 +183,6 @@ exports.createWindow = function(_userData, _diaryData){
 			timeTableView.visible = true;
 			scrollPosition(timeTableView);
 			timeWin.add(timeTableView);		
-			if (timeWin.prevWin != null) {
-				timeWin.prevWin.fireEvent('refresh', {diaryData:_diaryData});
-			}
 			// タイトルの表示
 			monthTitle.text =   monthName[_diaryData.month - 1] + ' ' + _diaryData.day;	
 		}

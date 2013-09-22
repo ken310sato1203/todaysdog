@@ -138,6 +138,8 @@ exports.style = {
 // winLogin -------------------------------------------------------
 	loginWin:{
 		backgroundColor: 'white',
+		// カスタムプロパティ
+		objectName : 'loginWin',
 	},
 
 	loginFacebookButton:{
@@ -153,6 +155,7 @@ exports.style = {
 		tabBarHidden: true,
 		title: 'フォト',
 		// カスタムプロパティ
+		objectName : 'photoWin',
 		prevWin : null,
 	},
 
@@ -477,6 +480,8 @@ exports.style = {
 		barImage: 'images/icon/titlebar.png',
 		tabBarHidden: true,
 		title: 'プロフィール',
+		// カスタムプロパティ
+		objectName : 'profileWin',
 	},
 
 	profileTitleView:{
@@ -731,6 +736,8 @@ exports.style = {
 		barImage: 'images/icon/titlebar.png',
 		tabBarHidden: true,
 		title: 'プロフィール',
+		// カスタムプロパティ
+		objectName : 'profileEditWin',
 	},
 
 	profileEditTitleView:{
@@ -866,6 +873,8 @@ exports.style = {
 //		barColor: '#a9a9a9',
 		barImage: 'images/icon/titlebar.png',
 		tabBarHidden: true,
+		// カスタムプロパティ
+		objectName : 'photoListWin',
 	},
 
 	photoListTitleView:{
@@ -1112,6 +1121,7 @@ exports.style = {
 		barImage: 'images/icon/titlebar.png',
 		tabBarHidden: true,
 		// カスタムプロパティ
+		objectName : 'userListWin',
 		prevWin : null,
 	},
 
@@ -1288,6 +1298,7 @@ exports.style = {
 		barImage: 'images/icon/titlebar.png',
 		tabBarHidden: true,
 		// カスタムプロパティ
+		objectName : 'commentListWin',
 		prevWin : null,
 	},
 
@@ -1441,6 +1452,8 @@ exports.style = {
 //		barColor: '#a9a9a9',
 		barImage: 'images/icon/titlebar.png',
 		tabBarHidden: true,
+		// カスタムプロパティ
+		objectName : 'mydogWin',
 	},
 	mydogTitleLabel:{
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
@@ -1518,6 +1531,8 @@ exports.style = {
 //		barColor: '#a9a9a9',
 		barImage: 'images/icon/titlebar.png',
 		tabBarHidden: true,
+		// カスタムプロパティ
+		objectName : 'calendarWin',
 	},
 	calendarTitleLabel:{
 		width: '200dp',
@@ -1594,6 +1609,8 @@ exports.style = {
 //		barColor: '#a9a9a9',
 		barImage: 'images/icon/titlebar.png',
 		tabBarHidden: true,
+		// カスタムプロパティ
+		objectName : 'cameraWin',
 	},
 	cameraTitleLabel:{
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
@@ -1646,6 +1663,8 @@ exports.style = {
 //		barColor: '#a9a9a9',
 		barImage: 'images/icon/titlebar.png',
 		tabBarHidden: true,
+		// カスタムプロパティ
+		objectName : 'cameraPostWin',
 	},
 	cameraPostTitleLabel:{
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
@@ -1726,6 +1745,7 @@ exports.style = {
 		barImage: 'images/icon/titlebar.png',
 		tabBarHidden: true,
 		// カスタムプロパティ
+		objectName : 'diaryWin',
 		nextWin: null,
 	},
 	diaryTitleView:{
@@ -1834,6 +1854,7 @@ exports.style = {
 		barImage: 'images/icon/titlebar.png',
 		tabBarHidden: true,
 		// カスタムプロパティ
+		objectName : 'timeWin',
 		prevWin : null,
 		openFlag : false,
 	},
@@ -1931,8 +1952,6 @@ exports.style = {
 		left: '47dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		// カスタムプロパティ
-		objectName : 'timeStampListView',
 	},
 	timeStampView:{
 		top: '6dp',
@@ -1950,8 +1969,7 @@ exports.style = {
 		height : '32dp',
 		defaultImage: '',
 		image : null,
-		// カスタムプロパティ
-		objectName : 'timeStampImage',
+		touchEnabled: false,
 	},
 	timeStampLabel:{
 		left: '36dp',
@@ -1959,8 +1977,7 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
-		// カスタムプロパティ
-		objectName : 'timeStampLabel',
+		touchEnabled: false,
 	},
 	timePlusImage:{
 		top: '8dp',
@@ -1978,6 +1995,8 @@ exports.style = {
 		barImage: 'images/icon/titlebar.png',
 		tabBarHidden: true,
 		title: 'わんとも',
+		// カスタムプロパティ
+		objectName : 'friendsWin',
 	},
 	friendsSearchButton:{
 		width: '28dp',
@@ -2194,6 +2213,7 @@ exports.style = {
 //		navBarHidden: true,
 		tabBarHidden: true,
 		// カスタムプロパティ
+		objectName : 'todayWin',
 		prevWin : null,
 	},
 	todayTitleLabel:{
@@ -2344,6 +2364,7 @@ exports.style = {
 		backButtonTitleImage: null,
 		tabBarHidden: true,
 		// カスタムプロパティ
+		objectName : 'stampWin',
 		prevWin : null,
 	},
 	stampTitleLabel:{
@@ -2412,6 +2433,7 @@ exports.style = {
 		barImage: 'images/icon/titlebar.png',
 		tabBarHidden: true,
 		// カスタムプロパティ
+		objectName : 'stampPostWin',
 		prevWin : null,
 	},
 	stampPostTitleLabel:{
@@ -2457,10 +2479,29 @@ exports.style = {
 	},
 	stampPostTextLabel:{
 		left: '48dp',
-		width: '224dp',
+		width: '190dp',
 		height: Ti.UI.SIZE,
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
+	},
+/*
+	stampPostMinusView:{
+		right: '0dp',
+		width: '48dp',
+		height: '100%',
+		// カスタムプロパティ
+		objectName: 'minus',
+	},
+*/
+	stampPostMinusImage:{
+		right: '10dp',
+		width : '28dp',
+		height : '28dp',
+		defaultImage: '',
+		image : 'images/icon/diary_minus.png',
+//		touchEnabled: false,
+		// カスタムプロパティ
+		objectName: 'minus',
 	},
 
 	stampPostListView:{
@@ -2534,6 +2575,7 @@ exports.style = {
 		barImage: 'images/icon/titlebar.png',
 		tabBarHidden: true,
 		// カスタムプロパティ
+		objectName : 'stampTextWin',
 		prevWin : null,
 	},
 	stampTextTitleLabel:{

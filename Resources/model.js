@@ -761,10 +761,6 @@ exports.model = {
 				Ti.API.debug('success:');
 				for (var i = 0; i < e.events.length; i++) {
 					var event = e.events[i];
-					Ti.API.debug('id: ' + event.id +
-					' /name: ' + event.name + 
-					' /start time: ' + event.start_time);
-
 					var startDate = util.getDate(event.start_time);
 					var hour = startDate.getHours();
 					if (event.duration == 0) {
@@ -860,7 +856,15 @@ exports.model = {
 			});
 		}
 	},
-
+	// スタンプデータの削除
+	removeCloudStampList:function(_stampDataList, callback){
+		Ti.API.debug('[func]removeCloudStampList:');
+		Cloud.Events.remove({
+			event_id: _stampDataList[0].event,
+		}, function (e) {
+			callback(e);
+		});
+	},
 
 	// スタンプデータの更新
 	updateStampList:function(_stampData){

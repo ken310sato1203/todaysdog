@@ -5,6 +5,7 @@ exports.createWindow = function(_userData, _stampDataList){
 
 	// Viewの取得
 	var getPostView = function() {
+		Ti.API.debug('[func]getPostView:');
 		var targetView = Ti.UI.createTableView(style.stampPostTableView);
 		var rowList = [];
 
@@ -23,6 +24,11 @@ exports.createWindow = function(_userData, _stampDataList){
 			var postLabel = Ti.UI.createLabel(style.stampPostTextLabel);
 			postLabel.text = _stampDataList[i].text;
 			stampView.add(postLabel);
+//			var minusView = Titanium.UI.createView(style.stampPostMinusView);
+//			stampView.add(minusView);
+			var minusImage = Titanium.UI.createImageView(style.stampPostMinusImage);
+//			minusView.add(minusImage);
+			stampView.add(minusImage);
 		}
 
 		// 日付
@@ -75,10 +81,27 @@ exports.createWindow = function(_userData, _stampDataList){
 			if (e.rowData.objectName != null){
 				var targetName = e.rowData.objectName;
 				if (targetName == "stamp"){
-					var textWin = win.createStampTextWindow(_userData, e.rowData.stampData);
-					textWin.prevWin = postWin;
-					win.openTabWindow(textWin, {animated:true});
-	
+					// マイナスボタンを押すと削除
+					if (e.source.objectName == "minus"){
+						if (_stampDataList.length == 1) {
+							if (_stampDataList[0].event == null) {
+								postWin.close({animated:true});
+							} else {
+								// 登録済みのスタンプデータを削除する場合
+								removeStampData();
+							}
+
+						} else {
+							targetView.deleteRow(e.index);
+							_stampDataList.splice(e.index, 1);
+						}
+
+					} else {
+						var textWin = win.createStampTextWindow(_userData, e.rowData.stampData);
+						textWin.prevWin = postWin;
+						win.openTabWindow(textWin, {animated:true});
+					}
+						
 				} else if (targetName == "date"){
 					datePicker.value = util.getDate(dateField.value);
 					datePickerView.animate(slideIn);
@@ -108,6 +131,81 @@ exports.createWindow = function(_userData, _stampDataList){
 		return targetView;
 	};
 
+	// 登録済みのスタンプデータを削除する場合
+	var removeStampData = function() {
+		Ti.API.debug('[func]removeStampData:');
+
+		var alertDialog = Titanium.UI.createAlertDialog({
+			title: '削除しますか？',
+			buttonNames: ['キャンセル','OK'],
+			cancel: 1
+		});
+		alertDialog.show();
+
+		alertDialog.addEventListener('click',function(alert){
+			Ti.API.debug('[event]alertDialog.click:');						
+			// OKの場合
+			if(alert.index == 1){
+				actInd.show();
+				tabGroup.add(actInd);
+				
+				// 登録データを削除する場合
+				model.removeCloudStampList(_stampDataList, function(e) {
+					Ti.API.debug('[func]removeCloudStampList.callback:');						
+					if (e.success) {
+						Ti.API.debug('Success:');
+						closePostWin();
+					} else {
+						util.errorDialog(e);
+					}
+					actInd.hide();
+				});
+			}
+		});		
+	};
+
+	// Windowクローズ時の更新処理
+	var closePostWin = function() {
+		Ti.API.debug('[func]closePostWin:');
+		var diaryData = {
+			year: _stampDataList[0].year,
+			month: _stampDataList[0].month,
+			day: _stampDataList[0].day,
+			weekday: null,
+			todayFlag: false,
+			stampList: null,
+			articleData: null,
+			timeIndex: _stampDataList[0].hour,
+		};
+
+		// 今日の日付
+		var now = new Date();
+		var year = now.getFullYear();
+		var month = now.getMonth() + 1;
+		var day = now.getDate();
+
+		if (diaryData.year == year && diaryData.month == month && diaryData.day == day) {
+			diaryData.todayFlag = true;
+		}
+
+		// diaryWinの更新
+		var targetTab = win.getTab("diaryTab");
+		targetTab.window.fireEvent('refresh', {diaryData:diaryData});
+		// timeWinの更新
+		if (targetTab.window.nextWin != null) {
+			targetTab.window.nextWin.fireEvent('refresh', {diaryData:diaryData});
+		}
+		// todayWinの更新
+		targetTab = win.getTab("todayTab");
+		targetTab.window.fireEvent('refresh');
+
+		// stampWinを閉じる
+		if (postWin.prevWin.objectName == 'stampWin') {
+			postWin.prevWin.close({animated:false});
+		}
+		postWin.close({animated:false});
+	};
+						
 // ---------------------------------------------------------------------
 
 	var postWin = Ti.UI.createWindow(style.stampPostWin);
@@ -298,40 +396,11 @@ exports.createWindow = function(_userData, _stampDataList){
 					Ti.API.debug('[func]cloudAddStampList.callback:');						
 					if (e.success) {
 						Ti.API.debug('Success:');
-						if (postWin.prevWin != null) {
-							var diaryData = {
-								year: _stampDataList[0].year,
-								month: _stampDataList[0].month,
-								day: _stampDataList[0].day,
-								weekday: null,
-								todayFlag: false,
-								stampList: null,
-								articleData: null,
-								timeIndex: _stampDataList[0].hour,
-							};
-					
-							// 今日の日付
-							var now = new Date();
-							var year = now.getFullYear();
-							var month = now.getMonth() + 1;
-							var day = now.getDate();
-					
-							if (diaryData.year == year && diaryData.month == month && diaryData.day == day) {
-								diaryData.todayFlag = true;
-							}
-
-							postWin.prevWin.fireEvent('refresh', {diaryData:diaryData});
-						}
-						// 複数の画面を同時にアニメーションさせるとエラーになるのでアニメーションさせない
-						postWin.close({animated:false});
-		
+						closePostWin();		
 					} else {
 						util.errorDialog(e);
 					}
-
-					setTimeout(function(){
-						actInd.hide();
-					},2000);
+					actInd.hide();
 				});
 			}
 		});

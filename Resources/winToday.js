@@ -78,6 +78,7 @@ exports.createWindow = function(_userData){
 				// timeWinを新規オープン
 				var timeWin = win.createTimeWindow(_userData, e.row.diaryData);
 				timeWin.prevWin = targetTab.window;
+				targetTab.window.nextWin = timeWin;
 				targetTab.open(timeWin, {animated:false});	
 				tabGroup.activeTab = targetTab;
 			});
@@ -311,7 +312,7 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]todayWin.refresh:');
 		// ビューの更新
 		updateTableView();
-
+/*
 		var targetTab = win.getTab("diaryTab");
 		// timeWinがオープンしている場合
 		if (targetTab.window.nextWin != null) {
@@ -319,31 +320,8 @@ exports.createWindow = function(_userData){
 			targetTab.window.nextWin.close({animated:false});
 		}
 		targetTab.window.fireEvent('refresh');
-	});
-
-/*
-	// タブバーの表示／非表示
-	var start = null;
-	var end = null;
-	 
-	todayWin.addEventListener('touchstart', function(e) {
-		Ti.API.info('[event]todayWin.touchstart');
-		start = e.y;
-	});
-	 
-	todayWin.addEventListener('touchmove', function(e) {
-		Ti.API.info('[event]todayWin.touchmove');
-		end = e.y;
-		if(start) {
-			if(start < end) {
-				tabGroup.animate({bottom: '0dp', duration : 500});
-			} else {
-				tabGroup.animate({bottom: '-50dp', duration : 500});
-			}
-			start = null;
-		}
-	});
 */
+	});
 
 	// 下スクロールで上部ヘッダがすべて表示するまでひっぱったかどうかのフラグ
 	var pulling = false;
