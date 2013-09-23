@@ -256,7 +256,6 @@ exports.model = {
 	// フォトコレクションの作成
 	createCloudPhotoCollection:function(params, callback){
 		Ti.API.debug('[func]createCloudPhotoCollection:');
-
 		Cloud.PhotoCollections.create({
 			name: params.name,
 		}, function (e) {
@@ -267,9 +266,21 @@ exports.model = {
 	// フォトコレクションの取得
 	getCloudPhotoCollection:function(params, callback){
 		Ti.API.debug('[func]getCloudPhotoCollection:');
-
 		Cloud.PhotoCollections.search({
 			user_id: params.userId,
+		}, function (e) {
+			callback(e);
+		});
+	},
+	// ライクコレクションの取得
+	getCloudLikeCollection:function(params, callback){
+		Ti.API.debug('[func]getCloudLikeCollection:');
+		// LikeがAPIでサポートされてないのでPhotoCollectionsを使わずReviewsから取得
+		Cloud.Reviews.query({
+			where: {
+				user_id: params.userId,
+				rating: 1
+			},
 		}, function (e) {
 			callback(e);
 		});
@@ -434,6 +445,26 @@ exports.model = {
 				}
 			}
 			e.userList = userList;
+			callback(e);
+		});
+	},
+
+	// フォローの取得
+	getCloudFollow:function(params, callback){
+		Ti.API.debug('[func]getCloudFollow:');
+		Cloud.Friends.search({
+			user_id: params.userId
+		}, function (e) {
+			callback(e);
+		});
+	},
+	// フォロワーの取得
+	getCloudFollower:function(params, callback){
+		Ti.API.debug('[func]getCloudFollower:');
+		Cloud.Friends.search({
+			user_id: params.userId,
+			followers: 'true'
+		}, function (e) {
 			callback(e);
 		});
 	},

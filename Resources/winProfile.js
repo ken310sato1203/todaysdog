@@ -200,13 +200,56 @@ exports.createWindow = function(_userData){
 								}
 							});
 						}
-
+/*
+					// LikeがAPIでサポートされてないのでPhotoCollectionsを使わずReviewsから取得
 					} else if (collection.name == 'like') {
 						_userData.like = collection.counts.total_photos;
 						countLikeLabel.text = _userData.like;
+*/
 					}
 				}
 
+			} else {
+				util.errorDialog(e);
+			}
+		});
+
+		// ライク数の取得
+		model.getCloudLikeCollection({
+			userId: _userData.id
+		}, function(e) {
+			Ti.API.debug('[func]getCloudLikeCollection.callback:');
+			if (e.success) {
+				_userData.like = e.reviews.length;
+				countLikeLabel.text = _userData.like;
+					
+			} else {
+				util.errorDialog(e);
+			}
+		});
+
+		// フォロワー数の取得
+		model.getCloudFollower({
+			userId: _userData.id
+		}, function(e) {
+			Ti.API.debug('[func]getCloudFollower.callback:');
+			if (e.success) {
+				_userData.follower = e.users.length;
+				countFollowerLabel.text = _userData.follower;
+					
+			} else {
+				util.errorDialog(e);
+			}
+		});
+		// フォロー数の取得
+		model.getCloudFollow({
+			userId: _userData.id
+		}, function(e) {
+			Ti.API.debug('[func]getCloudFollow.callback:');
+			if (e.success) {
+				_userData.follow = e.users.length;
+				countFollowLabel.text = _userData.follow;
+					
 			} else {
 				util.errorDialog(e);
 			}
