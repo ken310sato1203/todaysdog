@@ -859,8 +859,19 @@ exports.model = {
 	// スタンプデータの削除
 	removeCloudStampList:function(_stampDataList, callback){
 		Ti.API.debug('[func]removeCloudStampList:');
+/*
 		Cloud.Events.remove({
 			event_id: _stampDataList[0].event,
+		}, function (e) {
+			callback(e);
+		});
+*/
+		var custom_fields = {};
+		custom_fields[_stampDataList[0].stamp] = null;
+
+		Cloud.Events.update({
+			event_id: _stampDataList[0].event,
+			custom_fields: custom_fields
 		}, function (e) {
 			callback(e);
 		});

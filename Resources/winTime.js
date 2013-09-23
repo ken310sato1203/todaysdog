@@ -85,7 +85,7 @@ exports.createWindow = function(_userData, _diaryData){
 						postWin.prevWin = timeWin;
 						win.openTabWindow(postWin, {animated:true});
 						// timWinからの遷移でイベントが複数回実行（原因不明）されないようにするためのフラグ
-						timeWin.openFlag = true;
+//						timeWin.openFlag = true;
 					}
 //				}
 			});
@@ -245,12 +245,13 @@ exports.createWindow = function(_userData, _diaryData){
 		timeWin.add(timeTableView);
 	});
 
+/*
 	// windowクローズ時
 	timeWin.addEventListener('close', function(e) {
 		Ti.API.debug('[event]timeWin.close:');
 		timeWin.prevWin.nextWin = null;
 	});
-
+*/
 	// 右スワイプで前の画面に戻る
 	timeWin.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]timeWin.swipe:');
@@ -268,12 +269,13 @@ exports.createWindow = function(_userData, _diaryData){
 		updateTableView();
 	});
 
+/*
 	// timWinからstampPostWinへの遷移でイベントが複数回実行（原因不明）されないようにするためのフラグ
 	timeWin.addEventListener('focus', function(e){
 		Ti.API.debug('[event]timeWin.focus:');		
 		timeWin.openFlag = false;
 	});
-
+*/
 	return timeWin;
 };
 

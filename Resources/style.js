@@ -1856,7 +1856,7 @@ exports.style = {
 		// カスタムプロパティ
 		objectName : 'timeWin',
 		prevWin : null,
-		openFlag : false,
+//		openFlag : false,
 	},
 	timeTitleView:{
 		top: '0dp',
