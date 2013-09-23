@@ -149,6 +149,10 @@ exports.createWindow = function(_type, _articleData){
 					updateComment();
 					commentField.value = '';
 					commentField.blur();
+					if (photoWin.prevWin != null) {
+						photoWin.prevWin.fireEvent('refresh', {id:_articleData.id, like:0, comment:1});
+					}
+
 				} else {
 					util.errorDialog(e);
 				}
@@ -335,7 +339,6 @@ exports.createWindow = function(_type, _articleData){
 	likeStampImage.addEventListener('click',function(e){
 		Ti.API.debug('[event]likeStampImage.click:');
 		e.source.enabled = false;
-
 		if (e.source.clickFlag) {
 			// ライクの削除
 			model.removeCloudLikeList({
@@ -347,6 +350,9 @@ exports.createWindow = function(_type, _articleData){
 					Ti.API.debug('Success:');
 					model.removeLikeList(_articleData.no, loginId);
 					likeStampImage.image = 'images/icon/b_like_before.png';
+					if (photoWin.prevWin != null) {
+						photoWin.prevWin.fireEvent('refresh', {id:_articleData.id, like:-1, comment:0});
+					}
 			
 				} else {
 					util.errorDialog(e);
@@ -363,6 +369,9 @@ exports.createWindow = function(_type, _articleData){
 					var likeData = {no:_articleData.no, user:loginId, date:util.getFormattedNowDateTime()};			
 					model.addLikeList(likeData);
 					likeStampImage.image = 'images/icon/b_like_after.png';
+					if (photoWin.prevWin != null) {
+						photoWin.prevWin.fireEvent('refresh', {id:_articleData.id, like:1, comment:0});
+					}
 	
 				} else {
 					util.errorDialog(e);
@@ -389,12 +398,14 @@ exports.createWindow = function(_type, _articleData){
 		e.source.opacity = 1.0;
 	});
 
+/*
 	// コメント編集を反映
 	photoWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]photoWin.refresh:');
 		// コメントリストの更新
 		updateComment();
 	});
+*/
 
 	// 右スワイプで前の画面に戻る
 	photoWin.addEventListener('swipe',function(e){
@@ -403,7 +414,7 @@ exports.createWindow = function(_type, _articleData){
 			photoWin.close({animated:true});
 		}
 	});
-
+/*
 	// クローズ時に前の画面を更新
 	photoWin.addEventListener('close',function(e){
 		Ti.API.debug('[event]photoWin.close:');
@@ -411,6 +422,6 @@ exports.createWindow = function(_type, _articleData){
 			photoWin.prevWin.fireEvent('refresh', {articleData:_articleData});
 		}
 	});	
-
+*/
 	return photoWin;
 };

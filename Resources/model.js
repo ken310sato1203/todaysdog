@@ -866,6 +866,7 @@ exports.model = {
 			callback(e);
 		});
 */
+		// １イベントに対して複数スタンプが登録されているので削除はせずにcustom_fieldsにnullをセットして削除
 		var custom_fields = {};
 		custom_fields[_stampDataList[0].stamp] = null;
 
@@ -1023,6 +1024,7 @@ exports.model = {
 		Cloud.Reviews.create({
 			post_id: _postId,
     		rating: 1,
+    		allow_duplicate: true,
 		}, function (e) {
 			callback(e);
 		});

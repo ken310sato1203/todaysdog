@@ -1835,6 +1835,12 @@ exports.style = {
 		defaultImage: '',
 		image : null,
 	},
+	diaryArrowImage:{
+		width : '32dp',
+		height : '32dp',
+		defaultImage: '',
+		image : 'images/icon/diary_arrow.png',
+	},
 	diaryPhotoImage:{
 		top: '6dp',
 		right: '8dp',

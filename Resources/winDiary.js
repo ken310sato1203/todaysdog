@@ -17,7 +17,7 @@ exports.createWindow = function(_userData){
 
 	var clickEnable = true;
 	// スタンプの最大表示件数
-	var stampListMax = 6;
+	var stampListMax = 7;
 
 	// カレンダーデータの取得
 	var getCalendarRowData = function(_stampList, _year, _month) {
@@ -107,6 +107,10 @@ exports.createWindow = function(_userData){
 						stampImage.image = 'images/icon/' + rowStampList[j].stamp + '.png';
 						stampView.add(stampImage);
 					}
+				}
+				if (rowStampList.length > stampListMax) {
+					var arrowImage = Ti.UI.createImageView(style.diaryArrowImage);
+					stampView.add(arrowImage);					
 				}
 			}
 

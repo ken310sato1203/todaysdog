@@ -14,6 +14,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	var articlePage = 1;
 	// 記事データの取得件数
 	var articleCount = 6;
+	// 記事データの取得開始日（n日前）
+	var articleDay = 30;
 	// 更新時に読み込むフラグ
 	var nextArticleFlag = true;
 
@@ -111,7 +113,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			countView.add(commentLabel);
 
 			// リフレッシュ時に更新する対象を特定するために格納
-			refreshTarget.push({no:_articleList[i].no, likeLabel:likeLabel, commentLabel:commentLabel});
+			refreshTarget.push({id:_articleList[i].id, like:likeLabel, comment:commentLabel});
 			
 			// 各記事のタップでフォト画面へ遷移
 			articleView.addEventListener('click',function(e){
@@ -164,7 +166,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 					idList: idList,
 					year: year,
 					month: month,
-					day: day-6,
+					day: day - articleDay,
 					page: articlePage,
 					count: articleCount
 				}, function(e) {
@@ -248,11 +250,11 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// ライク・コメント編集を反映
 	friendsWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]friendsWin.refresh:');
-		if(e.articleData) {
+		if(e.id) {
 			for (var i=0; i<refreshTarget.length; i++) {
-				if (refreshTarget[i].no == e.articleData.no) {
-					refreshTarget[i].likeLabel.text = model.getLikeCount(e.articleData.no);
-					refreshTarget[i].commentLabel.text = model.getCommentCount(e.articleData.no);
+				if (refreshTarget[i].id == e.id) {
+					refreshTarget[i].like.text = refreshTarget[i].like.text + e.like;
+					refreshTarget[i].comment.text = refreshTarget[i].comment.text + e.comment;
 					break;
 				}
 			}

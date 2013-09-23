@@ -36,7 +36,7 @@ exports.createWindow = function(_userData, _diaryData){
 	};
 
 	// Viewの取得
-	var getTimeTableView = function(_type, _stampList) {
+	var getTimeTableView = function(_type) {
 		Ti.API.debug('[func]getTimeTableView:');
 		var targetView = Ti.UI.createTableView(style.timeTableView);
 		var rowList = [];
@@ -46,15 +46,8 @@ exports.createWindow = function(_userData, _diaryData){
 		for (var i=0; i<stampHour.length; i++) {
 			stampHour[i] = {data: []};
 		}
-/*
-		// 当日のデータ
-		var stampList = _diaryData.stampList;
-		if (stampList == null) {
-			stampList = model.getStampDayList(_userData, _diaryData.year, _diaryData.month, _diaryData.day);			
-		}
-*/
-		for (var i=0; i<_stampList.length; i++) {
-			stampHour[_stampList[i].hour + 1].data.push(_stampList[i]);
+		for (var i=0; i<_diaryData.stampList.length; i++) {
+			stampHour[_diaryData.stampList[i].hour + 1].data.push(_diaryData.stampList[i]);
 		}	
 
 		for (var i=0; i<timeRange.length; i++) {
@@ -154,10 +147,8 @@ exports.createWindow = function(_userData, _diaryData){
 	var updateTableView = function() {
 		Ti.API.debug('[func]updateTableView:');
 		var type = "time";
-		// 当日のデータ
-		var stampList = _diaryData.stampList;
-		if (stampList == null) {
-			// 当月のスタンプデータ取得
+		if (_diaryData.stampList == null) {
+			// スタンプデータの取得
 			model.getCloudStampList({
 				userId: _userData.id,
 				year: year,
@@ -166,7 +157,8 @@ exports.createWindow = function(_userData, _diaryData){
 			}, function(e) {
 				if (e.success) {
 					Ti.API.debug('[func]getCloudStampList.callback:');
-					timeTableView = getTimeTableView(type, e.stampList);
+					_diaryData.stampList = e.stampList;
+					timeTableView = getTimeTableView(type);
 					timeTableView.visible = true;
 					scrollPosition(timeTableView);
 					timeWin.add(timeTableView);
@@ -179,7 +171,7 @@ exports.createWindow = function(_userData, _diaryData){
 			});
 	
 		} else {
-			timeTableView = getTimeTableView(type, stampList);
+			timeTableView = getTimeTableView(type);
 			timeTableView.visible = true;
 			scrollPosition(timeTableView);
 			timeWin.add(timeTableView);		
@@ -238,8 +230,8 @@ exports.createWindow = function(_userData, _diaryData){
 			e.source.listFlag = false;
 			listImage.image = "images/icon/w_arrow_listup.png";
 		}
-		timeWin.rightNavButton = e.source;
-		timeTableView = getTimeTableView(type, _diaryData.stampList);
+//		timeWin.rightNavButton = e.source;
+		timeTableView = getTimeTableView(type);
 		scrollPosition(timeTableView);
 		timeTableView.visible = true;
 		timeWin.add(timeTableView);
