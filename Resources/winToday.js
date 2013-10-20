@@ -303,6 +303,10 @@ exports.createWindow = function(_userData){
 	var todayTitle = Ti.UI.createLabel(style.todayTitleLabel);	
 	todayWin.titleControl = todayTitle;
 
+	// カレンダーボタン
+	var calendarButton = Titanium.UI.createButton(style.todayCalendarButton);
+	todayWin.rightNavButton = calendarButton;
+
 	var todayTableView = Ti.UI.createTableView(style.todayTableView);
 	todayTableView.headerPullView = getTableHeader();
 	todayWin.add(todayTableView);
@@ -313,6 +317,15 @@ exports.createWindow = function(_userData){
 	updateTableView();
 
 // ---------------------------------------------------------------------
+	// カレンダーボタン
+	calendarButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]calendarButton.click:');
+		var type = "search";
+		var calendarWin = win.createCalendarWindow(_userData);
+		calendarWin.prevWin = todayWin;
+		win.openTabWindow(calendarWin, {animated:true});
+	});
+
 	// 更新用イベント
 	todayWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]todayWin.refresh:');

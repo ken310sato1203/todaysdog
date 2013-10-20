@@ -843,6 +843,71 @@ exports.model = {
 		return calendarTarget;
 	},
 
+	// 指定ユーザの記事リストから指定月の記事を取得
+	getCloudArticleList:function(params, callback){
+		Ti.API.debug('[func]getCloudArticleList:');
+		var startDate = null;
+		var endDate = null;
+		if (params.day == null) {
+			startDate = new Date(params.year, params.month-1, 1);
+			endDate = new Date(params.year, params.month, 1);
+		} else {
+			startDate = new Date(params.year, params.month-1, params.day);
+			endDate = new Date(params.year, params.month-1, params.day+1);
+		}
+
+		Cloud.Posts.query({
+			where: {
+				user_id: params.userId,
+				'postDate': {
+					'$gte': util.getCloudFormattedDateTime(startDate),
+					'$lt': util.getCloudFormattedDateTime(endDate)
+				}
+			},
+			order: 'created_at',
+			page : 1,
+			per_page : 31
+		}, function (e) {
+			var articleList = [];
+			if (e.success) {
+				Ti.API.debug('success:');
+				for (var i = 0; i < e.posts.length; i++) {
+					var post = e.posts[i];
+					var user = post.user;
+					var postDate = util.getDate(post.custom_fields.postDate);
+					var name = '';
+					if (user.custom_fields && user.custom_fields.name) {
+						name = user.custom_fields.name;
+					}
+					var likeCount = 0;
+					var commentCount = 0;
+					if (post.reviews_count && post.reviews_count > 0) {
+						commentCount = post.reviews_count;
+					}
+					if (post.ratings_count && post.ratings_count > 0) {
+						commentCount = commentCount - post.ratings_count;
+						likeCount = post.ratings_count;
+					}
+					var articleData = {
+						id: post.id,
+						userId: user.id,
+						user: user.first_name + ' ' + user.last_name,
+						name: name,
+						text: post.content,
+						date: util.getFormattedDateTime(postDate),
+						photo: post.photo.urls.original,
+						like: likeCount,
+						comment: commentCount,
+						icon: user.photo.urls.square_75
+					};
+					articleList.push(articleData);
+				}				
+			}
+			e.articleList = articleList; 
+			callback(e);
+		});
+	},
+
 	// 指定ユーザのスタンプリストから指定月のデータを取得
 	getStampList:function(_userData, _year, _month){
 		Ti.API.debug('[func]getStampList:');

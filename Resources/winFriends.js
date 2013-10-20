@@ -236,7 +236,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 // ---------------------------------------------------------------------
 
-	// 「検索」ボタン
+	// 検索ボタン
 	searchButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]searchButton.click:');
 		var type = "search";

@@ -857,16 +857,13 @@ exports.style = {
 
 	photoListArticleListView:{
 		layout: 'horizontal',
-		top: '5dp',
+		top: '0dp',
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
 		height: Ti.UI.SIZE,
 	},
 	photoListArticleView:{
 		layout: 'vertical',
-//		top: '5dp',
-//		left: '5dp',
-		top: '0dp',
-		bottom: '5dp',
+		top: '5dp',
 		left: '5dp',
 //		width: '100dp',
 		width: Ti.UI.SIZE,
@@ -1426,45 +1423,108 @@ exports.style = {
 
 // winCalendar -------------------------------------------------------
 	calendarWin:{
-		backgroundColor: '#dedede',
+		backgroundColor : '#dedede',
 //		barColor: '#a9a9a9',
 		barImage: 'images/icon/titlebar.png',
 		tabBarHidden: true,
 		// カスタムプロパティ
 		objectName : 'calendarWin',
 	},
+	calendarTitleView:{
+		layout: 'absolute',
+		top: '0dp',
+		left: '0dp',
+		width: '276dp',
+		height: Ti.UI.SIZE,
+	},
 	calendarTitleLabel:{
-		width: '200dp',
+		top: '0dp',
+		left: '0dp',
 		textAlign: 'center',
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
 	},
+	calendarPrevImage:{
+		top : '0dp',
+		right: '30dp',
+		width: '28dp',
+		height: '28dp',
+		image:'images/icon/w_arrow_left.png',
+	},
+	calendarNextImage:{
+		top : '0dp',
+		right: '0dp',
+		width: '28dp',
+		height: '28dp',
+		image:'images/icon/w_arrow_right.png',
+	},
+
+	calendarCalView:{
+		layout : 'vertical',
+		top : '0dp',
+//		width : Ti.Platform.displayCaps.platformWidth + 'dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor : '#dedede',
+	},
+	calendarTableView:{
+		top: '0dp',
+		left: '0dp',
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+		backgroundColor: 'white',
+		separatorColor: 'transparent',
+		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		data: [],
+//		visible: false,
+	},
+	calendarTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+	},
 
 	calendarHeaderView:{
-		layout : 'horizontal',
-		top : '0dp',
-		width : Ti.Platform.displayCaps.platformWidth + 'dp',
-		height : '20dp',
-		backgroundColor : '#F5F5F5',
+		layout: 'horizontal',
+		top: '0dp',
+		bottom: '1dp',
+		left: '3dp',
+		right: '2dp',
+//		width : Ti.Platform.displayCaps.platformWidth + 'dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
 	},
 	calendarHeaderLabel:{
 		top : '0dp',
-		left : '0dp',
-		width : '46dp',
+		right : '1dp',
+		width : '44dp',
 		height : '20dp',
+		backgroundColor: 'white',
 		text : null,
 		textAlign : 'center',
 		font : {fontSize:11, fontWeight:'bold'},
 		color : '#3a4756'
 	},
 
+	calendarBodyView:{
+		layout: 'horizontal',
+		top: '0dp',
+		left: '3dp',
+		right: '2dp',
+//		width : Ti.Platform.displayCaps.platformWidth + 'dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
 	calendarDayView:{
-		width : '46dp',
-		height : '58dp',
-		backgroundColor : null,
-		borderColor : '#FFDCDCDF',
+		top : '0dp',
+		bottom : '1dp',
+		right : '1dp',
+		width : '44dp',
+		height : '49dp',
+//		backgroundColor : null,
+//		borderColor : '#FFDCDCDF',
 		// カスタムプロパティ
 		objectName : 'calendarDayView',
 		dayImage: null,
@@ -1476,9 +1536,8 @@ exports.style = {
 		articleData : null,
 	},
 	calendarDayImage:{
-		top : '3dp',
-		width : '40dp',
-		height : '40dp',
+		top : '0dp',
+		width : '100%',
 		defaultImage: '',
 		backgroundColor: 'black',
 		image : null,
@@ -1494,13 +1553,14 @@ exports.style = {
 		// カスタムプロパティ
 		objectName : 'calendarDayLabel',
 	},
-
-	calendarCalView:{
-		layout : 'horizontal',
-		top : '21dp',
-		width : Ti.Platform.displayCaps.platformWidth + 'dp',
-		height : 'auto',
+	calendarTodayView:{
+		bottom: '0dp',
+		left: '0dp',
+		width: '3dp',
+		height: '16dp',
+		backgroundColor : '#87CEFA',
 	},
+
 
 // winCamera -------------------------------------------------------
 	cameraWin:{
@@ -1648,28 +1708,36 @@ exports.style = {
 		nextWin: null,
 	},
 	diaryTitleView:{
+		layout: 'absolute',
 		top: '0dp',
-		width: Ti.UI.SIZE,
+		left: '0dp',
+		width: '276dp',
 		height: Ti.UI.SIZE,
 	},
-
 	diaryTitleLabel:{
-		width: Ti.UI.SIZE,
+		top: '0dp',
+		left: '0dp',
+		textAlign: 'center',
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
 	},
-/*
-	diaryTitleTabbedBar:{
-		width: '130dp',
-		height: '30dp',
-		backgroundColor: '#b6b6b6',
-		style: Titanium.UI.iPhone.SystemButtonStyle.BAR,
-	    labels: ['Month', 'Day'],
-	    index: 1,
+	diaryPrevImage:{
+		top : '0dp',
+		right: '30dp',
+		width: '28dp',
+		height: '28dp',
+		image:'images/icon/w_arrow_left.png',
 	},
-*/
+	diaryNextImage:{
+		top : '0dp',
+		right: '0dp',
+		width: '28dp',
+		height: '28dp',
+		image:'images/icon/w_arrow_right.png',
+	},
+
 	diaryTableView:{
 		top: '1dp',
 		// 下のタブで表示されない余白分
@@ -2121,6 +2189,11 @@ exports.style = {
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
 		text: '今日のわんこ', 
+	},
+	todayCalendarButton:{
+		width: '28dp',
+		height: '28dp',
+		backgroundImage:'images/icon/w_today_calendar.png',
 	},
 
 	todayTableView:{

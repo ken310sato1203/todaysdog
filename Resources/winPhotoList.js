@@ -7,7 +7,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// 記事データの取得ページ
 	var articlePage = 1;
 	// 記事データの取得件数
-	var articleCount = 6;
+	var articleCount = 15;
 	// 記事データの取得開始日（n日前）
 	var articleDay = 30;
 	// 更新時に読み込むフラグ

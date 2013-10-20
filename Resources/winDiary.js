@@ -30,8 +30,6 @@ exports.createWindow = function(_userData){
 		for (var i=0; i<stampDay.length; i++) {
 			stampDay[i] = {data: []};
 		}
-		// 当月のスタンプデータ
-//		var stampList = model.getStampList(_userData, _year, _month);
 
 		for (var i=0; i<_stampList.length; i++) {
 			stampDay[_stampList[i].day-1].data.push(_stampList[i]);
@@ -178,27 +176,26 @@ exports.createWindow = function(_userData){
 		} else {
 			month--;
 		}
-//		setTimeout(function() {
-			// タイトルの年月
-			monthTitle.text =  year + ' ' + monthName[month-1];
-			// 当月のスタンプデータ取得
-			model.getCloudStampList({
-				userId: _userData.id,
-				year: year,
-				month: month,
-				day: null
-			}, function(e) {
-				if (e.success) {
-					Ti.API.debug('[func]getCloudStampList.callback:');
-					// カレンダーの表示
-					thisDiaryView = getCalView(e.stampList, year, month);
-					diaryWin.add(thisDiaryView);
-					thisDiaryView.visible = true;
-				} else {
-					util.errorDialog(e);
-				}
-			});
-//		}, 300);
+
+		// タイトルの年月
+		monthTitle.text =  year + ' ' + monthName[month-1];
+		// 当月のスタンプデータ取得
+		model.getCloudStampList({
+			userId: _userData.id,
+			year: year,
+			month: month,
+			day: null
+		}, function(e) {
+			if (e.success) {
+				Ti.API.debug('[func]getCloudStampList.callback:');
+				// カレンダーの表示
+				thisDiaryView = getCalView(e.stampList, year, month);
+				diaryWin.add(thisDiaryView);
+				thisDiaryView.visible = true;
+			} else {
+				util.errorDialog(e);
+			}
+		});
 	};
 
 	// 翌月カレンダーの表示
@@ -212,27 +209,26 @@ exports.createWindow = function(_userData){
 		} else {
 			month++;
 		}
-//		setTimeout(function() {
-			// タイトルの年月
-			monthTitle.text =  year + ' ' + monthName[month-1];
-			// 当月のスタンプデータ取得
-			model.getCloudStampList({
-				userId: _userData.id,
-				year: year,
-				month: month,
-				day: null
-			}, function(e) {
-				if (e.success) {
-					Ti.API.debug('[func]getCloudStampList.callback:');
-					// カレンダーの表示
-					thisDiaryView = getCalView(e.stampList, year, month);
-					diaryWin.add(thisDiaryView);
-					thisDiaryView.visible = true;
-				} else {
-					util.errorDialog(e);
-				}
-			});
-//		}, 300);
+
+		// タイトルの年月
+		monthTitle.text =  year + ' ' + monthName[month-1];
+		// 当月のスタンプデータ取得
+		model.getCloudStampList({
+			userId: _userData.id,
+			year: year,
+			month: month,
+			day: null
+		}, function(e) {
+			if (e.success) {
+				Ti.API.debug('[func]getCloudStampList.callback:');
+				// カレンダーの表示
+				thisDiaryView = getCalView(e.stampList, year, month);
+				diaryWin.add(thisDiaryView);
+				thisDiaryView.visible = true;
+			} else {
+				util.errorDialog(e);
+			}
+		});
 	};
 
 
@@ -270,16 +266,15 @@ exports.createWindow = function(_userData){
 // ---------------------------------------------------------------------
 	var diaryWin = Ti.UI.createWindow(style.diaryWin);
 	// タイトルの表示
+	var titleView = Ti.UI.createView(style.diaryTitleView);
+	diaryWin.titleControl = titleView;
 	var monthTitle = Ti.UI.createLabel(style.diaryTitleLabel);
 	monthTitle.text =  year + ' ' + monthName[month-1];
-	diaryWin.titleControl = monthTitle;
-
-	// 戻るボタンの表示
-	var backButton = Titanium.UI.createButton(style.commonBackButton);
-	diaryWin.leftNavButton = backButton;
-	// 次へボタンの表示
-	var nextButton = Titanium.UI.createButton(style.commonNextButton);
-	diaryWin.rightNavButton = nextButton;
+	titleView.add(monthTitle);
+	var prevImage = Ti.UI.createImageView(style.diaryPrevImage);
+	titleView.add(prevImage);
+	var nextImage = Ti.UI.createImageView(style.diaryNextImage);
+	titleView.add(nextImage);
 
 	var thisDiaryView = null;
 	
@@ -305,14 +300,14 @@ exports.createWindow = function(_userData){
 
 
 // ---------------------------------------------------------------------
-	// 戻るボタンをクリック
-	backButton.addEventListener('click', function(e){
-		Ti.API.debug('[event]backButton.click:');
+	// 前月ボタンをクリック
+	prevImage.addEventListener('click', function(e){
+		Ti.API.debug('[event]prevImage.click:');
 		prevCalView();
 	});
-	// 次へボタンをクリック
-	nextButton.addEventListener('click', function(e){
-		Ti.API.debug('[event]nextButton.click:');
+	// 翌月ボタンをクリック
+	nextImage.addEventListener('click', function(e){
+		Ti.API.debug('[event]nextImage.click:');
 		nextCalView();
 	});
 
