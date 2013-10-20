@@ -10,11 +10,10 @@ exports.createWindow = function(_type, _articleData){
 	var likeCount = 5;
 	// コメントリストの表示件数
 	var commentCount = 5;
-
-//	var userData = model.getUser(_articleData.userId);
+	//  ユーザデータ
 	var userData = null;
 
-	// 友人データ取得
+	// ユーザデータの取得
 	model.getCloudUser(_articleData.userId, function(e) {
 		Ti.API.debug('[func]getCloudUser.callback:');
 		if (e.success) {
@@ -23,51 +22,6 @@ exports.createWindow = function(_type, _articleData){
 			util.errorDialog(e);
 		}
 	});
-
-/*
-	// ライクリストの更新
-	var updateLike = function() {
-		Ti.API.debug('[func]updateLike:');
-		var count = model.getLikeCount(_articleData.no);
-		var children = likeTableRow.getChildren();
-
-		if (count > 0) {
-			var likeList = model.getLikeList(_articleData.no, likeCount);
-			likeCountLabel.text = ' x ' + count;
-			if (children.length > 0) {
-				likeTableRow.remove(likeListView);				
-			}
-			likeCountView.show();
-
-			// ライクがない場合に間を詰めるため1dpにしていた高さを変更
-			likeCountTableRow.height = Ti.UI.SIZE;
-			likeTableRow.height = Ti.UI.SIZE;
-			likeListView = Ti.UI.createView(style.photoLikeListView);
-			likeTableRow.add(likeListView);
-
-			for (var i=0; i<likeCount; i++) {
-				var likeView = Ti.UI.createView(style.photoLikeView);
-				likeListView.add(likeView);					
-				if (i < likeList.length) {
-					var likeUserIconImage = Ti.UI.createImageView(style.photoLikeUserIconImage);
-					likeUserIconImage.image = 'images/icon/' + likeList[i].user + '.jpg';						
-					likeView.add(likeUserIconImage);					
-				} else {
-					var likeIconImage = Ti.UI.createImageView(style.photoLikeIconImage);
-					likeView.add(likeIconImage);						
-				}
-			}
-
-		} else {
-			likeCountView.hide();
-			if (children.length > 0) {
-				likeTableRow.remove(likeListView);				
-			}
-			likeCountTableRow.height = '1dp';
-			likeTableRow.height = '1dp';
-		}
-	};
-*/
 
 	// コメントリストの更新
 	var updateComment = function() {
@@ -81,7 +35,6 @@ exports.createWindow = function(_type, _articleData){
 			if (e.success) {
 				Ti.API.debug('[func]getCloudCommentList.callback:');
 				if (e.reviews.length > 0) {
-//					var commentList = model.getCommentList(_articleData.no, null, commentCount);
 					commentListView = Ti.UI.createView(style.photoCommentListView);
 					commentRow.add(commentListView);
 					for (var i=0; i<e.reviews.length; i++) {
@@ -174,7 +127,6 @@ exports.createWindow = function(_type, _articleData){
 	var titleIconView = Ti.UI.createView(style.photoTitleIconView);
 	titleView.add(titleIconView);
 	var titleIconImage = Ti.UI.createImageView(style.photoTitleIconImage);
-//	titleIconImage.image = 'images/icon/i_' + _articleData.userId + '.png';
 	titleIconImage.image = _articleData.icon;
 	titleIconView.add(titleIconImage);
 
@@ -206,17 +158,7 @@ exports.createWindow = function(_type, _articleData){
 	var photoView = Ti.UI.createView(style.photoPhotoView);
 	articleView.add(photoView);
 	var photoImage = Ti.UI.createImageView(style.photoPhotoImage);
-
-/*
-	var photoFile  = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory + 'photo/' + _articleData.no + '.jpg');
-	if (photoFile.exists()) {
-		photoImage.image = photoFile.nativePath;
-	} else {
-		photoImage.image = 'images/photo/' + _articleData.no + '.jpg';		
-	}
-*/	
 	photoImage.image = _articleData.photo;
-
 	// カスタムプロパティに記事データを格納
 	photoImage.articleData = _articleData;
 	photoView.add(photoImage);
@@ -226,11 +168,35 @@ exports.createWindow = function(_type, _articleData){
 	var textView = Ti.UI.createView(style.photoTextView);
 	articleTextView.add(textView);
 
-/*
-	var nameLabel = Ti.UI.createLabel(style.photoNameLabel);
-	nameLabel.text = _articleData.name;
-	textView.add(nameLabel);
-*/
+	// ライクボタンの表示
+	var likeStampImage = Ti.UI.createImageView(style.photoLikeStampImage);
+	if (_type == "friends") {
+		likeStampImage.touchEnabled = true;
+		articleTextView.add(likeStampImage);
+		// ライクボタンを表示するため、記事のテキスト表示幅を設定
+		// photoLikeStampImage(10+55)と余白（10+10）を除いたサイズ
+		textView.width = (Ti.Platform.displayCaps.platformWidth - 85) + 'dp';
+
+		// ライクリストの取得
+		model.getCloudLikeList({
+			userId: loginId,
+			postId: _articleData.id
+		}, function(e) {
+			if (e.success) {
+				Ti.API.debug('[func]getCloudLikeList.callback:');			
+				if (e.reviews.length > 0) {
+					likeStampImage.image = 'images/icon/b_like_after.png';
+					likeStampImage.clickFlag = true;
+					likeStampImage.reviewId = e.reviews[0].id;
+				}
+	
+			} else {
+				util.errorDialog(e);
+			}
+		});
+	}
+
+	// 記事のテキストの表示
 	var textLabel = Ti.UI.createLabel(style.photoTextLabel);
 	textLabel.text = _articleData.text;			
 	var timeLabel = Ti.UI.createLabel(style.photoTimeLabel);
@@ -238,30 +204,10 @@ exports.createWindow = function(_type, _articleData){
 	textView.add(textLabel);
 	textView.add(timeLabel);
 
-	// ライクボタンの表示
-	var likeStampImage = Ti.UI.createImageView(style.photoLikeStampImage);
-	if (_type == "friends") {
-		likeStampImage.touchEnabled = true;
-	}
-	articleTextView.add(likeStampImage);
-
-	// ライクリストの取得
-	model.getCloudLikeList({
-		userId: loginId,
-		postId: _articleData.id
-	}, function(e) {
-		if (e.success) {
-			Ti.API.debug('[func]getCloudLikeList.callback:');			
-			if (e.reviews.length > 0) {
-				likeStampImage.image = 'images/icon/b_like_after.png';
-				likeStampImage.clickFlag = true;
-				likeStampImage.reviewId = e.reviews[0].id;
-			}
-
-		} else {
-			util.errorDialog(e);
-		}
-	});
+	// コメントリストの表示
+	var commentRow = Ti.UI.createTableViewRow(style.photoCommentTableRow);
+	photoTableView.appendRow(commentRow);
+	var commentListView = null;
 
 	if (_type == "friends") {
 		var actionView = Ti.UI.createView(style.photoActionView);
@@ -280,11 +226,6 @@ exports.createWindow = function(_type, _articleData){
 		shareActionView.add(shareActionImage);
 		var shareActionLabel = Ti.UI.createLabel(style.photoShareActionLabel);
 		shareActionView.add(shareActionLabel);		
-
-		// コメントリストの表示
-		var commentRow = Ti.UI.createTableViewRow(style.photoCommentTableRow);
-		photoTableView.appendRow(commentRow);
-		var commentListView = null;
 		
 		// 初回読み込み時に、コメントリストの更新
 		updateComment();
@@ -362,7 +303,10 @@ exports.createWindow = function(_type, _articleData){
 
 		} else {
 			// ライクの追加
-			model.addCloudLikeList(_articleData.id, function(e) {
+			model.addCloudLikeList({
+				postId: _articleData.id,
+				articleData: _articleData,
+			}, function(e) {
 				Ti.API.debug('[func]addCloudLikeList.callback:');						
 				if (e.success) {
 					Ti.API.debug('Success:');
@@ -392,20 +336,13 @@ exports.createWindow = function(_type, _articleData){
 	// タイトルアイコンのクリックでプロフィールを表示
 	titleIconImage.addEventListener('click',function(e){
 		Ti.API.debug('[event]titleIconImage.click:');
-		e.source.opacity = 0.5;
-		var profileWin = win.createProfileWindow(userData);
-		win.openTabWindow(profileWin, {animated:true});
-		e.source.opacity = 1.0;
+		if (userData.id != loginId) {
+			e.source.opacity = 0.5;
+			var profileWin = win.createProfileWindow(userData);
+			win.openTabWindow(profileWin, {animated:true});
+			e.source.opacity = 1.0;
+		}
 	});
-
-/*
-	// コメント編集を反映
-	photoWin.addEventListener('refresh', function(e){
-		Ti.API.debug('[event]photoWin.refresh:');
-		// コメントリストの更新
-		updateComment();
-	});
-*/
 
 	// 右スワイプで前の画面に戻る
 	photoWin.addEventListener('swipe',function(e){
@@ -414,14 +351,6 @@ exports.createWindow = function(_type, _articleData){
 			photoWin.close({animated:true});
 		}
 	});
-/*
-	// クローズ時に前の画面を更新
-	photoWin.addEventListener('close',function(e){
-		Ti.API.debug('[event]photoWin.close:');
-		if (photoWin.prevWin != null) {
-			photoWin.prevWin.fireEvent('refresh', {articleData:_articleData});
-		}
-	});	
-*/
+
 	return photoWin;
 };

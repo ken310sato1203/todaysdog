@@ -66,6 +66,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 	// 入力ボックスでリターンでフォーカスを外す
 	textArea.addEventListener('return',function(e){
 		Ti.API.debug('[event]textArea.return:');
+		e.source.value = e.source.value.replace(/\n+$/g,'');
 		textArea.blur();
 	});
 
@@ -76,91 +77,99 @@ exports.createWindow = function(_type, _userData, _photoImage){
 	postButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]postButton.click:');
 
-		var alertDialog = Titanium.UI.createAlertDialog({
-			title: '投稿しますか？',
-			buttonNames: ['キャンセル','OK'],
-			cancel: 1
-		});
-		alertDialog.show();
-
-		alertDialog.addEventListener('click',function(alert){
-			// OKの場合
-			if(alert.index == 1){
-				actInd.show();
-				tabGroup.add(actInd);
-
-				if (_type == 'photo_camera' || _type == 'icon_camera') {
-					// カメラロールに画像を保存する
-					Titanium.Media.saveToPhotoGallery(postImage.toBlob(), {
-						success : function(e) {
-							Ti.API.debug('success:');
-						},
-						error : function(e) {
-							Ti.API.debug('error:');
-						}
-					});
-				}
-
-				if (_type == 'photo_camera' || _type == 'photo_select') {
-					// ローカルに画像を保存
-					var dirPath = Ti.Filesystem.applicationDataDirectory + 'photo/';
-					var fileName = _userData.id;
-					model.saveLocalImage(postImage.toBlob(), dirPath, fileName);
-
-					var articleData = {
-						id: null, 
-						no: _userData.id, 
-						user: _userData.user, 
-						date: util.getFormattedNowDateTime(), 
-						text: textArea.value, 
-						photo: dirPath + fileName + '.png',
-						like: "0",
-						comment: "0"};
-					model.postCloudArticle({
-						date: articleData.date, 
-						text: articleData.text,
-						photo: postImage.toBlob(),
-						post: _userData.post
-					}, function(e) {
-						Ti.API.debug('[func]postCloudArticle.callback:');
-						if (e.success) {
-//							model.addArticleList(articleData);
-							_userData.today = articleData;
-							if (cameraPostWin.prevWin != null) {
-								cameraPostWin.prevWin.fireEvent('refresh');
-								cameraPostWin.prevWin.close();
+		if (textArea.value == textArea.hintText || textArea.value == "") {
+			var commentDialog = Titanium.UI.createAlertDialog({
+				title: 'コメントを入力してください',
+				buttonNames: ['OK'],
+			});
+			commentDialog.show();
+		} else {
+			var alertDialog = Titanium.UI.createAlertDialog({
+				title: '投稿しますか？',
+				buttonNames: ['キャンセル','OK'],
+				cancel: 1
+			});
+			alertDialog.show();
+	
+			alertDialog.addEventListener('click',function(alert){
+				// OKの場合
+				if(alert.index == 1){
+					actInd.show();
+					tabGroup.add(actInd);
+	
+					if (_type == 'photo_camera' || _type == 'icon_camera') {
+						// カメラロールに画像を保存する
+						Titanium.Media.saveToPhotoGallery(postImage.toBlob(), {
+							success : function(e) {
+								Ti.API.debug('success:');
+							},
+							error : function(e) {
+								Ti.API.debug('error:');
 							}
-							cameraPostWin.close({animated:true});
-
-						} else {
-							util.errorDialog(e);
-						}
-						actInd.hide();
-					});
-					
-				} else {
-					// ローカルに画像を保存
-					var dirPath = Ti.Filesystem.applicationDataDirectory + 'icon/';
-					var fileName = _userData.id;
-					model.saveLocalImage(postImage.toBlob(), dirPath, fileName);
-					model.updateCloudUserIcon({icon: postImage.toBlob()}, function(e) {
-						Ti.API.debug('[func]updateCloudUserIcon.callback:');
-						if (e.success) {
-							_userData.icon = dirPath + fileName + '.png';
-							if (cameraPostWin.prevWin != null) {
-								cameraPostWin.prevWin.fireEvent('refresh');
-								cameraPostWin.prevWin.close();
+						});
+					}
+	
+					if (_type == 'photo_camera' || _type == 'photo_select') {
+						// ローカルに画像を保存
+						var dirPath = Ti.Filesystem.applicationDataDirectory + 'photo/';
+						var fileName = _userData.id;
+						model.saveLocalImage(postImage.toBlob(), dirPath, fileName);
+	
+						var articleData = {
+							id: null, 
+							no: _userData.id, 
+							user: _userData.user, 
+							date: util.getFormattedNowDateTime(), 
+							text: textArea.value, 
+							photo: dirPath + fileName + '.png',
+							like: "0",
+							comment: "0"};
+						model.postCloudArticle({
+							date: articleData.date, 
+							text: articleData.text,
+							photo: postImage.toBlob(),
+							post: _userData.post
+						}, function(e) {
+							Ti.API.debug('[func]postCloudArticle.callback:');
+							if (e.success) {
+	//							model.addArticleList(articleData);
+								_userData.today = articleData;
+								if (cameraPostWin.prevWin != null) {
+									cameraPostWin.prevWin.fireEvent('refresh');
+									cameraPostWin.prevWin.close();
+								}
+								cameraPostWin.close({animated:true});
+	
+							} else {
+								util.errorDialog(e);
 							}
-							cameraPostWin.close({animated:true});
-
-						} else {
-							util.errorDialog(e);
-						}
-						actInd.hide();
-					});
+							actInd.hide();
+						});
+						
+					} else {
+						// ローカルに画像を保存
+						var dirPath = Ti.Filesystem.applicationDataDirectory + 'icon/';
+						var fileName = _userData.id;
+						model.saveLocalImage(postImage.toBlob(), dirPath, fileName);
+						model.updateCloudUserIcon({icon: postImage.toBlob()}, function(e) {
+							Ti.API.debug('[func]updateCloudUserIcon.callback:');
+							if (e.success) {
+								_userData.icon = dirPath + fileName + '.png';
+								if (cameraPostWin.prevWin != null) {
+									cameraPostWin.prevWin.fireEvent('refresh');
+									cameraPostWin.prevWin.close();
+								}
+								cameraPostWin.close({animated:true});
+	
+							} else {
+								util.errorDialog(e);
+							}
+							actInd.hide();
+						});
+					}
 				}
-			}
-		});
+			});			
+		}
 	});
 
 	// 入力ボックスにフォーカス

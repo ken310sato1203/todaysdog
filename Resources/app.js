@@ -15,7 +15,7 @@ var customTab = null;
 var openMainWindow = function(_userData) {
 	Ti.API.debug('[func]openMainWindow:');
 
-	model.addUserList(_userData);
+//	model.addUserList(_userData);
 	model.setLoginId(_userData.id);
 	
 	tabGroup = Ti.UI.createTabGroup(style.tabGroupHidden);

@@ -292,8 +292,9 @@ exports.model = {
 
 		Cloud.PhotoCollections.showPhotos({
 			collection_id: params.collection,
-			page: params.page,
-			per_page: 1,
+			order: '-created_at',
+			page : params.page,
+			per_page : params.count
 		}, function (e) {
 			callback(e);
 		});
@@ -404,8 +405,8 @@ exports.model = {
 				{ first_name: {'$regex': '^' + params.name} }, 
 				{ last_name: {'$regex': '^' + params.name} }
 			] },
-			page : params.page,
-			per_page : params.count
+			page: params.page,
+			per_page: params.count
 		}, function (e) {
 			if (e.success) {
 				Ti.API.debug('success:');
@@ -453,8 +454,48 @@ exports.model = {
 	getCloudFollow:function(params, callback){
 		Ti.API.debug('[func]getCloudFollow:');
 		Cloud.Friends.search({
-			user_id: params.userId
+			user_id: params.userId,
+			page: params.page,
+			per_page: params.count
 		}, function (e) {
+			if (e.success) {
+				Ti.API.debug('success:');
+				var userList = [];
+				for (var i = 0; i < e.users.length; i++) {
+					var user = e.users[i];
+					var userData = {
+						id: user.id,
+						user: user.first_name + ' ' + user.last_name,
+						photo: 0,
+						like: 0,
+						follow: 0,
+						follower: 0,
+						name: '',
+						breed: '',
+						sex: '',
+						birth: '', 
+						memo: '',
+						post: null,
+						like: null,
+						icon: null
+					};
+	
+					if (user.custom_fields) {
+						if (user.custom_fields.name != null)  { userData.name = user.custom_fields.name; }
+						if (user.custom_fields.breed != null) { userData.breed = user.custom_fields.breed; }
+						if (user.custom_fields.sex != null)   { userData.sex = user.custom_fields.sex; }
+						if (user.custom_fields.birth != null) { userData.birth = user.custom_fields.birth; }
+						if (user.custom_fields.memo != null)  { userData.memo = user.custom_fields.memo; }
+						if (user.custom_fields.post != null)  { userData.post = user.custom_fields.post; }
+						if (user.custom_fields.like != null)  { userData.like = user.custom_fields.like; }
+					}
+					if (user.photo) {
+						userData.icon = user.photo.urls.square_75;
+					}
+					userList.push(userData);
+				}
+			}
+			e.userList = userList;
 			callback(e);
 		});
 	},
@@ -463,7 +504,67 @@ exports.model = {
 		Ti.API.debug('[func]getCloudFollower:');
 		Cloud.Friends.search({
 			user_id: params.userId,
-			followers: 'true'
+			followers: 'true',
+			page: params.page,
+			per_page: params.count
+		}, function (e) {
+			if (e.success) {
+				Ti.API.debug('success:');
+				var userList = [];
+				for (var i = 0; i < e.users.length; i++) {
+					var user = e.users[i];
+					var userData = {
+						id: user.id,
+						user: user.first_name + ' ' + user.last_name,
+						photo: 0,
+						like: 0,
+						follow: 0,
+						follower: 0,
+						name: '',
+						breed: '',
+						sex: '',
+						birth: '', 
+						memo: '',
+						post: null,
+						like: null,
+						icon: null
+					};
+	
+					if (user.custom_fields) {
+						if (user.custom_fields.name != null)  { userData.name = user.custom_fields.name; }
+						if (user.custom_fields.breed != null) { userData.breed = user.custom_fields.breed; }
+						if (user.custom_fields.sex != null)   { userData.sex = user.custom_fields.sex; }
+						if (user.custom_fields.birth != null) { userData.birth = user.custom_fields.birth; }
+						if (user.custom_fields.memo != null)  { userData.memo = user.custom_fields.memo; }
+						if (user.custom_fields.post != null)  { userData.post = user.custom_fields.post; }
+						if (user.custom_fields.like != null)  { userData.like = user.custom_fields.like; }
+					}
+					if (user.photo) {
+						userData.icon = user.photo.urls.square_75;
+					}
+					userList.push(userData);
+				}
+			}
+			e.userList = userList;
+			callback(e);
+		});
+	},
+
+	// フォローの取得
+	getCloudFollowCount:function(params, callback){
+		Ti.API.debug('[func]getCloudFollowCount:');
+		Cloud.Friends.search({
+			user_id: params.userId
+		}, function (e) {
+			callback(e);
+		});
+	},
+	// フォロワーの取得
+	getCloudFollowerCount:function(params, callback){
+		Ti.API.debug('[func]getCloudFollowerCount:');
+		Cloud.Friends.search({
+			user_id: params.userId,
+			followers: 'true',
 		}, function (e) {
 			callback(e);
 		});
@@ -498,11 +599,12 @@ exports.model = {
 					}
 					var likeCount = 0;
 					var commentCount = 0;
+					if (post.reviews_count && post.reviews_count > 0) {
+						commentCount = post.reviews_count;
+					}
 					if (post.ratings_count && post.ratings_count > 0) {
+						commentCount = commentCount - post.ratings_count;
 						likeCount = post.ratings_count;
-						if (post.reviews_count && post.reviews_count > 0) {
-							commentCount = post.reviews_count - post.ratings_count;
-						}
 					}
 					var articleData = {
 						id: post.id,
@@ -1050,12 +1152,15 @@ exports.model = {
 	},
 
 	// ライクリストに追加
-	addCloudLikeList:function(_postId, callback){
+	addCloudLikeList:function(params, callback){
 		Ti.API.debug('[func]addCloudLikeList:');
 		Cloud.Reviews.create({
-			post_id: _postId,
+			post_id: params.postId,
     		rating: 1,
     		allow_duplicate: true,
+			custom_fields: {
+				articleData: params.articleData
+			}
 		}, function (e) {
 			callback(e);
 		});

@@ -207,7 +207,7 @@ exports.style = {
 	photoTableView:{ 
 		// 下のタブで表示されない余白分
 		bottom: '44dp',
-		backgroundColor: '#dedede',
+		backgroundColor: 'white',
 		separatorColor: 'transparent',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		data: [],
@@ -254,8 +254,7 @@ exports.style = {
 		bottom: '5dp',
 		left: '10dp',
 		right: '10dp',
-		// photoLikeStampImage(10+55)と余白（10+10）を除いたサイズ
-		width: (Ti.Platform.displayCaps.platformWidth - 85) + 'dp',
+		width: '100%',
 		height: Ti.UI.SIZE,
 	},
 	photoNameLabel:{
@@ -536,27 +535,22 @@ exports.style = {
 		bottom: '44dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
-		backgroundColor: 'white',
+//		backgroundColor: 'white',
 //		scrollable: false,
 		data: [],
 	},
-	profileInfoTableRow:{ 
+
+	profileCountTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-//		touchEnabled: false,
+		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
-	profileInfoView:{
-		layout: 'horizontal',
-		width: '100%',
-		height: Ti.UI.SIZE,
-//		height: '100%',
-		backgroundColor: 'white',
-	},
 	profileIconView:{
-		top: '15dp',
-		bottom: '18dp',
-		left: '15dp',
+		top: '8dp',
+		bottom: '8dp',
+		left: '13dp',
+		right: '10dp',
 		width: '54dp',
 		height: '54dp',
 		borderRadius: '27dp',
@@ -566,51 +560,6 @@ exports.style = {
 		height: '54dp',
 		defaultImage: '',
 	},
-	profileInfoTextView:{
-		layout: 'vertical',
-		top: '15dp',
-		bottom: '10dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-	},
-	profileNameLabel:{
-		top: '0dp',
-		left: '15dp',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-	},
-	profileUserLabel:{
-		top: '0dp',
-		left: '15dp',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-	},
-	profileBreedLabel:{
-		top: '5dp',
-		left: '15dp',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-	},
-	profileBirthLabel:{
-		top: '0dp',
-		left: '15dp',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-	},
-	profileMemoLabel:{
-		top: '5dp',
-		left: '15dp',
-		right: '10dp',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-	},
-
-	profileCountTableRow:{ 
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		touchEnabled: false,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-	},
 	profileCountView:{
 		layout: 'horizontal',
 		top: '0dp',
@@ -618,96 +567,46 @@ exports.style = {
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
-	profileCountPhotoView:{
+	profileCountDataView:{
 		layout: 'vertical',
-		top: '0dp',
+		top: '10dp',
 		right: '1dp',
 		width: '79dp',
 		height: '46dp',
-		backgroundColor: 'white',
-//		backgroundColor: '#eeeeee',
 	},
-	profileCountPhotoLabel:{
+	profileCountDataLabel:{
 		top: '5dp',
 		textAlign: 'center',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
-	profileCountPhotoUnitLabel:{
+	profileCountDataUnitLabel:{
 		top: '1dp',
 		textAlign: 'center',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
-		text: 'フォト',
 	},
 
-	profileCountLikeView:{
+	profileInfoTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+//		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+	},
+	profileInfoView:{
 		layout: 'vertical',
+		top: '10dp',
+		left: '15dp',
+		right: '15dp',
+		bottom: '10dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	profileInfoLabel:{
 		top: '0dp',
-		right: '1dp',
-		width: '79dp',
-		height: '46dp',
-		backgroundColor: 'white',
-//		backgroundColor: '#eeeeee',
-	},
-	profileCountLikeLabel:{
-		top: '5dp',
-		textAlign: 'center',
-		font: {fontSize:14, fontFamily:'Helvetica Neue'},
-		color: '#000',
-	},
-	profileCountLikeUnitLabel:{
-		top: '1dp',
-		textAlign: 'center',
+		left: '0dp',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
-		text: 'わんポチ',
-	},
-
-	profileCountFollowerView:{
-		layout: 'vertical',
-		top: '0dp',
-		right: '1dp',
-		width: '79dp',
-		height: '46dp',
-		backgroundColor: 'white',
-//		backgroundColor: '#eeeeee',
-	},
-	profileCountFollowerLabel:{
-		top: '5dp',
-		textAlign: 'center',
-		font: {fontSize:14, fontFamily:'Helvetica Neue'},
-		color: '#000',
-	},
-	profileCountFollowerUnitLabel:{
-		top: '1dp',
-		textAlign: 'center',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-		text: 'フォロワ',
-	},
-
-	profileCountFollowView:{
-		layout: 'vertical',
-		top: '0dp',
-		right: '0dp',
-		width: '80dp',
-		height: '46dp',
-		backgroundColor: 'white',
-//		backgroundColor: '#eeeeee',
-	},
-	profileCountFollowLabel:{
-		top: '5dp',
-		textAlign: 'center',
-		font: {fontSize:14, fontFamily:'Helvetica Neue'},
-		color: '#000',
-	},
-	profileCountFollowUnitLabel:{
-		top: '1dp',
-		textAlign: 'center',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-		text: 'フォロー',
 	},
 
 	profilePhotoTableRow:{ 
@@ -1731,8 +1630,8 @@ exports.style = {
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
 		// hintTextはiOSで対応されていないので、focus/blur時に処理
-		hintText: 'comment',
-		value: 'comment',
+		hintText: 'コメントを入力してください',
+		value: 'コメントを入力してください',
 		suppressReturn: false,
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
         returnKeyType:Ti.UI.RETURNKEY_DONE,
@@ -2008,14 +1907,6 @@ exports.style = {
 		width: '28dp',
 		height: '28dp',
 		backgroundImage:'images/icon/w_friends_search.png',
-	},
-
-	friendsTitleView:{
-		layout: 'absolute',
-		top: '0dp',
-		left: '0dp',
-		width: '100%',
-		height: Ti.UI.SIZE,
 	},
 
 	friendsUpdateButton:{

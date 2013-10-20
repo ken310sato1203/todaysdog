@@ -238,30 +238,55 @@ exports.createWindow = function(_type, _userData){
 			}
 
 		} else {
-			// 前回取得した最後のインデックス以降を取得
-			// 「続きを読む」ボタンの表示判定のため、表示件数より1件多い条件で取得
-			var userList = null;
-	
 			// フォロワのユーザ一覧
 			if (_type == "follower") {
-				userList = model.getFollowerList(_userData.id, prevUserIndex, userCount);
+				model.getCloudFollower({
+					userId: _userData.id,
+					page: searchPage,
+					count: searchCount
+				}, function(e) {
+					Ti.API.debug('[func]getCloudFollower.callback:');
+					if (e.success) {
+						if (e.userList.length > 0) {
+							appendUser(e.userList);
+							searchPage++;
+						} else {
+							if (searchPage == 1) {
+								appendNoDataLabel();
+							}
+							nextSearchFlag = false;							
+						}
+			
+					} else {
+						util.errorDialog(e);
+					}
+				});
+
 			// フォローのユーザ一覧
 			} else if (_type == "follow") {
-				userList = model.getFollowList(_userData.id, prevUserIndex, userCount);
+				model.getCloudFollow({
+					userId: _userData.id,
+					page: searchPage,
+					count: searchCount
+				}, function(e) {
+					Ti.API.debug('[func]getCloudFollow.callback:');
+					if (e.success) {
+						if (e.userList.length > 0) {
+							appendUser(e.userList);
+							searchPage++;
+						} else {
+							if (searchPage == 1) {
+								appendNoDataLabel();
+							}
+							nextSearchFlag = false;							
+						}
+			
+					} else {
+						util.errorDialog(e);
+					}
+				});
 			}	
-	
-			if (userList == null || userList.length == 0) {
-				// 1件も取得できなかった場合
-				appendNoDataLabel();		
-				// 次回更新用に続きのユーザ一覧がないフラグを設定
-				nextUserFlag = false;
-			} else {
-				appendUser(userList);
-				// 次回更新用に取得した最後のインデックスを設定
-				Ti.API.debug('userList:' + userList);
-				Ti.API.debug('userList.length:' + userList.length);
-				prevUserIndex = userList[userList.length-1].no;
-			}
+
 		}
 	};
 	
@@ -286,11 +311,11 @@ exports.createWindow = function(_type, _userData){
 
 	// フォロワのユーザ一覧
 	if (_type == "follower") {
-		titleLabel.text = 'わんともフォロワー';
+		titleLabel.text = 'フォロワー';
 
 	// フォローのユーザ一覧
 	} else 	if (_type == "follow") {
-		titleLabel.text = 'わんともフォロー';
+		titleLabel.text = 'フォロー中';
 
 	// 検索のユーザ一覧
 	} else 	if (_type == "search") {

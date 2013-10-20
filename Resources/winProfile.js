@@ -16,111 +16,16 @@ exports.createWindow = function(_userData){
 		var countView = Ti.UI.createView(style.profileCountView);
 		profileCountRow.add(countView);
 
-		// フォト数の表示
-		var countPhotoView = Ti.UI.createView(style.profileCountPhotoView);
-		countView.add(countPhotoView);
-		var countPhotoLabel = Ti.UI.createLabel(style.profileCountPhotoLabel);
-		countPhotoLabel.text = _userData.photo;
-		var countPhotoUnitLabel = Ti.UI.createLabel(style.profileCountPhotoUnitLabel);
-		countPhotoView.add(countPhotoLabel);
-		countPhotoView.add(countPhotoUnitLabel);
-	
-		// フォト数をクリックでフォト一覧を表示
-		countPhotoView.addEventListener('click', function(e){
-			Ti.API.debug('[event]countPhotoView.click:');
-			if (_userData.photo > 0) {
-				countPhotoView.backgroundColor = '#dedede';
-				var type = "user";
-				var photoListWin = win.createPhotoListWindow(type, _userData);
-				win.openTabWindow(photoListWin, {animated:true});
-				countPhotoView.backgroundColor = 'white';
-			}
-		});
-	
-		// ライク数の表示
-		var countLikeView = Ti.UI.createView(style.profileCountLikeView);
-		countView.add(countLikeView);
-		var countLikeLabel = Ti.UI.createLabel(style.profileCountLikeLabel);
-		countLikeLabel.text = _userData.like;
-		var countLikeUnitLabel = Ti.UI.createLabel(style.profileCountLikeUnitLabel);
-		countLikeView.add(countLikeLabel);
-		countLikeView.add(countLikeUnitLabel);
-	
-		// ライク数をクリックでフォト一覧を表示
-		countLikeView.addEventListener('click', function(e){
-			Ti.API.debug('[event]countLikeView.click:');
-			if (_userData.like > 0) {
-				countLikeView.backgroundColor = '#dedede';
-				var type = "like";
-				var photoListWin = win.createPhotoListWindow(type, _userData);
-				win.openTabWindow(photoListWin, {animated:true});
-				countLikeView.backgroundColor = 'white';
-			}
-		});
-	
-		// フォロワー数の表示
-		var countFollowerView = Ti.UI.createView(style.profileCountFollowerView);
-		countView.add(countFollowerView);
-		var countFollowerLabel = Ti.UI.createLabel(style.profileCountFollowerLabel);
-		countFollowerLabel.text = _userData.follower;
-		var countFollowerUnitLabel = Ti.UI.createLabel(style.profileCountFollowerUnitLabel);
-		countFollowerView.add(countFollowerLabel);
-		countFollowerView.add(countFollowerUnitLabel);
-	
-		// フォロワ数をクリックでユーザ一覧を表示
-		countFollowerView.addEventListener('click', function(e){
-			Ti.API.debug('[event]countFollowerView.click:');
-			if (_userData.follower > 0) {
-				countFollowerView.backgroundColor = '#dedede';
-				var type = "follower";
-				var userListWin = win.createUserListWindow(type, _userData);
-				userListWin.prevWin = profileWin;
-				win.openTabWindow(userListWin, {animated:true});
-				countFollowerView.backgroundColor = 'white';
-			}
-		});
-	
-		// フォロー数の表示
-		var countFollowView = Ti.UI.createView(style.profileCountFollowView);
-		countView.add(countFollowView);
-		var countFollowLabel = Ti.UI.createLabel(style.profileCountFollowLabel);
-		countFollowLabel.text = _userData.follow;
-		var countFollowUnitLabel = Ti.UI.createLabel(style.profileCountFollowUnitLabel);
-		countFollowView.add(countFollowLabel);
-		countFollowView.add(countFollowUnitLabel);
-	
-		// フォロー数をクリックでユーザ一覧を表示
-		countFollowView.addEventListener('click', function(e){
-			Ti.API.debug('[event]countFollowView.click:');
-			if (_userData.follow > 0) {
-				countFollowView.backgroundColor = '#dedede';
-				var type = "follow";
-				var userListWin = win.createUserListWindow(type, _userData);
-				userListWin.prevWin = profileWin;
-				win.openTabWindow(userListWin, {animated:true});
-				countFollowView.backgroundColor = 'white';
-			}
-		});
-	
-		// プロフィール情報の表示
-		var profileInfoRow = Titanium.UI.createTableViewRow(style.profileInfoTableRow);
-		rowList.push(profileInfoRow);
-	
-		var infoView = Ti.UI.createView(style.profileInfoView);
-		profileInfoRow.add(infoView);
-	
+		// アイコンの表示
 		var iconView = Ti.UI.createView(style.profileIconView);
-		infoView.add(iconView);
+		countView.add(iconView);
 		var iconImage = Ti.UI.createImageView(style.profileIconImage);
 		iconImage.image = _userData.icon;
 		iconView.add(iconImage);
-		var infoTextView = Ti.UI.createView(style.profileInfoTextView);
-		infoView.add(infoTextView);
 
 		// アイコンをクリック
 		iconView.addEventListener('click',function(e){
 			Ti.API.debug('[event]iconView.click:');
-
 			var dialog = Titanium.UI.createOptionDialog({
 				options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
 				cancel:2
@@ -144,24 +49,123 @@ exports.createWindow = function(_userData){
 			});
 		});			
 	
-		if (_userData.name != '') {
-			var nameLabel = Ti.UI.createLabel(style.profileNameLabel);
-			nameLabel.text = _userData.name;
-			infoTextView.add(nameLabel);
-		}
-		var userLabel = Ti.UI.createLabel(style.profileUserLabel);
-		userLabel.text = '@' + _userData.user;
-		infoTextView.add(userLabel);
+		// フォト数の表示
+		var countPhotoView = Ti.UI.createView(style.profileCountDataView);
+		countView.add(countPhotoView);
+		var countPhotoLabel = Ti.UI.createLabel(style.profileCountDataLabel);
+		countPhotoLabel.text = _userData.photo;
+		var countPhotoUnitLabel = Ti.UI.createLabel(style.profileCountDataUnitLabel);
+		countPhotoUnitLabel.text = '投稿数';
+		countPhotoView.add(countPhotoLabel);
+		countPhotoView.add(countPhotoUnitLabel);
 	
-		var breedLabel = Ti.UI.createLabel(style.profileBreedLabel);
-		breedLabel.text = _userData.breed + ' ' + _userData.sex;
-		infoTextView.add(breedLabel);
-		var birthLabel = Ti.UI.createLabel(style.profileBirthLabel);
-		birthLabel.text = _userData.birth;
-		infoTextView.add(birthLabel);
-		var memoLabel = Ti.UI.createLabel(style.profileMemoLabel);
+		// フォト数をクリックでフォト一覧を表示
+		countPhotoView.addEventListener('click', function(e){
+			Ti.API.debug('[event]countPhotoView.click:');
+			if (_userData.photo > 0) {
+				countPhotoView.backgroundColor = '#dedede';
+				var type = "user";
+				var photoListWin = win.createPhotoListWindow(type, _userData);
+				win.openTabWindow(photoListWin, {animated:true});
+				countPhotoView.backgroundColor = 'white';
+			}
+		});
+
+/*	
+		// ライクの記事情報がreviewから１回では取得できないので表示しないことに
+		// ライク数の表示
+		var countLikeView = Ti.UI.createView(style.profileCountLikeView);
+		countView.add(countLikeView);
+		var countLikeLabel = Ti.UI.createLabel(style.profileCountLikeLabel);
+		countLikeLabel.text = _userData.like;
+		var countLikeUnitLabel = Ti.UI.createLabel(style.profileCountLikeUnitLabel);
+		countLikeView.add(countLikeLabel);
+		countLikeView.add(countLikeUnitLabel);
+	
+		// ライク数をクリックでフォト一覧を表示
+		countLikeView.addEventListener('click', function(e){
+			Ti.API.debug('[event]countLikeView.click:');
+			if (_userData.like > 0) {
+				countLikeView.backgroundColor = '#dedede';
+				var type = "like";
+				var photoListWin = win.createPhotoListWindow(type, _userData);
+				win.openTabWindow(photoListWin, {animated:true});
+				countLikeView.backgroundColor = 'white';
+			}
+		});
+*/
+	
+		// フォロワー数の表示
+		var countFollowerView = Ti.UI.createView(style.profileCountDataView);
+		countView.add(countFollowerView);
+		var countFollowerLabel = Ti.UI.createLabel(style.profileCountDataLabel);
+		countFollowerLabel.text = _userData.follower;
+		var countFollowerUnitLabel = Ti.UI.createLabel(style.profileCountDataUnitLabel);
+		countFollowerUnitLabel.text = 'フォロワー';
+		countFollowerView.add(countFollowerLabel);
+		countFollowerView.add(countFollowerUnitLabel);
+	
+		// フォロワ数をクリックでユーザ一覧を表示
+		countFollowerView.addEventListener('click', function(e){
+			Ti.API.debug('[event]countFollowerView.click:');
+			if (_userData.follower > 0) {
+				countFollowerView.backgroundColor = '#dedede';
+				var type = "follower";
+				var userListWin = win.createUserListWindow(type, _userData);
+				userListWin.prevWin = profileWin;
+				win.openTabWindow(userListWin, {animated:true});
+				countFollowerView.backgroundColor = 'white';
+			}
+		});
+	
+		// フォロー数の表示
+		var countFollowView = Ti.UI.createView(style.profileCountDataView);
+		countView.add(countFollowView);
+		var countFollowLabel = Ti.UI.createLabel(style.profileCountDataLabel);
+		countFollowLabel.text = _userData.follow;
+		var countFollowUnitLabel = Ti.UI.createLabel(style.profileCountDataUnitLabel);
+		countFollowUnitLabel.text = 'フォロー中';
+		countFollowView.add(countFollowLabel);
+		countFollowView.add(countFollowUnitLabel);
+	
+		// フォロー数をクリックでユーザ一覧を表示
+		countFollowView.addEventListener('click', function(e){
+			Ti.API.debug('[event]countFollowView.click:');
+			if (_userData.follow > 0) {
+				countFollowView.backgroundColor = '#dedede';
+				var type = "follow";
+				var userListWin = win.createUserListWindow(type, _userData);
+				userListWin.prevWin = profileWin;
+				win.openTabWindow(userListWin, {animated:true});
+				countFollowView.backgroundColor = 'white';
+			}
+		});
+	
+		// プロフィール情報の表示
+		var profileInfoRow = Titanium.UI.createTableViewRow(style.profileInfoTableRow);
+		rowList.push(profileInfoRow);
+	
+		var infoView = Ti.UI.createView(style.profileInfoView);
+		profileInfoRow.add(infoView);
+
+		if (_userData.name != '') {
+			var nameLabel = Ti.UI.createLabel(style.profileInfoLabel);
+			nameLabel.text = _userData.name;
+			infoView.add(nameLabel);
+		}
+		var userLabel = Ti.UI.createLabel(style.profileInfoLabel);
+		userLabel.text = '@' + _userData.user;
+		infoView.add(userLabel);
+	
+		var breedLabel = Ti.UI.createLabel(style.profileInfoLabel);
+		breedLabel.text = _userData.breed;
+		infoView.add(breedLabel);
+		var birthLabel = Ti.UI.createLabel(style.profileInfoLabel);
+		birthLabel.text = _userData.birth + ' ' + _userData.sex;
+		infoView.add(birthLabel);
+		var memoLabel = Ti.UI.createLabel(style.profileInfoLabel);
 		memoLabel.text = _userData.memo;
-		infoTextView.add(memoLabel);
+		infoView.add(memoLabel);
 
 		var profilePhotoRow = Titanium.UI.createTableViewRow(style.profilePhotoTableRow);
 		rowList.push(profilePhotoRow);
@@ -188,7 +192,8 @@ exports.createWindow = function(_userData){
 							var coverIndex = Math.floor(Math.random() * _userData.photo);
 							model.getCloudPhoto({
 								collection: collection.id,
-								page: coverIndex+1
+								page: coverIndex+1,
+								count: 1
 							}, function(e) {
 								Ti.API.debug('[func]getCloudPhoto.callback:');
 								if (e.success) {
@@ -214,6 +219,7 @@ exports.createWindow = function(_userData){
 			}
 		});
 
+/*
 		// ライク数の取得
 		model.getCloudLikeCollection({
 			userId: _userData.id
@@ -227,29 +233,27 @@ exports.createWindow = function(_userData){
 				util.errorDialog(e);
 			}
 		});
-
+*/
 		// フォロワー数の取得
-		model.getCloudFollower({
+		model.getCloudFollowerCount({
 			userId: _userData.id
 		}, function(e) {
-			Ti.API.debug('[func]getCloudFollower.callback:');
+			Ti.API.debug('[func]getCloudFollowerCount.callback:');
 			if (e.success) {
 				_userData.follower = e.users.length;
 				countFollowerLabel.text = _userData.follower;
-					
 			} else {
 				util.errorDialog(e);
 			}
 		});
 		// フォロー数の取得
-		model.getCloudFollow({
+		model.getCloudFollowCount({
 			userId: _userData.id
 		}, function(e) {
-			Ti.API.debug('[func]getCloudFollow.callback:');
+			Ti.API.debug('[func]getCloudFollowCount.callback:');
 			if (e.success) {
 				_userData.follow = e.users.length;
 				countFollowLabel.text = _userData.follow;
-					
 			} else {
 				util.errorDialog(e);
 			}

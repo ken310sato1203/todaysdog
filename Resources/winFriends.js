@@ -222,8 +222,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	
 // ---------------------------------------------------------------------
 	var friendsWin = Ti.UI.createWindow(style.friendsWin);
-	var titleView = null;
-	var titleLabel = null;
 
 	// 友人を検索するボタン
 	var searchButton = Titanium.UI.createButton(style.friendsSearchButton);
