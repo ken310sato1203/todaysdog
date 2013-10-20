@@ -279,7 +279,9 @@ exports.createWindow = function(_type, _articleData){
 	// ライクボタンのクリックでライクリストに追加
 	likeStampImage.addEventListener('click',function(e){
 		Ti.API.debug('[event]likeStampImage.click:');
-		e.source.enabled = false;
+		// 多重クリック防止
+		e.source.touchEnabled = false;
+
 		if (e.source.clickFlag) {
 			// ライクの削除
 			model.removeCloudLikeList({
@@ -289,7 +291,6 @@ exports.createWindow = function(_type, _articleData){
 				Ti.API.debug('[func]removeCloudLikeList.callback:');						
 				if (e.success) {
 					Ti.API.debug('Success:');
-					model.removeLikeList(_articleData.no, loginId);
 					likeStampImage.image = 'images/icon/b_like_before.png';
 					if (photoWin.prevWin != null) {
 						photoWin.prevWin.fireEvent('refresh', {id:_articleData.id, like:-1, comment:0});
@@ -310,9 +311,9 @@ exports.createWindow = function(_type, _articleData){
 				Ti.API.debug('[func]addCloudLikeList.callback:');						
 				if (e.success) {
 					Ti.API.debug('Success:');
-					var likeData = {no:_articleData.no, user:loginId, date:util.getFormattedNowDateTime()};			
-					model.addLikeList(likeData);
 					likeStampImage.image = 'images/icon/b_like_after.png';
+					likeStampImage.reviewId = e.reviews[0].id;
+
 					if (photoWin.prevWin != null) {
 						photoWin.prevWin.fireEvent('refresh', {id:_articleData.id, like:1, comment:0});
 					}
@@ -324,7 +325,11 @@ exports.createWindow = function(_type, _articleData){
 			e.source.clickFlag = true;
 		}
 
-		e.source.enabled = true;
+		// 多重クリック防止
+        setTimeout(function(){
+			e.source.touchEnabled = true;
+        }, 3000);
+
 	});
 
 	// 戻るボタンをクリック

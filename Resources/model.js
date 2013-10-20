@@ -1157,10 +1157,7 @@ exports.model = {
 		Cloud.Reviews.create({
 			post_id: params.postId,
     		rating: 1,
-    		allow_duplicate: true,
-			custom_fields: {
-				articleData: params.articleData
-			}
+    		allow_duplicate: true
 		}, function (e) {
 			callback(e);
 		});

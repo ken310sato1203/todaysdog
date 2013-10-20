@@ -119,13 +119,13 @@ exports.createWindow = function(_userData){
 
 		// 今日の投稿がまだの場合
 		} else {
-			var cameraImage = Ti.UI.createImageView(style.todayCameraImage);
 			photoView.add(cameraImage);
 	
 			// cameraImageをクリック
 			cameraImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]cameraImage.click:');
-
+				// 多重クリック防止
+				e.source.touchEnabled = false;
 				var dialog = Titanium.UI.createOptionDialog({
 					options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
 					cancel:2
@@ -135,6 +135,7 @@ exports.createWindow = function(_userData){
 
 				dialog.addEventListener('click',function(e) {
 					Ti.API.debug('[event]dialog.click:');
+					e.source.touchEnabled = true;
 					switch( e.index ) {
 						case 0:
 							var cameraWin = win.createCameraWindow('photo_camera', _userData);
@@ -176,9 +177,12 @@ exports.createWindow = function(_userData){
 		// editImageをクリック
 		editImage.addEventListener('click',function(e){
 			Ti.API.debug('[event]editImage.click:');
+			// 多重クリック防止
+			editImage.touchEnabled = false;
 			var stampWin = win.createStampWindow(_userData, null);	
 			stampWin.prevWin = todayWin;
 			win.openTabWindow(stampWin, {animated:true});
+			editImage.touchEnabled = true;
 		});
 
 		var timeView = getTimeTableView(_stampList);
@@ -303,6 +307,8 @@ exports.createWindow = function(_userData){
 	todayTableView.headerPullView = getTableHeader();
 	todayWin.add(todayTableView);
 
+	var cameraImage = Ti.UI.createImageView(style.todayCameraImage);
+
 	// ビューの更新
 	updateTableView();
 
@@ -311,6 +317,7 @@ exports.createWindow = function(_userData){
 	todayWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]todayWin.refresh:');
 		// ビューの更新
+		todayTableView.data = [];
 		updateTableView();
 /*
 		var targetTab = win.getTab("diaryTab");
@@ -375,6 +382,7 @@ exports.createWindow = function(_userData){
 	        setTimeout(function(){
 	        	resetPullHeader(e.source);
 				// ビューの更新
+				todayTableView.data = [];
 				updateTableView();
 	        }, 2000);
 	    }
