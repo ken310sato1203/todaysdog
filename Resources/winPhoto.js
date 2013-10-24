@@ -189,6 +189,7 @@ exports.createWindow = function(_type, _articleData){
 					likeStampImage.clickFlag = true;
 					likeStampImage.reviewId = e.reviews[0].id;
 				}
+				likeStampImage.visible = true;
 	
 			} else {
 				util.errorDialog(e);
@@ -284,26 +285,29 @@ exports.createWindow = function(_type, _articleData){
 
 		if (e.source.clickFlag) {
 			// ライクの削除
+			likeStampImage.image = 'images/icon/b_like_before.png';
 			model.removeCloudLikeList({
 				postId: _articleData.id,
 				reviewId: e.source.reviewId
 			}, function(e) {
-				Ti.API.debug('[func]removeCloudLikeList.callback:');						
+				Ti.API.debug('[func]removeCloudLikeList.callback:');
 				if (e.success) {
 					Ti.API.debug('Success:');
-					likeStampImage.image = 'images/icon/b_like_before.png';
+					likeStampImage.clickFlag = false;
 					if (photoWin.prevWin != null) {
 						photoWin.prevWin.fireEvent('refresh', {id:_articleData.id, like:-1, comment:0});
 					}
 			
 				} else {
 					util.errorDialog(e);
+					likeStampImage.image = 'images/icon/b_like_after.png';
 				}
+				likeStampImage.touchEnabled = true;
 			});
-			e.source.clickFlag = false;
 
 		} else {
 			// ライクの追加
+			likeStampImage.image = 'images/icon/b_like_after.png';
 			model.addCloudLikeList({
 				postId: _articleData.id,
 				articleData: _articleData,
@@ -311,25 +315,19 @@ exports.createWindow = function(_type, _articleData){
 				Ti.API.debug('[func]addCloudLikeList.callback:');						
 				if (e.success) {
 					Ti.API.debug('Success:');
-					likeStampImage.image = 'images/icon/b_like_after.png';
+					likeStampImage.clickFlag = true;
 					likeStampImage.reviewId = e.reviews[0].id;
-
 					if (photoWin.prevWin != null) {
 						photoWin.prevWin.fireEvent('refresh', {id:_articleData.id, like:1, comment:0});
 					}
 	
 				} else {
 					util.errorDialog(e);
+					likeStampImage.image = 'images/icon/b_like_before.png';
 				}
+				likeStampImage.touchEnabled = true;
 			});
-			e.source.clickFlag = true;
 		}
-
-		// 多重クリック防止
-        setTimeout(function(){
-			e.source.touchEnabled = true;
-        }, 3000);
-
 	});
 
 	// 戻るボタンをクリック

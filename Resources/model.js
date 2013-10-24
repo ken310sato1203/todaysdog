@@ -1017,16 +1017,16 @@ exports.model = {
 	addCloudStampList:function(_stampDataList, callback){
 		Ti.API.debug('[func]addCloudStampList:');
 
-		var stampDate = new Date(
-			_stampDataList[0].year, 
-			_stampDataList[0].month-1, 
-			_stampDataList[0].day, 
-			_stampDataList[0].hour);
 		var duration = 3600;
 		if (_stampDataList[0].hour == -1) {
 			duration = 0;
 			_stampDataList[0].hour = 0;
 		}
+		var stampDate = new Date(
+			_stampDataList[0].year, 
+			_stampDataList[0].month-1, 
+			_stampDataList[0].day, 
+			_stampDataList[0].hour);
 
 		var custom_fields = {};
 		for (var i=0; i<_stampDataList.length; i++) {

@@ -318,11 +318,13 @@ exports.createWindow = function(_userData){
 	// 前月ボタンをクリック
 	prevImage.addEventListener('click', function(e){
 		Ti.API.debug('[event]prevImage.click:');
+		prevImage.touchEnabled = false;
 		prevCalView();
 	});
 	// 翌月ボタンをクリック
 	nextImage.addEventListener('click', function(e){
 		Ti.API.debug('[event]nextImage.click:');
+		nextImage.touchEnabled = false;
 		nextCalView();
 	});
 	// 戻るボタンをクリック
@@ -339,6 +341,8 @@ exports.createWindow = function(_userData){
 	slideView.addEventListener('complete',function(e){
 		Ti.API.debug('[event]slideView.complete:');
 		clickEnable = true;
+		prevImage.touchEnabled = true;
+		nextImage.touchEnabled = true;
 	});
 
 	// 左右スワイプで前月・翌月のカレンダーを表示

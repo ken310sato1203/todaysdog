@@ -293,6 +293,7 @@ exports.style = {
 		defaultImage: '',
 		image: 'images/icon/b_like_before.png',
 		touchEnabled: false,
+		visible: false,
 		// カスタムプロパティ
 		clickFlag: false,
 	},
@@ -1432,7 +1433,6 @@ exports.style = {
 	},
 	calendarTitleView:{
 		layout: 'absolute',
-		top: '0dp',
 		left: '0dp',
 		width: '276dp',
 		height: Ti.UI.SIZE,
@@ -1448,14 +1448,14 @@ exports.style = {
 	},
 	calendarPrevImage:{
 		top : '0dp',
-		right: '30dp',
+		right: '47dp',
 		width: '28dp',
 		height: '28dp',
 		image:'images/icon/w_arrow_left.png',
 	},
 	calendarNextImage:{
 		top : '0dp',
-		right: '0dp',
+		right: '17dp',
 		width: '28dp',
 		height: '28dp',
 		image:'images/icon/w_arrow_right.png',
@@ -1687,7 +1687,7 @@ exports.style = {
 		width: '264dp',
 		height : '90dp',
 		backgroundColor: 'white',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
 		// hintTextはiOSで対応されていないので、focus/blur時に処理
 		hintText: 'コメントを入力してください',
@@ -1709,10 +1709,11 @@ exports.style = {
 	},
 	diaryTitleView:{
 		layout: 'absolute',
-		top: '0dp',
-		left: '0dp',
+//		top: '0dp',
+//		left: '0dp',
 		width: '276dp',
 		height: Ti.UI.SIZE,
+//		backgroundColor: 'yellow',
 	},
 	diaryTitleLabel:{
 		top: '0dp',
@@ -2148,6 +2149,11 @@ exports.style = {
 		textAlign: 'left',
 		font: {fontSize:11, fontFamily:'Helvetica Neue'},
 		color: '#000',
+	},
+	friendsPreloadImage:{
+		width: '0dp',
+		height: '0dp',
+		visible:false
 	},
 
 	friendsNoDataTableRow:{ 
@@ -2589,7 +2595,7 @@ exports.style = {
 		width: '268dp',
 		height : '130dp',
 		backgroundColor: 'white',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
 		// hintTextはiOSで対応されていないので、focus/blur時に処理
 		hintText: 'comment',

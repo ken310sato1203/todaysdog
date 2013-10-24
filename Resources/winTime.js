@@ -192,7 +192,7 @@ exports.createWindow = function(_userData, _diaryData){
 	timeWin.titleControl = monthTitle;
 
 	// 戻るボタンの表示
-	var backButton = Titanium.UI.createButton(style.timeBackButton);
+	var backButton = Titanium.UI.createButton(style.commonBackButton);
 	timeWin.leftNavButton = backButton;
 
 	// リストボタンの表示

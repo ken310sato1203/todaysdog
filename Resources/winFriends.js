@@ -114,6 +114,10 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 			// リフレッシュ時に更新する対象を特定するために格納
 			refreshTarget.push({id:_articleList[i].id, like:likeLabel, comment:commentLabel});
+
+			var preloadImage = Ti.UI.createImageView(style.friendsPreloadImage);
+			preloadImage.image = _articleList[i].photo;
+			articleView.add(preloadImage);
 			
 			// 各記事のタップでフォト画面へ遷移
 			articleView.addEventListener('click',function(e){
