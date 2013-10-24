@@ -13,16 +13,6 @@ exports.createWindow = function(_type, _articleData){
 	//  ユーザデータ
 	var userData = null;
 
-	// ユーザデータの取得
-	model.getCloudUser(_articleData.userId, function(e) {
-		Ti.API.debug('[func]getCloudUser.callback:');
-		if (e.success) {
-			userData = e.userList[0];
-		} else {
-			util.errorDialog(e);
-		}
-	});
-
 	// コメントリストの更新
 	var updateComment = function() {
 		Ti.API.debug('[func]updateComment:');
@@ -129,6 +119,17 @@ exports.createWindow = function(_type, _articleData){
 	var titleIconImage = Ti.UI.createImageView(style.photoTitleIconImage);
 	titleIconImage.image = _articleData.icon;
 	titleIconView.add(titleIconImage);
+
+	// ユーザデータの取得
+	model.getCloudUser(_articleData.userId, function(e) {
+		Ti.API.debug('[func]getCloudUser.callback:');
+		if (e.success) {
+			userData = e.userList[0];
+			titleIconImage.touchEnabled = true;
+		} else {
+			util.errorDialog(e);
+		}
+	});
 
 	var nameView = Ti.UI.createView(style.photoTitleNameView);
 	titleView.add(nameView);

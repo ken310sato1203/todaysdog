@@ -177,6 +177,7 @@ exports.style = {
 		width: '28dp',
 		height: '28dp',
 		defaultImage: '',
+		touchEnabled: false,
 	},
 	photoTitleNameView:{
 		layout: 'vertical',
