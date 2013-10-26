@@ -26,27 +26,29 @@ exports.createWindow = function(_userData){
 		// アイコンをクリック
 		iconView.addEventListener('click',function(e){
 			Ti.API.debug('[event]iconView.click:');
-			var dialog = Titanium.UI.createOptionDialog({
-				options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
-				cancel:2
-			});
-			dialog.show();
-
-			dialog.addEventListener('click',function(e) {
-				Ti.API.debug('[event]dialog.click:');
-				switch( e.index ) {
-					case 0:
-						var cameraWin = win.createCameraWindow('icon_camera', _userData);
-						cameraWin.prevWin = profileWin;
-						win.openTabWindow(cameraWin, {animated:true});
-						break;
-					case 1:
-						var cameraWin = win.createCameraWindow('icon_select', _userData);
-						cameraWin.prevWin = profileWin;
-						win.openTabWindow(cameraWin, {animated:true});
-						break;
-				}
-			});
+			if (_userData.id == loginId) {
+				var dialog = Titanium.UI.createOptionDialog({
+					options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
+					cancel:2
+				});
+				dialog.show();
+	
+				dialog.addEventListener('click',function(e) {
+					Ti.API.debug('[event]dialog.click:');
+					switch( e.index ) {
+						case 0:
+							var cameraWin = win.createCameraWindow('icon_camera', _userData);
+							cameraWin.prevWin = profileWin;
+							win.openTabWindow(cameraWin, {animated:true});
+							break;
+						case 1:
+							var cameraWin = win.createCameraWindow('icon_select', _userData);
+							cameraWin.prevWin = profileWin;
+							win.openTabWindow(cameraWin, {animated:true});
+							break;
+					}
+				});
+			}
 		});			
 	
 		// フォト数の表示

@@ -103,29 +103,16 @@ exports.createWindow = function(_userData){
 			photoImage.image = _articleList[0].photo;
 			photoView.add(photoImage);
 	
-			// photoImageをクリック
-			photoImage.addEventListener('click',function(e){
-				Ti.API.debug('[event]photoImage.click:');
-	/*
-				if (e.source.displayFlag) {
-					diaryView.top = '200dp';
-					e.source.displayFlag = false;
-				} else {
-					diaryView.top = photoImage.height + 'dp';
-					e.source.displayFlag = true;
-				}
-	*/
-			});
-
 		// 今日の投稿がまだの場合
 		} else {
+			var cameraImage = Ti.UI.createImageView(style.todayCameraImage);
 			photoView.add(cameraImage);
 	
 			// cameraImageをクリック
 			cameraImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]cameraImage.click:');
 				// 多重クリック防止
-				e.source.touchEnabled = false;
+				cameraImage.touchEnabled = false;
 				var dialog = Titanium.UI.createOptionDialog({
 					options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
 					cancel:2
@@ -135,7 +122,7 @@ exports.createWindow = function(_userData){
 
 				dialog.addEventListener('click',function(e) {
 					Ti.API.debug('[event]dialog.click:');
-					e.source.touchEnabled = true;
+					cameraImage.touchEnabled = true;
 					switch( e.index ) {
 						case 0:
 							var cameraWin = win.createCameraWindow('photo_camera', _userData);
@@ -310,8 +297,6 @@ exports.createWindow = function(_userData){
 	var todayTableView = Ti.UI.createTableView(style.todayTableView);
 	todayTableView.headerPullView = getTableHeader();
 	todayWin.add(todayTableView);
-
-	var cameraImage = Ti.UI.createImageView(style.todayCameraImage);
 
 	// ビューの更新
 	updateTableView();

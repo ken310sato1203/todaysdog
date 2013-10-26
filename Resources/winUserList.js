@@ -50,10 +50,12 @@ exports.createWindow = function(_type, _userData){
 			// 各ユーザ一覧のタップでプロフィール画面へ遷移
 			iconView.addEventListener('click',function(e){
 				Ti.API.debug('[event]iconView.click:');
-				e.source.opacity = 0.5;
-				var profileWin = win.createProfileWindow(e.source.userData);
-				win.openTabWindow(profileWin, {animated:true});
-				e.source.opacity = 1.0;
+				if (e.source.userData.id != loginId) {
+					e.source.opacity = 0.5;
+					var profileWin = win.createProfileWindow(e.source.userData);
+					win.openTabWindow(profileWin, {animated:true});
+					e.source.opacity = 1.0;
+				}
 			});
 
 			if (_userList[i].id != loginId) {

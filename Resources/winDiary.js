@@ -15,7 +15,7 @@ exports.createWindow = function(_userData){
 	var monthName = util.diary.monthName;
 	var weekday = util.diary.weekday;
 
-	var clickEnable = true;
+	var slideEnable = true;
 	// スタンプの最大表示件数
 	var stampListMax = 7;
 
@@ -146,7 +146,7 @@ exports.createWindow = function(_userData){
 		calView.addEventListener('click', function(e) {
 			Ti.API.debug('[event]calView.click:');
 			Ti.API.debug('[event]e.source:', e.source);
-			if (clickEnable) {
+			if (slideEnable) {
 				if (e.source.objectName != "diaryPhotoImage") {
 					var timeWin = win.createTimeWindow(_userData, e.row.diaryData);
 					timeWin.prevWin = diaryWin;
@@ -168,67 +168,71 @@ exports.createWindow = function(_userData){
 	// 前月カレンダーの表示
 	var prevCalView = function() {
 		Ti.API.debug('[func]prevCalView:');
-		slideView.left = style.commonSize.screenWidth + 'dp';
-		thisDiaryView.animate(slideView);
-		if (month == 1) {
-			month = 12;
-			year--;
-		} else {
-			month--;
-		}
-
-		// タイトルの年月
-		monthTitle.text =  year + ' ' + monthName[month-1];
-		// 当月のスタンプデータ取得
-		model.getCloudStampList({
-			userId: _userData.id,
-			year: year,
-			month: month,
-			day: null
-		}, function(e) {
-			if (e.success) {
-				Ti.API.debug('[func]getCloudStampList.callback:');
-				// カレンダーの表示
-				thisDiaryView = getCalView(e.stampList, year, month);
-				diaryWin.add(thisDiaryView);
-				thisDiaryView.visible = true;
+		if (slideEnable) {
+			slideView.left = style.commonSize.screenWidth + 'dp';
+			thisDiaryView.animate(slideView);
+			if (month == 1) {
+				month = 12;
+				year--;
 			} else {
-				util.errorDialog(e);
+				month--;
 			}
-		});
+	
+			// タイトルの年月
+			monthTitle.text =  year + ' ' + monthName[month-1];
+			// 当月のスタンプデータ取得
+			model.getCloudStampList({
+				userId: _userData.id,
+				year: year,
+				month: month,
+				day: null
+			}, function(e) {
+				if (e.success) {
+					Ti.API.debug('[func]getCloudStampList.callback:');
+					// カレンダーの表示
+					thisDiaryView = getCalView(e.stampList, year, month);
+					diaryWin.add(thisDiaryView);
+					thisDiaryView.visible = true;
+				} else {
+					util.errorDialog(e);
+				}
+			});
+		}
 	};
 
 	// 翌月カレンダーの表示
 	var nextCalView = function() {
 		Ti.API.debug('[func]nextCalView:');
-		slideView.left = (style.commonSize.screenWidth * -1) + 'dp';
-		thisDiaryView.animate(slideView);
-		if (month == 12) {
-			month = 1;
-			year++;
-		} else {
-			month++;
-		}
-
-		// タイトルの年月
-		monthTitle.text =  year + ' ' + monthName[month-1];
-		// 当月のスタンプデータ取得
-		model.getCloudStampList({
-			userId: _userData.id,
-			year: year,
-			month: month,
-			day: null
-		}, function(e) {
-			if (e.success) {
-				Ti.API.debug('[func]getCloudStampList.callback:');
-				// カレンダーの表示
-				thisDiaryView = getCalView(e.stampList, year, month);
-				diaryWin.add(thisDiaryView);
-				thisDiaryView.visible = true;
+		if (slideEnable) {
+			slideView.left = (style.commonSize.screenWidth * -1) + 'dp';
+			thisDiaryView.animate(slideView);
+			if (month == 12) {
+				month = 1;
+				year++;
 			} else {
-				util.errorDialog(e);
+				month++;
 			}
-		});
+	
+			// タイトルの年月
+			monthTitle.text =  year + ' ' + monthName[month-1];
+			// 当月のスタンプデータ取得
+			model.getCloudStampList({
+				userId: _userData.id,
+				year: year,
+				month: month,
+				day: null
+			}, function(e) {
+				if (e.success) {
+					Ti.API.debug('[func]getCloudStampList.callback:');
+					// カレンダーの表示
+					thisDiaryView = getCalView(e.stampList, year, month);
+					diaryWin.add(thisDiaryView);
+					thisDiaryView.visible = true;
+				} else {
+					util.errorDialog(e);
+				}
+			});
+		}
 	};
 
 
@@ -303,26 +307,22 @@ exports.createWindow = function(_userData){
 	// 前月ボタンをクリック
 	prevImage.addEventListener('click', function(e){
 		Ti.API.debug('[event]prevImage.click:');
-		prevImage.touchEnabled = false;
 		prevCalView();
 	});
 	// 翌月ボタンをクリック
 	nextImage.addEventListener('click', function(e){
 		Ti.API.debug('[event]nextImage.click:');
-		nextImage.touchEnabled = false;
 		nextCalView();
 	});
 
 	// スライド中はクリックイベントを禁止
 	slideView.addEventListener('start',function(e){
 		Ti.API.debug('[event]slideView.start:');
-		clickEnable = false;
+		slideEnable = false;
 	});
 	slideView.addEventListener('complete',function(e){
 		Ti.API.debug('[event]slideView.complete:');
-		clickEnable = true;
-		prevImage.touchEnabled = true;
-		nextImage.touchEnabled = true;
+		slideEnable = true;
 	});
 
 	// 左右スワイプで前月・翌月のカレンダーを表示
