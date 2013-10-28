@@ -54,6 +54,10 @@ exports.createWindow = function(_userData, _stampData){
 			}
 			historyTableView.data = historyRowList;
 			textScrollView.add(historyTableView);
+			
+			// ローカルから取得テスト
+			var localHistory = model.getLocalStampHistoryList(_stampData.stamp);
+			Ti.API.debug('localHistory:' + localHistory);
 
 		} else {
 			util.errorDialog(e);

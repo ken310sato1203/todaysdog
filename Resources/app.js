@@ -7,6 +7,8 @@ var win = require('win').win;
 var style = require('style').style;
 var model = require('model').model;
 var util = require('util').util;
+var sqliter = require("sqliter").sqliter;
+var sqlite = new sqliter("todaysdog");
 
 var tabGroup = null;
 var customTab = null;	
@@ -14,6 +16,9 @@ var customTab = null;
 // ---------------------------------------------------------------------
 var openMainWindow = function(_userData) {
 	Ti.API.debug('[func]openMainWindow:');
+
+	// ローカルDBの初期設定
+	model.createLocalStampList();
 
 //	model.addUserList(_userData);
 	model.setLoginId(_userData.id);

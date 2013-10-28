@@ -396,7 +396,8 @@ exports.createWindow = function(_userData, _stampDataList){
 					Ti.API.debug('[func]cloudAddStampList.callback:');						
 					if (e.success) {
 						Ti.API.debug('Success:');
-						closePostWin();		
+						model.addLocalStampList(_stampDataList);
+						closePostWin();
 					} else {
 						util.errorDialog(e);
 					}
