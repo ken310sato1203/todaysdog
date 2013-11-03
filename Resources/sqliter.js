@@ -53,37 +53,42 @@ var makeQuery = {
 		return r;
 	},
 	
-	tableCheck:function(_tblname,_query){
-		if(!_tblname || !_query){
-			console.log("sqlite:makeQuery.tableCheck - tblname and query is string");
+	tableIsExist:function(_tblname){
+		this.reset();
+
+		if(!_tblname){
+			console.log("sqlite:makeQuery.tableIsExist - tblname is string");
 			return false;
 		}
-		
-		this.reset();
-		
+
 		this.select().from("sqlite_master").where("type","=","table").and_where("tbl_name","=",_tblname).execute();
-		
 		var result = this.result;
 		
-		var sql = "";
+		var sql = null;
 		while(result.isValidRow()){
 			sql = result.fieldByName("sql");
 			result.next();
 		}
-		
-		if(!sql){
-			console.log("create table");
-			this.query(_query).execute();
+
+        if(!sql){
+			return false;
+		} else {
+			return true;
 		}
-		else if(sql != _query){
-			console.log("table is old,drop table and create table");
-			this.drop(_tblname);
-			this.query(_query).execute();
-		}
-		
-		return true;
 	},
-	
+
+	tableCreate:function(_tblname,_query){
+		this.reset();
+
+		if(!_tblname || !_query){
+			console.log("sqlite:makeQuery.tableCreate - tblname and query is string");
+			return false;
+		}
+
+		this.query(_query).execute();
+		return this;
+	},
+		
 	query:function(_string){
 		this.reset();
 		
@@ -103,7 +108,7 @@ var makeQuery = {
 		
 		this.result = db.execute(this.q);
 		
-		return this;
+		return this.result;
 	},
 	getResult:function(){
 		return this.result;
@@ -394,6 +399,19 @@ var makeQuery = {
 		}
 		
 		this.q = "INSERT INTO " + _table;
+		
+		this.ins = 1;
+		return this;
+	},
+	replace:function(_table){
+		this.reset();
+		
+		if(typeof _table != "string"){
+			console.log("sqlite:makeQuery.replace - table is string");
+			return false;
+		}
+		
+		this.q = "INSERT OR REPLACE INTO " + _table;
 		
 		this.ins = 1;
 		return this;

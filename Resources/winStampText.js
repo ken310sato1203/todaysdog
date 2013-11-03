@@ -31,6 +31,31 @@ exports.createWindow = function(_userData, _stampData){
 	var historyList = [];
 
 	// スタンプの履歴データ取得
+	var localHistoryList = model.getLocalStampHistoryList(_stampData.stamp);
+	var defaultHistoryList = model.getStampHistoryList(_stampData.stamp);
+	if (localHistoryList == null) {
+		historyList = defaultHistoryList;				
+	} else {
+		historyList = localHistoryList.concat(defaultHistoryList);
+	}
+	historyList = util.unique(historyList).slice(0,5);
+				
+	var historyRowList = [];
+	if (historyList != null) {
+		for (var i=0; i<historyList.length; i++) {
+			var historyRow = Titanium.UI.createTableViewRow(style.stampHistoryTableRow);
+			historyRowList.push(historyRow);
+			var historyLabel = Ti.UI.createLabel(style.stampHistoryLabel);
+			historyLabel.text = historyList[i];
+			historyRow.add(historyLabel);
+		}
+	}
+	historyTableView.data = historyRowList;
+	textScrollView.add(historyTableView);
+
+
+/*
+	// スタンプの履歴データ取得
 	model.getCloudStampHistoryList({
 		userId: _userData.id,
 		stamp: _stampData.stamp
@@ -55,14 +80,12 @@ exports.createWindow = function(_userData, _stampData){
 			historyTableView.data = historyRowList;
 			textScrollView.add(historyTableView);
 			
-			// ローカルから取得テスト
-			var localHistory = model.getLocalStampHistoryList(_stampData.stamp);
-			Ti.API.debug('localHistory:' + localHistory);
 
 		} else {
 			util.errorDialog(e);
 		}
 	});
+*/
 
 // ---------------------------------------------------------------------
 	// 戻るボタンをクリック

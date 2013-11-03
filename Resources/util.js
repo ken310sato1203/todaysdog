@@ -101,7 +101,7 @@ exports.util = {
 	errorDialog:function(e){
 		var dialog = Titanium.UI.createAlertDialog({
 			title: 'エラーが発生しました',
-			message: '[' + e.type + ']' + e.error,
+			message: e.message,
 			buttonNames: ['OK'],
 		});
 		dialog.show();

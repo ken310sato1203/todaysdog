@@ -930,6 +930,27 @@ exports.model = {
 	},
 
 	// 指定ユーザのスタンプリストから指定月のデータを取得
+	initCloudStampList:function(params, callback){
+		Ti.API.debug('[func]initCloudStampList:');
+		Cloud.Events.query({
+			where: {
+				user_id: params.userId
+			},
+			page : 1,
+			per_page : 1000
+		}, function (e) {
+			if (e.success) {
+				Ti.API.debug('success:');
+				for (var i = 0; i < e.events.length; i++) {
+					Cloud.Events.remove({event_id:e.events[i].id, user_id:params.userId}, function (e) {
+						callback(e);
+					});
+				}
+			}
+		});
+	},
+
+	// 指定ユーザのスタンプリストから指定月のデータを取得
 	getCloudStampList:function(params, callback){
 		Ti.API.debug('[func]getCloudStampList:');
 		var startDate = null;
@@ -970,7 +991,7 @@ exports.model = {
 							event: event.id,
 							user: event.user.id,
 							stamp: stamp,
-							text: (event.custom_fields[stamp])[0],
+							text: event.custom_fields[stamp],
 							year: startDate.getFullYear(),
 							month: startDate.getMonth() + 1,
 							day: startDate.getDate(),
@@ -1013,11 +1034,19 @@ exports.model = {
 		stampList.unshift(_stampData);
 	},
 
+	// スタンプデータテーブルの存在チェック
+	isExistLocalStampList:function(){
+		Ti.API.debug('[func]isExistLocalStampList:');
+		return sqlite.open(function(db){
+			return db.tableIsExist("StampHistoryTB");
+		});
+	},
+
 	// スタンプデータテーブルの作成
 	createLocalStampList:function(){
 		Ti.API.debug('[func]createLocalStampList:');
 		sqlite.open(function(db){
-			db.tableCheck("StampHistoryTB", "CREATE TABLE IF NOT EXISTS StampHistoryTB (stamp VARCHAR, history TEXT, created_at TIMESTAMP DEFAULT (DATETIME('now','localtime')))");
+			db.tableCreate("StampHistoryTB", "CREATE TABLE StampHistoryTB (stamp VARCHAR, history TEXT, created_at TIMESTAMP DEFAULT (DATETIME('now','localtime')), PRIMARY KEY (stamp))");
 		});
 	},
 
@@ -1025,10 +1054,9 @@ exports.model = {
 	addLocalStampList:function(_stampDataList){
 		Ti.API.debug('[func]addLocalStampList:');
 		sqlite.open(function(db){
-			for (var i=0; i<_stampDataList.length; i++) {
-				for (var j=0; j<_stampDataList[i].historyList.length; j++) {
-					db.insert("StampHistoryTB").set({stamp:_stampDataList[i].stamp, history:_stampDataList[i].historyList[j]}).execute();
-				}
+			for (var i=0; i<_stampDataList.length; i++) {				
+				var historyListString = JSON.stringify(_stampDataList[i].historyList);
+				db.replace("StampHistoryTB").set({stamp:_stampDataList[i].stamp, history:historyListString}).execute();
 			}
 		});
 	},
@@ -1050,7 +1078,7 @@ exports.model = {
 
 		var custom_fields = {};
 		for (var i=0; i<_stampDataList.length; i++) {
-			custom_fields[_stampDataList[i].stamp] = _stampDataList[i].historyList;
+			custom_fields[_stampDataList[i].stamp] = _stampDataList[i].text;
 		}
 		
 		if(_stampDataList[0].event == null) {
@@ -1126,13 +1154,17 @@ exports.model = {
 	// 指定スタンプの履歴データを取得
 	getLocalStampHistoryList:function(_stamp){
 		Ti.API.debug('[func]getLocalStampHistoryList:');
-		var data = sqlite.open(function(db){
-//			return db.select().from("StampHistoryTB").where("stamp","=",_stamp).order_by("created_at","desc").limit(5).execute().as_array();
-			return db.select().from("StampHistoryTB").where("stamp","=",_stamp).order_by("created_at","desc").execute().as_array();
+		var historyList = sqlite.open(function(db){
+			var result = db.select().from("StampHistoryTB").where("stamp","=",_stamp).execute();
+			var data = eval(result.fieldByName("history"));
+			return data;
 		});
-		return data;
+		
+		return historyList;
 	},
 
+
+/*
 	// 指定スタンプの履歴データを取得
 	getCloudStampHistoryList:function(params, callback){
 		Ti.API.debug('[func]getCloudStampHistoryList:');
@@ -1162,6 +1194,7 @@ exports.model = {
 			callback(e);
 		});
 	},
+*/
 
 	// ライクリストに追加
 	addLikeList:function(_likeList){

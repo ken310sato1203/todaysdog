@@ -17,9 +17,6 @@ var customTab = null;
 var openMainWindow = function(_userData) {
 	Ti.API.debug('[func]openMainWindow:');
 
-	// ローカルDBの初期設定
-	model.createLocalStampList();
-
 //	model.addUserList(_userData);
 	model.setLoginId(_userData.id);
 	
@@ -89,6 +86,7 @@ Ti.Facebook.addEventListener('login', function(e) {
 		model.loginCloudUser(type, Ti.Facebook.accessToken, function (e) {
 			if (e.success) {
 				var userData = e.userData;
+
 				// 初回アイコンの登録
 				if (userData.icon == null) {
 					userData.icon = 'images/icon/i_circle.png';
@@ -139,6 +137,23 @@ Ti.Facebook.addEventListener('login', function(e) {
 						}
 					});
 				}
+				
+				// ローカルDBの初期設定
+				var isExistLocalStampList = model.isExistLocalStampList();
+				if (! isExistLocalStampList) {
+					model.createLocalStampList();
+
+					// スタンプデータの初期化
+					model.initCloudStampList({
+						userId: userData.id
+					}, function(e) {
+						Ti.API.debug('[func]initCloudStampList.callback:');
+						if (! e.success) {
+							util.errorDialog(e);
+						}
+					});
+				}
+				
 				// メインウィンドウの表示
 				openMainWindow(userData);
 
