@@ -79,9 +79,16 @@ var loginFbButton = Ti.Facebook.createLoginButton(style.loginFacebookButton);
 loginWin.add(loginFbButton);
 loginWin.open();
 
+// ロード用画面
+var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
+
 Ti.Facebook.addEventListener('login', function(e) {
 	Ti.API.debug('[event]Ti.Facebook.login:');
 	if (e.success) {
+		loginFbButton.hide();
+		actInd.show();
+		loginWin.add(actInd);
+
 		var type = 'facebook';
 		model.loginCloudUser(type, Ti.Facebook.accessToken, function (e) {
 			if (e.success) {
@@ -153,6 +160,8 @@ Ti.Facebook.addEventListener('login', function(e) {
 						}
 					});
 				}
+
+				actInd.hide();
 				
 				// メインウィンドウの表示
 				openMainWindow(userData);
@@ -169,6 +178,7 @@ Ti.Facebook.addEventListener('login', function(e) {
 Ti.Facebook.addEventListener('logout', function(e) {
 	Ti.API.debug('[event]Ti.Facebook.logout:');
 	var httpClient = Titanium.Network.createHTTPClient();
+	httpClient.clearCookies('http://login.facebook.com');
 	httpClient.clearCookies('https://login.facebook.com');
 	Ti.Facebook.accessToken = null;
 	Ti.Facebook.uid = null;

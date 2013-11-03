@@ -296,12 +296,10 @@ exports.createWindow = function(_userData){
 	// タイトルの表示
 	var titleView = Ti.UI.createView(style.profileTitleView);
 	var titleLabel = Ti.UI.createLabel(style.profileTitleLabel);	
-	titleView.add(titleLabel);
 	profileWin.titleControl = titleView;
 
 	// 戻るボタンの表示
 	var backButton = Titanium.UI.createButton(style.commonBackButton);
-	profileWin.leftNavButton = backButton;
 
 	// プロフィールを編集するボタン
 	var editButton = Titanium.UI.createButton(style.profileEditButton);
@@ -309,16 +307,28 @@ exports.createWindow = function(_userData){
 	var unfollowButton = Titanium.UI.createButton(style.profileUnfollowButton);
 	// 未フォローユーザをフォローするボタン
 	var followButton = Titanium.UI.createButton(style.profileFollowButton);
+	//  ログアウトボタン
+	var exitButton = Titanium.UI.createButton(style.profileExitButton);
+	var b1 = Titanium.UI.createButton({title:'Left Nav'});
+	if (loginId == _userData.id) {
+		profileWin.rightNavButton = exitButton;
+		// tabGroupではleftNavButtonが使えない
+//		profileWin.leftNavButton = editButton;
+		titleView.add(editButton);
+		titleView.add(titleLabel);
+
+	} else {
+		profileWin.leftNavButton = backButton;
+		titleView.add(titleLabel);
+		if (model.checkFollowList(loginId, _userData.id)) {
+			profileWin.rightNavButton = unfollowButton;
+		} else {
+			profileWin.rightNavButton = followButton;
+		}
+	}
+
 	// ロード用画面
 	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
-
-	if (loginId == _userData.id) {
-		profileWin.rightNavButton = editButton;
-	} else if (model.checkFollowList(loginId, _userData.id)) {
-		profileWin.rightNavButton = unfollowButton;
-	} else {
-		profileWin.rightNavButton = followButton;
-	}
 	
 	var profileTableView = Ti.UI.createTableView(style.profileTableView);
 	profileTableView.headerPullView = getTableHeader();
@@ -340,6 +350,28 @@ exports.createWindow = function(_userData){
 		win.openTabWindow(profileEditWin, {animated:true});
 
 	});
+
+	// ログアウトボタンをクリック
+	exitButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]exitButton.click:');
+		var alertDialog = Titanium.UI.createAlertDialog({
+			title: 'ログアウトしますか？',
+			buttonNames: ['キャンセル','OK'],
+			cancel: 1
+		});
+		alertDialog.show();
+
+		alertDialog.addEventListener('click',function(alert){
+			Ti.API.debug('[event]alertDialog.click:');						
+			// OKの場合
+			if(alert.index == 1){
+				Ti.Facebook.logout();
+				tabGroup.close();
+				customTab.close();
+				loginFbButton.show();
+			}
+		});
+	});	
 
 	// 「フォロー中」ボタン
 	unfollowButton.addEventListener('click', function(e){

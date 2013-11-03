@@ -486,14 +486,14 @@ exports.style = {
 	},
 
 	profileTitleView:{
-		layout: 'absolute',
+		layout: 'horizontal',
 		top: '0dp',
 		left: '0dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
 	},
 	profileTitleLabel:{
-		left: '0dp',
+		left: '10dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
@@ -526,9 +526,15 @@ exports.style = {
 		title: 'フォロー中',
 	},
 	profileEditButton:{
+		left: '0dp',
 		width: '28dp',
 		height: '28dp',
 		backgroundImage:'images/icon/w_profile_edit.png',
+	},
+	profileExitButton:{
+		width: '36dp',
+		height: '36dp',
+		backgroundImage:'images/icon/w_profile_info.png',
 	},
 
 	profileTableView:{ 
