@@ -40,9 +40,9 @@ exports.createWindow = function(_type, _userData){
 			iconView.add(iconImage);
 			var textLabel = Ti.UI.createLabel(style.userListTextLabel);
 			if (_userList[i].name != '') {
-				textLabel.text = _userList[i].name + '\n@' + _userList[i].user;
+				textLabel.text = _userList[i].name + '\n' + _userList[i].user;
 			} else {
-				textLabel.text = '@' + _userList[i].user;				
+				textLabel.text = _userList[i].user;				
 			}
 			
 			userView.add(textLabel);

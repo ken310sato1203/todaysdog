@@ -17,7 +17,7 @@ exports.createWindow = function(_userData){
 	profileEditWin.leftNavButton = backButton;
 
 	// 「保存」自分のプロフィールを編集するボタン
-	var saveButton = Titanium.UI.createButton(style.commonPlusButton);
+	var saveButton = Titanium.UI.createButton(style.profileSaveButton);
 	profileEditWin.rightNavButton = saveButton;
 	// ロード用画面
 	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
@@ -27,56 +27,15 @@ exports.createWindow = function(_userData){
 
 	var profileEditRowList = [];
 
-/*
-	// アイコンのフィールドを表示
-	var iconRow = Titanium.UI.createTableViewRow(style.profileEditListTableRow);
-	profileEditRowList.push(iconRow);
-	iconRow.objectName = 'icon';
-	var iconItemView = Ti.UI.createView(style.profileEditListItemView);
-	iconRow.add(iconItemView);
-	var iconLabel = Ti.UI.createLabel(style.profileEditListItemLabel);
-	iconLabel.text = 'アイコン';
-	iconItemView.add(iconLabel);
-	var iconView = Ti.UI.createImageView(style.profileEditIconView);
-	iconItemView.add(iconView);
-	var iconImage = Ti.UI.createImageView(style.profileEditIconImage);
-	iconImage.image = _userData.icon;
-	iconView.add(iconImage);
-
-	// カバー写真のフィールドを表示
-	var coverRow = Titanium.UI.createTableViewRow(style.profileEditListTableRow);
-	profileEditRowList.push(coverRow);
-	coverRow.objectName = 'cover';
-	var coverView = Ti.UI.createView(style.profileEditListItemView);
-	coverRow.add(coverView);
-	var coverLabel = Ti.UI.createLabel(style.profileEditListItemLabel);
-	coverLabel.text = 'カバー写真';
-	var coverImage = Ti.UI.createImageView(style.profileEditCoverImage);
-	coverImage.image = 'images/photo/A0010.jpg';
-	coverView.add(coverLabel);
-	coverView.add(coverImage);
-
-	// カバー写真をクリック
-	coverImage.addEventListener('click', function(e){
-		Ti.API.debug('[event]coverImage.click:');
-
-		Titanium.Media.openPhotoGallery({
-			success : function(event) {
-				var photo = event.media.imageAsThumbnail(100);//100はサムネイル写真のサイズを設定する（１００＊１００)
-			},
-			error : function(error) {
-			},
-			cancel : function() {
-				// キャンセル時の挙動
-			},
-			// 選択直後に拡大縮小移動をするか否かのフラグ
-			allowEditing : false,
-			// 選択可能なメディア種別を配列で指定
-			mediaTypes : [Ti.Media.MEDIA_TYPE_PHOTO]
-		});
-	});
-*/
-
+	// タイトルを表示
+	var titleRow = Titanium.UI.createTableViewRow(style.profileEditListTableRow);
+	profileEditRowList.push(titleRow);
+	titleRow.objectName = 'title';
+	var titleView = Ti.UI.createView(style.profileEditListTitleView);
+	titleRow.add(titleView);
+	var titleLabel = Ti.UI.createLabel(style.profileEditListTitleLabel);
+	titleLabel.text = 'プロフィールの編集';
+	titleView.add(titleLabel);
 
 	// 名前のフィールドを表示
 	var nameRow = Titanium.UI.createTableViewRow(style.profileEditListTableRow);
@@ -214,37 +173,49 @@ exports.createWindow = function(_userData){
 	// 「保存」ボタン
 	saveButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]saveButton.click:');
-		actInd.show();
-		tabGroup.add(actInd);
-		
-		_userData.name = nameField.value;
-		_userData.breed = breedField.value;
-		_userData.sex = sexField.value;
-		_userData.birth = birthField.value;
-		_userData.memo = memoField.value;
-
-		// ユーザデータの更新
-		model.updateCloudUser({
-			name: _userData.name,
-			breed: _userData.breed,
-			sex: _userData.sex,
-			birth: _userData.birth,
-			memo: _userData.memo
-		}, function(e) {
-			if (e.success) {
-				Ti.API.debug('[func]updateCloudUser.callback:');
-				model.updateUserList(_userData);
-				if (profileEditWin.prevWin != null) {
-					profileEditWin.prevWin.fireEvent('refresh');
-				}
-				profileEditWin.close({animated:true});
-
-			} else {
-				util.errorDialog(e);
-			}
-			actInd.hide();
+		var alertDialog = Titanium.UI.createAlertDialog({
+			title: '保存しますか？',
+			buttonNames: ['キャンセル','OK'],
+			cancel: 1
 		});
+		alertDialog.show();
 
+		alertDialog.addEventListener('click',function(alert){
+			Ti.API.debug('[event]alertDialog.click:');						
+			// OKの場合
+			if(alert.index == 1){
+				actInd.show();
+				tabGroup.add(actInd);
+				
+				_userData.name = nameField.value;
+				_userData.breed = breedField.value;
+				_userData.sex = sexField.value;
+				_userData.birth = birthField.value;
+				_userData.memo = memoField.value;
+		
+				// ユーザデータの更新
+				model.updateCloudUser({
+					name: _userData.name,
+					breed: _userData.breed,
+					sex: _userData.sex,
+					birth: _userData.birth,
+					memo: _userData.memo
+				}, function(e) {
+					if (e.success) {
+						Ti.API.debug('[func]updateCloudUser.callback:');
+						model.updateUserList(_userData);
+						if (profileEditWin.prevWin != null) {
+							profileEditWin.prevWin.fireEvent('refresh');
+						}
+						profileEditWin.close({animated:true});
+		
+					} else {
+						util.errorDialog(e);
+					}
+					actInd.hide();
+				});
+			}
+		});
 	});
 
 	// 選択したフィールド名を保管
@@ -317,11 +288,6 @@ exports.createWindow = function(_userData){
 		if (e.direction == 'right') {
 			profileEditWin.close({animated:true});
 		}
-	});
-
-	// オープン時の処理
-	profileEditWin.addEventListener('open',function(e){
-		Ti.API.debug('[event]profileEditWin.open:');
 	});
 
 	return profileEditWin;

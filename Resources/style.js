@@ -144,7 +144,6 @@ exports.style = {
 
 	loginFacebookButton:{
 		top : '100dp',
-		style : Ti.Facebook.BUTTON_STYLE_WIDE,
 	},
 
 // winPhoto -------------------------------------------------------
@@ -531,10 +530,10 @@ exports.style = {
 		height: '28dp',
 		backgroundImage:'images/icon/w_profile_edit.png',
 	},
-	profileExitButton:{
-		width: '36dp',
-		height: '36dp',
-		backgroundImage:'images/icon/w_profile_info.png',
+	profileConfigButton:{
+		width: '28dp',
+		height: '28dp',
+		backgroundImage:'images/icon/w_profile_gear.png',
 	},
 
 	profileTableView:{ 
@@ -604,16 +603,54 @@ exports.style = {
 	profileInfoView:{
 		layout: 'vertical',
 		top: '10dp',
+		bottom: '10dp',
 		left: '15dp',
 		right: '15dp',
-		bottom: '10dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
-	profileInfoLabel:{
+	profileInfoNameView:{
+		layout: 'horizontal',
+		top: '0dp',
+		bottom: '5dp',
+		left: '0dp',
+		height: Ti.UI.SIZE,
+	},
+	profileInfoNameLabel:{
 		top: '0dp',
 		left: '0dp',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		right: '5dp',
+		width: Ti.UI.SIZE,
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+	profileInfoUserLabel:{
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+	profileInfoBreedLabel:{
+		top: '0dp',
+		left: '0dp',
+		height: Ti.UI.SIZE,
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+	profileInfoBirthLabel:{
+		top: '0dp',
+		bottom: '5dp',
+		left: '0dp',
+		height: Ti.UI.SIZE,
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+	profileInfoMemoLabel:{
+		top: '0dp',
+		left: '0dp',
+		height: Ti.UI.SIZE,
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
 
@@ -665,6 +702,11 @@ exports.style = {
 		shadowColor: '#696969', 
 		text: 'プロフィール', 
 	},
+	profileSaveButton:{
+		width: '28dp',
+		height: '28dp',
+		backgroundImage:'images/icon/w_profile_save.png',
+	},
 
 	profileEditTableView:{ 
 		top: '0dp',
@@ -682,6 +724,17 @@ exports.style = {
 		// カスタムプロパティ
 		objectName: null,
 	},
+	profileEditListTitleView:{
+		layout: 'absolute',
+		top: '0dp',
+		height: '30dp',
+		backgroundColor: '#eeeeee',
+	},
+	profileEditListTitleLabel:{
+		left: '15dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
 	profileEditListItemView:{
 		layout: 'absolute',
 		top: '0dp',
@@ -691,7 +744,7 @@ exports.style = {
 	profileEditListItemLabel:{
 		top: '0dp',
 		left: '15dp',
-		height: '35dp',
+		height: '40dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
@@ -700,7 +753,7 @@ exports.style = {
 		right: '15dp',
 		textAlign:'right',
 		width: '166dp',
-		height: '35dp',
+		height: '40dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		hintText: '入力してください',
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
@@ -711,7 +764,7 @@ exports.style = {
 	profileEditListTextArea:{
 		top : '30dp',
 		bottom : '10dp',
-		left: '8dp',
+		left: '7dp',
 		width: '296dp',
 		height : '90dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
@@ -720,26 +773,6 @@ exports.style = {
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
         returnKeyType:Ti.UI.RETURNKEY_DONE,
         touchEnabled: false,
-	},
-	profileEditIconView:{
-		top: '5dp',
-		bottom: '5dp',
-		right: '15dp',
-		width: '54dp',
-		height: '54dp',
-		borderRadius: '27dp',
-	},
-	profileEditIconImage:{
-		width: '54dp',
-		height: '54dp',
-		defaultImage: '',
-	},
-	profileEditCoverImage:{
-		top: '5dp',
-		bottom: '5dp',
-		right: '15dp',
-		width: '100dp',
-		height: (100 * 3 / 4) + 'dp',
 	},
 
 	profileEditListPickerView:{
@@ -774,6 +807,78 @@ exports.style = {
 		value: null,
 	},
 
+// winProfileConfig -------------------------------------------------------
+	profileConfigWin:{
+		backgroundColor: '#dedede',
+//		barColor: '#a9a9a9',
+		barImage: 'images/icon/titlebar.png',
+		tabBarHidden: true,
+		title: '設定',
+		// カスタムプロパティ
+		objectName : 'profileConfigWin',
+	},
+
+	profileConfigTitleView:{
+		layout: 'absolute',
+		top: '0dp',
+		left: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+	},
+	profileConfigTitleLabel:{
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+		text: '設定', 
+	},
+
+	profileConfigTableView:{ 
+		top: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+//		scrollable: false,
+		data: [],
+	},
+	profileConfigListTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+//		selectedBackgroundColor: 'white',
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		// カスタムプロパティ
+		objectName: null,
+	},
+	profileConfigListTitleView:{
+		layout: 'absolute',
+		top: '0dp',
+		height: '30dp',
+		backgroundColor: '#eeeeee',
+	},
+	profileConfigListTitleLabel:{
+		left: '15dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+	profileConfigListItemView:{
+		layout: 'absolute',
+		top: '0dp',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+	},
+	profileConfigListItemLabel:{
+		top: '0dp',
+		left: '15dp',
+		height: '40dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+
+	
 // winPhotoList -------------------------------------------------------
 	photoListWin:{
 		backgroundColor: '#dedede',

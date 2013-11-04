@@ -13,6 +13,7 @@ var stampPostWin = require('winStampPost');
 var stampTextWin = require('winStampText');
 var profileWin = require('winProfile');
 var profileEditWin = require('winProfileEdit');
+var profileConfigWin = require('winProfileConfig');
 var photoWin = require('winPhoto');
 var photoListWin = require('winPhotoList');
 var userListWin = require('winUserList');
@@ -91,6 +92,11 @@ exports.win = {
 	createProfileEditWindow:function(_userData){
 		Ti.API.debug('[func]createProfileEditWindow:');
 		var win = profileEditWin.createWindow(_userData);
+		return win;
+	},
+	createProfileConfigWindow:function(_userData){
+		Ti.API.debug('[func]createProfileConfigWindow:');
+		var win = profileConfigWin.createWindow(_userData);
 		return win;
 	},
 	createPhotoWindow:function(_type, _articleData){

@@ -85,7 +85,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				nameView.add(nameLabel);
 			}
 			var userLabel = Ti.UI.createLabel(style.friendsUserLabel);
-			userLabel.text = '@' + _articleList[i].user;
+			userLabel.text = _articleList[i].user;
 			nameView.add(userLabel);
 
 			var textLabel = Ti.UI.createLabel(style.friendsTextLabel);

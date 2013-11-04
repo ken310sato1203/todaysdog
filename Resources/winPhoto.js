@@ -139,7 +139,7 @@ exports.createWindow = function(_type, _articleData){
 		nameView.add(titleNameLabel);
 	}
 	var titleUserLabel = Ti.UI.createLabel(style.photoTitleUserLabel);
-	titleUserLabel.text = '@' + _articleData.user;
+	titleUserLabel.text = _articleData.user;
 	nameView.add(titleUserLabel);
 
 

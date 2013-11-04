@@ -2,6 +2,7 @@
 
 // モジュール読み込み
 var Cloud = require('ti.cloud');
+var Facebook = require('facebook');
 
 var win = require('win').win;
 var style = require('style').style;
@@ -67,121 +68,145 @@ var openMainWindow = function(_userData) {
 */
 };
 
+var loginFacebook = function() {
+	Ti.API.debug('[func]loginFacebook:');
+	// ロード用画面
+	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
+	actInd.show();
+	loginWin.add(actInd);
+	
+	model.loginCloudUser('facebook', Facebook.accessToken, function (e) {
+		if (e.success) {
+			var userData = e.userData;
+
+			// 初回アイコンの登録
+			if (userData.icon == null) {
+				userData.icon = 'images/icon/i_circle.png';
+				var defaultIcon = Ti.UI.createImageView({image: userData.icon});
+				model.updateCloudUserIcon({
+					user: userData.user,
+					icon: defaultIcon.toBlob()
+				}, function(e) {
+					Ti.API.debug('[func]updateCloudUserIcon.callback:');
+					if (! e.success) {
+						util.errorDialog(e);
+					}
+				});
+			}
+			// 初回フォトコレクションの作成
+			if (userData.post == null || userData.like == null) {
+				userData.post = 0;
+				userData.like = 0;
+				// フォトコレクションの作成
+				model.createCloudPhotoCollection({
+					name: 'post'
+				}, function(e) {
+					Ti.API.debug('[func]createCloudPhotoCollection.callback:');
+					if (e.success) {
+						// フォトコレクションの作成
+						model.createCloudPhotoCollection({
+							name: 'like'
+						}, function(e) {
+							Ti.API.debug('[func]createCloudPhotoCollection.callback:');
+							if (e.success) {
+								// コレクションの更新
+								model.updateCloudUserCollection({
+									post: userData.post,
+									like: userData.like,
+								}, function(e) {
+									if (! e.success) {
+										util.errorDialog(e);
+									}
+								});
+		
+							} else {
+								util.errorDialog(e);
+							}
+						});
+
+					} else {
+						util.errorDialog(e);
+					}
+				});
+			}
+			
+			// ローカルDBの初期設定
+			var isExistLocalStampList = model.isExistLocalStampList();
+			if (! isExistLocalStampList) {
+				model.createLocalStampList();
+
+				// スタンプデータの初期化
+				model.initCloudStampList({
+					userId: userData.id
+				}, function(e) {
+					Ti.API.debug('[func]initCloudStampList.callback:');
+					if (! e.success) {
+						util.errorDialog(e);
+					}
+				});
+			}
+
+			// メインウィンドウの表示
+			openMainWindow(userData);
+
+		} else {
+			util.errorDialog(e);
+		}
+	});
+	
+	actInd.hide();
+};
+
 // ---------------------------------------------------------------------
 
 // facebook側で登録したアプリID
-Ti.Facebook.appid = '159833880868916';
-Ti.Facebook.permissions = ['publish_stream'];
-Ti.Facebook.forceDialogAuth = false;
+Facebook.appid = '159833880868916';
+Facebook.permissions = ['publish_stream'];
+// iOS6以降、facebookのシングルサインオンに対応するためforceDialogAuthはfalseにすべきとあるが
+// authorizeがGET系のみとなり、reauthorizeで再度POST系の認証をする必要があるため、trueとしシングルサインオンには対応しない
+Facebook.forceDialogAuth = true;
 
 var loginWin = Ti.UI.createWindow(style.loginWin);
-var loginFbButton = Ti.Facebook.createLoginButton(style.loginFacebookButton);
+var loginFbButton = Facebook.createLoginButton(style.loginFacebookButton);
+loginFbButton.style = Facebook.BUTTON_STYLE_WIDE;
+loginFbButton.hide();
 loginWin.add(loginFbButton);
-loginWin.open();
+loginWin.open();	
 
-// ロード用画面
-var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
+// ログイン状態の時に、facebook側でログアウトした場合
+// Facebook.loggedInはtureなのに、loginイベントが発火してしまうため、
+// loginFlagで制御する
+var loginFlag = false;
 
-Ti.Facebook.addEventListener('login', function(e) {
-	Ti.API.debug('[event]Ti.Facebook.login:');
+if ( Facebook.loggedIn ) {
+	loginFlag = true;
+	loginFacebook();
+} else {
+	loginFbButton.show();
+}
+
+Facebook.addEventListener('login', function(e) {
+	Ti.API.debug('[event]Facebook.login:');
 	if (e.success) {
 		loginFbButton.hide();
-		actInd.show();
-		loginWin.add(actInd);
+		if (! loginFlag) {
+			loginFacebook();
+		}
 
-		var type = 'facebook';
-		model.loginCloudUser(type, Ti.Facebook.accessToken, function (e) {
-			if (e.success) {
-				var userData = e.userData;
-
-				// 初回アイコンの登録
-				if (userData.icon == null) {
-					userData.icon = 'images/icon/i_circle.png';
-					var defaultIcon = Ti.UI.createImageView({image: userData.icon});
-					model.updateCloudUserIcon({
-						user: userData.user,
-						icon: defaultIcon.toBlob()
-					}, function(e) {
-						Ti.API.debug('[func]updateCloudUserIcon.callback:');
-						if (! e.success) {
-							util.errorDialog(e);
-						}
-					});
-				}
-				// 初回フォトコレクションの作成
-				if (userData.post == null || userData.like == null) {
-					userData.post = 0;
-					userData.like = 0;
-					// フォトコレクションの作成
-					model.createCloudPhotoCollection({
-						name: 'post'
-					}, function(e) {
-						Ti.API.debug('[func]createCloudPhotoCollection.callback:');
-						if (e.success) {
-							// フォトコレクションの作成
-							model.createCloudPhotoCollection({
-								name: 'like'
-							}, function(e) {
-								Ti.API.debug('[func]createCloudPhotoCollection.callback:');
-								if (e.success) {
-									// コレクションの更新
-									model.updateCloudUserCollection({
-										post: userData.post,
-										like: userData.like,
-									}, function(e) {
-										if (! e.success) {
-											util.errorDialog(e);
-										}
-									});
-			
-								} else {
-									util.errorDialog(e);
-								}
-							});
-
-						} else {
-							util.errorDialog(e);
-						}
-					});
-				}
-				
-				// ローカルDBの初期設定
-				var isExistLocalStampList = model.isExistLocalStampList();
-				if (! isExistLocalStampList) {
-					model.createLocalStampList();
-
-					// スタンプデータの初期化
-					model.initCloudStampList({
-						userId: userData.id
-					}, function(e) {
-						Ti.API.debug('[func]initCloudStampList.callback:');
-						if (! e.success) {
-							util.errorDialog(e);
-						}
-					});
-				}
-
-				actInd.hide();
-				
-				// メインウィンドウの表示
-				openMainWindow(userData);
-
-			} else {
-				util.errorDialog(e);
-			}
-		});
 	} else {
-		util.errorDialog(e);
+		// ログインダイアログでキャンセル
+//		util.errorDialog(e);
 	}
 });	
 
-Ti.Facebook.addEventListener('logout', function(e) {
-	Ti.API.debug('[event]Ti.Facebook.logout:');
+Facebook.addEventListener('logout', function(e) {
+	Ti.API.debug('[event]Facebook.logout:');
 	var httpClient = Titanium.Network.createHTTPClient();
-	httpClient.clearCookies('http://login.facebook.com');
 	httpClient.clearCookies('https://login.facebook.com');
-	Ti.Facebook.accessToken = null;
-	Ti.Facebook.uid = null;
+	tabGroup.close();
+	customTab.close();
+	loginFlag = false;
+	loginFbButton.show();
 });
 
 

@@ -150,24 +150,40 @@ exports.createWindow = function(_userData){
 		var infoView = Ti.UI.createView(style.profileInfoView);
 		profileInfoRow.add(infoView);
 
+		var nameView = Ti.UI.createView(style.profileInfoNameView);
+		infoView.add(nameView);
+		
 		if (_userData.name != '') {
-			var nameLabel = Ti.UI.createLabel(style.profileInfoLabel);
+			var nameLabel = Ti.UI.createLabel(style.profileInfoNameLabel);
 			nameLabel.text = _userData.name;
-			infoView.add(nameLabel);
+			nameView.add(nameLabel);
 		}
-		var userLabel = Ti.UI.createLabel(style.profileInfoLabel);
-		userLabel.text = '@' + _userData.user;
-		infoView.add(userLabel);
+		var userLabel = Ti.UI.createLabel(style.profileInfoUserLabel);
+		userLabel.text = _userData.user;
+		nameView.add(userLabel);
 	
-		var breedLabel = Ti.UI.createLabel(style.profileInfoLabel);
-		breedLabel.text = _userData.breed;
-		infoView.add(breedLabel);
-		var birthLabel = Ti.UI.createLabel(style.profileInfoLabel);
-		birthLabel.text = _userData.birth + ' ' + _userData.sex;
-		infoView.add(birthLabel);
-		var memoLabel = Ti.UI.createLabel(style.profileInfoLabel);
-		memoLabel.text = _userData.memo;
-		infoView.add(memoLabel);
+		if (_userData.breed != '') {
+			var breedLabel = Ti.UI.createLabel(style.profileInfoBreedLabel);
+			breedLabel.text = _userData.breed;
+			infoView.add(breedLabel);
+		}
+		if (_userData.birth != '' || _userData.sex != '') {
+			var birthLabel = Ti.UI.createLabel(style.profileInfoBirthLabel);
+			if (_userData.sex == '') {
+				birthLabel.text = _userData.birth;
+			} else if (_userData.birth == '') {
+				birthLabel.text = _userData.sex;
+			} else {
+				birthLabel.text = _userData.birth + '（' + _userData.sex + '）';
+			}
+			infoView.add(birthLabel);
+		}
+
+		if (_userData.memo != '') {
+			var memoLabel = Ti.UI.createLabel(style.profileInfoMemoLabel);
+			memoLabel.text = _userData.memo;
+			infoView.add(memoLabel);
+		}
 
 		var profilePhotoRow = Titanium.UI.createTableViewRow(style.profilePhotoTableRow);
 		rowList.push(profilePhotoRow);
@@ -308,10 +324,10 @@ exports.createWindow = function(_userData){
 	// 未フォローユーザをフォローするボタン
 	var followButton = Titanium.UI.createButton(style.profileFollowButton);
 	//  ログアウトボタン
-	var exitButton = Titanium.UI.createButton(style.profileExitButton);
+	var configButton = Titanium.UI.createButton(style.profileConfigButton);
 	var b1 = Titanium.UI.createButton({title:'Left Nav'});
 	if (loginId == _userData.id) {
-		profileWin.rightNavButton = exitButton;
+		profileWin.rightNavButton = configButton;
 		// tabGroupではleftNavButtonが使えない
 //		profileWin.leftNavButton = editButton;
 		titleView.add(editButton);
@@ -352,25 +368,11 @@ exports.createWindow = function(_userData){
 	});
 
 	// ログアウトボタンをクリック
-	exitButton.addEventListener('click', function(e){
-		Ti.API.debug('[event]exitButton.click:');
-		var alertDialog = Titanium.UI.createAlertDialog({
-			title: 'ログアウトしますか？',
-			buttonNames: ['キャンセル','OK'],
-			cancel: 1
-		});
-		alertDialog.show();
-
-		alertDialog.addEventListener('click',function(alert){
-			Ti.API.debug('[event]alertDialog.click:');						
-			// OKの場合
-			if(alert.index == 1){
-				Ti.Facebook.logout();
-				tabGroup.close();
-				customTab.close();
-				loginFbButton.show();
-			}
-		});
+	configButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]configButton.click:');
+		var profileConfigWin = win.createProfileConfigWindow(_userData);
+		profileConfigWin.prevWin = profileWin;
+		win.openTabWindow(profileConfigWin, {animated:true});
 	});	
 
 	// 「フォロー中」ボタン

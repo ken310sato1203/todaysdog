@@ -214,11 +214,11 @@ exports.createWindow = function(_userData, _stampDataList){
 	postWin.titleControl = titleLabel;
 
 	// 戻るボタンの表示
-	var backButton = Titanium.UI.createButton(style.commonBackButton);
+	var backButton = Ti.UI.createButton(style.commonBackButton);
 	postWin.leftNavButton = backButton;
 
 	// 投稿ボタンの表示
-	var postButton = Titanium.UI.createButton(style.commonPlusButton);
+	var postButton = Ti.UI.createButton(style.commonPlusButton);
 	postWin.rightNavButton = postButton;
 
 	// 日付
