@@ -189,7 +189,7 @@ exports.createWindow = function(_userData, _stampData){
 						event: null,
 						user: user,
 						stamp: selectedIndex[i].stamp,
-						text: '',
+						textList: [''],
 						year: year,
 						month: month,
 						day: day,
@@ -197,7 +197,6 @@ exports.createWindow = function(_userData, _stampData){
 						all: null,
 						report: null,
 						date: null,
-						historyList: ['']
 					};
 					stampDataList.push(stampData);
 				}

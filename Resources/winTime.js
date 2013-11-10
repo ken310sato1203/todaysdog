@@ -25,7 +25,7 @@ exports.createWindow = function(_userData, _diaryData){
 		targetView.stampData = _rowStamp;
 
 		var stampLabel = Ti.UI.createLabel(style.timeStampLabel);
-		stampLabel.text = _rowStamp.text;
+		stampLabel.text = _rowStamp.textList[0];
 		targetView.add(stampLabel);
 
 		var stampImage = Ti.UI.createImageView(style.timeStampImage);
@@ -57,7 +57,7 @@ exports.createWindow = function(_userData, _diaryData){
 				event: null,
 				user: _userData.user,
 				stamp: null,
-				text: null,
+				textList: null,
 				year: year,
 				month: month,
 				day: day,

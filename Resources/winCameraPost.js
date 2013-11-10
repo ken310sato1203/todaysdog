@@ -111,28 +111,31 @@ exports.createWindow = function(_type, _userData, _photoImage){
 	
 					if (_type == 'photo_camera' || _type == 'photo_select') {
 						// ローカルに画像を保存
+						var now = new Date();
+						var nowDate = util.getFormattedDate(now);
+						var nowDateTime = util.getFormattedDateTime(now);
 						var dirPath = Ti.Filesystem.applicationDataDirectory + 'photo/';
-						var fileName = _userData.id;
+						var fileName = _userData.id + "_" + nowDate;
 						model.saveLocalImage(postImage.toBlob(), dirPath, fileName);
 	
 						var articleData = {
 							id: null, 
 							no: _userData.id, 
 							user: _userData.user, 
-							date: util.getFormattedNowDateTime(), 
+							date: nowDateTime, 
 							text: textArea.value, 
 							photo: dirPath + fileName + '.png',
 							like: "0",
-							comment: "0"};
+							comment: "0"
+						};
 						model.postCloudArticle({
-							date: articleData.date, 
-							text: articleData.text,
+							date: nowDateTime, 
+							text: textArea.value,
 							photo: postImage.toBlob(),
 							post: _userData.post
 						}, function(e) {
 							Ti.API.debug('[func]postCloudArticle.callback:');
 							if (e.success) {
-	//							model.addArticleList(articleData);
 								_userData.today = articleData;
 								if (cameraPostWin.prevWin != null) {
 									cameraPostWin.prevWin.fireEvent('refresh');

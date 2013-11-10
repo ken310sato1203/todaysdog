@@ -584,7 +584,7 @@ exports.style = {
 	profileCountDataLabel:{
 		top: '5dp',
 		textAlign: 'center',
-		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		font: {fontSize:16, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
 	profileCountDataUnitLabel:{

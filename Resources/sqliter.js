@@ -53,7 +53,7 @@ var makeQuery = {
 		return r;
 	},
 	
-	tableIsExist:function(_tblname){
+	isExist:function(_tblname){
 		this.reset();
 
 		if(!_tblname){
@@ -77,7 +77,7 @@ var makeQuery = {
 		}
 	},
 
-	tableCreate:function(_tblname,_query){
+	create:function(_tblname,_query){
 		this.reset();
 
 		if(!_tblname || !_query){
@@ -521,7 +521,7 @@ var makeQuery = {
 			return false;
 		}
 		
-		this.q = "DROP TABLE " + _table;
+		this.query("DROP TABLE " + _table).execute();
 		
 		return this;
 	},

@@ -22,7 +22,7 @@ exports.createWindow = function(_userData, _stampDataList){
 			postImage.image = 'images/icon/' + _stampDataList[i].stamp + '.png';
 			stampView.add(postImage);		
 			var postLabel = Ti.UI.createLabel(style.stampPostTextLabel);
-			postLabel.text = _stampDataList[i].text;
+			postLabel.text = _stampDataList[i].textList[0];
 			stampView.add(postLabel);
 //			var minusView = Titanium.UI.createView(style.stampPostMinusView);
 //			stampView.add(minusView);
@@ -396,7 +396,7 @@ exports.createWindow = function(_userData, _stampDataList){
 					Ti.API.debug('[func]cloudAddStampList.callback:');
 					if (e.success) {
 						Ti.API.debug('Success:');
-						model.addLocalStampList(_stampDataList);
+						model.addLocalStampHistoryList(_stampDataList);
 						closePostWin();
 					} else {
 						util.errorDialog(e);
@@ -413,8 +413,7 @@ exports.createWindow = function(_userData, _stampDataList){
 		// 投稿テキストの更新
 		for (var i=0; i<_stampDataList.length; i++) {
 			if (_stampDataList[i].stamp == e.stampData.stamp) {
-				_stampDataList[i].text = e.stampData.text;
-				_stampDataList[i].historyList = e.stampData.historyList;
+				_stampDataList[i].textList = e.stampData.textList;
 			}
 		}
 		// ビューの再作成

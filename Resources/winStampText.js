@@ -12,11 +12,6 @@ exports.createWindow = function(_userData, _stampData){
 	var backButton = Titanium.UI.createButton(style.commonBackButton);
 	textWin.leftNavButton = backButton;
 
-/*
-	// 完了ボタンの表示
-	var doneButton = Titanium.UI.createButton(style.commonPlusButton);
-	textWin.rightNavButton = doneButton;
-*/
 	var textScrollView = Ti.UI.createScrollView(style.stampTextScrollView);
 	textWin.add(textScrollView);
 	
@@ -24,14 +19,17 @@ exports.createWindow = function(_userData, _stampData){
 	textScrollView.add(textView);
 
 	var textArea = Ti.UI.createTextArea(style.stampTextArea);
-	textArea.value = _stampData.text;
+	textArea.value = _stampData.textList[0];
 	textView.add(textArea);
 
 	var historyTableView = Ti.UI.createTableView(style.stampHistoryTableView);
 	var historyList = [];
 
 	// スタンプの履歴データ取得
-	var localHistoryList = model.getLocalStampHistoryList(_stampData.stamp);
+	var localHistoryList = model.getLocalStampHistoryList({
+		userId: _userData.id,
+		stamp: _stampData.stamp
+	});
 	var defaultHistoryList = model.getStampHistoryList(_stampData.stamp);
 	if (localHistoryList == null) {
 		historyList = defaultHistoryList;				
@@ -92,31 +90,20 @@ exports.createWindow = function(_userData, _stampData){
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
 		if (textWin.prevWin != null) {
-			_stampData.text = textArea.value.replace(/\n+$/g,'').replace(/\s+$/g,'');
-			if (_stampData.text == '') {
-				historyList = [_stampData.text];
+			var stampText = textArea.value.replace(/\n+$/g,'').replace(/\s+$/g,'');
+			if (stampText == '') {
+				historyList = [stampText];
 			} else {
-				historyList.unshift(_stampData.text);
+				historyList.unshift(stampText);
 				historyList = util.unique(historyList).slice(0,5);
 			}
-			_stampData.historyList = historyList;
+			_stampData.textList = historyList;
 
 			textWin.prevWin.fireEvent('refresh', {stampData:_stampData});
 		}
 		textWin.close({animated:true});
 	});	
 
-/*
-	// 完了ボタンをクリック
-	doneButton.addEventListener('click', function(e){
-		Ti.API.debug('[event]doneButton.click:');
-		if (textWin.prevWin != null) {
-			_stampData.text = textArea.value;
-			textWin.prevWin.fireEvent('refresh', {stampData:_stampData});
-		}
-		textWin.close({animated:true});
-	});
-*/
 	textArea.addEventListener('focus',function(e){
 		if (e.source.value == e.source.hintText) {
 			e.source.value = "";
@@ -133,6 +120,7 @@ exports.createWindow = function(_userData, _stampData){
 	textArea.addEventListener('return',function(e){
 		Ti.API.debug('[event]textArea.return:');
 		textArea.blur();
+		backButton.fireEvent('click');
 	});
 
 	// 履歴クリックでチェックし入力テキストにコピー
@@ -146,6 +134,7 @@ exports.createWindow = function(_userData, _stampData){
 		}
 		e.row.hasCheck = true;
 		textArea.value = e.source.text;
+		backButton.fireEvent('click');
 	});
 
 	// 画面クリックでコメントフィールドのフォーカスを外す

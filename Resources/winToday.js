@@ -31,7 +31,8 @@ exports.createWindow = function(_userData){
 		targetView.stampData = _rowStamp;
 
 		var stampLabel = Ti.UI.createLabel(style.todayTimeStampLabel);
-		stampLabel.text = _rowStamp.text;
+
+		stampLabel.text = _rowStamp.textList[0];
 		targetView.add(stampLabel);
 
 		var stampImage = Ti.UI.createImageView(style.todayTimeStampImage);
@@ -99,8 +100,12 @@ exports.createWindow = function(_userData){
 
 		// 今日の投稿が既にされている場合
 		if (_articleList.length > 0) {
+			var nowDate = _articleList[0].date.substring(0, 10);
+			var dirPath = Ti.Filesystem.applicationDataDirectory + 'photo/';
+			var fileName = _userData.id + "_" + nowDate;
+
 			var photoImage = Ti.UI.createImageView(style.todayPhotoImage);
-			photoImage.image = _articleList[0].photo;
+			photoImage.image = dirPath + fileName + '.png';
 			photoView.add(photoImage);
 	
 		// 今日の投稿がまだの場合

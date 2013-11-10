@@ -130,17 +130,42 @@ var loginFacebook = function() {
 				});
 			}
 			
-			// ローカルDBの初期設定
-			var isExistLocalStampList = model.isExistLocalStampList();
-			if (! isExistLocalStampList) {
-				model.createLocalStampList();
-
-				// スタンプデータの初期化
-				model.initCloudStampList({
+			// スタンプデータの初期化
+			model.dropLocalStampList();
+			model.createLocalStampList();
+/*
+			model.initCloudStampList({
+				userId: userData.id
+			}, function(e) {
+				Ti.API.debug('[func]initCloudStampList.callback:');
+				if (! e.success) {
+					util.errorDialog(e);
+				}
+			});
+*/
+			var countLocalStampList = model.getCountLocalStampList(userData.id);
+			if (countLocalStampList == 0) {
+				model.getAllCloudStampList({
 					userId: userData.id
 				}, function(e) {
-					Ti.API.debug('[func]initCloudStampList.callback:');
-					if (! e.success) {
+					Ti.API.debug('[func]getAllCloudStampList.callback:');
+					if (e.success) {
+
+						// 最新のデータのみを抽出
+						var stampHistoryList = [];
+						var checkList = {};
+						for (var i = 0; i < e.stampList.length; i++) {
+							
+							if (checkList[e.stampList[i].stamp] == null) {
+								checkList[e.stampList[i].stamp] = true;
+								stampHistoryList.push(e.stampList[i]);
+							}
+						}
+												
+						// ローカルDBに登録
+						model.addLocalStampHistoryList(stampHistoryList);
+
+					} else {
 						util.errorDialog(e);
 					}
 				});

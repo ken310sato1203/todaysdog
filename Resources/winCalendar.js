@@ -31,8 +31,12 @@ exports.createWindow = function(_userData){
 		var articleImage = null;
 		
 		if (e.articleData != null) {
+			var nowDate = util.getFormattedDate(new Date(e.year, e.month-1, e.day));
+			var dirPath = Ti.Filesystem.applicationDataDirectory + 'photo/';
+			var fileName = _userData.id + "_" + nowDate;
+			
 			dayView.dayImage = Ti.UI.createImageView(style.calendarDayImage);
-			dayView.dayImage.image = e.articleData.photo;
+			dayView.dayImage.image = dirPath + fileName + '.png';
 			dayView.add(dayView.dayImage);
 		}
 
