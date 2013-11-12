@@ -179,7 +179,11 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 						if (e.articleList.length > 0) {
 							// 取得した記事をテーブルに追加
 							friendsTableView.appendRow(getFriendsArticleTableRow(e.articleList), {animated:true});
-							articlePage++;
+							if (e.meta.total_pages == articlePage) {
+								nextArticleFlag = false;
+							} else if (e.meta.total_pages > articlePage) {
+								articlePage++;
+							}
 						} else {
 							if (articlePage == 1) {
 								appendNoDataLabel();
@@ -332,11 +336,13 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	});
 
 	// スクロールの一番下で発生するイベント
-	friendsTableView.addEventListener('scrollEnd',function(){
+	friendsTableView.addEventListener('scrollEnd',function(e){
         Ti.API.debug('[event]friendsTableView.scrollEnd:');
-		if (nextArticleFlag) {
-			updateArticle();
-		}
+        if(e.contentOffset.y + e.size.height >= e.contentSize.height) {
+			if (nextArticleFlag) {
+				updateArticle();
+			}
+        }
 	});
 	
 	return friendsWin;

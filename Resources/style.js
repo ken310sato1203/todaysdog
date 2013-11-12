@@ -9,13 +9,13 @@ exports.style = {
 	},
 
 	commonActivityIndicator:{
-		backgroundColor: 'black',
+//		backgroundColor: 'black',
 		opacity: 0.7,
 		width: '100%',
 		height: '100%',
-		style: Ti.UI.iPhone.ActivityIndicatorStyle.PLAIN,
+		style: Ti.UI.iPhone.ActivityIndicatorStyle.DARK,
 		font: {fontSize:14, fontWeight:'bold'},
-		color: 'white',
+		color: 'gray',
 		message: 'Loading...',
 	},
 

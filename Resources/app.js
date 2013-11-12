@@ -131,7 +131,7 @@ var loginFacebook = function() {
 			}
 			
 			// スタンプデータの初期化
-			model.dropLocalStampList();
+//			model.dropLocalStampList();
 			model.createLocalStampList();
 /*
 			model.initCloudStampList({
@@ -179,7 +179,7 @@ var loginFacebook = function() {
 		}
 	});
 	
-	actInd.hide();
+//	actInd.hide();
 };
 
 // ---------------------------------------------------------------------
