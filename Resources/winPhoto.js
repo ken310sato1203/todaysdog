@@ -71,6 +71,10 @@ exports.createWindow = function(_type, _articleData){
 	// コメントの追加
 	var addComment = function() {
 		if (commentField.value != '') {
+
+			actInd.show();
+			tabGroup.add(actInd);
+
 			var date = util.getFormattedNowDateTime();
 			var commentData = {
 				no: _articleData.no, 
@@ -99,6 +103,7 @@ exports.createWindow = function(_type, _articleData){
 				} else {
 					util.errorDialog(e);
 				}
+				actInd.hide();
 			});
 
 		} else {
@@ -275,6 +280,9 @@ exports.createWindow = function(_type, _articleData){
 		});
 
 	}
+
+	// ロード用画面
+	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
 
 // ---------------------------------------------------------------------
 

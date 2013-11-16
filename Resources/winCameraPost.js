@@ -41,6 +41,9 @@ exports.createWindow = function(_type, _userData, _photoImage){
 		iconView.add(postImage);
 	}
 
+	// 投稿時のロード用画面
+	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
+
 // ---------------------------------------------------------------------
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
@@ -68,10 +71,14 @@ exports.createWindow = function(_type, _userData, _photoImage){
 		Ti.API.debug('[event]textArea.return:');
 		e.source.value = e.source.value.replace(/\n+$/g,'');
 		textArea.blur();
+		postButton.fireEvent('click');
 	});
 
-	// 投稿時のロード用画面
-	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
+	// 画面クリックでコメントフィールドのフォーカスを外す
+	cameraPostWin.addEventListener('click',function(e){
+		Ti.API.debug('[event]cameraPostWin.click:');
+		textArea.blur();
+	});
 
 	// 投稿ボタンをクリック
 	postButton.addEventListener('click', function(e){
@@ -109,6 +116,9 @@ exports.createWindow = function(_type, _userData, _photoImage){
 						});
 					}
 	
+					// todayWinの更新
+					var todayTab = win.getTab("todayTab");
+
 					if (_type == 'photo_camera' || _type == 'photo_select') {
 						// ローカルに画像を保存
 						var now = new Date();
@@ -137,11 +147,13 @@ exports.createWindow = function(_type, _userData, _photoImage){
 							Ti.API.debug('[func]postCloudArticle.callback:');
 							if (e.success) {
 								_userData.today = articleData;
+
+								// todayWinの初期化後に画面を閉じてもらう
+								todayTab.window.fireEvent('refresh', {closeWin:cameraPostWin});
+								// 遷移前の画面を閉じる
 								if (cameraPostWin.prevWin != null) {
-									cameraPostWin.prevWin.fireEvent('refresh');
 									cameraPostWin.prevWin.close();
 								}
-								cameraPostWin.close({animated:true});
 	
 							} else {
 								util.errorDialog(e);
@@ -158,11 +170,13 @@ exports.createWindow = function(_type, _userData, _photoImage){
 							Ti.API.debug('[func]updateCloudUserIcon.callback:');
 							if (e.success) {
 								_userData.icon = dirPath + fileName + '.png';
+
+								// todayWinの初期化後に画面を閉じてもらう
+								todayTab.window.fireEvent('refresh', {closeWin:cameraPostWin});
+								// 遷移前の画面を閉じる
 								if (cameraPostWin.prevWin != null) {
-									cameraPostWin.prevWin.fireEvent('refresh');
 									cameraPostWin.prevWin.close();
 								}
-								cameraPostWin.close({animated:true});
 	
 							} else {
 								util.errorDialog(e);
@@ -173,27 +187,6 @@ exports.createWindow = function(_type, _userData, _photoImage){
 				}
 			});			
 		}
-	});
-
-	// 入力ボックスにフォーカス
-	textArea.addEventListener('focus',function(e){
-		if (e.source.value == e.source.hintText) {
-			e.source.value = "";
-			e.source.color = "black";
-		}
-	});
-	// 入力ボックスにフォーカスが外れる
-	textArea.addEventListener('blur',function(e){
-		if (e.source.value == "") {
-			e.source.value = e.source.hintText;
-			e.source.color = "gray";
-		}
-	});
-
-	// 画面クリックでコメントフィールドのフォーカスを外す
-	cameraPostWin.addEventListener('click',function(e){
-		Ti.API.debug('[event]cameraPostWin.click:');
-		textArea.blur();
 	});
 
 	return cameraPostWin;

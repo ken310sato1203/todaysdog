@@ -69,14 +69,14 @@ exports.win = {
 		var win = todayWin.createWindow(_userData, _stampData);
 		return win;
 	},
-	createStampWindow:function(_userData, _stampData){
+	createStampWindow:function(_type, _userData, _stampData){
 		Ti.API.debug('[func]createStampWindow:');
-		var win = stampWin.createWindow(_userData, _stampData);
+		var win = stampWin.createWindow(_type, _userData, _stampData);
 		return win;
 	},
-	createStampPostWindow:function(_userData, _stampDataList){
+	createStampPostWindow:function(_type, _userData, _stampDataList){
 		Ti.API.debug('[func]createStampPostWindow:');
-		var win = stampPostWin.createWindow(_userData, _stampDataList);
+		var win = stampPostWin.createWindow(_type, _userData, _stampDataList);
 		return win;
 	},
 	createStampTextWindow:function(_userData, _stampData){

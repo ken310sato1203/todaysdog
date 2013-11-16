@@ -1,7 +1,8 @@
 // スタンプ
 
-exports.createWindow = function(_userData, _stampData){
+exports.createWindow = function(_type, _userData, _stampData){
 	Ti.API.debug('[func]winStamp.createWindow:');
+	Ti.API.debug('_type:' + _type);
 
 	var loginId = model.getLoginId();
 
@@ -202,7 +203,7 @@ exports.createWindow = function(_userData, _stampData){
 				}
 			}
 	
-			var postWin = win.createStampPostWindow(_userData, stampDataList);	
+			var postWin = win.createStampPostWindow(_type, _userData, stampDataList);	
 			postWin.prevWin = stampWin;
 			win.openTabWindow(postWin, {animated:true});
 	});

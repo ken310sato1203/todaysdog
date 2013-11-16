@@ -17,6 +17,9 @@ exports.createWindow = function(_userData, _diaryData){
 	var monthName = util.diary.monthName;
 	var timeRange = util.diary.timeRange;
 
+	// 多重クリック防止
+	var clickEnable = true;
+
 	// StampViewの取得
 	var getStampView = function(_rowStamp) {
 		Ti.API.debug('[func]getStampView:');
@@ -72,13 +75,16 @@ exports.createWindow = function(_userData, _diaryData){
 	
 			hourView.addEventListener('click',function(e){
 				Ti.API.debug('[event]hourView.click:');
-//				if (timeWin.openFlag == false) {
-					if (e.source.objectName == 'timeStampView') {
-						var postWin = win.createStampPostWindow(_userData, [e.source.stampData]);
-						postWin.prevWin = timeWin;
-						win.openTabWindow(postWin, {animated:true});
-						// timWinからの遷移でイベントが複数回実行（原因不明）されないようにするためのフラグ
-//						timeWin.openFlag = true;
+					// 多重クリック防止
+					if (clickEnable) {
+						clickEnable = false;
+						if (e.source.objectName == 'timeStampView') {
+							var type = "time";
+							var postWin = win.createStampPostWindow(type, _userData, [e.source.stampData]);
+							postWin.prevWin = timeWin;
+							win.openTabWindow(postWin, {animated:true});
+						}
+						clickEnable = true;
 					}
 //				}
 			});
@@ -123,9 +129,14 @@ exports.createWindow = function(_userData, _diaryData){
 	
 			plusImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]plusImage.click:');
-				var stampWin = win.createStampWindow(_userData, e.row.stampData);
-				stampWin.prevWin = timeWin;
-				win.openTabWindow(stampWin, {animated:true});
+				if (clickEnable) {
+					clickEnable = false;
+					var type = "time";
+					var stampWin = win.createStampWindow(type, _userData, e.row.stampData);
+					stampWin.prevWin = timeWin;
+					win.openTabWindow(stampWin, {animated:true});
+					clickEnable = true;
+				}
 			});
 			
 			if (_type == "time" || (_type == "list" && rowStampList.length > 0)) {
@@ -259,6 +270,11 @@ exports.createWindow = function(_userData, _diaryData){
 		timeWin.remove(timeTableView);
 		_diaryData = e.diaryData;
 		updateTableView();
+
+		// 初期化後に呼び出し元の画面を閉じる
+		if (e.closeWin) {
+			e.closeWin.close({animated:false});
+		}
 	});
 
 /*

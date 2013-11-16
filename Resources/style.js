@@ -1690,6 +1690,7 @@ exports.style = {
 		shadowColor: '#696969', 
 		text: 'カメラ', 
 	},
+
 	cameraOverlayView:{
 		top: '0dp',
 		width: Ti.UI.SIZE,
@@ -1721,12 +1722,14 @@ exports.style = {
 		defaultImage: '',
 		image : null,
 	},
+/*
 	cameraSpaceView:{
 		top: Ti.Platform.displayCaps.platformWidth * 3 / 4,
 		width: Ti.Platform.displayCaps.platformWidth,
 		height: '100%',
 		backgroundColor: 'white',
 	},
+*/
 
 // winCameraPost -------------------------------------------------------
 	cameraPostWin:{

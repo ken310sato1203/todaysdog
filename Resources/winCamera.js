@@ -168,12 +168,12 @@ exports.createWindow = function(_type, _userData){
 			startCamera();	
 		}
 	});
-
+/*
 	// 更新用イベント
 	cameraWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]cameraWin.refresh:');
 		cameraWin.prevWin.fireEvent('refresh');
 	});
-
+*/
 	return cameraWin;
 };

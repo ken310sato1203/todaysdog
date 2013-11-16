@@ -171,7 +171,8 @@ exports.createWindow = function(_userData){
 			Ti.API.debug('[event]editImage.click:');
 			// 多重クリック防止
 			editImage.touchEnabled = false;
-			var stampWin = win.createStampWindow(_userData, null);	
+			var type = "today";
+			var stampWin = win.createStampWindow(type, _userData, null);	
 			stampWin.prevWin = todayWin;
 			win.openTabWindow(stampWin, {animated:true});
 			editImage.touchEnabled = true;
@@ -322,6 +323,11 @@ exports.createWindow = function(_userData){
 		// ビューの更新
 		todayTableView.data = [];
 		updateTableView();
+		
+		// 初期化後に呼び出し元の画面を閉じる
+		if (e.closeWin) {
+			e.closeWin.close({animated:false});
+		}
 /*
 		var targetTab = win.getTab("diaryTab");
 		// timeWinがオープンしている場合

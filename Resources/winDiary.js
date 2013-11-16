@@ -15,7 +15,10 @@ exports.createWindow = function(_userData){
 	var monthName = util.diary.monthName;
 	var weekday = util.diary.weekday;
 
+	// 多重クリック防止
 	var slideEnable = true;
+	var clickEnable = true;
+
 	// スタンプの最大表示件数
 	var stampListMax = 7;
 
@@ -146,13 +149,16 @@ exports.createWindow = function(_userData){
 		calView.addEventListener('click', function(e) {
 			Ti.API.debug('[event]calView.click:');
 			Ti.API.debug('[event]e.source:', e.source);
-			if (slideEnable) {
+			// 多重クリック防止
+			if (clickEnable) {
+				clickEnable = false;
 				if (e.source.objectName != "diaryPhotoImage") {
 					var timeWin = win.createTimeWindow(_userData, e.row.diaryData);
 					timeWin.prevWin = diaryWin;
 					diaryWin.nextWin = timeWin;
 					win.openTabWindow(timeWin, {animated:true});
 				}
+				clickEnable = true;
 			}
 		});
 
@@ -168,6 +174,7 @@ exports.createWindow = function(_userData){
 	// 前月カレンダーの表示
 	var prevCalView = function() {
 		Ti.API.debug('[func]prevCalView:');
+		// 多重クリック防止
 		if (slideEnable) {
 			slideView.left = style.commonSize.screenWidth + 'dp';
 			thisDiaryView.animate(slideView);
@@ -203,6 +210,7 @@ exports.createWindow = function(_userData){
 	// 翌月カレンダーの表示
 	var nextCalView = function() {
 		Ti.API.debug('[func]nextCalView:');
+		// 多重クリック防止
 		if (slideEnable) {
 			slideView.left = (style.commonSize.screenWidth * -1) + 'dp';
 			thisDiaryView.animate(slideView);

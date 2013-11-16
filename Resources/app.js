@@ -14,6 +14,18 @@ var sqlite = new sqliter("todaysdog");
 var tabGroup = null;
 var customTab = null;	
 
+// facebook側で登録したアプリID
+Facebook.appid = '159833880868916';
+Facebook.permissions = ['publish_stream'];
+// iOS6以降、facebookのシングルサインオンに対応するためforceDialogAuthはfalseにすべきとあるが
+// authorizeがGET系のみとなり、reauthorizeで再度POST系の認証をする必要があるため、trueとしシングルサインオンには対応しない
+Facebook.forceDialogAuth = true;
+
+// ログイン状態の時に、facebook側でログアウトした場合
+// Facebook.loggedInはtureなのに、loginイベントが発火してしまうため、
+// loginFlagで制御する
+var loginFlag = false;
+
 // ---------------------------------------------------------------------
 var openMainWindow = function(_userData) {
 	Ti.API.debug('[func]openMainWindow:');
@@ -70,8 +82,7 @@ var openMainWindow = function(_userData) {
 
 var loginFacebook = function() {
 	Ti.API.debug('[func]loginFacebook:');
-	// ロード用画面
-	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
+
 	actInd.show();
 	loginWin.add(actInd);
 	
@@ -184,13 +195,6 @@ var loginFacebook = function() {
 
 // ---------------------------------------------------------------------
 
-// facebook側で登録したアプリID
-Facebook.appid = '159833880868916';
-Facebook.permissions = ['publish_stream'];
-// iOS6以降、facebookのシングルサインオンに対応するためforceDialogAuthはfalseにすべきとあるが
-// authorizeがGET系のみとなり、reauthorizeで再度POST系の認証をする必要があるため、trueとしシングルサインオンには対応しない
-Facebook.forceDialogAuth = true;
-
 var loginWin = Ti.UI.createWindow(style.loginWin);
 var loginFbButton = Facebook.createLoginButton(style.loginFacebookButton);
 loginFbButton.style = Facebook.BUTTON_STYLE_WIDE;
@@ -198,10 +202,8 @@ loginFbButton.hide();
 loginWin.add(loginFbButton);
 loginWin.open();	
 
-// ログイン状態の時に、facebook側でログアウトした場合
-// Facebook.loggedInはtureなのに、loginイベントが発火してしまうため、
-// loginFlagで制御する
-var loginFlag = false;
+// ロード用画面
+var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
 
 if ( Facebook.loggedIn ) {
 	loginFlag = true;
@@ -209,6 +211,9 @@ if ( Facebook.loggedIn ) {
 } else {
 	loginFbButton.show();
 }
+
+
+// ---------------------------------------------------------------------
 
 Facebook.addEventListener('login', function(e) {
 	Ti.API.debug('[event]Facebook.login:');
@@ -234,6 +239,4 @@ Facebook.addEventListener('logout', function(e) {
 	loginFbButton.show();
 });
 
-
-// ---------------------------------------------------------------------
  

@@ -1,7 +1,8 @@
 // スタンプ投稿
 
-exports.createWindow = function(_userData, _stampDataList){
+exports.createWindow = function(_type, _userData, _stampDataList){
 	Ti.API.debug('[func]winStampPost.createWindow:');
+	Ti.API.debug('_type:' + _type);
 
 	// Viewの取得
 	var getPostView = function() {
@@ -188,22 +189,35 @@ exports.createWindow = function(_userData, _stampDataList){
 			diaryData.todayFlag = true;
 		}
 
-		// diaryWinの更新
-		var targetTab = win.getTab("diaryTab");
-		targetTab.window.fireEvent('refresh', {diaryData:diaryData});
-		// timeWinの更新
-		if (targetTab.window.nextWin != null) {
-			targetTab.window.nextWin.fireEvent('refresh', {diaryData:diaryData});
-		}
 		// todayWinの更新
-		targetTab = win.getTab("todayTab");
-		targetTab.window.fireEvent('refresh');
+		var todayTab = win.getTab("todayTab");
+		if (_type == "today") {
+			// todayWinの初期化後に画面を閉じてもらう
+			todayTab.window.fireEvent('refresh', {closeWin:postWin});
+		} else {		
+			todayTab.window.fireEvent('refresh');
+		}
+
+		// diaryWinの更新
+		var diaryTab = win.getTab("diaryTab");
+		diaryTab.window.fireEvent('refresh', {diaryData:diaryData});
+		// timeWinの更新
+		if (diaryTab.window.nextWin != null) {
+			if (_type == "time") {
+				// diaryWinの初期化後に画面を閉じてもらう
+				diaryTab.window.nextWin.fireEvent('refresh', {diaryData:diaryData, closeWin:postWin});
+			} else {		
+				diaryTab.window.nextWin.fireEvent('refresh', {diaryData:diaryData});
+			}
+		}
 
 		// stampWinを閉じる
 		if (postWin.prevWin.objectName == 'stampWin') {
 			postWin.prevWin.close({animated:false});
 		}
-		postWin.close({animated:false});
+
+		// 遷移元の初期化後に画面を閉じるため、遷移元側でcloseを実行
+//		postWin.close({animated:false});
 	};
 						
 // ---------------------------------------------------------------------
@@ -345,15 +359,15 @@ exports.createWindow = function(_userData, _stampDataList){
 	   }
 	});
 
+	// ロード用画面
+	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
+
 // ---------------------------------------------------------------------
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
 		postWin.close({animated:true});
 	});	
-
-	// ロード用画面
-	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
 
 	// 投稿ボタンをクリック
 	postButton.addEventListener('click', function(e){
