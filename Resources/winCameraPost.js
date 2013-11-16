@@ -117,7 +117,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 					}
 	
 					// todayWinの更新
-					var todayTab = win.getTab("todayTab");
+					var todayWin = win.getTab("todayTab").window;
 
 					if (_type == 'photo_camera' || _type == 'photo_select') {
 						// ローカルに画像を保存
@@ -148,12 +148,15 @@ exports.createWindow = function(_type, _userData, _photoImage){
 							if (e.success) {
 								_userData.today = articleData;
 
-								// todayWinの初期化後に画面を閉じてもらう
-								todayTab.window.fireEvent('refresh', {closeWin:cameraPostWin});
 								// 遷移前の画面を閉じる
 								if (cameraPostWin.prevWin != null) {
 									cameraPostWin.prevWin.close();
 								}
+								// todayWinの更新
+								todayWin.fireEvent('refresh');
+								todayWin.addEventListener('refresh', function(){
+									cameraPostWin.close({animated:false});
+							    });
 	
 							} else {
 								util.errorDialog(e);
@@ -171,12 +174,15 @@ exports.createWindow = function(_type, _userData, _photoImage){
 							if (e.success) {
 								_userData.icon = dirPath + fileName + '.png';
 
-								// todayWinの初期化後に画面を閉じてもらう
-								todayTab.window.fireEvent('refresh', {closeWin:cameraPostWin});
 								// 遷移前の画面を閉じる
 								if (cameraPostWin.prevWin != null) {
 									cameraPostWin.prevWin.close();
 								}
+								// todayWinの更新
+								todayWin.fireEvent('refresh');
+								todayWin.addEventListener('refresh', function(){
+									cameraPostWin.close({animated:false});
+							    });
 	
 							} else {
 								util.errorDialog(e);

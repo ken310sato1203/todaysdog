@@ -75,18 +75,24 @@ exports.createWindow = function(_userData, _diaryData){
 	
 			hourView.addEventListener('click',function(e){
 				Ti.API.debug('[event]hourView.click:');
-					// 多重クリック防止
-					if (clickEnable) {
+
+				// 多重クリック防止
+				if (clickEnable) {
+					if (e.source.objectName == 'timeStampView') {
 						clickEnable = false;
-						if (e.source.objectName == 'timeStampView') {
-							var type = "time";
-							var postWin = win.createStampPostWindow(type, _userData, [e.source.stampData]);
-							postWin.prevWin = timeWin;
-							win.openTabWindow(postWin, {animated:true});
-						}
-						clickEnable = true;
+						var type = "time";
+						var postWin = win.createStampPostWindow(type, _userData, [e.source.stampData]);
+						postWin.addEventListener('open', function(){
+							// スライド前にopenイベントが発火するので1秒後にセット
+					        setTimeout(function(){
+								clickEnable = true;
+					        }, 1000);
+					    });
+
+						postWin.prevWin = timeWin;
+						win.openTabWindow(postWin, {animated:true});
 					}
-//				}
+				}
 			});
 	
 			var timeLabel = Ti.UI.createLabel(style.timeHourLabel);
@@ -133,9 +139,15 @@ exports.createWindow = function(_userData, _diaryData){
 					clickEnable = false;
 					var type = "time";
 					var stampWin = win.createStampWindow(type, _userData, e.row.stampData);
+					stampWin.addEventListener('open', function(){
+						// スライド前にopenイベントが発火するので1秒後にセット
+				        setTimeout(function(){
+							clickEnable = true;
+				        }, 1000);
+				    });
+
 					stampWin.prevWin = timeWin;
 					win.openTabWindow(stampWin, {animated:true});
-					clickEnable = true;
 				}
 			});
 			

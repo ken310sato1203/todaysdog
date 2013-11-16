@@ -148,17 +148,23 @@ exports.createWindow = function(_userData){
 		// 日付行をクリックした時
 		calView.addEventListener('click', function(e) {
 			Ti.API.debug('[event]calView.click:');
-			Ti.API.debug('[event]e.source:', e.source);
+
 			// 多重クリック防止
 			if (clickEnable) {
-				clickEnable = false;
 				if (e.source.objectName != "diaryPhotoImage") {
+					clickEnable = false;
 					var timeWin = win.createTimeWindow(_userData, e.row.diaryData);
+					timeWin.addEventListener('open', function(){
+						// スライド前にopenイベントが発火するので1秒後にセット
+				        setTimeout(function(){
+							clickEnable = true;
+				        }, 1000);
+				    });
+
 					timeWin.prevWin = diaryWin;
 					diaryWin.nextWin = timeWin;
 					win.openTabWindow(timeWin, {animated:true});
 				}
-				clickEnable = true;
 			}
 		});
 

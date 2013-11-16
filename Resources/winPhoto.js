@@ -183,6 +183,18 @@ exports.createWindow = function(_type, _articleData){
 		// photoLikeStampImage(10+55)と余白（10+10）を除いたサイズ
 		textView.width = (Ti.Platform.displayCaps.platformWidth - 85) + 'dp';
 
+		var likeReviewId = model.getLocalLikeReviewId({
+			userId: loginId,
+			article: _articleData.id
+		});
+		if (likeReviewId != null) {
+			likeStampImage.image = 'images/icon/b_like_after.png';
+			likeStampImage.clickFlag = true;
+			likeStampImage.reviewId = likeReviewId;
+		}
+		likeStampImage.visible = true;
+
+/*
 		// ライクリストの取得
 		model.getCloudLikeList({
 			userId: loginId,
@@ -201,6 +213,7 @@ exports.createWindow = function(_type, _articleData){
 				util.errorDialog(e);
 			}
 		});
+*/
 	}
 
 	// 記事のテキストの表示
@@ -295,6 +308,7 @@ exports.createWindow = function(_type, _articleData){
 		if (e.source.clickFlag) {
 			// ライクの削除
 			likeStampImage.image = 'images/icon/b_like_before.png';
+
 			model.removeCloudLikeList({
 				postId: _articleData.id,
 				reviewId: e.source.reviewId
@@ -306,6 +320,12 @@ exports.createWindow = function(_type, _articleData){
 					if (photoWin.prevWin != null) {
 						photoWin.prevWin.fireEvent('refresh', {id:_articleData.id, like:-1, comment:0});
 					}
+
+					// ローカルから削除
+					model.removeLocalLikeList({
+						userId: loginId,
+						article: _articleData.id
+					});
 			
 				} else {
 					util.errorDialog(e);
@@ -317,6 +337,7 @@ exports.createWindow = function(_type, _articleData){
 		} else {
 			// ライクの追加
 			likeStampImage.image = 'images/icon/b_like_after.png';
+
 			model.addCloudLikeList({
 				postId: _articleData.id,
 				articleData: _articleData,
@@ -329,6 +350,10 @@ exports.createWindow = function(_type, _articleData){
 					if (photoWin.prevWin != null) {
 						photoWin.prevWin.fireEvent('refresh', {id:_articleData.id, like:1, comment:0});
 					}
+
+					// ローカルに登録
+					var likeList = [{user:loginId, article:_articleData.id, review:e.reviews[0].id}];
+					model.addLocalLikeList(likeList);
 	
 				} else {
 					util.errorDialog(e);

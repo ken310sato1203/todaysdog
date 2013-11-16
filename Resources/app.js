@@ -80,6 +80,83 @@ var openMainWindow = function(_userData) {
 */
 };
 
+var initStampHistory = function(_userData) {
+	Ti.API.debug('[func]initStampHistory:');
+	// スタンプデータの初期化
+//	model.dropLocalStampList();
+	model.createLocalStampList();
+/*
+	model.initCloudStampList({
+		userId: _userData.id
+	}, function(e) {
+		Ti.API.debug('[func]initCloudStampList.callback:');
+		if (! e.success) {
+			util.errorDialog(e);
+		}
+	});
+*/
+	var countLocalStampList = model.getCountLocalStampList(_userData.id);
+	if (countLocalStampList == 0) {
+		model.getAllCloudStampList({
+			userId: _userData.id
+		}, function(e) {
+			Ti.API.debug('[func]getAllCloudStampList.callback:');
+			if (e.success) {
+
+				// 最新のデータのみを抽出
+				var stampHistoryList = [];
+				var checkList = {};
+				for (var i = 0; i < e.stampList.length; i++) {
+					
+					if (checkList[e.stampList[i].stamp] == null) {
+						checkList[e.stampList[i].stamp] = true;
+						stampHistoryList.push(e.stampList[i]);
+					}
+				}
+										
+				// ローカルDBに登録
+				model.addLocalStampHistoryList(stampHistoryList);
+
+			} else {
+				util.errorDialog(e);
+			}
+		});
+	}
+};
+
+var initLikeArticle = function(_userData) {
+	Ti.API.debug('[func]initLikeArticle:');
+	// ライクデータの初期化
+//	model.dropLocalLikeList();
+	model.createLocalLikeList();
+/*
+	model.initCloudLikeList({
+		userId: _userData.id
+	}, function(e) {
+		Ti.API.debug('[func]initCloudLikeList.callback:');
+		if (! e.success) {
+			util.errorDialog(e);
+		}
+	});
+*/
+	var countLocalLikeList = model.getCountLocalLikeList(_userData.id);
+	if (countLocalLikeList == 0) {
+		model.getAllCloudLikeList({
+			userId: _userData.id
+		}, function(e) {
+			Ti.API.debug('[func]getAllCloudLikeList.callback:');
+			if (e.success) {
+
+				// ローカルDBに登録
+				model.addLocalLikeList(e.likeList);
+
+			} else {
+				util.errorDialog(e);
+			}
+		});
+	}
+};
+
 var loginFacebook = function() {
 	Ti.API.debug('[func]loginFacebook:');
 
@@ -142,46 +219,10 @@ var loginFacebook = function() {
 			}
 			
 			// スタンプデータの初期化
-//			model.dropLocalStampList();
-			model.createLocalStampList();
-/*
-			model.initCloudStampList({
-				userId: userData.id
-			}, function(e) {
-				Ti.API.debug('[func]initCloudStampList.callback:');
-				if (! e.success) {
-					util.errorDialog(e);
-				}
-			});
-*/
-			var countLocalStampList = model.getCountLocalStampList(userData.id);
-			if (countLocalStampList == 0) {
-				model.getAllCloudStampList({
-					userId: userData.id
-				}, function(e) {
-					Ti.API.debug('[func]getAllCloudStampList.callback:');
-					if (e.success) {
-
-						// 最新のデータのみを抽出
-						var stampHistoryList = [];
-						var checkList = {};
-						for (var i = 0; i < e.stampList.length; i++) {
-							
-							if (checkList[e.stampList[i].stamp] == null) {
-								checkList[e.stampList[i].stamp] = true;
-								stampHistoryList.push(e.stampList[i]);
-							}
-						}
-												
-						// ローカルDBに登録
-						model.addLocalStampHistoryList(stampHistoryList);
-
-					} else {
-						util.errorDialog(e);
-					}
-				});
-			}
-
+			initStampHistory(userData);
+			// ライクデータの初期化
+			initLikeArticle(userData);
+			
 			// メインウィンドウの表示
 			openMainWindow(userData);
 

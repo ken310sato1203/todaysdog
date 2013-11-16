@@ -1347,6 +1347,96 @@ exports.model = {
 		return count;
 	},
 
+	// ライクデータテーブルの作成
+	createLocalLikeList:function(){
+		Ti.API.debug('[func]createLocalLikeList:');
+		sqlite.open(function(db){
+			db.create("LikeArticleTB", "CREATE TABLE IF NOT EXISTS LikeArticleTB (user VARCHAR, article VARCHAR, review VARCHAR, created_at TIMESTAMP DEFAULT (DATETIME('now','localtime')), PRIMARY KEY (user, article))");
+		});
+	},
+
+	// ライクデータテーブルの削除
+	dropLocalLikeList:function(){
+		Ti.API.debug('[func]dropLocalLikeList:');
+		sqlite.open(function(db){
+			db.drop("LikeArticleTB");
+		});
+	},
+
+	// ライクデータテーブルの件数取得
+	getCountLocalLikeList:function(_user){
+		Ti.API.debug('[func]getCountLocalLikeList:');
+		return sqlite.open(function(db){
+			var result = db.select("count(user)").from("LikeArticleTB").where("user","=",_user).execute();
+			return result.field(0);
+		});
+	},
+
+	// 指定ユーザのライクデータから全データを取得
+	getAllCloudLikeList:function(params, callback){
+		Ti.API.debug('[func]getAllCloudLikeList:');
+		// 6ヶ月前以降のデータを取得
+		var now = new Date();		
+		var startDate = new Date(now.getFullYear(), now.getMonth() + 1 - 6, now.getDate());
+
+		Cloud.Reviews.query({
+			where: {
+				user_id: params.userId,
+				rating: 1,
+				'created_at': {
+					'$gte': util.getCloudFormattedDateTime(startDate)
+				}
+			},
+			order: '-updated_at',
+			page : 1,
+			per_page : 5000
+		}, function (e) {
+			var likeList = [];
+			if (e.success) {
+				Ti.API.debug('success:');
+				for (var i = 0; i < e.reviews.length; i++) {
+					var likeData = {
+						user: params.userId,
+						article: e.reviews[i].reviewed_object.id,
+						review: e.reviews[i].id,
+					};
+					likeList.push(likeData);
+				}
+			}
+			e.likeList = likeList;
+			callback(e);
+		});
+	},
+
+	// ライクデータを追加
+	addLocalLikeList:function(_likeList){
+		Ti.API.debug('[func]addLocalLikeList:');
+		sqlite.open(function(db){
+			for (var i=0; i<_likeList.length; i++) {
+				db.replace("LikeArticleTB").set({user:_likeList[i].user, article:_likeList[i].article, review:_likeList[i].review}).execute();
+			}
+		});
+	},
+	// ライクデータを削除
+	removeLocalLikeList:function(params){
+		Ti.API.debug('[func]removeLocalLikeList:');
+		sqlite.open(function(db){
+			db.remove("LikeArticleTB").where("user","=",params.userId).and_where("article","=",params.article).execute();
+		});
+	},
+
+	// 指定記事のライクデータを取得
+	getLocalLikeReviewId:function(params){
+		Ti.API.debug('[func]getLocalLikeList:');
+		var likeReviewId = sqlite.open(function(db){
+			var result = db.select().from("LikeArticleTB").where("user","=",params.userId).and_where("article","=",params.article).execute();
+			var data = result.fieldByName("review");
+			return data;
+		});
+		
+		return likeReviewId;
+	},
+
 	// ライクリストに追加
 	addCloudLikeList:function(params, callback){
 		Ti.API.debug('[func]addCloudLikeList:');

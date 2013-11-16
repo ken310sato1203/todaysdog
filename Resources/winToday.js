@@ -323,20 +323,6 @@ exports.createWindow = function(_userData){
 		// ビューの更新
 		todayTableView.data = [];
 		updateTableView();
-		
-		// 初期化後に呼び出し元の画面を閉じる
-		if (e.closeWin) {
-			e.closeWin.close({animated:false});
-		}
-/*
-		var targetTab = win.getTab("diaryTab");
-		// timeWinがオープンしている場合
-		if (targetTab.window.nextWin != null) {
-			// timeWinをクローズ
-			targetTab.window.nextWin.close({animated:false});
-		}
-		targetTab.window.fireEvent('refresh');
-*/
 	});
 
 	// 下スクロールで上部ヘッダがすべて表示するまでひっぱったかどうかのフラグ

@@ -189,35 +189,34 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 			diaryData.todayFlag = true;
 		}
 
-		// todayWinの更新
-		var todayTab = win.getTab("todayTab");
-		if (_type == "today") {
-			// todayWinの初期化後に画面を閉じてもらう
-			todayTab.window.fireEvent('refresh', {closeWin:postWin});
-		} else {		
-			todayTab.window.fireEvent('refresh');
-		}
-
-		// diaryWinの更新
-		var diaryTab = win.getTab("diaryTab");
-		diaryTab.window.fireEvent('refresh', {diaryData:diaryData});
-		// timeWinの更新
-		if (diaryTab.window.nextWin != null) {
-			if (_type == "time") {
-				// diaryWinの初期化後に画面を閉じてもらう
-				diaryTab.window.nextWin.fireEvent('refresh', {diaryData:diaryData, closeWin:postWin});
-			} else {		
-				diaryTab.window.nextWin.fireEvent('refresh', {diaryData:diaryData});
-			}
-		}
-
 		// stampWinを閉じる
 		if (postWin.prevWin.objectName == 'stampWin') {
 			postWin.prevWin.close({animated:false});
 		}
 
-		// 遷移元の初期化後に画面を閉じるため、遷移元側でcloseを実行
-//		postWin.close({animated:false});
+		// todayWinの更新
+		var todayWin = win.getTab("todayTab").window;
+		todayWin.fireEvent('refresh');
+		if (_type == "today") {
+			todayWin.addEventListener('refresh', function(){
+				postWin.close({animated:false});
+		    });
+		}
+
+		// diaryWinの更新
+		var diaryWin = win.getTab("diaryTab").window;
+		diaryWin.fireEvent('refresh', {diaryData:diaryData});
+		// timeWinの更新
+		var timeWin = diaryWin.nextWin;
+		if (timeWin != null) {
+			timeWin.fireEvent('refresh', {diaryData:diaryData});
+			if (_type == "time") {
+				timeWin.addEventListener('refresh', function(){
+					postWin.close({animated:false});
+			    });
+			}
+		}
+
 	};
 						
 // ---------------------------------------------------------------------
@@ -410,6 +409,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 					Ti.API.debug('[func]cloudAddStampList.callback:');
 					if (e.success) {
 						Ti.API.debug('Success:');
+						// ローカルに登録
 						model.addLocalStampHistoryList(_stampDataList);
 						closePostWin();
 					} else {
