@@ -12,7 +12,7 @@ var sqliter = require("sqliter").sqliter;
 var sqlite = new sqliter("todaysdog");
 
 var tabGroup = null;
-var customTab = null;	
+var customTab = null;
 
 // facebook側で登録したアプリID
 Facebook.appid = '159833880868916';
@@ -80,11 +80,15 @@ var openMainWindow = function(_userData) {
 */
 };
 
-var initStampHistory = function(_userData) {
-	Ti.API.debug('[func]initStampHistory:');
+var initStamp = function(_userData) {
+	Ti.API.debug('[func]initStamp:');
 	// スタンプデータの初期化
 //	model.dropLocalStampList();
 	model.createLocalStampList();
+
+//	model.dropLocalStampHistoryList();
+	model.createLocalStampHistoryList();
+
 /*
 	model.initCloudStampList({
 		userId: _userData.id
@@ -95,27 +99,35 @@ var initStampHistory = function(_userData) {
 		}
 	});
 */
-	var countLocalStampList = model.getCountLocalStampList(_userData.id);
-	if (countLocalStampList == 0) {
+	var countStamp = model.getCountLocalStampList(_userData.id);
+	var countHistory = model.getCountLocalStampHistoryList(_userData.id);
+
+	if (countStamp == 0 || countHistory == 0) {
 		model.getAllCloudStampList({
 			userId: _userData.id
 		}, function(e) {
 			Ti.API.debug('[func]getAllCloudStampList.callback:');
 			if (e.success) {
 
-				// 最新のデータのみを抽出
-				var stampHistoryList = [];
-				var checkList = {};
-				for (var i = 0; i < e.stampList.length; i++) {
-					
-					if (checkList[e.stampList[i].stamp] == null) {
-						checkList[e.stampList[i].stamp] = true;
-						stampHistoryList.push(e.stampList[i]);
-					}
+				if (countStamp == 0) {
+					// ローカルDBに登録
+					model.addLocalStampList(e.stampList);
 				}
-										
-				// ローカルDBに登録
-				model.addLocalStampHistoryList(stampHistoryList);
+
+				if (countHistory == 0) {
+					// 最新のデータのみを抽出
+					var stampHistoryList = [];
+					var checkList = {};
+					for (var i = 0; i < e.stampList.length; i++) {
+						
+						if (checkList[e.stampList[i].stamp] == null) {
+							checkList[e.stampList[i].stamp] = true;
+							stampHistoryList.push(e.stampList[i]);
+						}
+					}											
+					// ローカルDBに登録
+					model.addLocalStampHistoryList(stampHistoryList);
+				}
 
 			} else {
 				util.errorDialog(e);
@@ -219,7 +231,7 @@ var loginFacebook = function() {
 			}
 			
 			// スタンプデータの初期化
-			initStampHistory(userData);
+			initStamp(userData);
 			// ライクデータの初期化
 			initLikeArticle(userData);
 			

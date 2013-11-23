@@ -210,6 +210,16 @@ exports.createWindow = function(_userData){
 			// 今日の記事データ取得
 			rowList.push(getTodayPhotoRow([_userData.today]));
 			// 今日のスタンプデータ取得
+			var stampList = model.getLocalStampList({
+				userId: _userData.id,
+				year: year,
+				month: month,
+				day: day
+			});
+			rowList.push(getTodayDiaryRow(stampList));
+			todayTableView.setData(rowList);
+
+/*						
 			model.getCloudStampList({
 				userId: _userData.id,
 				year: year,
@@ -225,6 +235,7 @@ exports.createWindow = function(_userData){
 					util.errorDialog(e);
 				}
 			});
+*/
 		} else {
 			// 過去の記事データを保持している場合のリセット
 			_userData.today = null;
@@ -241,6 +252,15 @@ exports.createWindow = function(_userData){
 				if (e.success) {
 					rowList.push(getTodayPhotoRow(e.articleList));
 					// 今日のスタンプデータ取得
+					var stampList = model.getLocalStampList({
+						userId: _userData.id,
+						year: year,
+						month: month,
+						day: day
+					});
+					rowList.push(getTodayDiaryRow(stampList));
+					todayTableView.setData(rowList);
+/*
 					model.getCloudStampList({
 						userId: _userData.id,
 						year: year,
@@ -256,7 +276,7 @@ exports.createWindow = function(_userData){
 							util.errorDialog(e);
 						}
 					});
-
+*/
 				} else {
 					util.errorDialog(e);
 				}

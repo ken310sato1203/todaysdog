@@ -172,6 +172,21 @@ exports.createWindow = function(_userData, _diaryData){
 		var type = "time";
 		if (_diaryData.stampList == null) {
 			// スタンプデータの取得
+			var stampList = model.getLocalStampList({
+				userId: _userData.id,
+				year: year,
+				month: month,
+				day: day
+			});
+			_diaryData.stampList = stampList;
+			timeTableView = getTimeTableView(type);
+			timeTableView.visible = true;
+			scrollPosition(timeTableView);
+			timeWin.add(timeTableView);
+			// タイトルの表示
+			monthTitle.text =  monthName[_diaryData.month - 1] + ' ' + _diaryData.day;	
+
+/*
 			model.getCloudStampList({
 				userId: _userData.id,
 				year: year,
@@ -192,7 +207,7 @@ exports.createWindow = function(_userData, _diaryData){
 					util.errorDialog(e);
 				}
 			});
-	
+*/	
 		} else {
 			timeTableView = getTimeTableView(type);
 			timeTableView.visible = true;

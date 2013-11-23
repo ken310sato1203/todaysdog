@@ -47,7 +47,10 @@ var makeQuery = {
 		db = Ti.Database.open(dbname);
 		
 		var r = _func(this);
-		
+
+		if(this.result) {
+			this.result.close();			
+		}
 		db.close();
 		
 		return r;
@@ -108,7 +111,7 @@ var makeQuery = {
 		
 		this.result = db.execute(this.q);
 		
-		return this.result;
+		return this;
 	},
 	getResult:function(){
 		return this.result;
@@ -134,7 +137,6 @@ var makeQuery = {
 			
 			result.next();
 		}
-		result.close();
 		
 		return data;
 	},
@@ -333,24 +335,13 @@ var makeQuery = {
 		this.q += "))";
 		return this;
 	},
-	order_by:function(_column,_order){
+	order_by:function(_column){
 		if(_column && typeof _column == "string"){
 			this.q += (!this.order)?" ORDER BY " + _column:"," + _column;
 		}
 		else{
 			console.log("sqlite:makeQuery.order_by - column is string");
 			return false;
-		}
-		
-		if(_order && typeof _order == "string"){
-			_order = _order.toUpperCase();
-			
-			if(_order != "ASC" && _order != "DESC"){
-				console.log("sqlite:makeQuery.order_by - order is string(asc or desc)");
-				return false;
-			}
-			
-			this.q += " " + _order;
 		}
 		
 		this.order = 1;

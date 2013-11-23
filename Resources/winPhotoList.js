@@ -77,7 +77,11 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				if (e.articleList.length > 0) {
 					// 取得した記事をテーブルに追加
 					photoListTableView.appendRow(getPhotoListArticleTableRow(e.articleList), {animated:true});
-					articlePage++;
+					if (e.meta.total_pages == articlePage) {
+						nextArticleFlag = false;
+					} else if (e.meta.total_pages > articlePage) {
+						articlePage++;
+					}
 				} else {
 					if (articlePage == 1) {
 						appendNoDataLabel();

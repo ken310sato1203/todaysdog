@@ -194,6 +194,18 @@ exports.createWindow = function(_userData){
 			// タイトルの年月
 			monthTitle.text =  year + ' ' + monthName[month-1];
 			// 当月のスタンプデータ取得
+			var stampList = model.getLocalStampList({
+				userId: _userData.id,
+				year: year,
+				month: month,
+				day: null
+			});
+			// カレンダーの表示
+			thisDiaryView = getCalView(stampList, year, month);
+			diaryWin.add(thisDiaryView);
+			thisDiaryView.visible = true;
+
+/*
 			model.getCloudStampList({
 				userId: _userData.id,
 				year: year,
@@ -210,6 +222,7 @@ exports.createWindow = function(_userData){
 					util.errorDialog(e);
 				}
 			});
+*/
 		}
 	};
 
@@ -230,6 +243,18 @@ exports.createWindow = function(_userData){
 			// タイトルの年月
 			monthTitle.text =  year + ' ' + monthName[month-1];
 			// 当月のスタンプデータ取得
+			var stampList = model.getLocalStampList({
+				userId: _userData.id,
+				year: year,
+				month: month,
+				day: null
+			});
+			// カレンダーの表示
+			thisDiaryView = getCalView(stampList, year, month);
+			diaryWin.add(thisDiaryView);
+			thisDiaryView.visible = true;
+
+/*
 			model.getCloudStampList({
 				userId: _userData.id,
 				year: year,
@@ -246,21 +271,38 @@ exports.createWindow = function(_userData){
 					util.errorDialog(e);
 				}
 			});
+*/
 		}
 	};
 
 
 	// カレンダーの再作成
-	var refreshCalView = function(_year, _month, _day) {
-		Ti.API.debug('[func]refreshCalView:');
+	var updateCalView = function(_year, _month, _day) {
+		Ti.API.debug('[func]updateCalView:');
 		year = _year;
 		month = _month;
 		// タイトルの年月
 		monthTitle.text =  year + ' ' + monthName[month-1];
 		// ビューの再作成
-		diaryWin.remove(thisDiaryView);
+		if(thisDiaryView) {
+			diaryWin.remove(thisDiaryView);
+		}
 
 		// 当月のスタンプデータ取得
+		var stampList = model.getLocalStampList({
+			userId: _userData.id,
+			year: year,
+			month: month,
+			day: null
+		});
+		// カレンダーの表示
+		thisDiaryView = getCalView(stampList, year, month);
+		diaryWin.add(thisDiaryView);
+		// 今日の日にスクロール
+		thisDiaryView.scrollToIndex(_day-3 > 0? _day-3 : 0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
+		thisDiaryView.visible = true;
+
+/*
 		model.getCloudStampList({
 			userId: _userData.id,
 			year: year,
@@ -279,6 +321,7 @@ exports.createWindow = function(_userData){
 				util.errorDialog(e);
 			}
 		});
+*/
 	};
 
 // ---------------------------------------------------------------------
@@ -295,7 +338,9 @@ exports.createWindow = function(_userData){
 	titleView.add(nextImage);
 
 	var thisDiaryView = null;
+	updateCalView(nowYear, nowMonth, nowDay);
 	
+/*
 	// 当月のスタンプデータ取得
 	model.getCloudStampList({
 		userId: _userData.id,
@@ -315,7 +360,7 @@ exports.createWindow = function(_userData){
 			util.errorDialog(e);
 		}
 	});
-
+*/
 
 // ---------------------------------------------------------------------
 	// 前月ボタンをクリック
@@ -358,13 +403,13 @@ exports.createWindow = function(_userData){
 		nowMonth = now.getMonth() + 1;
 		nowDay = now.getDate();
 
-		refreshCalView(nowYear, nowMonth, nowDay);
+		updateCalView(nowYear, nowMonth, nowDay);
 /*
 		if (year == nowYear && month == nowMonth) {
 			// 今日の日にスクロール
 			thisDiaryView.scrollToIndex(nowDay-3 > 0? nowDay-3 : 0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 		} else {
-			refreshCalView(nowYear, nowMonth, nowDay);
+			updateCalView(nowYear, nowMonth, nowDay);
 		}
 */
 	});
@@ -374,7 +419,7 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]diaryWin.refresh:');
 		// ビューの再作成
 		if (e.diaryData) {
-			refreshCalView(e.diaryData.year, e.diaryData.month, e.diaryData.day);			
+			updateCalView(e.diaryData.year, e.diaryData.month, e.diaryData.day);			
 
 		} else {
 			// 今日の日付の取得
@@ -382,7 +427,7 @@ exports.createWindow = function(_userData){
 			nowYear = now.getFullYear();
 			nowMonth = now.getMonth() + 1;
 			nowDay = now.getDate();
-			refreshCalView(nowYear, nowMonth, nowDay);
+			updateCalView(nowYear, nowMonth, nowDay);
 		}
 	});
 

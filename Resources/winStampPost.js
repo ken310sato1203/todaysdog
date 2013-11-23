@@ -155,6 +155,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 					Ti.API.debug('[func]removeCloudStampList.callback:');						
 					if (e.success) {
 						Ti.API.debug('Success:');
+						model.removeLocalStampList(_stampDataList);
 						closePostWin();
 					} else {
 						util.errorDialog(e);
@@ -410,6 +411,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 					if (e.success) {
 						Ti.API.debug('Success:');
 						// ローカルに登録
+						model.addLocalStampList(e.stampDataList);
 						model.addLocalStampHistoryList(_stampDataList);
 						closePostWin();
 					} else {

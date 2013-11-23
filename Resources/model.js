@@ -52,6 +52,7 @@ commentList = [
 	{no:"A0024", seq:"1", userId:"kuro", name:"クロ", date:"2013-03-10 08:14:27", text:"今年もよろしくお願いします。あけましておめでとうございます。今年もよろしくお願いします。あけましておめでとうございます。"},
 ];
 
+/*
 likeList = [
 	{no:"A0020", seq:"2", userId:"51f7d0af51dfe2157f01843d", date:"2013-03-02 09:23:45"},
 	{no:"A0020", seq:"1", userId:"maki.oshika.9", date:"2013-03-01 08:14:27"},
@@ -60,7 +61,7 @@ likeList = [
 	{no:"A0022", seq:"1", userId:"maki.oshika.9", date:"2013-03-04 12:37:02"},
 	{no:"A0023", seq:"1", userId:"maki.oshika.9", date:"2013-03-06 10:37:02"},
 ];
-
+*/
 userList = [
 	{id:"maki.oshika.9", user:"maki.oshika.9", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう さくら", breed:"ダックスフント", sex:"♀", birth:"2005-12-07", memo:"東京在住、ビール党。東京在住、ビール党。東京在住、ビール党。東京在住、ビール党。東京在住、ビール党。", icon:"images/icon/i_maki.oshika.9.png", cover:""},
 //	{id:"51f7d0af51dfe2157f01843d", user:"ken_sato", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう けん", breed:"ダックスフント", sex:"♂", birth:"2005-12-07", memo:"東京在住、びびり。東京在住、びびり。東京在住、びびり。東京在住、びびり。東京在住、びびり。", icon:"", cover:""},
@@ -161,6 +162,7 @@ for (var i=0; i<articleList.length; i++) {
 		}
 	}
 }
+/*
 for (var i=0; i<likeList.length; i++) {
 	for (var j=0; j<userList.length; j++) {
 		if (likeList[i].userId == userList[j].id) {
@@ -173,7 +175,7 @@ for (var i=0; i<likeList.length; i++) {
 		}
 	}
 }
-
+*/
 for (var i=0; i<followList.length; i++) {
 	for (var j=0; j<userList.length; j++) {
 		if (followList[i].userId == userList[j].id) {
@@ -666,6 +668,7 @@ exports.model = {
 		articleList = _articleList;
 	},
 
+/*
 	// 記事リストの取得
 	// 前回更新時に読み込んだ記事の最終インデックスより新しい記事を取得
 	getArticleList:function(_type, _userData, _prevArticleIndex, _articleCount){
@@ -760,7 +763,7 @@ exports.model = {
 
 		return target;
 	},
-
+*/
 	// 指定ユーザの記事リストから指定日除いてランダムに取得
 	getRandomArticle:function(_userData, _notInArticleData){
 		Ti.API.debug('[func]getRandomArticle:');
@@ -973,8 +976,8 @@ exports.model = {
 				Ti.API.debug('success:');
 				for (var i = 0; i < e.events.length; i++) {
 					var event = e.events[i];
-					var startDate = util.getDate(event.start_time);
-					var hour = startDate.getHours();
+					var date = util.getDate(event.start_time);
+					var hour = date.getHours();
 					if (event.duration == 0) {
 						hour = -1;
 					}
@@ -985,9 +988,9 @@ exports.model = {
 							user: event.user.id,
 							stamp: stamp,
 							textList: event.custom_fields[stamp],
-							year: startDate.getFullYear(),
-							month: startDate.getMonth() + 1,
-							day: startDate.getDate(),
+							year: date.getFullYear(),
+							month: date.getMonth() + 1,
+							day: date.getDate(),
 							hour: hour
 						};
 						stampList.push(stampData);
@@ -1029,8 +1032,8 @@ exports.model = {
 				Ti.API.debug('success:');
 				for (var i = 0; i < e.events.length; i++) {
 					var event = e.events[i];
-					var startDate = util.getDate(event.start_time);
-					var hour = startDate.getHours();
+					var date = util.getDate(event.start_time);
+					var hour = date.getHours();
 					if (event.duration == 0) {
 						hour = -1;
 					}
@@ -1041,9 +1044,9 @@ exports.model = {
 							user: event.user.id,
 							stamp: stamp,
 							textList: event.custom_fields[stamp],
-							year: startDate.getFullYear(),
-							month: startDate.getMonth() + 1,
-							day: startDate.getDate(),
+							year: date.getFullYear(),
+							month: date.getMonth() + 1,
+							day: date.getDate(),
 							hour: hour
 						};
 						stampList.push(stampData);
@@ -1083,20 +1086,21 @@ exports.model = {
 		stampList.unshift(_stampData);
 	},
 
-	// スタンプデータテーブルの件数取得
-	getCountLocalStampList:function(_user){
-		Ti.API.debug('[func]getCountLocalStampList:');
-		return sqlite.open(function(db){
-			var result = db.select("count(user)").from("StampHistoryTB").where("user","=",_user).execute();
-			return result.field(0);
-		});
-	},
-
 	// スタンプデータテーブルの作成
 	createLocalStampList:function(){
 		Ti.API.debug('[func]createLocalStampList:');
 		sqlite.open(function(db){
-			db.create("StampHistoryTB", "CREATE TABLE IF NOT EXISTS StampHistoryTB (user VARCHAR, stamp VARCHAR, textList TEXT, created_at TIMESTAMP DEFAULT (DATETIME('now','localtime')), PRIMARY KEY (user, stamp))");
+			db.create("DiaryStampTB", 
+				"CREATE TABLE IF NOT EXISTS DiaryStampTB (" + 
+				"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"user VARCHAR, " +
+				"event VARCHAR, " +
+				"stamp VARCHAR, " +
+				"text TEXT, " +
+				"date TEXT, " + 
+				"duration INTEGER, " + 
+				"created_at TIMESTAMP DEFAULT (DATETIME('now','localtime')))"
+			);
 		});
 	},
 
@@ -1104,7 +1108,7 @@ exports.model = {
 	dropLocalStampList:function(){
 		Ti.API.debug('[func]dropLocalStampList:');
 		sqlite.open(function(db){
-			db.drop("StampHistoryTB");
+			db.drop("DiaryStampTB");
 		});
 	},
 
@@ -1112,13 +1116,182 @@ exports.model = {
 	addLocalStampList:function(_stampDataList){
 		Ti.API.debug('[func]addLocalStampList:');
 		sqlite.open(function(db){
-			for (var i=0; i<_stampDataList.length; i++) {				
-				var textListString = JSON.stringify(_stampDataList[i].textList);
-				db.replace("StampHistoryTB").set({user:_stampDataList[i].user, stamp:_stampDataList[i].stamp, textList:textListString}).execute();
+			for (var i=0; i<_stampDataList.length; i++) {
+				var duration = 3600;
+				if (_stampDataList[i].hour == -1) {
+					duration = 0;
+					_stampDataList[i].hour = 0;
+				}
+				var stampDate = new Date(
+					_stampDataList[i].year, 
+					_stampDataList[i].month-1, 
+					_stampDataList[i].day, 
+					_stampDataList[i].hour);
+
+				if (_stampDataList[i].id) {
+					db.update("DiaryStampTB").set({
+						event:_stampDataList[i].event, 
+						user:_stampDataList[i].user, 
+						stamp:_stampDataList[i].stamp, 
+						text:_stampDataList[i].textList[0], 
+						date:util.getCloudFormattedDateTime(stampDate),
+						duration:duration, 
+					}).where("id","=",_stampDataList[i].id)
+					.execute();
+				} else {
+					db.insert("DiaryStampTB").set({
+						event:_stampDataList[i].event, 
+						user:_stampDataList[i].user, 
+						stamp:_stampDataList[i].stamp, 
+						text:_stampDataList[i].textList[0], 
+						date:util.getCloudFormattedDateTime(stampDate),
+						duration:duration, 
+					}).execute();
+				}
 			}
 		});
 	},
-	
+
+	// スタンプデータの取得
+	getLocalStampList:function(params){
+		Ti.API.debug('[func]getLocalStampList:');
+
+		var startDate = null;
+		var endDate = null;
+		if (params.day == null) {
+			startDate = new Date(params.year, params.month-1, 1);
+			endDate = new Date(params.year, params.month, 1);
+		} else {
+			startDate = new Date(params.year, params.month-1, params.day);
+			endDate = new Date(params.year, params.month-1, params.day+1);
+		}
+
+		var stampList = sqlite.open(function(db){
+			var rows = db.select().from("DiaryStampTB")
+				.where("user","=",params.userId)
+				.and_where("date",">=",util.getCloudFormattedDateTime(startDate))
+				.and_where("date","<",util.getCloudFormattedDateTime(endDate))
+				.order_by("date asc, created_at asc")
+				.execute().getResult();
+
+			var result = [];
+			while(rows.isValidRow()){
+				var date = util.getDate(rows.fieldByName('date'));
+				var hour = date.getHours();
+				if (rows.fieldByName('duration') == 0) {
+					hour = -1;
+				}
+
+				var stampData = {
+					id: rows.fieldByName('id'),
+					event: rows.fieldByName('event'),
+					user: rows.fieldByName('user'),
+					stamp: rows.fieldByName('stamp'),
+					textList: [rows.fieldByName('text')],
+					year: date.getFullYear(),
+					month: date.getMonth() + 1,
+					day: date.getDate(),
+					hour: hour
+				};
+				result.push(stampData);
+				rows.next();
+			}
+			return result;
+		});
+		
+		return stampList;
+	},
+
+	// スタンプデータテーブルの件数取得
+	getCountLocalStampList:function(_user){
+		Ti.API.debug('[func]getCountLocalStampList:');
+		return sqlite.open(function(db){
+			var rows = db.select("count(user)").from("DiaryStampTB")
+				.where("user","=",_user)
+				.execute().getResult();
+			return rows.field(0);
+		});
+	},
+
+	// スタンプデータの削除
+	removeLocalStampList:function(_stampDataList){
+		Ti.API.debug('[func]removeLocalStampList:');
+		sqlite.open(function(db){
+			for (var i=0; i<_stampDataList.length; i++) {				
+				db.remove("DiaryStampTB")
+					.where("id","=",_stampDataList[i].id)
+					.execute();
+			}
+		});
+	},
+
+
+	// スタンプデータテーブルの作成
+	createLocalStampHistoryList:function(){
+		Ti.API.debug('[func]createLocalStampHistoryList:');
+		sqlite.open(function(db){
+			db.create("StampHistoryTB", 
+				"CREATE TABLE IF NOT EXISTS StampHistoryTB (" + 
+				"user VARCHAR, " + 
+				"stamp VARCHAR, " + 
+				"textList TEXT, " + 
+				"created_at TIMESTAMP DEFAULT (DATETIME('now','localtime')), " + 
+				"PRIMARY KEY (user, stamp))"
+			);
+		});
+	},
+
+	// スタンプデータテーブルの削除
+	dropLocalStampHistoryList:function(){
+		Ti.API.debug('[func]dropLocalStampHistoryList:');
+		sqlite.open(function(db){
+			db.drop("StampHistoryTB");
+		});
+	},
+
+	// スタンプの履歴データを追加
+	addLocalStampHistoryList:function(_stampDataList){
+		Ti.API.debug('[func]addLocalStampHistoryList:');
+		sqlite.open(function(db){
+			for (var i=0; i<_stampDataList.length; i++) {				
+				var textListString = JSON.stringify(_stampDataList[i].textList);
+				db.replace("StampHistoryTB").set({
+					user:_stampDataList[i].user, 
+					stamp:_stampDataList[i].stamp, 
+					textList:textListString
+				}).execute();
+			}
+		});
+	},
+
+	// 指定スタンプの履歴データを取得
+	getLocalStampHistoryList:function(params){
+		Ti.API.debug('[func]getLocalStampHistoryList:');
+		var historyList = sqlite.open(function(db){
+			var rows = db.select().from("StampHistoryTB")
+				.where("user","=",params.userId)
+				.and_where("stamp","=",params.stamp)
+				.execute().getResult();			
+			var data = eval(rows.fieldByName("textList"));
+			return data;
+		});
+		
+		return historyList;
+	},
+
+	// スタンプデータテーブルの件数取得
+	getCountLocalStampHistoryList:function(_user){
+		Ti.API.debug('[func]getCountLocalStampHistoryList:');
+		return sqlite.open(function(db){
+			var rows = db.select("count(user)").from("StampHistoryTB")
+				.where("user","=",_user)
+				.execute().getResult();
+			return rows.field(0);
+		});
+	},
+
+
+
 	// スタンプデータの追加
 	addCloudStampList:function(_stampDataList, callback){
 		Ti.API.debug('[func]addCloudStampList:');
@@ -1146,6 +1319,8 @@ exports.model = {
 				duration: duration,
 				custom_fields: custom_fields
 			}, function (e) {
+				_stampDataList[0].event = e.events[0].id;
+				e.stampDataList = _stampDataList;
 				callback(e);
 			});
 		} else {
@@ -1209,28 +1384,6 @@ exports.model = {
 		}
 	},
 
-	// 指定スタンプの履歴データを取得
-	getLocalStampHistoryList:function(params){
-		Ti.API.debug('[func]getLocalStampHistoryList:');
-		var historyList = sqlite.open(function(db){
-			var result = db.select().from("StampHistoryTB").where("user","=",params.userId).and_where("stamp","=",params.stamp).execute();
-			var data = eval(result.fieldByName("textList"));
-			return data;
-		});
-		
-		return historyList;
-	},
-
-	// スタンプの履歴データを追加
-	addLocalStampHistoryList:function(_stampDataList){
-		Ti.API.debug('[func]addLocalStampHistoryList:');
-		sqlite.open(function(db){
-			for (var i=0; i<_stampDataList.length; i++) {				
-				var textListString = JSON.stringify(_stampDataList[i].textList);
-				db.replace("StampHistoryTB").set({user:_stampDataList[i].user, stamp:_stampDataList[i].stamp, textList:textListString}).execute();
-			}
-		});
-	},
 
 /*
 	// 指定スタンプの履歴データを取得
@@ -1263,7 +1416,7 @@ exports.model = {
 		});
 	},
 */
-
+/*
 	// ライクリストに追加
 	addLikeList:function(_likeList){
 		Ti.API.debug('[func]addLikeList:');
@@ -1346,12 +1499,20 @@ exports.model = {
 		}
 		return count;
 	},
-
+*/
 	// ライクデータテーブルの作成
 	createLocalLikeList:function(){
 		Ti.API.debug('[func]createLocalLikeList:');
 		sqlite.open(function(db){
-			db.create("LikeArticleTB", "CREATE TABLE IF NOT EXISTS LikeArticleTB (user VARCHAR, article VARCHAR, review VARCHAR, created_at TIMESTAMP DEFAULT (DATETIME('now','localtime')), PRIMARY KEY (user, article))");
+			// Cloudでは、review_idがプライマリーキーになっているが、Localではarticle_idをプライマリーキーに設定して、取得・削除をおこなう
+			db.create("LikeArticleTB", 
+				"CREATE TABLE IF NOT EXISTS LikeArticleTB (" + 
+				"user VARCHAR, " + 
+				"article VARCHAR, " + 
+				"review VARCHAR, " + 
+				"created_at TIMESTAMP DEFAULT (DATETIME('now','localtime')), " + 
+				"PRIMARY KEY (user, article))"
+			);
 		});
 	},
 
@@ -1367,8 +1528,10 @@ exports.model = {
 	getCountLocalLikeList:function(_user){
 		Ti.API.debug('[func]getCountLocalLikeList:');
 		return sqlite.open(function(db){
-			var result = db.select("count(user)").from("LikeArticleTB").where("user","=",_user).execute();
-			return result.field(0);
+			var rows = db.select("count(user)").from("LikeArticleTB")
+				.where("user","=",_user)
+				.execute().getResult();
+			return rows.field(0);
 		});
 	},
 
@@ -1413,7 +1576,11 @@ exports.model = {
 		Ti.API.debug('[func]addLocalLikeList:');
 		sqlite.open(function(db){
 			for (var i=0; i<_likeList.length; i++) {
-				db.replace("LikeArticleTB").set({user:_likeList[i].user, article:_likeList[i].article, review:_likeList[i].review}).execute();
+				db.replace("LikeArticleTB").set({
+					user:_likeList[i].user, 
+					article:_likeList[i].article, 
+					review:_likeList[i].review
+				}).execute();
 			}
 		});
 	},
@@ -1421,7 +1588,9 @@ exports.model = {
 	removeLocalLikeList:function(params){
 		Ti.API.debug('[func]removeLocalLikeList:');
 		sqlite.open(function(db){
-			db.remove("LikeArticleTB").where("user","=",params.userId).and_where("article","=",params.article).execute();
+			db.remove("LikeArticleTB").where("user","=",params.userId)
+				.and_where("article","=",params.article)
+				.execute();
 		});
 	},
 
@@ -1429,8 +1598,11 @@ exports.model = {
 	getLocalLikeReviewId:function(params){
 		Ti.API.debug('[func]getLocalLikeList:');
 		var likeReviewId = sqlite.open(function(db){
-			var result = db.select().from("LikeArticleTB").where("user","=",params.userId).and_where("article","=",params.article).execute();
-			var data = result.fieldByName("review");
+			var rows = db.select().from("LikeArticleTB")
+				.where("user","=",params.userId)
+				.and_where("article","=",params.article)
+				.execute().getResult();
+			var data = rows.fieldByName("review");
 			return data;
 		});
 		
