@@ -130,23 +130,23 @@ exports.createWindow = function(_type, _userData, _photoImage){
 	
 						var articleData = {
 							id: null, 
-							no: _userData.id, 
-							user: _userData.user, 
+//							no: _userData.id, 
+							userId: _userData.id, 
 							date: nowDateTime, 
 							text: textArea.value, 
 							photo: dirPath + fileName + '.png',
 							like: "0",
 							comment: "0"
 						};
-						model.postCloudArticle({
-							date: nowDateTime, 
-							text: textArea.value,
-							photo: postImage.toBlob(),
-							post: _userData.post
+						model.addCloudArticle({
+							articleData: articleData,
+							photo: postImage.toBlob()
 						}, function(e) {
-							Ti.API.debug('[func]postCloudArticle.callback:');
+							Ti.API.debug('[func]addCloudArticle.callback:');
 							if (e.success) {
-								_userData.today = articleData;
+								// ローカルに登録
+								model.addLocalArticleList([e.articleData]);
+								_userData.today = e.articleData;
 
 								// 遷移前の画面を閉じる
 								if (cameraPostWin.prevWin != null) {

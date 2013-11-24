@@ -169,9 +169,10 @@ exports.model = {
 	},
 
 	// 記事の投稿
-	postCloudArticle:function(params, callback){
-		Ti.API.debug('[func]postCloudArticle:');		
-		var articleDate = util.getDate(params.date);
+	addCloudArticle:function(params, callback){
+		Ti.API.debug('[func]addCloudArticle:');		
+		var articleData = params.articleData;
+		var articleDate = util.getDate(articleData.date);
 
 		Cloud.Photos.create({
 			photo: params.photo,
@@ -180,16 +181,24 @@ exports.model = {
 			if (e.success) {
 				Ti.API.debug('success:');
 				Cloud.Posts.create({
-					content: params.text,
+					content: articleData.text,
 					photo_id: e.photos[0].id,
 					custom_fields: {
 						postDate: util.getCloudFormattedDateTime(articleDate)
 					}
-				}, function (e) {
-					callback(e);
+				}, function (e2) {
+					if (e2.success) {
+						// Cloudで付与されたidをセット
+						articleData.post = e2.posts[0].id;
+						// 取得できないので後でセット
+//						articleData.photo = e2.posts[0].photo.urls.original;
+						articleData.photo = "";
+						e2.articleData = articleData;
+					}
+					callback(e2);
 				});
 			} else {
-				callback(e);				
+				callback(e);
 			}
 		});
 	},
@@ -439,8 +448,28 @@ exports.model = {
 	},
 
 	// 記事の取得
-	getCloudArticle:function(params, callback){
-		Ti.API.debug('[func]getCloudArticle:');
+	getCloudArticlePost:function(params, callback){
+		Ti.API.debug('[func]getCloudArticlePost:');
+
+		Cloud.Posts.query({
+			event_id: params.postId,
+			order: '-created_at',
+			page : 1,
+			per_page : 1
+		}, function (e) {
+			if (e.success) {
+				Ti.API.debug('success:');				
+				if (e.posts[0].photo.urls) {
+					e.photo = e.posts[0].photo.urls.original;					
+				}
+			}
+			callback(e);
+		});
+	},
+
+	// 記事の取得
+	getCloudTodayArticle:function(params, callback){
+		Ti.API.debug('[func]getCloudTodayArticle:');
 		var startDate = new Date(params.year, params.month-1, params.day);
 
 		Cloud.Posts.query({
@@ -567,6 +596,154 @@ exports.model = {
 			}
 			e.articleList = articleList; 
 			callback(e);
+		});
+	},
+
+	// 記事データテーブルの作成
+	createLocalArticleList:function(){
+		Ti.API.debug('[func]createLocalArticleList:');
+		sqlite.open(function(db){
+			db.create("DogArticleTB", 
+				"CREATE TABLE IF NOT EXISTS DogArticleTB (" + 
+				"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+				"user VARCHAR, " + 
+				"post VARCHAR, " + 
+				"photo VARCHAR, " + 
+				"text TEXT, " +
+				"date TEXT, " + 
+				"created_at TIMESTAMP DEFAULT (DATETIME('now','localtime')))"
+			);
+		});
+	},
+
+	// 記事データテーブルの削除
+	dropLocalArticleList:function(){
+		Ti.API.debug('[func]dropLocalArticleList:');
+		sqlite.open(function(db){
+			db.drop("DogArticleTB");
+		});
+	},
+
+	// 記事データの追加
+	addLocalArticleList:function(_articleData){
+		Ti.API.debug('[func]addLocalArticleList:');
+		for (var i = 0; i < _articleData.length; i++) {
+			var articleDate = util.getDate(_articleData[i].date);
+			sqlite.open(function(db){
+				db.insert("DogArticleTB").set({
+					user:_articleData[i].userId, 
+					post:_articleData[i].post, 
+					photo:_articleData[i].photo, 
+					text:_articleData[i].text, 
+					date:util.getCloudFormattedDateTime(articleDate)
+				}).execute();
+			});
+		}
+	},
+
+	// 記事データの写真URL追加
+	addLocalArticlePhoto:function(params){
+		Ti.API.debug('[func]updateLocalArticleList:');
+		sqlite.open(function(db){
+			db.update("DogArticleTB").set({
+				photo:params.photo
+			})
+			.where("post","=",params.post)
+			.execute();
+		});
+	},
+
+	// 記事データの取得
+	getAllCloudArticleList:function(params, callback){
+		Ti.API.debug('[func]getAllCloudArticleList:');
+		// 6ヶ月前以降のデータを取得
+		var now = new Date();		
+		var startDate = new Date(now.getFullYear(), now.getMonth() + 1 - 6, now.getDate());
+
+		Cloud.Posts.query({
+			where: {
+				user_id: params.userId,
+				'postDate': {
+					'$gte': util.getCloudFormattedDateTime(startDate)
+				}
+			},
+			order: '-created_at',
+			page : 1,
+			per_page : 5000
+		}, function (e) {
+			var articleList = [];
+			if (e.success) {
+				Ti.API.debug('success:');
+				for (var i = 0; i < e.posts.length; i++) {
+					var post = e.posts[i];
+					var user = post.user;
+					var postDate = util.getDate(post.custom_fields.postDate);
+					var name = '';
+					if (user.custom_fields && user.custom_fields.name) {
+						name = user.custom_fields.name;
+					}
+					var likeCount = 0;
+					var commentCount = 0;
+					if (post.reviews_count && post.reviews_count > 0) {
+						commentCount = post.reviews_count;
+					}
+					if (post.ratings_count && post.ratings_count > 0) {
+						commentCount = commentCount - post.ratings_count;
+						likeCount = post.ratings_count;
+					}
+					var articleData = {
+						post: post.id,
+						userId: user.id,
+						user: user.first_name + ' ' + user.last_name,
+						name: name,
+						text: post.content,
+						date: util.getFormattedDateTime(postDate),
+						photo: post.photo.urls.original,
+						like: likeCount,
+						comment: commentCount,
+						icon: user.photo.urls.square_75
+					};
+					articleList.push(articleData);
+				}				
+			}
+			e.articleList = articleList; 
+			callback(e);
+		});
+	},
+
+	// 今日の記事の取得
+	getLocalTodayArticle:function(_user, _date){
+		Ti.API.debug('[func]getLocalTodayArticle:');
+		var articleData = sqlite.open(function(db){
+			var rows = db.select().from("DogArticleTB")
+				.where("user","=",_user)
+				.and_where("date",">=",util.getCloudFormattedDateTime(_date))
+				.order_by("created_at asc")
+				.execute().getResult();
+			var result = null;
+			if (rows.isValidRow()){
+				result = {
+					id: rows.fieldByName('id'),
+					user: rows.fieldByName('user'),
+					post: rows.fieldByName('post'),
+					text: rows.fieldByName('text'),
+					photo: rows.fieldByName('photo'),
+					date: rows.fieldByName('date'),
+				};
+			}
+			return result;
+		});		
+		return articleData;
+	},
+
+	// 記事データテーブルの件数取得
+	getCountLocalArticleList:function(_user){
+		Ti.API.debug('[func]getCountLocalArticleList:');
+		return sqlite.open(function(db){
+			var rows = db.select("count(user)").from("DogArticleTB")
+				.where("user","=",_user)
+				.execute().getResult();
+			return rows.field(0);
 		});
 	},
 
@@ -740,8 +917,8 @@ exports.model = {
 
 				if (_stampDataList[i].id) {
 					db.update("DiaryStampTB").set({
-//						event:_stampDataList[i].event, 
 //						user:_stampDataList[i].user, 
+//						event:_stampDataList[i].event, 
 						stamp:_stampDataList[i].stamp, 
 						text:_stampDataList[i].textList[0], 
 						date:util.getCloudFormattedDateTime(stampDate),
@@ -750,8 +927,8 @@ exports.model = {
 					.execute();
 				} else {
 					db.insert("DiaryStampTB").set({
-						event:_stampDataList[i].event, 
 						user:_stampDataList[i].user, 
+						event:_stampDataList[i].event, 
 						stamp:_stampDataList[i].stamp, 
 						text:_stampDataList[i].textList[0], 
 						date:util.getCloudFormattedDateTime(stampDate),
@@ -1346,6 +1523,17 @@ exports.model = {
 		return friendsList;
 	},
 
+	// 友人データテーブルの件数取得
+	getCountLocalFriendsList:function(_user){
+		Ti.API.debug('[func]getCountLocalFriendsList:');
+		return sqlite.open(function(db){
+			var rows = db.select("count(user)").from("DogFriendsTB")
+				.where("user","=",_user)
+				.execute().getResult();
+			return rows.field(0);
+		});
+	},
+
 	// 友人かどうかのチェック
 	checkLocalFriendsList:function(_user, _friend){
 		Ti.API.debug('[func]getLocalFriendsList:');
@@ -1368,17 +1556,5 @@ exports.model = {
 				.and_where("friend","=",_friend)
 				.execute();
 		});
-	},
-
-	// 友人データテーブルの件数取得
-	getCountLocalFriendsList:function(_user){
-		Ti.API.debug('[func]getCountLocalFriendsList:');
-		return sqlite.open(function(db){
-			var rows = db.select("count(user)").from("DogFriendsTB")
-				.where("user","=",_user)
-				.execute().getResult();
-			return rows.field(0);
-		});
-	},
-	
+	},	
 };

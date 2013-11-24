@@ -64,7 +64,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	var updateArticle = function() {
 		Ti.API.debug('[func]updateArticle:');
 		// 今日の記事データ取得
-		model.getCloudArticle({
+		model.getCloudTodayArticle({
 			idList: [_userData.id],
 			year: 2013,
 			month: 1,
@@ -72,7 +72,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			page: articlePage,
 			count: articleCount
 		}, function(e) {
-			Ti.API.debug('[func]getCloudArticle.callback:');
+			Ti.API.debug('[func]getCloudTodayArticle.callback:');
 			if (e.success) {
 				if (e.articleList.length > 0) {
 					// 取得した記事をテーブルに追加
