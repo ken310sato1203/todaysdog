@@ -198,7 +198,6 @@ exports.createWindow = function(_userData){
 
 		var rowList = [];
 		var nowDate = new Date(year, month-1, day);
-		var articleList = model.getDateArticle(_userData, nowDate);
 
 		var today = null;
 		if (_userData.today) {

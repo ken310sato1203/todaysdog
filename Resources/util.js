@@ -120,5 +120,17 @@ exports.util = {
 		}
 		return uniqueArray;
 	},
+
+	// リストに存在しているかチェック
+	checkList:function(_list, _id){
+		Ti.API.debug('[func]checkList:');
+		for (var i=0; i<_list.length; i++) {
+			if (_list[i] == _id) {
+				return true;
+			}
+		}
+		return false;
+	},
+
 };
 

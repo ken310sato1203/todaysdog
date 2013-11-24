@@ -66,7 +66,7 @@ exports.createWindow = function(_type, _userData){
 				var followButtonLabel = Ti.UI.createLabel(style.userFollowButtonLabel);
 				followButton.add(followButtonLabel);
 	
-				if (model.checkFollowList(loginId, _userList[i].id)) {
+				if (model.checkLocalFriendsList(loginId, _userList[i].id)) {
 					followButton.backgroundColor = '#dedede';
 					followButton.clickFlag = true;
 					followButtonLabel.text = 'フォロー中';
@@ -97,9 +97,7 @@ exports.createWindow = function(_type, _userData){
 								model.removeCloudFriends(source.id, function(e) {
 									Ti.API.debug('[func]removeCloudFriends.callback:');
 									if (e.success) {
-										// プロフィールのフォロー数を更新
-										var loginData = model.getUser(loginId);
-										model.removeFollowList(loginId, source.id);
+										model.removeLocalFriendsList(loginId, source.id);
 										source.backgroundColor = 'white';
 										source.clickFlag = false;
 										source.getChildren()[0].text = 'フォローする';
@@ -121,9 +119,7 @@ exports.createWindow = function(_type, _userData){
 						model.addCloudFriends(source.id, function(e) {
 							Ti.API.debug('[func]addCloudFriends.callback:');
 							if (e.success) {
-								// プロフィールのフォロー数を更新
-								var loginData = model.getUser(loginId);
-								model.addFollowList(loginId, source.id);
+								model.addLocalFriendsList(loginId, [source]);
 								source.backgroundColor = '#dedede';
 								source.clickFlag = true;
 								source.getChildren()[0].text = 'フォロー中';
@@ -355,8 +351,7 @@ exports.createWindow = function(_type, _userData){
 	userListWin.addEventListener('close',function(e){
 		Ti.API.debug('[event]userListWin.close:');
 		if (userListWin.prevWin != null) {
-			var currentData = model.getUser(_userData.id);
-			userListWin.prevWin.fireEvent('refresh', {userData:currentData});
+			userListWin.prevWin.fireEvent('refresh');
 		}
 	});	
 

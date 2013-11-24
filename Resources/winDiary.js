@@ -40,7 +40,7 @@ exports.createWindow = function(_userData){
 
 
 		// 当月の記事データ
-		var articleList = model.getCalendarArticle(_userData, _year, _month);
+//		var articleList = model.getCalendarArticle(_userData, _year, _month);
 
 		var rowData = [];
 		for (var i=0; i<months[_month-1]; i++) {
@@ -52,7 +52,7 @@ exports.createWindow = function(_userData){
 				weekday: weekday[dayOfWeek],
 				todayFlag: false,
 				stampList: stampDay[i].data,
-				articleData: articleList[i],
+//				articleData: articleList[i],
 				timeIndex: 9,
 			};
 
@@ -115,6 +115,7 @@ exports.createWindow = function(_userData){
 				}
 			}
 
+/*
 			var rowArticleData = _rowData[i].articleData;
 			if (rowArticleData != null) {
 				var stampPhotoImage = Ti.UI.createImageView(style.diaryPhotoImage);
@@ -129,7 +130,7 @@ exports.createWindow = function(_userData){
 					win.openTabWindow(photoWin, {animated:true});
 				});
 			}
-
+*/
 			rowList.push(row);
 		}
 

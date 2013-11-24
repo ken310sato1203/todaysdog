@@ -89,7 +89,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 								postWin.close({animated:true});
 							} else {
 								// 登録済みのスタンプデータを削除する場合
-								removeStampData();
+								removeStampData(_stampDataList[0]);
 							}
 
 						} else {
@@ -133,7 +133,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	};
 
 	// 登録済みのスタンプデータを削除する場合
-	var removeStampData = function() {
+	var removeStampData = function(_stampData) {
 		Ti.API.debug('[func]removeStampData:');
 
 		var alertDialog = Titanium.UI.createAlertDialog({
@@ -151,11 +151,11 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 				tabGroup.add(actInd);
 				
 				// 登録データを削除する場合
-				model.removeCloudStampList(_stampDataList, function(e) {
+				model.removeCloudStampList(_stampData, function(e) {
 					Ti.API.debug('[func]removeCloudStampList.callback:');						
 					if (e.success) {
 						Ti.API.debug('Success:');
-						model.removeLocalStampList(_stampDataList);
+						model.removeLocalStampList(_stampData);
 						closePostWin();
 					} else {
 						util.errorDialog(e);
@@ -397,12 +397,6 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 						_stampDataList[i].hour = -1;
 					} else {
 						_stampDataList[i].hour = util.getHour(hourField.value);
-					}
-
-					if (_stampDataList[i].no == null) {
-						model.addStampList(_stampDataList[i]);
-					} else {
-						model.updateStampList(_stampDataList[i]);
 					}
 				}
 

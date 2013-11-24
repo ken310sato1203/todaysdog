@@ -89,10 +89,9 @@ exports.createWindow = function(_type, _articleData){
 				comment: commentField.value,
 				date: date
 			}, function(e) {
-				Ti.API.debug('[func]addCommentList.callback:');						
+				Ti.API.debug('[func]addCloudCommentList.callback:');						
 				if (e.success) {
 					Ti.API.debug('Success:');
-					model.addCommentList(commentData);
 					updateComment();
 					commentField.value = '';
 					commentField.blur();

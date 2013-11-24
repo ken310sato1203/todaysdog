@@ -2,78 +2,12 @@
 
 var loginId = null;
 
-var articleList = [];
-var likeList = [];
-var commentList = [];
-var userList = [];
 var breedList = [];
 var sexList = [];
-var followList = [];
-var stampList = [];
 var stampSelectList = [];
 var stampHistoryList = [];
 
 // ---------------------------------------------------------------------
-//loginId = "maki.oshika.9";
-
-articleList = [
-	{id:"23", no:"A0023", userId:"maki.oshika.9", user:"maki.oshika.9", name:"さとう さくら", date:"2013-04-09 10:26:05", text:"3明けましておめでとうございます。", like:"0", comment:"0"},
-	{id:"22", no:"A0022", userId:"51f7d0af51dfe2157f01843d", user:"ken_sato", name:"さとう けん", date:"2013-04-09 08:26:05", text:"2明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"21", no:"A0021", userId:"kuro", user:"kuro", name:"クロ", date:"2013-04-09 07:26:05", text:"1明けましておめでとうございます。今年もよい年になりますように。", like:"0", comment:"0"},
-	{id:"20", no:"A0020", userId:"santa", user:"santa", name:"サンタ", date:"2013-04-06 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"19", no:"A0019", userId:"gon", user:"gon", name:"ゴン", date:"2013-04-06 06:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"18", no:"A0018", userId:"jiro", user:"jiro", name:"ジロー", date:"2013-04-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"17", no:"A0017", userId:"momo", user:"momo", name:"モモ", date:"2013-03-27 12:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"16", no:"A0016", userId:"maki.oshika.9", user:"maki.oshika.9", name:"さとう さくら", date:"2013-03-27 10:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"15", no:"A0015", userId:"51f7d0af51dfe2157f01843d", user:"ken_sato", name:"さとう けん", date:"2013-03-27 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"14", no:"A0014", userId:"momo", user:"momo", name:"モモ", date:"2013-03-24 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"13", no:"A0013", userId:"kuro", user:"kuro", name:"クロ", date:"2013-03-23 15:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"12", no:"A0012", userId:"gon", user:"gon", name:"ゴン", date:"2013-03-23 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"11", no:"A0011", userId:"jiro", user:"jiro", name:"ジロー", date:"2013-03-21 20:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"10", no:"A0010", userId:"santa", user:"santa", name:"サンタ", date:"2013-03-21 09:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"9", no:"A0009", userId:"momo", user:"momo", name:"モモ", date:"2013-03-21 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"8", no:"A0008", userId:"kuro",user:"kuro",  name:"クロ", date:"2013-03-17 11:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"7", no:"A0007", userId:"gon", user:"gon", name:"ゴン", date:"2013-03-17 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"6", no:"A0006", userId:"jiro", user:"jiro", name:"ジロー", date:"2013-03-13 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"5", no:"A0005", userId:"maki.oshika.9", user:"maki.oshika.9", name:"さとう さくら", date:"2013-03-03 09:26:05", text:"3明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"4", no:"A0004", userId:"maki.oshika.9", user:"maki.oshika.9", name:"さとう さくら", date:"2013-03-03 08:26:05", text:"2明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"3", no:"A0003", userId:"maki.oshika.9", user:"maki.oshika.9", name:"さとう さくら", date:"2013-03-03 07:26:05", text:"1明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"2", no:"A0002", userId:"51f7d0af51dfe2157f01843d", user:"ken_sato", name:"さとう けん", date:"2013-03-02 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-	{id:"1", no:"A0001", userId:"maki.oshika.9", user:"maki.oshika.9", name:"さとう さくら", date:"2013-03-01 07:26:05", text:"明けましておめでとうございます。今年もよい年になりますように。ハッピーニューイヤー！", like:"0", comment:"0"},
-];
-
-commentList = [
-	{no:"A0021", seq:"1", userId:"jiro", name:"ジロー", date:"2013-03-01 13:37:02", text:"ことよろ。"},
-	{no:"A0021", seq:"2", userId:"jiro", name:"ジロー", date:"2013-03-02 09:23:45", text:"今年もよろしく。"},
-	{no:"A0022", seq:"1", userId:"51f7d0af51dfe2157f01843d", name:"さとう さくら", date:"2013-03-02 09:23:45", text:"今年もよろしく。"},
-	{no:"A0022", seq:"2", userId:"koro", name:"クロ", date:"2013-03-03 09:23:45", text:"今年もよろしく。"},
-	{no:"A0022", seq:"3", userId:"gon", name:"ゴン", date:"2013-03-05 09:23:45", text:"今年もよろしく。"},
-	{no:"A0023", seq:"1", userId:"shiro", name:"シロ", date:"2013-03-02 09:23:45", text:"今年もよろしく。"},
-	{no:"A0024", seq:"1", userId:"kuro", name:"クロ", date:"2013-03-10 08:14:27", text:"今年もよろしくお願いします。あけましておめでとうございます。今年もよろしくお願いします。あけましておめでとうございます。"},
-];
-
-/*
-likeList = [
-	{no:"A0020", seq:"2", userId:"51f7d0af51dfe2157f01843d", date:"2013-03-02 09:23:45"},
-	{no:"A0020", seq:"1", userId:"maki.oshika.9", date:"2013-03-01 08:14:27"},
-	{no:"A0021", seq:"1", userId:"pochi", date:"2013-03-03 13:37:02"},
-	{no:"A0022", seq:"2", userId:"momo", date:"2013-03-05 11:37:02"},
-	{no:"A0022", seq:"1", userId:"maki.oshika.9", date:"2013-03-04 12:37:02"},
-	{no:"A0023", seq:"1", userId:"maki.oshika.9", date:"2013-03-06 10:37:02"},
-];
-*/
-userList = [
-	{id:"maki.oshika.9", user:"maki.oshika.9", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう さくら", breed:"ダックスフント", sex:"♀", birth:"2005-12-07", memo:"東京在住、ビール党。東京在住、ビール党。東京在住、ビール党。東京在住、ビール党。東京在住、ビール党。", icon:"images/icon/i_maki.oshika.9.png", cover:""},
-//	{id:"51f7d0af51dfe2157f01843d", user:"ken_sato", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう けん", breed:"ダックスフント", sex:"♂", birth:"2005-12-07", memo:"東京在住、びびり。東京在住、びびり。東京在住、びびり。東京在住、びびり。東京在住、びびり。", icon:"", cover:""},
-	{id:"koro", user:"koro", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう コロ", breed:"ダックスフント", sex:"♂", birth:"2005-12-07", memo:"びびり", icon:"", cover:""},
-	{id:"shiro", user:"shiro", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう しろ", breed:"ダックスフント", sex:"♀", birth:"2005-12-07", memo:"びびり", icon:"", cover:""},
-	{id:"pochi", user:"pochi", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう ポチ", breed:"ダックスフント", sex:"♂", birth:"2005-12-07", memo:"びびり", icon:"", cover:""},
-	{id:"jiro", user:"jiro", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう ジロー", breed:"ダックスフント", sex:"♂", birth:"2005-12-07", memo:"びびり", icon:"", cover:""},
-	{id:"gon", user:"gon", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう ゴン", breed:"ダックスフント", sex:"♂", birth:"2005-12-07", memo:"びびり", icon:"", cover:""},
-	{id:"kuro", user:"kuro", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう クロ", breed:"ダックスフント", sex:"♂", birth:"2005-12-07", memo:"びびり", icon:"", cover:""},
-	{id:"momo", user:"momo", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう もも", breed:"ダックスフント", sex:"♀", birth:"2005-12-07", memo:"びびり", icon:"", cover:""},
-	{id:"santa", user:"santa", photo:"0", like:"0", follow:"0", follower:"0", name:"さとう サンタ", breed:"ダックスフント", sex:"♂", birth:"2005-12-07", memo:"びびり", icon:"", cover:""},
-];
 
 breedList = [
 	{value:"チワワ"},
@@ -86,34 +20,6 @@ breedList = [
 sexList = [
 	{value:"男の子"},
 	{value:"女の子"},
-];
-
-followList = [
-	{userId:"maki.oshika.9", follow:"51f7d0af51dfe2157f01843d"},
-	{userId:"maki.oshika.9", follow:"kuro"},
-	{userId:"maki.oshika.9", follow:"santa"},
-	{userId:"maki.oshika.9", follow:"gon"},
-	{userId:"maki.oshika.9", follow:"jiro"},
-	{userId:"maki.oshika.9", follow:"momo"},
-	{userId:"51f7d0af51dfe2157f01843d", follow:"maki.oshika.9"},
-	{userId:"51f7d0af51dfe2157f01843d", follow:"koro"},
-	{userId:"51f7d0af51dfe2157f01843d", follow:"shiro"},
-	{userId:"shiro", follow:"maki.oshika.9"},
-];
-
-stampList = [
-	{no:"12", userId:"maki.oshika.9", stamp:"stamp_walking1", text:"朝のさんぽ、いいうんち", year:2013, month:6, day:1, hour:16, repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"11", userId:"maki.oshika.9", stamp:"stamp_restaurant1", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:2013, month:6, day:1, hour:15, repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"10", userId:"maki.oshika.9", stamp:"stamp_walking1", text:"朝のさんぽ、いいうんち。朝のさんぽ、いいうんち。朝のさんぽ、いい", year:2013, month:6, day:1, hour:-1, repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"9", userId:"maki.oshika.9", stamp:"stamp_restaurant1", text:"お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。お昼ごはん、がっつり食べた。", year:2013, month:6, day:1, hour:-1, repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"8", userId:"maki.oshika.9", stamp:"stamp_warning", text:"シャンプー予約", year:2013, month:4, day:10, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"7", userId:"maki.oshika.9", stamp:"stamp_star", text:"公園でBBQ", year:2013, month:4, day:8, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"6", userId:"maki.oshika.9", stamp:"stamp_injection", text:"のみだに薬", year:2013, month:4, day:8, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"5", userId:"maki.oshika.9", stamp:"stamp_restaurant1", text:"お昼ごはん、がっつり食べた", year:2013, month:4, day:7, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"4", userId:"maki.oshika.9", stamp:"stamp_walking1", text:"朝のさんぽ、いいうんち", year:2013, month:4, day:5, hour:10, repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"3", userId:"maki.oshika.9", stamp:"stamp_walking1", text:"朝のさんぽ、いいうんち", year:2013, month:4, day:24, hour:9, repeat:"0", date:"2013-03-04 10:23:45"},
-	{no:"2", userId:"maki.oshika.9", stamp:"stamp_restaurant1", text:"お昼ごはん、がっつり食べた", year:2013, month:3, day:4, hour:13, repeat:"0", date:"2013-03-04 15:23:45"},
-	{no:"1", userId:"maki.oshika.9", stamp:"stamp_walking1", text:"朝のさんぽ、いいうんち", year:2013, month:3, day:4, hour:9, repeat:"0", date:"2013-03-04 10:23:45"},
 ];
 
 stampSelectList = [
@@ -153,46 +59,6 @@ stampHistoryList = [
 	{stamp:"stamp_trip",textList:["旅行"]},
 	{stamp:"stamp_star",textList:["記念日"]},
 ];
-
-
-for (var i=0; i<articleList.length; i++) {
-	for (var j=0; j<userList.length; j++) {
-		if (articleList[i].userId == userList[j].id) {
-			userList[j].photo++;
-		}
-	}
-}
-/*
-for (var i=0; i<likeList.length; i++) {
-	for (var j=0; j<userList.length; j++) {
-		if (likeList[i].userId == userList[j].id) {
-			userList[j].like++;
-		}
-	}
-	for (var j=0; j<articleList.length; j++) {
-		if (likeList[i].no == articleList[j].no) {
-			articleList[j].like++;
-		}
-	}
-}
-*/
-for (var i=0; i<followList.length; i++) {
-	for (var j=0; j<userList.length; j++) {
-		if (followList[i].userId == userList[j].id) {
-			userList[j].follow++;
-		}
-		if (followList[i].follow == userList[j]	) {
-			userList[j].follower++;
-		}
-	}
-}
-for (var i=0; i<commentList.length; i++) {
-	for (var j=0; j<articleList.length; j++) {
-		if (commentList[i].no == articleList[j].no) {
-			articleList[j].comment++;
-		}
-	}
-}
 
 // ---------------------------------------------------------------------
 exports.model = {
@@ -639,213 +505,6 @@ exports.model = {
 		return loginId;
 	},
 
-	// 記事の追加
-	addArticleList:function(_articleData){
-		Ti.API.debug('[func]addArticleList:');
-		_articleData.id = parseInt(articleList[0].id, 10) + 1;
-		articleList.unshift(_articleData);
-		for (var i=0; i<userList.length; i++) {
-			if (userList[i].id == _articleData.userId) {
-				userList[i].photo++;
-				break;
-			}
-		}
-	},
-
-	// 記事の取得
-	getArticle:function(_articleNo){
-		Ti.API.debug('[func]getArticle:');
-		for (var i=0; i<articleList.length; i++) {
-			if (articleList[i].no == _articleNo) {
-				return articleList[i];
-			}
-		}
-	},
-
-	// 記事リストの登録
-	setArticleList:function(_articleList){
-		Ti.API.debug('[func]setArticleList:');
-		articleList = _articleList;
-	},
-
-/*
-	// 記事リストの取得
-	// 前回更新時に読み込んだ記事の最終インデックスより新しい記事を取得
-	getArticleList:function(_type, _userData, _prevArticleIndex, _articleCount){
-		Ti.API.debug('[func]getArticleList:');
-		Ti.API.debug('_type:' + _type);
-		var target = [];
-		var pushCount = 0;
-		var pushFlag = false;
-		if (_prevArticleIndex == null) {
-			pushFlag = true;
-		}
-
-		// 全ユーザのフォト一覧
-		if (_type == "all") {
-			for (var i=0; i<articleList.length; i++) {
-				if (pushFlag) {
-					target.push(articleList[i]);
-					pushCount++;
-					if (pushCount == _articleCount) {
-						return target;
-					}
-				}
-				if (articleList[i].no == _prevArticleIndex) {
-					pushFlag = true;
-				}
-			}
-
-		// 指定ユーザのフォト一覧
-		} else 	if (_type == "user") {
-			for (var i=0; i<articleList.length; i++) {
-				if (pushFlag) {
-					if (articleList[i].userId == _userData.id) {
-						target.push(articleList[i]);
-						pushCount++;
-						if (pushCount == _articleCount) {
-							return target;
-						}
-					}
-				}
-				if (articleList[i].no == _prevArticleIndex) {
-					pushFlag = true;
-				}
-			}
-
-		// ライクなフォト一覧
-		} else 	if (_type == "like") {
-			for (var i=0; i<articleList.length; i++) {
-				if (pushFlag) {
-					for (var j=0; j<likeList.length; j++) {
-						if (articleList[i].no == likeList[j].no && likeList[j].userId == _userData.id) {
-							target.push(articleList[i]);
-							pushCount++;
-							if (pushCount == _articleCount) {
-								return target;
-							}
-							break;
-						}
-					}
-				}
-				if (articleList[i].no == _prevArticleIndex) {
-					pushFlag = true;
-				}
-			}
-
-		// フォローユーザのフォト一覧
-		} else 	if (_type == "follow") {
-			for (var i=0; i<articleList.length; i++) {
-				if (pushFlag) {
-					if (articleList[i].userId == _userData.id) {
-						target.push(articleList[i]);
-						pushCount++;
-					} else {
-						for (var j=0; j<followList.length; j++) {
-							if (followList[j].userId == _userData.id) {
-								if (articleList[i].userId == followList[j].follow) {
-									target.push(articleList[i]);
-									pushCount++;
-									break;
-								}
-							}
-						}
-					}
-					if (pushCount == _articleCount) {
-						return target;
-					}
-				}
-				if (articleList[i].no == _prevArticleIndex) {
-					pushFlag = true;
-				}
-			}
-		}
-
-		return target;
-	},
-*/
-	// 指定ユーザの記事リストから指定日除いてランダムに取得
-	getRandomArticle:function(_userData, _notInArticleData){
-		Ti.API.debug('[func]getRandomArticle:');
-		var target = [];
-		if (_notInArticleData != null) {
-			for (var i=0; i<articleList.length; i++) {
-				if (articleList[i].userId == _userData.id) {
-					if (articleList[i].no != _notInArticleData.no) {
-						target.push(articleList[i]);
-					}
-				}
-			}
-
-		} else {
-			for (var i=0; i<articleList.length; i++) {
-				if (articleList[i].userId == _userData.id) {
-					target.push(articleList[i]);
-				}
-			}
-		}
-
-		if (target.length > 0) {
-			var randomIndex = Math.floor(Math.random() * target.length);
-			var ramdomDate = util.getDate(target[randomIndex].date);
-			return this.getDateArticle(_userData, ramdomDate);
-
-		} else {
-			return target;
-		}
-	},
-
-	// 指定ユーザの記事リストから指定日の記事を取得
-	getDateArticle:function(_userData, _calendarDate){
-		Ti.API.debug('[func]getDateArticle:');
-		var target = [];
-		var calendarDay = _calendarDate.getDate();
-		var calendarYear = _calendarDate.getFullYear();
-		var calendarMonth = _calendarDate.getMonth();
-
-		for (var i=articleList.length; i>0; i--) {
-			if (articleList[i-1].userId == _userData.id) {
-				var articleDate = util.getDate(articleList[i-1].date);
-				if (articleDate.getDate() == calendarDay) {
-					if (articleDate.getFullYear() == calendarYear && articleDate.getMonth() == calendarMonth) {
-						target.push(articleList[i-1]);
-					}
-				}
-			}
-		}
-
-		return target;
-	},
-
-	// 指定ユーザの記事リストから指定月の記事を取得
-	getCalendarArticle:function(_userData, _year, _month){
-		Ti.API.debug('[func]getCalendarArticle:');
-		var calendarTarget = [];
-
-		var daysInMonth = 32 - new Date(_year, _month-1, 32).getDate();
-		for (var i=0; i < daysInMonth; i++) {
-			var target = null;
-			for (var j=articleList.length; j>0; j--) {
-				if (articleList[j-1].userId == _userData.id) {
-					var articleDate = util.getDate(articleList[j-1].date);
-					var articleDay = articleDate.getDate();
-					if (i == articleDay - 1) {
-						var articleYear = articleDate.getFullYear();
-						var articleMonth = articleDate.getMonth() + 1;
-						if (_year == articleYear && _month == articleMonth) {
-							// 同じ日に複数の記事があっても１つのみセット
-							target = articleList[j-1];
-							break;
-						}
-					}
-				}
-			}
-			calendarTarget.push(target);
-		}
-
-		return calendarTarget;
-	},
-
 	// 指定ユーザの記事リストから指定月の記事を取得
 	getCloudArticleList:function(params, callback){
 		Ti.API.debug('[func]getCloudArticleList:');
@@ -909,27 +568,6 @@ exports.model = {
 			e.articleList = articleList; 
 			callback(e);
 		});
-	},
-
-	// 指定ユーザのスタンプリストから指定月のデータを取得
-	getStampList:function(_userData, _year, _month){
-		Ti.API.debug('[func]getStampList:');
-		var stampList = [];
-
-		var daysInMonth = 32 - new Date(_year, _month-1, 32).getDate();
-		for (var i=0; i < daysInMonth; i++) {
-			for (var j=stampList.length; j>0; j--) {
-				if (stampList[j-1].userId == _userData.id) {
-					if (i == stampList[j-1].day - 1) {
-						if (_year == stampList[j-1].year && _month == stampList[j-1].month) {
-							stampList.push(stampList[j-1]);
-						}
-					}
-				}
-			}
-		}
-
-		return stampList;
 	},
 
 	// 指定ユーザのスタンプリストから指定月のデータを取得
@@ -1058,34 +696,6 @@ exports.model = {
 		});
 	},
 
-	// 指定ユーザのスタンプリストから指定日のデータを取得
-	getStampDayList:function(_userData, _year, _month, _day){
-		Ti.API.debug('[func]getStampDayList:');
-		var stampList = [];
-
-		var daysInMonth = 32 - new Date(_year, _month-1, 32).getDate();
-		for (var i=0; i < daysInMonth; i++) {
-			for (var j=stampList.length; j>0; j--) {
-				if (stampList[j-1].userId == _userData.id) {
-					if (i == stampList[j-1].day - 1) {
-						if (_year == stampList[j-1].year && _month == stampList[j-1].month && _day == stampList[j-1].day) {
-							stampList.push(stampList[j-1]);
-						}
-					}
-				}
-			}
-		}
-
-		return stampList;
-	},
-
-	// スタンプデータの追加
-	addStampList:function(_stampData){
-		Ti.API.debug('[func]addStampList:');
-		_stampData.no = parseInt(stampList[0].no, 10) + 1;
-		stampList.unshift(_stampData);
-	},
-
 	// スタンプデータテーブルの作成
 	createLocalStampList:function(){
 		Ti.API.debug('[func]createLocalStampList:');
@@ -1130,8 +740,8 @@ exports.model = {
 
 				if (_stampDataList[i].id) {
 					db.update("DiaryStampTB").set({
-						event:_stampDataList[i].event, 
-						user:_stampDataList[i].user, 
+//						event:_stampDataList[i].event, 
+//						user:_stampDataList[i].user, 
 						stamp:_stampDataList[i].stamp, 
 						text:_stampDataList[i].textList[0], 
 						date:util.getCloudFormattedDateTime(stampDate),
@@ -1214,14 +824,12 @@ exports.model = {
 	},
 
 	// スタンプデータの削除
-	removeLocalStampList:function(_stampDataList){
+	removeLocalStampList:function(_stampData){
 		Ti.API.debug('[func]removeLocalStampList:');
 		sqlite.open(function(db){
-			for (var i=0; i<_stampDataList.length; i++) {				
-				db.remove("DiaryStampTB")
-					.where("id","=",_stampDataList[i].id)
-					.execute();
-			}
+			db.remove("DiaryStampTB")
+				.where("id","=",_stampData.id)
+				.execute();
 		});
 	},
 
@@ -1272,8 +880,7 @@ exports.model = {
 				.where("user","=",params.userId)
 				.and_where("stamp","=",params.stamp)
 				.execute().getResult();			
-			var data = eval(rows.fieldByName("textList"));
-			return data;
+			return eval(rows.fieldByName("textList"));
 		});
 		
 		return historyList;
@@ -1319,7 +926,10 @@ exports.model = {
 				duration: duration,
 				custom_fields: custom_fields
 			}, function (e) {
-				_stampDataList[0].event = e.events[0].id;
+				// Cloudで付与されたidをセット
+				for (var i=0; i<_stampDataList.length; i++) {
+					_stampDataList[i].event = e.events[0].id;
+				}
 				e.stampDataList = _stampDataList;
 				callback(e);
 			});
@@ -1331,41 +941,24 @@ exports.model = {
 				duration: duration,
 				custom_fields: custom_fields
 			}, function (e) {
+				e.stampDataList = _stampDataList;
 				callback(e);
 			});
 		}
 	},
 	// スタンプデータの削除
-	removeCloudStampList:function(_stampDataList, callback){
+	removeCloudStampList:function(_stampData, callback){
 		Ti.API.debug('[func]removeCloudStampList:');
-/*
-		Cloud.Events.remove({
-			event_id: _stampDataList[0].event,
-		}, function (e) {
-			callback(e);
-		});
-*/
 		// １イベントに対して複数スタンプが登録されているので削除はせずにcustom_fieldsにnullをセットして削除
 		var custom_fields = {};
-		custom_fields[_stampDataList[0].stamp] = null;
+		custom_fields[_stampData.stamp] = null;
 
 		Cloud.Events.update({
-			event_id: _stampDataList[0].event,
+			event_id: _stampData.event,
 			custom_fields: custom_fields
 		}, function (e) {
 			callback(e);
 		});
-	},
-
-	// スタンプデータの更新
-	updateStampList:function(_stampData){
-		Ti.API.debug('[func]updateStampList:');
-		for (var i=0; i<stampList.length; i++) {
-			if (stampList[i].no == _stampData.no) {
-				stampList[i] = _stampData;
-				break;
-			}
-		}
 	},
 
 	// 選択スタンプのリストを取得
@@ -1416,90 +1009,7 @@ exports.model = {
 		});
 	},
 */
-/*
-	// ライクリストに追加
-	addLikeList:function(_likeList){
-		Ti.API.debug('[func]addLikeList:');
-		_likeList.seq = 1;
-		for (var i=0; i<likeList.length; i++) {
-			if (likeList[i].no == _likeList.no) {
-				_likeList.seq = parseInt(likeList[i].seq, 10) + 1;
-				break;
-			}
-		}
-		likeList.unshift(_likeList);
 
-		for (var i=0; i<userList.length; i++) {
-			if (userList[i].id == _likeList.userId) {
-				userList[i].like++;
-				break;
-			}
-		}
-		for (var i=0; i<articleList.length; i++) {
-			if (articleList[i].no == _likeList.no) {
-				articleList[i].like++;
-				break;
-			}
-		}
-	},
-	// ライクリストから削除
-	removeLikeList:function(_articleNo, _id){
-		Ti.API.debug('[func]removeLikeList:');
-		for (var i=0; i<likeList.length; i++) {
-			if (likeList[i].no == _articleNo && likeList[i].userId == _id) {
-				likeList.splice(i, 1);
-				break;
-			}
-		}
-		for (var i=0; i<userList.length; i++) {
-			if (userList[i].id == _id) {
-				userList[i].like--;
-				break;
-			}
-		}
-		for (var i=0; i<articleList.length; i++) {
-			if (articleList[i].no == _articleNo) {
-				articleList[i].like--;
-				break;
-			}
-		}
-	},
-	// ライクリストに追加されているかを確認
-	checkLikeList:function(_articleNo, _id){
-		Ti.API.debug('[func]checkLikeList:');
-		for (var i=0; i<likeList.length; i++) {
-			if (likeList[i].no == _articleNo && likeList[i].userId == _id) {
-				return true;
-			}
-		}
-		return false;
-	},
-	// ライクリストの取得
-	getLikeList:function(_articleNo, _likeCount){
-		Ti.API.debug('[func]getLikeList:');
-		var target = [];
-		for (var i=0; i<likeList.length; i++) {
-			if (likeList[i].no == _articleNo) {
-				target.push(likeList[i]);
-				if (target.length == _likeCount) {
-					break;
-				}
-			}
-		}
-		return target;
-	},
-	// ライク数の取得
-	getLikeCount:function(_articleNo){
-		Ti.API.debug('[func]getLikeCount:');
-		var count = 0;
-		for (var i=0; i<likeList.length; i++) {
-			if (likeList[i].no == _articleNo) {
-				count++;
-			}
-		}
-		return count;
-	},
-*/
 	// ライクデータテーブルの作成
 	createLocalLikeList:function(){
 		Ti.API.debug('[func]createLocalLikeList:');
@@ -1602,8 +1112,7 @@ exports.model = {
 				.where("user","=",params.userId)
 				.and_where("article","=",params.article)
 				.execute().getResult();
-			var data = rows.fieldByName("review");
-			return data;
+			return rows.fieldByName("review");
 		});
 		
 		return likeReviewId;
@@ -1674,107 +1183,6 @@ exports.model = {
 		}, function (e) {
 			callback(e);
 		});
-	},
-	
-	// コメントリストに追加
-	addCommentList:function(_commentList){
-		Ti.API.debug('[func]addCommentList:');
-		_commentList.seq = 1;
-		for (var i=0; i<commentList.length; i++) {
-			if (commentList[i].no == _commentList.no) {
-				_commentList.seq = parseInt(commentList[i].seq, 10) + 1;
-				break;
-			}
-		}
-		// 末尾に追加
-		commentList.push(_commentList);
-
-		for (var i=0; i<articleList.length; i++) {
-			if (articleList[i].no == _commentList.no) {
-				articleList[i].comment++;
-				break;
-			}
-		}
-	},
-	// コメントリストの取得
-	getCommentList:function(_articleNo, _prevCommentIndex, _commentCount){
-		Ti.API.debug('[func]getCommentList:');
-		var target = [];
-		var pushCount = 0;
-		var pushFlag = false;
-		if (_prevCommentIndex == null) {
-			pushFlag = true;
-		}
-
-		for (var i=0; i<commentList.length; i++) {
-			if (commentList[i].no == _articleNo) {
-				if (pushFlag) {
-					target.push(commentList[i]);
-					pushCount++;
-					if (pushCount == _commentCount) {
-						return target;
-					}
-				}
-				if (commentList[i].seq == _prevCommentIndex) {
-					pushFlag = true;
-				}
-			}
-		}
-		return target;
-	},
-	// コメント数の取得
-	getCommentCount:function(_articleNo){
-		Ti.API.debug('[func]getCommentCount:');
-		var count = 0;
-		for (var i=0; i<commentList.length; i++) {
-			if (commentList[i].no == _articleNo) {
-				count++;
-			}
-		}
-		return count;
-	},
-	// コメントの削除
-	removeCommentList:function(_id, _articleNo, _seq){
-		Ti.API.debug('[func]removeCommentList:');
-		for (var i=0; i<commentList.length; i++) {
-			if (commentList[i].no == _articleNo && commentList[i].seq == _seq) {
-				commentList.splice(i, 1);
-				break;
-			}
-		}
-		for (var i=0; i<articleList.length; i++) {
-			if (articleList[i].no == _articleNo) {
-				articleList[i].comment--;
-				break;
-			}
-		}
-	},
-	
-	// ユーザデータの追加
-	addUserList:function(_userData){
-		Ti.API.debug('[func]addUserList:');
-		var existFlag = false;
-		for (var i=0; i<userList.length; i++) {
-			if (userList[i].id == _userData.id) {
-				existFlag = true;
-				break;
-			}
-		}
-		if (! existFlag) {
-			// 先頭に追加
-			userList.unshift(_userData);
-		}
-	},
-
-	// ユーザデータの更新
-	updateUserList:function(_userData){
-		Ti.API.debug('[func]updateUserList:');
-		for (var i=0; i<userList.length; i++) {
-			if (userList[i].id == _userData.id) {
-				userList[i] = _userData;
-				break;
-			}
-		}
 	},
 
 	// ユーザデータの取得
@@ -1865,19 +1273,6 @@ exports.model = {
 		});
 	},
 
-	// ユーザデータの取得
-	getUser:function(_id){
-		Ti.API.debug('[func]getUser:');
-		var target = null;
-		for (var i=0; i<userList.length; i++) {
-			if (userList[i].id == _id) {
-				target = userList[i];
-				break;
-			}
-		}
-		return target;
-	},
-
 	// 犬種リストの取得
 	setBreedList:function(_breedList){
 		Ti.API.debug('[func]setBreedList:');
@@ -1899,132 +1294,91 @@ exports.model = {
 		return sexList;
 	},
 
-	// フォローリストの登録
-	setFollowList:function(_followList){
-		Ti.API.debug('[func]setFollowList:');
-		followList = _followList;
+	// 友人データテーブルの作成
+	createLocalFriendsList:function(){
+		Ti.API.debug('[func]createLocalFriendsList:');
+		sqlite.open(function(db){
+			db.create("DogFriendsTB", 
+				"CREATE TABLE IF NOT EXISTS DogFriendsTB (" + 
+				"user VARCHAR, " + 
+				"friend VARCHAR, " + 
+				"created_at TIMESTAMP DEFAULT (DATETIME('now','localtime')), " + 
+				"PRIMARY KEY (user, friend))"
+			);
+		});
 	},
 
-	// フォローリストの取得
-	getFollowList:function(_id, _prevUserIndex, _followCount){
-		Ti.API.debug('[func]getFollowList:');
-		var target = [];
-		var pushCount = 0;
-		var pushFlag = false;
-		if (_prevUserIndex == null) {
-			pushFlag = true;
-		}
+	// 友人データテーブルの削除
+	dropLocalFriendsList:function(){
+		Ti.API.debug('[func]dropLocalFriendsList:');
+		sqlite.open(function(db){
+			db.drop("DogFriendsTB");
+		});
+	},
 
-		for (var i=0; i<followList.length; i++) {
-			if (followList[i].userId == _id) {
-				for (var j=0; j<userList.length; j++) {
-					if (userList[j].id == followList[i].follow) {
-						if (pushFlag) {
-							target.push(userList[j]);
-							pushCount++;
-							if (pushCount == _followCount) {
-								return target;
-							}
-						}
-						if (followList[i].follow == _prevUserIndex) {
-							pushFlag = true;
-						}
-					}
-				}
-			}
+	// 友人データを追加
+	addLocalFriendsList:function(_user, _friendList){
+		Ti.API.debug('[func]addLocalFriendsList:');
+		for (var i=0; i<_friendList.length; i++) {
+			sqlite.open(function(db){
+				db.replace("DogFriendsTB").set({
+					user:_user, 
+					friend:_friendList[i].id
+				}).execute();
+			});
 		}
-		return target;
 	},
-	// フォロワーリストの取得
-	getFollowerList:function(_id, _prevUserIndex, _followerCount){
-		Ti.API.debug('[func]getFollowerList:');
-		var target = [];
-		var pushCount = 0;
-		var pushFlag = false;
-		if (_prevUserIndex == null) {
-			pushFlag = true;
-		}
 
-		for (var i=0; i<followList.length; i++) {
-			if (followList[i].follow == _id) {
-				for (var j=0; j<userList.length; j++) {
-					if (userList[j].id == followList[i].userId) {
-						if (pushFlag) {
-							target.push(userList[j]);
-							pushCount++;
-							if (pushCount == _followerCount) {
-								return target;
-							}
-						}
-						if (followList[i].userId == _prevUserIndex) {
-							pushFlag = true;
-						}
-					}
-				}
+	// 友人の取得
+	getLocalFriendsList:function(_user){
+		Ti.API.debug('[func]getLocalFriendsList:');
+		var friendsList = sqlite.open(function(db){
+			var rows = db.select().from("DogFriendsTB")
+				.where("user","=",_user)
+				.execute().getResult();			
+			var result = [];
+			while (rows.isValidRow()){
+				result.push(rows.fieldByName("friend"));
+				rows.next();
 			}
-		}
-		return target;
+			return result;
+		});		
+		return friendsList;
 	},
-	// フォローしているかのチェック
-	checkFollowList:function(_id, _follow){
-		Ti.API.debug('[func]checkFollowList:');
-		for (var i=0; i<followList.length; i++) {
-			if (followList[i].userId == _id) {
-				if (followList[i].follow == _follow) {
-					return true;
-				}
-			}
-		}
-		return false;
+
+	// 友人かどうかのチェック
+	checkLocalFriendsList:function(_user, _friend){
+		Ti.API.debug('[func]getLocalFriendsList:');
+		var existFlag = sqlite.open(function(db){
+			var rows = db.select().from("DogFriendsTB")
+				.where("user","=",_user)
+				.and_where("friend","=",_friend)
+				.execute().getResult();	
+			return (rows.rowCount > 0);
+		});
+		return existFlag;
 	},
-	// フォローユーザの追加
-	addFollowList:function(_id, _follow){
-		Ti.API.debug('[func]addFollowList:');
-		var existFlag = false;
-		for (var i=0; i<followList.length; i++) {
-			if (followList[i].userId == _id && followList[i].follow == _follow) {
-				existFlag = true;
-				break;
-			}
-		}
-		if (! existFlag) {
-			// 先頭に追加
-			followList.unshift({user:_id, follow:_follow});
-			for (var i=0; i<userList.length; i++) {
-				if (userList[i].id == _id) {
-					userList[i].follow++;
-					break;
-				}
-			}
-			for (var i=0; i<userList.length; i++) {
-				if (userList[i].id == _follow) {
-					userList[i].follower++;
-					break;
-				}
-			}		
-		}
+
+	// 友人データの削除
+	removeLocalFriendsList:function(_user, _friend){
+		Ti.API.debug('[func]removeLocalFriendsList:');
+		sqlite.open(function(db){
+			db.remove("DogFriendsTB")
+				.where("user","=",_user)
+				.and_where("friend","=",_friend)
+				.execute();
+		});
 	},
-	// フォローユーザの削除
-	removeFollowList:function(_id, _follow){
-		Ti.API.debug('[func]removeFollowList:');
-		for (var i=0; i<followList.length; i++) {
-			if (followList[i].userId == _id && followList[i].follow == _follow) {
-				followList.splice(i, 1);
-				break;
-			}
-		}
-		for (var i=0; i<userList.length; i++) {
-			if (userList[i].id == _id) {
-				userList[i].follow--;
-				break;
-			}
-		}
-		for (var i=0; i<userList.length; i++) {
-			if (userList[i].id == _follow) {
-				userList[i].follower--;
-				break;
-			}
-		}		
+
+	// 友人データテーブルの件数取得
+	getCountLocalFriendsList:function(_user){
+		Ti.API.debug('[func]getCountLocalFriendsList:');
+		return sqlite.open(function(db){
+			var rows = db.select("count(user)").from("DogFriendsTB")
+				.where("user","=",_user)
+				.execute().getResult();
+			return rows.field(0);
+		});
 	},
 	
 };

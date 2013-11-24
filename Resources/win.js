@@ -17,7 +17,6 @@ var profileConfigWin = require('winProfileConfig');
 var photoWin = require('winPhoto');
 var photoListWin = require('winPhotoList');
 var userListWin = require('winUserList');
-var commentListWin = require('winCommentList');
 
 // ---------------------------------------------------------------------
 exports.win = {
@@ -112,11 +111,6 @@ exports.win = {
 	createUserListWindow:function(_type, _userData){
 		Ti.API.debug('[func]createUserListWindow:');
 		var win = userListWin.createWindow(_type, _userData);
-		return win;
-	},
-	createCommentListWindow:function(_articleData){
-		Ti.API.debug('[func]createCommentListWindow:');
-		var win = commentListWin.createWindow(_articleData);
 		return win;
 	},
 

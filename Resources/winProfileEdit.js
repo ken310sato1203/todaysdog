@@ -203,7 +203,6 @@ exports.createWindow = function(_userData){
 				}, function(e) {
 					if (e.success) {
 						Ti.API.debug('[func]updateCloudUser.callback:');
-						model.updateUserList(_userData);
 						if (profileEditWin.prevWin != null) {
 							profileEditWin.prevWin.fireEvent('refresh');
 						}

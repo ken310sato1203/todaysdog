@@ -30,7 +30,6 @@ var loginFlag = false;
 var openMainWindow = function(_userData) {
 	Ti.API.debug('[func]openMainWindow:');
 
-//	model.addUserList(_userData);
 	model.setLoginId(_userData.id);
 	
 	tabGroup = Ti.UI.createTabGroup(style.tabGroupHidden);
@@ -89,16 +88,6 @@ var initStamp = function(_userData) {
 //	model.dropLocalStampHistoryList();
 	model.createLocalStampHistoryList();
 
-/*
-	model.initCloudStampList({
-		userId: _userData.id
-	}, function(e) {
-		Ti.API.debug('[func]initCloudStampList.callback:');
-		if (! e.success) {
-			util.errorDialog(e);
-		}
-	});
-*/
 	var countStamp = model.getCountLocalStampList(_userData.id);
 	var countHistory = model.getCountLocalStampHistoryList(_userData.id);
 
@@ -141,16 +130,7 @@ var initLikeArticle = function(_userData) {
 	// ライクデータの初期化
 //	model.dropLocalLikeList();
 	model.createLocalLikeList();
-/*
-	model.initCloudLikeList({
-		userId: _userData.id
-	}, function(e) {
-		Ti.API.debug('[func]initCloudLikeList.callback:');
-		if (! e.success) {
-			util.errorDialog(e);
-		}
-	});
-*/
+
 	var countLocalLikeList = model.getCountLocalLikeList(_userData.id);
 	if (countLocalLikeList == 0) {
 		model.getAllCloudLikeList({
@@ -162,6 +142,30 @@ var initLikeArticle = function(_userData) {
 				// ローカルDBに登録
 				model.addLocalLikeList(e.likeList);
 
+			} else {
+				util.errorDialog(e);
+			}
+		});
+	}
+};
+
+var initFollowList = function(_userData) {
+	Ti.API.debug('[func]initFollowList:');
+	// 友人データの初期化
+//	model.dropLocalFriendsList();
+	model.createLocalFriendsList();
+
+	var countLocalFriendsList = model.getCountLocalFriendsList(_userData.id);
+	if (countLocalFriendsList == 0) {
+		model.getCloudFollow({
+			userId: _userData.id,
+			page: 1,
+			count: 5000
+		}, function(e) {
+			Ti.API.debug('[func]getCloudFollower.callback:');
+			if (e.success) {
+				model.addLocalFriendsList(_userData.id, e.userList);
+	
 			} else {
 				util.errorDialog(e);
 			}
@@ -234,6 +238,8 @@ var loginFacebook = function() {
 			initStamp(userData);
 			// ライクデータの初期化
 			initLikeArticle(userData);
+			// 友人データの初期化
+			initFollowList(userData);
 			
 			// メインウィンドウの表示
 			openMainWindow(userData);

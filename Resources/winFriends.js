@@ -150,6 +150,50 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		// 日時の更新
 		updateTime();
 
+		// 友人リストを保管
+		var idList = model.getLocalFriendsList(_userData.id);
+		var followList = [];
+
+		if (idList) {
+			for (var i=0; i<idList.length; i++) {
+				followList.push({userId: _userData.id, follow: idList[i]});
+			}
+			_userData.follow = followList.length;
+			// 自分を追加
+			idList.push(_userData.id);
+			// 今日の記事データ取得
+			model.getCloudArticle({
+				idList: idList,
+				year: year,
+				month: month,
+				day: day - articleDay,
+				page: articlePage,
+				count: articleCount
+			}, function(e) {
+				Ti.API.debug('[func]getCloudArticle.callback:');
+				if (e.success) {
+					if (e.articleList.length > 0) {
+						// 取得した記事をテーブルに追加
+						friendsTableView.appendRow(getFriendsArticleTableRow(e.articleList), {animated:true});
+						if (e.meta.total_pages == articlePage) {
+							nextArticleFlag = false;
+						} else if (e.meta.total_pages > articlePage) {
+							articlePage++;
+						}
+					} else {
+						if (articlePage == 1) {
+							appendNoDataLabel();
+						}
+						nextArticleFlag = false;							
+					}
+		
+				} else {
+					util.errorDialog(e);
+				}
+			});			
+		}
+
+/*
 		// 今日の友人データ取得
 		model.getCloudFriends(_userData.id, function(e) {
 			Ti.API.debug('[func]getCloudFriends.callback:');
@@ -161,7 +205,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 					idList.push(e.userList[i].id);
 					followList.push({userId: _userData.id, follow: e.userList[i].id});
 				}
-				model.setFollowList(followList);
 				_userData.follow = followList.length;
 				// 自分を追加
 				idList.push(_userData.id);
@@ -200,6 +243,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				util.errorDialog(e);
 			}
 		});
+*/
 	};
 
 	// 最上部から下スクロールで最新データを更新する用のヘッダを作成

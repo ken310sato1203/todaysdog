@@ -336,7 +336,7 @@ exports.createWindow = function(_userData){
 	} else {
 		profileWin.leftNavButton = backButton;
 		titleView.add(titleLabel);
-		if (model.checkFollowList(loginId, _userData.id)) {
+		if (model.checkLocalFriendsList(loginId, _userData.id)) {
 			profileWin.rightNavButton = unfollowButton;
 		} else {
 			profileWin.rightNavButton = followButton;
@@ -385,22 +385,29 @@ exports.createWindow = function(_userData){
 			buttonNames: ['キャンセル','OK'],
 		    cancel: 1
 		});
+		unfollowButton.enabled = false;
 		alertDialog.show();
-		unfollowButton.enabled = true;
 
 		alertDialog.addEventListener('click',function(alert){
 		    // OKの場合
 		    if(alert.index == 1){
 				actInd.show();
 				tabGroup.add(actInd);
-				model.removeFollowList(loginId, _userData.id);
-		
-				setTimeout(function(){
-					profileWin.rightNavButton = followButton;
+				// 友人の削除
+				model.removeCloudFriends(_userData.id, function(e) {
+					Ti.API.debug('[func]removeCloudFriends.callback:');
+					if (e.success) {
+						model.removeLocalFriendsList(loginId, _userData.id);
+						followButton.enabled = true;
+						profileWin.rightNavButton = followButton;
+//						countFollowerLabel.text = _userData.follower;
+					} else {
+						util.errorDialog(e);
+					}
 					actInd.hide();
-					countFollowerLabel.text = _userData.follower;
-				},2000);		        
+				});		
 		    }
+			unfollowButton.enabled = true;
 		});
 	});
 
@@ -410,15 +417,21 @@ exports.createWindow = function(_userData){
 		followButton.enabled = false;
 		actInd.show();
 		tabGroup.add(actInd);
-		model.addFollowList(loginId, _userData.id);
 
-		setTimeout(function(){
-			unfollowButton.enabled = true;
-			profileWin.rightNavButton = unfollowButton;
+		// 友人の追加
+		model.addCloudFriends(_userData.id, function(e) {
+			Ti.API.debug('[func]addCloudFriends.callback:');
+			if (e.success) {
+				model.addLocalFriendsList(loginId, [_userData]);
+				unfollowButton.enabled = true;
+				profileWin.rightNavButton = unfollowButton;
+//				countFollowerLabel.text = _userData.follower;
+			} else {
+				util.errorDialog(e);
+			}
+			followButton.enabled = true;
 			actInd.hide();
-			countFollowerLabel.text = _userData.follower;
-		},2000);
-		followButton.enabled = true;
+		});
 	});
 
 	// プロフィール編集を反映
