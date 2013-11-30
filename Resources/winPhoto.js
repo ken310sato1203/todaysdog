@@ -164,6 +164,7 @@ exports.createWindow = function(_type, _articleData){
 	articleView.add(photoView);
 	var photoImage = Ti.UI.createImageView(style.photoPhotoImage);
 	photoImage.image = _articleData.photo;
+	Ti.API.debug('photoImage.image:' + photoImage.image);
 	// カスタムプロパティに記事データを格納
 	photoImage.articleData = _articleData;
 	photoView.add(photoImage);

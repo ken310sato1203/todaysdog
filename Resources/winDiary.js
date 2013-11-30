@@ -205,25 +205,6 @@ exports.createWindow = function(_userData){
 			thisDiaryView = getCalView(stampList, year, month);
 			diaryWin.add(thisDiaryView);
 			thisDiaryView.visible = true;
-
-/*
-			model.getCloudStampList({
-				userId: _userData.id,
-				year: year,
-				month: month,
-				day: null
-			}, function(e) {
-				if (e.success) {
-					Ti.API.debug('[func]getCloudStampList.callback:');
-					// カレンダーの表示
-					thisDiaryView = getCalView(e.stampList, year, month);
-					diaryWin.add(thisDiaryView);
-					thisDiaryView.visible = true;
-				} else {
-					util.errorDialog(e);
-				}
-			});
-*/
 		}
 	};
 
@@ -254,25 +235,6 @@ exports.createWindow = function(_userData){
 			thisDiaryView = getCalView(stampList, year, month);
 			diaryWin.add(thisDiaryView);
 			thisDiaryView.visible = true;
-
-/*
-			model.getCloudStampList({
-				userId: _userData.id,
-				year: year,
-				month: month,
-				day: null
-			}, function(e) {
-				if (e.success) {
-					Ti.API.debug('[func]getCloudStampList.callback:');
-					// カレンダーの表示
-					thisDiaryView = getCalView(e.stampList, year, month);
-					diaryWin.add(thisDiaryView);
-					thisDiaryView.visible = true;
-				} else {
-					util.errorDialog(e);
-				}
-			});
-*/
 		}
 	};
 
@@ -302,27 +264,6 @@ exports.createWindow = function(_userData){
 		// 今日の日にスクロール
 		thisDiaryView.scrollToIndex(_day-3 > 0? _day-3 : 0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
 		thisDiaryView.visible = true;
-
-/*
-		model.getCloudStampList({
-			userId: _userData.id,
-			year: year,
-			month: month,
-			day: null
-		}, function(e) {
-			if (e.success) {
-				Ti.API.debug('[func]getCloudStampList.callback:');
-				// カレンダーの表示
-				thisDiaryView = getCalView(e.stampList, year, month);
-				diaryWin.add(thisDiaryView);
-				// 今日の日にスクロール
-				thisDiaryView.scrollToIndex(_day-3 > 0? _day-3 : 0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
-				thisDiaryView.visible = true;
-			} else {
-				util.errorDialog(e);
-			}
-		});
-*/
 	};
 
 // ---------------------------------------------------------------------
@@ -339,7 +280,9 @@ exports.createWindow = function(_userData){
 	titleView.add(nextImage);
 
 	var thisDiaryView = null;
-	updateCalView(nowYear, nowMonth, nowDay);
+	// 今日の日スクロールが、なぜか25日以降の場合、一番下までスクロールしないので、
+	// winDiaryを作成した後に、app.jsで再作成することで対応
+//	updateCalView(nowYear, nowMonth, nowDay);
 	
 /*
 	// 当月のスタンプデータ取得
@@ -405,14 +348,6 @@ exports.createWindow = function(_userData){
 		nowDay = now.getDate();
 
 		updateCalView(nowYear, nowMonth, nowDay);
-/*
-		if (year == nowYear && month == nowMonth) {
-			// 今日の日にスクロール
-			thisDiaryView.scrollToIndex(nowDay-3 > 0? nowDay-3 : 0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-		} else {
-			updateCalView(nowYear, nowMonth, nowDay);
-		}
-*/
 	});
 
 	// 更新用イベント

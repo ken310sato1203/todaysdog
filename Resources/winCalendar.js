@@ -18,37 +18,41 @@ exports.createWindow = function(_userData){
 	var slideEnable = true;
 
 	// 日付の作成
-	var getDayView = function(e) {
+	var getDayView = function(params) {
 		Ti.API.debug('[func]getDayView:');
 		var dayView = Ti.UI.createView(style.calendarDayView);
-		dayView.backgroundColor = e.backgroundColor;
-		dayView.year = e.year;
-		dayView.month = e.month;
-		dayView.day = e.day;
-		dayView.currentFlag = e.currentFlag;
-		dayView.articleData = e.articleData;
+		dayView.backgroundColor = params.backgroundColor;
+		dayView.year = params.year;
+		dayView.month = params.month;
+		dayView.day = params.day;
+		dayView.currentFlag = params.currentFlag;
 
+		dayView.dayImage = null;
+		dayView.articleData = null;
 		var articleImage = null;
-		
-		if (e.articleData != null) {
-			var nowDate = util.getFormattedDate(new Date(e.year, e.month-1, e.day));
-			var dirPath = Ti.Filesystem.applicationDataDirectory + 'photo/';
-			var fileName = _userData.id + "_" + nowDate;
-			
+		if (params.articleData != null) {
 			dayView.dayImage = Ti.UI.createImageView(style.calendarDayImage);
-			dayView.dayImage.image = dirPath + fileName + '.png';
+			var nowDate = util.getFormattedDate(new Date(params.year, params.month-1, params.day));
+			var fileName = _userData.id + "_" + nowDate;
+			// ローカルに投稿写真が保存されてる場合
+			if (model.checkLocalImage(util.local.photoPath, fileName)) {
+				params.articleData.photo = util.local.photoPath + fileName + '.png';
+			}
+			dayView.dayImage.image = params.articleData.photo;
 			dayView.add(dayView.dayImage);
+			dayView.articleData = params.articleData;
+			Ti.API.debug('[func]getDayView:' + dayView.dayImage.image);
 		}
 
 		dayView.dayLabel = Ti.UI.createLabel(style.calendarDayLabel);
-		dayView.dayLabel.color = e.textColor;
-		dayView.dayLabel.text = e.day;
+		dayView.dayLabel.color = params.textColor;
+		dayView.dayLabel.text = params.day;
 		dayView.add(dayView.dayLabel);
 
-		if ( e.currentFlag ) {
+		if ( params.currentFlag ) {
 			// 今日の日付表示
-			if ( e.day == nowDay ) {
-				if (e.year == nowYear && e.month == nowMonth) {
+			if ( params.day == nowDay ) {
+				if (params.year == nowYear && params.month == nowMonth) {
 //					dayView.backgroundColor = '#87CEFA';
 //					dayView.dayLabel.color = 'white';
 					var todayView = Ti.UI.createView(style.calendarTodayView);
@@ -183,6 +187,19 @@ exports.createWindow = function(_userData){
 		return calView;
 	};
 
+	// 記事取得
+	var getArticleList = function(_year, _month) {
+		Ti.API.debug('[func]getArticleList:');
+		return model.getLocalArticle({
+			userId:_userData.id, 
+			user:_userData.user, 
+			name:_userData.name, 
+			icon:_userData.icon, 
+			year:_year,
+			month:_month
+		});
+	};
+
 	// スライド用アニメーション
 	var slideView = Ti.UI.createAnimation({
 		duration : 500,
@@ -204,22 +221,10 @@ exports.createWindow = function(_userData){
 	
 			// タイトルの年月
 			monthTitle.text =  year + ' ' + monthName[month-1];
-			// 当月のスタンプデータ取得
-			model.getCloudArticleList({
-				userId: _userData.id,
-				year: year,
-				month: month,
-				day: null
-			}, function(e) {
-				if (e.success) {
-					Ti.API.debug('[func]getCloudArticleList.callback:');
-					// カレンダーの表示
-					thisDiaryView = getCalView(e.articleList, year, month);
-					calendarWin.add(thisDiaryView);
-				} else {
-					util.errorDialog(e);
-				}
-			});
+			// カレンダーの表示
+			var articleList = getArticleList(year, month);
+			thisDiaryView = getCalView(articleList, year, month);
+			calendarWin.add(thisDiaryView);
 		}
 	};
 
@@ -238,22 +243,10 @@ exports.createWindow = function(_userData){
 	
 			// タイトルの年月
 			monthTitle.text =  year + ' ' + monthName[month-1];
-			// 当月のスタンプデータ取得
-			model.getCloudArticleList({
-				userId: _userData.id,
-				year: year,
-				month: month,
-				day: null
-			}, function(e) {
-				if (e.success) {
-					Ti.API.debug('[func]getCloudArticleList.callback:');
-					// カレンダーの表示
-					thisDiaryView = getCalView(e.articleList, year, month);
-					calendarWin.add(thisDiaryView);
-				} else {
-					util.errorDialog(e);
-				}
-			});
+			// カレンダーの表示
+			var articleList = getArticleList(year, month);
+			thisDiaryView = getCalView(articleList, year, month);
+			calendarWin.add(thisDiaryView);
 		}
 	};
 
@@ -266,23 +259,10 @@ exports.createWindow = function(_userData){
 		monthTitle.text =  year + ' ' + monthName[month-1];
 		// ビューの再作成
 		calendarWin.remove(thisDiaryView);
-
-		// 当月のスタンプデータ取得
-		model.getCloudArticleList({
-			userId: _userData.id,
-			year: year,
-			month: month,
-			day: null
-		}, function(e) {
-			if (e.success) {
-				Ti.API.debug('[func]getCloudArticleList.callback:');
-				// カレンダーの表示
-				thisDiaryView = getCalView(e.articleList, year, month);
-				calendarWin.add(thisDiaryView);
-			} else {
-				util.errorDialog(e);
-			}
-		});
+		// カレンダーの表示
+		var articleList = getArticleList(year, month);
+		thisDiaryView = getCalView(articleList, year, month);
+		calendarWin.add(thisDiaryView);
 	};
 
 // ---------------------------------------------------------------------
@@ -303,7 +283,12 @@ exports.createWindow = function(_userData){
 	calendarWin.leftNavButton = backButton;
 
 	var thisDiaryView = null;
+	// カレンダーの表示
+	var articleList = getArticleList(year, month);
+	thisDiaryView = getCalView(articleList, year, month);
+	calendarWin.add(thisDiaryView);
 
+/*	
 	// 当月のスタンプデータ取得
 	model.getCloudArticleList({
 		userId: _userData.id,
@@ -320,6 +305,7 @@ exports.createWindow = function(_userData){
 			util.errorDialog(e);
 		}
 	});
+*/
 
 // ---------------------------------------------------------------------
 	// 前月ボタンをクリック

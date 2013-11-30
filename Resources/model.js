@@ -121,6 +121,41 @@ exports.model = {
 		photoFile.write(_imageBlob);
 	},
 
+	// ローカルに画像が保存されていることをチェック
+	deleteLocalImage:function(_dirPath, _fileName){
+		Ti.API.debug('[func]deleteLocalImage:');
+		var photoDir  = Ti.Filesystem.getFile(_dirPath);
+		var photoFile  = Ti.Filesystem.getFile(photoDir.nativePath + _fileName + '.png');
+		if (photoFile.exists()) {
+			photoFile.deleteFile();
+		}
+	},
+
+	// ローカルに画像が保存されていることをチェック
+	checkLocalImage:function(_dirPath, _fileName){
+		Ti.API.debug('[func]checkLocalImage:');
+		var photoDir  = Ti.Filesystem.getFile(_dirPath);
+		var photoFile  = Ti.Filesystem.getFile(photoDir.nativePath + _fileName + '.png');
+		if (photoFile.exists()) {
+			return true;
+		} else {
+			return false;
+		}
+	},
+
+	// クラウドの画像をロード
+	loadCloudImage:function(_imagePath, callback){
+		Ti.API.debug('[func]loadCloudImage:');
+
+		var xhr = Titanium.Network.createHTTPClient();
+		xhr.open('GET',_imagePath);
+		xhr.onload = function(e){
+			e.image = this.responseData;
+			callback(e);
+		};
+		xhr.send();
+	},
+
 	// フォトコレクションの作成
 	createCloudPhotoCollection:function(params, callback){
 		Ti.API.debug('[func]createCloudPhotoCollection:');
@@ -189,7 +224,7 @@ exports.model = {
 				}, function (e2) {
 					if (e2.success) {
 						// Cloudで付与されたidをセット
-						articleData.post = e2.posts[0].id;
+						articleData.id = e2.posts[0].id;
 						// 取得できないので後でセット
 //						articleData.photo = e2.posts[0].photo.urls.original;
 						articleData.photo = "";
@@ -489,7 +524,6 @@ exports.model = {
 				for (var i = 0; i < e.posts.length; i++) {
 					var post = e.posts[i];
 					var user = post.user;
-					var postDate = util.getDate(post.custom_fields.postDate);
 					var name = '';
 					if (user.custom_fields && user.custom_fields.name) {
 						name = user.custom_fields.name;
@@ -509,7 +543,7 @@ exports.model = {
 						user: user.first_name + ' ' + user.last_name,
 						name: name,
 						text: post.content,
-						date: util.getFormattedDateTime(postDate),
+						date: util.getFormattedDateTime(post.custom_fields.postDate),
 						photo: post.photo.urls.original,
 						like: likeCount,
 						comment: commentCount,
@@ -565,7 +599,6 @@ exports.model = {
 				for (var i = 0; i < e.posts.length; i++) {
 					var post = e.posts[i];
 					var user = post.user;
-					var postDate = util.getDate(post.custom_fields.postDate);
 					var name = '';
 					if (user.custom_fields && user.custom_fields.name) {
 						name = user.custom_fields.name;
@@ -585,7 +618,7 @@ exports.model = {
 						user: user.first_name + ' ' + user.last_name,
 						name: name,
 						text: post.content,
-						date: util.getFormattedDateTime(postDate),
+						date: util.getFormattedDateTime(post.custom_fields.postDate),
 						photo: post.photo.urls.original,
 						like: likeCount,
 						comment: commentCount,
@@ -632,7 +665,7 @@ exports.model = {
 			sqlite.open(function(db){
 				db.insert("DogArticleTB").set({
 					user:_articleData[i].userId, 
-					post:_articleData[i].post, 
+					post:_articleData[i].id,
 					photo:_articleData[i].photo, 
 					text:_articleData[i].text, 
 					date:util.getCloudFormattedDateTime(articleDate)
@@ -657,7 +690,7 @@ exports.model = {
 	getAllCloudArticleList:function(params, callback){
 		Ti.API.debug('[func]getAllCloudArticleList:');
 		// 6ヶ月前以降のデータを取得
-		var now = new Date();		
+		var now = new Date();
 		var startDate = new Date(now.getFullYear(), now.getMonth() + 1 - 6, now.getDate());
 
 		Cloud.Posts.query({
@@ -667,7 +700,7 @@ exports.model = {
 					'$gte': util.getCloudFormattedDateTime(startDate)
 				}
 			},
-			order: '-created_at',
+			order: 'created_at',
 			page : 1,
 			per_page : 5000
 		}, function (e) {
@@ -677,7 +710,6 @@ exports.model = {
 				for (var i = 0; i < e.posts.length; i++) {
 					var post = e.posts[i];
 					var user = post.user;
-					var postDate = util.getDate(post.custom_fields.postDate);
 					var name = '';
 					if (user.custom_fields && user.custom_fields.name) {
 						name = user.custom_fields.name;
@@ -692,12 +724,12 @@ exports.model = {
 						likeCount = post.ratings_count;
 					}
 					var articleData = {
-						post: post.id,
+						id: post.id,
 						userId: user.id,
 						user: user.first_name + ' ' + user.last_name,
 						name: name,
 						text: post.content,
-						date: util.getFormattedDateTime(postDate),
+						date: util.getFormattedDateTime(post.custom_fields.postDate),
 						photo: post.photo.urls.original,
 						like: likeCount,
 						comment: commentCount,
@@ -711,29 +743,74 @@ exports.model = {
 		});
 	},
 
-	// 今日の記事の取得
-	getLocalTodayArticle:function(_user, _date){
-		Ti.API.debug('[func]getLocalTodayArticle:');
-		var articleData = sqlite.open(function(db){
+	// ローカルから記事の取得
+	getLocalArticle:function(params){
+		Ti.API.debug('[func]getLocalArticle:');
+		var startDate = null;
+		var endDate = null;
+		if (params.day == null) {
+			startDate = new Date(params.year, params.month-1, 1);
+			endDate = new Date(params.year, params.month, 1);
+		} else {
+			startDate = new Date(params.year, params.month-1, params.day);
+			endDate = new Date(params.year, params.month-1, params.day+1);
+		}
+
+		var articleList = sqlite.open(function(db){
 			var rows = db.select().from("DogArticleTB")
-				.where("user","=",_user)
-				.and_where("date",">=",util.getCloudFormattedDateTime(_date))
+				.where("user","=",params.userId)
+				.and_where("date",">=",util.getFormattedDate(startDate))
+				.and_where("date","<",util.getFormattedDate(endDate))
 				.order_by("created_at asc")
 				.execute().getResult();
-			var result = null;
-			if (rows.isValidRow()){
-				result = {
-					id: rows.fieldByName('id'),
-					user: rows.fieldByName('user'),
-					post: rows.fieldByName('post'),
+			var result = [];
+			while (rows.isValidRow()){
+				result.push({
+					user: params.user,
+					name: params.name,
+					icon: params.icon,
+					id: rows.fieldByName('post'),
+					userId: rows.fieldByName('user'),
+//					post: rows.fieldByName('post'),
 					text: rows.fieldByName('text'),
 					photo: rows.fieldByName('photo'),
-					date: rows.fieldByName('date'),
-				};
+					date: util.getFormattedDateTime(rows.fieldByName('date'))
+				});
+				rows.next();
 			}
 			return result;
 		});		
-		return articleData;
+		return articleList;
+	},
+	
+	// ローカルから記事の取得
+	getLocalTodayArticle:function(params){
+		Ti.API.debug('[func]getLocalTodayArticle:');
+		var startDate = new Date(params.year, params.month-1, params.day);
+		var articleList = sqlite.open(function(db){
+			var rows = db.select().from("DogArticleTB")
+				.where("user","=",params.userId)
+				.and_where("date",">=",util.getFormattedDate(startDate))
+				.order_by("created_at asc")
+				.execute().getResult();
+			var result = [];
+			while (rows.isValidRow()){
+				result.push({
+					user: params.user,
+					name: params.name,
+					icon: params.icon,
+					id: rows.fieldByName('post'),
+					userId: rows.fieldByName('user'),
+//					post: rows.fieldByName('post'),
+					text: rows.fieldByName('text'),
+					photo: rows.fieldByName('photo'),
+					date: util.getFormattedDateTime(rows.fieldByName('date'))
+				});
+				rows.next();
+			}
+			return result;
+		});		
+		return articleList;
 	},
 
 	// 記事データテーブルの件数取得
@@ -782,7 +859,7 @@ exports.model = {
 					'$gte': util.getCloudFormattedDateTime(startDate)
 				}
 			},
-			order: '-updated_at',
+			order: 'created_at',
 			page : 1,
 			per_page : 5000
 		}, function (e) {
@@ -1237,7 +1314,7 @@ exports.model = {
 					'$gte': util.getCloudFormattedDateTime(startDate)
 				}
 			},
-			order: '-updated_at',
+			order: '-created_at',
 			page : 1,
 			per_page : 5000
 		}, function (e) {

@@ -3,25 +3,9 @@
 exports.createWindow = function(_userData){
 	Ti.API.debug('[func]winToday.createWindow:');
 
-	var year = null;
-	var month = null;
-	var day = null;
-	var hour = null;
-	var weekday = null;
+	var now = null;
 
 // ---------------------------------------------------------------------
-
-	// 日時の更新
-	var updateTime = function() {
-		Ti.API.debug('[func]updateTime:');
-		var now = new Date();
-		year = now.getFullYear();
-		month = now.getMonth() + 1;
-		day = now.getDate();
-//		day = Math.floor(Math.random() * 2) + 1;
-		hour = now.getHours();
-		weekday = util.diary.weekday[now.getDay()];
-	};
 
 	// StampViewの取得
 	var getStampView = function(_rowStamp) {
@@ -48,16 +32,14 @@ exports.createWindow = function(_userData){
 		var targetView = Ti.UI.createTableView(style.todayTimeTableView);
 		var rowList = [];
 
-		// 当日のデータ
-//		var _stampList = model.getStampDayList(_userData, year, month, day);
-		
+		// 当日のデータ		
 		for (var i=0; i<_stampList.length; i++) {
 			var row = Ti.UI.createTableViewRow(style.todayTimeTableRow);
 			row.diaryData = {
-				year: year,
-				month: month,
-				day: day,
-				weekday: weekday,
+				year: now.year,
+				month: now.month,
+				day: now.day,
+				weekday: now.weekday,
 				todayFlag: true,
 				stampList: _stampList,
 				articleData: null,
@@ -100,13 +82,29 @@ exports.createWindow = function(_userData){
 
 		// 今日の投稿が既にされている場合
 		if (_articleData) {
-			var nowDate = _articleData.date.substring(0, 10);
-			var dirPath = Ti.Filesystem.applicationDataDirectory + 'photo/';
-			var fileName = _userData.id + "_" + nowDate;
+			var fileName = _userData.id + "_" + now.today;
+			
+//			model.deleteLocalImage(util.local.photoPath, fileName);
 
 			var photoImage = Ti.UI.createImageView(style.todayPhotoImage);
-			photoImage.image = dirPath + fileName + '.png';
+			// ローカルに投稿写真が保存されてる場合
+			if (model.checkLocalImage(util.local.photoPath, fileName)) {
+				photoImage.image = util.local.photoPath + fileName + '.png';
+			} else {
+				photoImage.image = _articleData.photo;
+/*
+				model.loadCloudImage(_articleData.photo, function(e) {
+					Ti.API.debug('[func]loadCloudImage.callback:');
+					if (e.success) {
+						model.saveLocalImage(e.image, util.local.photoPath, fileName);
+					} else {
+						util.errorDialog(e);
+					}
+				});
+*/
+			}
 			photoView.add(photoImage);
+
 	
 		// 今日の投稿がまだの場合
 		} else {
@@ -158,11 +156,11 @@ exports.createWindow = function(_userData){
 
 		var dayLabel = Ti.UI.createLabel(style.todayDayLabel);
 		dayView.add(dayLabel);
-		dayLabel.text = month + '/' + day;
+		dayLabel.text = now.month + '/' + now.day;
 		var weekdayLabel = Ti.UI.createLabel(style.todayWeekdayLabel);
 		dayView.add(weekdayLabel);
-		weekdayLabel.text = weekday.text;
-		weekdayLabel.color = weekday.color;
+		weekdayLabel.text = now.weekday.text;
+		weekdayLabel.color = now.weekday.color;
 		var editImage = Ti.UI.createImageView(style.todayEditImage);
 		dayView.add(editImage);
 	
@@ -193,28 +191,36 @@ exports.createWindow = function(_userData){
 	// ビューの更新
 	var updateTableView = function() {
 		Ti.API.debug('[func]updateTableView:');
-		// 日時の更新
-		updateTime();
 
 		var rowList = [];
-
-		var today = null;
-		if (_userData.today) {
-			today = util.getDateElement(_userData.today.date);
-		}
-
+		// 日時の更新
+		var nowDate = new Date();
+		now = util.getDateElement(nowDate);
+		now.weekday = util.diary.weekday[nowDate.getDay()];
+		now.today = util.getFormattedDate(nowDate);
 		// 今日の記事データ取得
-		var nowDate = new Date(year, month-1, day);
-		var articleData = model.getLocalTodayArticle(_userData.id, nowDate);
+		var articleList = model.getLocalTodayArticle({
+			userId:_userData.id, 
+			name:_userData.name, 
+			icon:_userData.icon, 
+			year: now.year,
+			month: now.month,
+			day: now.day
+		});
+		var articleData = null;
+		if(articleList.length > 0) {
+			articleData = articleList[0];
+		}
+		
 		if (articleData && articleData.photo == "") {
 			model.getCloudArticlePost({
 				userId: _userData.id,
-				postId: articleData.post,
+				postId: articleData.id,
 			}, function(e) {
 				Ti.API.debug('[func]getCloudArticlePost.callback:');
 				if (e.success) {
 					if (e.photo) {
-						model.addLocalArticlePhoto({post:articleData.post, photo:e.photo});
+						model.addLocalArticlePhoto({post:articleData.id, photo:e.photo});
 					}
 		
 				} else {
@@ -223,78 +229,18 @@ exports.createWindow = function(_userData){
 			});
 		}
 		
-		// すでに今日の記事データを保持している場合
-		if (today && today.year == year && today.month == month && today.day == day) {
-			// 今日の記事データ取得
-			rowList.push(getTodayPhotoRow(_userData.today));
-			// 今日のスタンプデータ取得
-			var stampList = model.getLocalStampList({
-				userId: _userData.id,
-				year: year,
-				month: month,
-				day: day
-			});
-			rowList.push(getTodayDiaryRow(stampList));
-			todayTableView.setData(rowList);
+		// 今日の記事データ取得
+		rowList.push(getTodayPhotoRow(articleData));
+		// 今日のスタンプデータ取得
+		var stampList = model.getLocalStampList({
+			userId: _userData.id,
+			year: now.year,
+			month: now.month,
+			day: now.day
+		});
+		rowList.push(getTodayDiaryRow(stampList));
+		todayTableView.setData(rowList);
 
-/*						
-			model.getCloudStampList({
-				userId: _userData.id,
-				year: year,
-				month: month,
-				day: day
-			}, function(e) {
-				Ti.API.debug('[func]getCloudStampList.callback:');
-				if (e.success) {
-					rowList.push(getTodayDiaryRow(e.stampList));
-					todayTableView.setData(rowList);
-		
-				} else {
-					util.errorDialog(e);
-				}
-			});
-*/
-		} else {
-			// 過去の記事データを保持している場合のリセット
-			_userData.today = null;
-			rowList.push(getTodayPhotoRow(articleData));
-			// 今日のスタンプデータ取得
-			var stampList = model.getLocalStampList({
-				userId: _userData.id,
-				year: year,
-				month: month,
-				day: day
-			});
-			rowList.push(getTodayDiaryRow(stampList));
-			todayTableView.setData(rowList);
-
-/*
-			model.getCloudArticle({
-				idList: [_userData.id],
-				year: year,
-				month: month,
-				day: day,
-				page: 1,
-				count: 1
-			}, function(e) {
-				Ti.API.debug('[func]getCloudArticle.callback:');
-				if (e.success) {
-					rowList.push(getTodayPhotoRow(e.articleList));
-					// 今日のスタンプデータ取得
-					var stampList = model.getLocalStampList({
-						userId: _userData.id,
-						year: year,
-						month: month,
-						day: day
-					});
-					rowList.push(getTodayDiaryRow(stampList));
-					todayTableView.setData(rowList);
-				} else {
-					util.errorDialog(e);
-				}
-			});
-*/
-		}
 	};
 
 	// 最上部から下スクロールで最新データを更新する用のヘッダを作成

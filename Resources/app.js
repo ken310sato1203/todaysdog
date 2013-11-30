@@ -57,10 +57,15 @@ var openMainWindow = function(_userData) {
 	// 初期表示のウィンドウを設定
 	tabGroup.setActiveTab(tab2);
 	tabGroup.open();
-	
+
 	// カスタムタブを上から表示
 	customTab = win.getCustomTabView();
 	customTab.open();
+
+	// diaryWinの今日の日スクロールが、なぜか25日以降の場合、一番下までスクロールしないので、
+	// createした後に再作成することで対応
+	var diaryWin = win.getTab("diaryTab").window;
+	diaryWin.fireEvent('refresh');
 	
 /*
 	// 最新情報を表示
@@ -152,7 +157,7 @@ var initLikeArticle = function(_userData) {
 var initStamp = function(_userData) {
 	Ti.API.debug('[func]initStamp:');
 	// スタンプデータの初期化
-//	model.dropLocalStampList();
+	model.dropLocalStampList();
 	model.createLocalStampList();
 
 //	model.dropLocalStampHistoryList();

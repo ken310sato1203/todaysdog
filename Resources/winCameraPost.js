@@ -124,9 +124,8 @@ exports.createWindow = function(_type, _userData, _photoImage){
 						var now = new Date();
 						var nowDate = util.getFormattedDate(now);
 						var nowDateTime = util.getFormattedDateTime(now);
-						var dirPath = Ti.Filesystem.applicationDataDirectory + 'photo/';
 						var fileName = _userData.id + "_" + nowDate;
-						model.saveLocalImage(postImage.toBlob(), dirPath, fileName);
+						model.saveLocalImage(postImage.toBlob(), util.local.photoPath, fileName);
 	
 						var articleData = {
 							id: null, 
@@ -134,7 +133,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 							userId: _userData.id, 
 							date: nowDateTime, 
 							text: textArea.value, 
-							photo: dirPath + fileName + '.png',
+							photo: util.local.photoPath + fileName + '.png',
 							like: "0",
 							comment: "0"
 						};
@@ -166,13 +165,12 @@ exports.createWindow = function(_type, _userData, _photoImage){
 						
 					} else {
 						// ローカルに画像を保存
-						var dirPath = Ti.Filesystem.applicationDataDirectory + 'icon/';
 						var fileName = _userData.id;
-						model.saveLocalImage(postImage.toBlob(), dirPath, fileName);
+						model.saveLocalImage(postImage.toBlob(), util.local.iconPath, fileName);
 						model.updateCloudUserIcon({icon: postImage.toBlob()}, function(e) {
 							Ti.API.debug('[func]updateCloudUserIcon.callback:');
 							if (e.success) {
-								_userData.icon = dirPath + fileName + '.png';
+								_userData.icon = util.local.iconPath + fileName + '.png';
 
 								// 遷移前の画面を閉じる
 								if (cameraPostWin.prevWin != null) {

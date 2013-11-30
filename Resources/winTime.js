@@ -58,7 +58,7 @@ exports.createWindow = function(_userData, _diaryData){
 			row.stampData = {
 				no: null,
 				event: null,
-				user: _userData.user,
+				user: _userData.id,
 				stamp: null,
 				textList: null,
 				year: year,
