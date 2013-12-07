@@ -6,6 +6,7 @@ exports.style = {
 	commonSize:{
 		// 計算で遣う数値なので'dp'はつけない
 		screenWidth: Ti.Platform.displayCaps.platformWidth,
+		screenHeight: Ti.Platform.displayCaps.platformHeight,
 	},
 
 	commonActivityIndicator:{
@@ -476,7 +477,7 @@ exports.style = {
 // winProfile -------------------------------------------------------
 	profileWin:{
 		backgroundColor: '#dedede',
-//		barColor: '#a9a9a9',
+//		barColor: '#e74c3c',
 		barImage: 'images/icon/titlebar.png',
 		tabBarHidden: true,
 		title: 'プロフィール',
@@ -699,13 +700,22 @@ exports.style = {
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 
 		shadowOffset: {x:0,y:-1},
-		shadowColor: '#696969', 
+		shadowColor: '#696969',
+		highlightedColor: '#696969',
 		text: 'プロフィール', 
 	},
 	profileSaveButton:{
-		width: '28dp',
-		height: '28dp',
-		backgroundImage:'images/icon/w_profile_save.png',
+//		width: '28dp',
+//		height: '28dp',
+//		backgroundImage:'images/icon/w_profile_save.png',
+		width: '50dp',
+		height: '25dp',
+//		backgroundColor: '#dedede',
+		backgroundImage: 'images/icon/titlebar10.png',
+		textAlign: 'center',
+		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
+		color: '#e74c3c',
+		title: '保存',
 	},
 
 	profileEditTableView:{ 
@@ -748,6 +758,14 @@ exports.style = {
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
+	profileEditListValueLabel:{
+		right: '15dp',
+		textAlign:'right',
+		width: '166dp',
+		height: '35dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
 	profileEditListValueField:{
 		top: '0dp',
 		right: '15dp',
@@ -755,11 +773,12 @@ exports.style = {
 		width: '166dp',
 		height: '40dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#000',
 		hintText: '入力してください',
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
         returnKeyType:Ti.UI.RETURNKEY_DONE,
         borderStyle:Ti.UI.INPUT_BORDERSTYLE_NONE,
-        touchEnabled: false,
+        touchEnabled: true,
 	},
 	profileEditListTextArea:{
 		top : '30dp',
@@ -768,11 +787,12 @@ exports.style = {
 		width: '296dp',
 		height : '90dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#000',
 		// hintTextはiOSで対応されていないので、focus/blur時に処理
 		hintText: '入力してください',
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
         returnKeyType:Ti.UI.RETURNKEY_DONE,
-        touchEnabled: false,
+        touchEnabled: true,
 	},
 
 	profileEditListPickerView:{
@@ -870,12 +890,50 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
 	},
+	profileConfigListValueField:{
+		top: '0dp',
+		right: '15dp',
+		textAlign:'right',
+		width: '166dp',
+		height: '40dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		hintText: '入力してください',
+        keyboardType:Ti.UI.KEYBOARD_DEFAULT,
+        returnKeyType:Ti.UI.RETURNKEY_DONE,
+        borderStyle:Ti.UI.INPUT_BORDERSTYLE_NONE,
+        touchEnabled: false,
+	},
 	profileConfigListItemLabel:{
 		top: '0dp',
 		left: '15dp',
 		height: '40dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
+	},
+	profileConfigListPickerView:{
+		bottom: '-259dp',
+		height: '259dp',
+	},
+	profileConfigListPickerToolbar:{
+		top: '0dp',
+		items: null,
+	},
+	profileConfigListCancelButton:{
+		style: Ti.UI.iPhone.SystemButtonStyle.BORDERED,
+		title: 'Cancel',
+	},
+	profileConfigListSpacerButton:{
+		systemButton:Ti.UI.iPhone.SystemButton.FLEXIBLE_SPACE,
+	},
+	profileConfigListDoneButton:{
+		style:Ti.UI.iPhone.SystemButtonStyle.DONE,
+		title: 'Done',
+	},
+	profileConfigListHourPicker:{
+		top: '43dp',
+		selectionIndicator: true,
+		type:Ti.UI.PICKER_TYPE_PLAIN,
+		value: null,
 	},
 
 	
@@ -2604,6 +2662,14 @@ exports.style = {
 	},
 	stampPostListItemLabel:{
 		left: '15dp',
+		height: '35dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+	stampPostListValueLabel:{
+		right: '15dp',
+		textAlign:'right',
+		width: '166dp',
 		height: '35dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',

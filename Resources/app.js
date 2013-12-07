@@ -31,6 +31,10 @@ var openMainWindow = function(_userData) {
 	Ti.API.debug('[func]openMainWindow:');
 
 	model.setLoginId(_userData.id);
+	Ti.App.Properties.setString('userId', _userData.id);
+	if(_userData.name != '') {
+		Ti.App.Properties.setString(_userData.id + 'name', _userData.name);
+	}
 	
 	tabGroup = Ti.UI.createTabGroup(style.tabGroupHidden);
 	var win1 = win.createFriendsWindow(_userData);
@@ -111,7 +115,7 @@ var initFollowList = function(_userData) {
 var initArticle = function(_userData) {
 	Ti.API.debug('[func]initArticle:');
 	// 記事データの初期化
-	model.dropLocalArticleList();
+//	model.dropLocalArticleList();
 	model.createLocalArticleList();
 
 	var countLocalArticleList = model.getCountLocalArticleList(_userData.id);
@@ -157,7 +161,7 @@ var initLikeArticle = function(_userData) {
 var initStamp = function(_userData) {
 	Ti.API.debug('[func]initStamp:');
 	// スタンプデータの初期化
-	model.dropLocalStampList();
+//	model.dropLocalStampList();
 	model.createLocalStampList();
 
 //	model.dropLocalStampHistoryList();
@@ -300,6 +304,8 @@ if ( Facebook.loggedIn ) {
 	loginFbButton.show();
 }
 
+// アプリがバックグラウンドに変わった時に実行
+var service = Ti.App.iOS.registerBackgroundService({url:'notice.js'});
 
 // ---------------------------------------------------------------------
 

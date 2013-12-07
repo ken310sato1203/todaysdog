@@ -204,6 +204,10 @@ exports.createWindow = function(_userData){
 			// カレンダーの表示
 			thisDiaryView = getCalView(stampList, year, month);
 			diaryWin.add(thisDiaryView);
+/*
+			var day = parseInt(offset/45);
+			thisDiaryView.scrollToIndex(day-3 > 0? day-3 : 0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
+*/
 			thisDiaryView.visible = true;
 		}
 	};
@@ -234,6 +238,10 @@ exports.createWindow = function(_userData){
 			// カレンダーの表示
 			thisDiaryView = getCalView(stampList, year, month);
 			diaryWin.add(thisDiaryView);
+/*
+			var day = parseInt(offset/45);
+			thisDiaryView.scrollToIndex(day-3 > 0? day-3 : 0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
+*/
 			thisDiaryView.visible = true;
 		}
 	};
@@ -280,6 +288,8 @@ exports.createWindow = function(_userData){
 	titleView.add(nextImage);
 
 	var thisDiaryView = null;
+	var offset = null;
+
 	// 今日の日スクロールが、なぜか25日以降の場合、一番下までスクロールしないので、
 	// winDiaryを作成した後に、app.jsで再作成することで対応
 //	updateCalView(nowYear, nowMonth, nowDay);
@@ -349,7 +359,11 @@ exports.createWindow = function(_userData){
 
 		updateCalView(nowYear, nowMonth, nowDay);
 	});
-
+/*
+	diaryWin.addEventListener('scroll',function(e) {    
+		offset = e.contentOffset.y;
+	});
+*/
 	// 更新用イベント
 	diaryWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]diaryWin.refresh:');

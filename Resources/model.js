@@ -653,7 +653,9 @@ exports.model = {
 	dropLocalArticleList:function(){
 		Ti.API.debug('[func]dropLocalArticleList:');
 		sqlite.open(function(db){
-			db.drop("DogArticleTB");
+			if(db.isExist("DogArticleTB")){
+				db.drop("DogArticleTB");
+			}
 		});
 	},
 
@@ -972,7 +974,9 @@ exports.model = {
 	dropLocalStampList:function(){
 		Ti.API.debug('[func]dropLocalStampList:');
 		sqlite.open(function(db){
-			db.drop("DiaryStampTB");
+			if(db.isExist("DiaryStampTB")){
+				db.drop("DiaryStampTB");
+			}
 		});
 	},
 
@@ -1107,7 +1111,9 @@ exports.model = {
 	dropLocalStampHistoryList:function(){
 		Ti.API.debug('[func]dropLocalStampHistoryList:');
 		sqlite.open(function(db){
-			db.drop("StampHistoryTB");
+			if(db.isExist("StampHistoryTB")){
+				db.drop("StampHistoryTB");
+			}
 		});
 	},
 
@@ -1157,16 +1163,22 @@ exports.model = {
 	addCloudStampList:function(_stampDataList, callback){
 		Ti.API.debug('[func]addCloudStampList:');
 
+		var stampDate = null;
 		var duration = 3600;
 		if (_stampDataList[0].hour == -1) {
 			duration = 0;
-			_stampDataList[0].hour = 0;
+			stampDate = new Date(
+				_stampDataList[0].year, 
+				_stampDataList[0].month-1, 
+				_stampDataList[0].day, 
+				0);
+		} else {
+			stampDate = new Date(
+				_stampDataList[0].year, 
+				_stampDataList[0].month-1, 
+				_stampDataList[0].day, 
+				_stampDataList[0].hour);
 		}
-		var stampDate = new Date(
-			_stampDataList[0].year, 
-			_stampDataList[0].month-1, 
-			_stampDataList[0].day, 
-			_stampDataList[0].hour);
 
 		var custom_fields = {};
 		for (var i=0; i<_stampDataList.length; i++) {
@@ -1284,7 +1296,9 @@ exports.model = {
 	dropLocalLikeList:function(){
 		Ti.API.debug('[func]dropLocalLikeList:');
 		sqlite.open(function(db){
-			db.drop("LikeArticleTB");
+			if(db.isExist("LikeArticleTB")){
+				db.drop("LikeArticleTB");
+			}
 		});
 	},
 
@@ -1566,7 +1580,9 @@ exports.model = {
 	dropLocalFriendsList:function(){
 		Ti.API.debug('[func]dropLocalFriendsList:');
 		sqlite.open(function(db){
-			db.drop("DogFriendsTB");
+			if(db.isExist("DogFriendsTB")){
+				db.drop("DogFriendsTB");
+			}
 		});
 	},
 

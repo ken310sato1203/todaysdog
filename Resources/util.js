@@ -25,9 +25,7 @@ exports.util = {
 	    var year = now.getFullYear();
 	    var month = now.getMonth() + 1;
 	    var day = now.getDate();
-	    var hour = 0;
-	    var minute = 0;
-	    return String.format("%04.0f-%02.0f-%02.0f %02.0f:%02.0f", year, month, day, hour, minute);
+	    return String.format("%04.0f-%02.0f-%02.0f", year, month, day);
 	},
 	// 現在日時を日時フォーマットに変換
 	getFormattedNowDateTime:function(){
@@ -46,6 +44,20 @@ exports.util = {
 	    var month = _date.getMonth() + 1;
 	    var day = _date.getDate();
 	    return String.format("%04.0f-%02.0f-%02.0f", year, month, day);
+	},
+	// Date型を日付フォーマットに変換
+	getFormattedDateJapan:function(_date){
+		if (_date instanceof Date) {
+		    var year = _date.getFullYear();
+		    var month = _date.getMonth() + 1;
+		    var day = _date.getDate();
+		    return year + '年' + month + '月' + day + '日';
+		} else {
+			var year = _date.substr(0,4);
+			var month = _date.substr(5,2);
+			var day = _date.substr(8,2);
+		    return year + '年' + month + '月' + day + '日';
+	   }
 	},
 	// Date型を日時フォーマットに変換
 	getFormattedDateTime:function(_date){

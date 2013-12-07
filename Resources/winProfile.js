@@ -174,7 +174,7 @@ exports.createWindow = function(_userData){
 			} else if (_userData.birth == '') {
 				birthLabel.text = _userData.sex;
 			} else {
-				birthLabel.text = _userData.birth + '（' + _userData.sex + '）';
+				birthLabel.text = util.getFormattedDateJapan(_userData.birth) + '生まれの' + _userData.sex;
 			}
 			infoView.add(birthLabel);
 		}
@@ -364,7 +364,13 @@ exports.createWindow = function(_userData){
 		var profileEditWin = win.createProfileEditWindow(_userData);
 		profileEditWin.prevWin = profileWin;
 		win.openTabWindow(profileEditWin, {animated:true});
-
+/*
+		profileEditWin.open({
+			modal: true,
+			modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_CURRENT_CONTEXT,
+			modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_COVER_VERTICAL
+		});
+*/
 	});
 
 	// ログアウトボタンをクリック

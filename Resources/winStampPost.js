@@ -41,10 +41,8 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 
 		var dateLabel = Ti.UI.createLabel(style.stampPostListItemLabel);
 		dateLabel.text = '日付';
-		dateField.value = dateValue;
-		dateField.enabled = false;
 		dateView.add(dateLabel);
-		dateView.add(dateField);
+		dateView.add(dateValue);
 
 		// 時間
 		var hourRow = Ti.UI.createTableViewRow(style.stampPostTableRow);
@@ -55,10 +53,8 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 
 		var hourLabel = Ti.UI.createLabel(style.stampPostListItemLabel);
 		hourLabel.text = '時間';
-		hourField.value = hourValue;
-		hourField.enabled = false;
 		hourView.add(hourLabel);
-		hourView.add(hourField);
+		hourView.add(hourValue);
 
 		// 終日
 		var allRow = Ti.UI.createTableViewRow(style.stampPostTableRow);
@@ -69,7 +65,6 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 
 		var allLabel = Ti.UI.createLabel(style.stampPostListItemLabel);
 		allLabel.text = '終日';
-		allSwitch.value = allValue;
 		allView.add(allLabel);
 		allView.add(allSwitch);
 
@@ -104,12 +99,12 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 					}
 						
 				} else if (targetName == "date"){
-					datePicker.value = util.getDate(dateField.value);
+					datePicker.value = util.getDate(dateValue.text);
 					datePickerView.animate(slideIn);
 	
 				} else if (targetName == "hour"){
 					if(allSwitch.value == false) {
-						hourPicker.setSelectedRow(0, util.getHour(hourField.value));
+						hourPicker.setSelectedRow(0, util.getHour(hourValue.text));
 						// アニメーションがうまく動かないので時間遅らせて表示
 						setTimeout(function() {
 							hourPickerView.animate(slideIn);
@@ -236,19 +231,21 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	postWin.rightNavButton = postButton;
 
 	// 日付
-	var dateField = Ti.UI.createTextField(style.stampPostListValueField);
-	var dateValue = util.getFormattedDate(new Date(_stampDataList[0].year, _stampDataList[0].month-1, _stampDataList[0].day));
-	// 時間
-	var hourField = Ti.UI.createTextField(style.stampPostListValueField);
-	var hourValue = null;
-	if (_stampDataList[0].hour == "-1") {
-		hourValue = "-";
-	} else {
-		hourValue = util.getFormattedHour(_stampDataList[0].hour);
-	}
+	var dateValue = Ti.UI.createLabel(style.stampPostListValueLabel);
+	dateValue.text = util.getFormattedDate(new Date(_stampDataList[0].year, _stampDataList[0].month-1, _stampDataList[0].day));
 	// 終日
 	var allSwitch = Ti.UI.createSwitch(style.stampPostListValueSwitch);
-	var allValue = false;
+	// 時間
+	var hourValue = Ti.UI.createLabel(style.stampPostListValueLabel);
+	if (_stampDataList[0].hour == "-1") {
+		hourValue.text = '-';
+		hourValue.source = '00:00';
+		allSwitch.value = true;
+	} else {
+		hourValue.text = util.getFormattedHour(_stampDataList[0].hour);
+		hourValue.source = hourValue.text;
+		allSwitch.value = false;
+	}
 
 	// 選択したフィールド名を保管
 	var selectedName = null;
@@ -280,8 +277,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	});
 	dateDone.addEventListener('click', function(e){
 		if (selectedValue != null) {
-			dateValue = util.getFormattedDate(selectedValue);
-			dateField.value = dateValue;
+			dateValue.text = util.getFormattedDate(selectedValue);
 		}
 		datePickerView.animate(slideOut);
 	});
@@ -341,8 +337,8 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	});
 	hourDone.addEventListener('click', function(e){
 		if (selectedIndex != null) {
-			hourValue = util.getFormattedHour(selectedIndex);
-			hourField.value = hourValue;
+			hourValue.text = util.getFormattedHour(selectedIndex);
+			hourValue.source = hourValue.text;
 		}
 		hourPickerView.animate(slideOut);
 	});
@@ -353,9 +349,9 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	// 終日選択
 	allSwitch.addEventListener('change',function(e){
 	   if (e.value == true) {
-	   		hourField.value = "-";
+	   		hourValue.text = '-';
 	   } else {
-			hourField.value = hourValue;
+			hourValue.text = hourValue.source;
 	   }
 	});
 
@@ -389,14 +385,14 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 				
 				for (var i=0; i<_stampDataList.length; i++) {	
 					// フィールドの値をセット
-					var date = util.getDate(dateField.value);
+					var date = util.getDate(dateValue.text);
 					_stampDataList[i].year = date.getFullYear();
 					_stampDataList[i].month = date.getMonth() + 1;
 					_stampDataList[i].day = date.getDate();
 					if(allSwitch.value == true) {
 						_stampDataList[i].hour = -1;
 					} else {
-						_stampDataList[i].hour = util.getHour(hourField.value);
+						_stampDataList[i].hour = util.getHour(hourValue.text);
 					}
 				}
 
