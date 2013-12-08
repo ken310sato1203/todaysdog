@@ -8,6 +8,7 @@ var win = require('win').win;
 var style = require('style').style;
 var model = require('model').model;
 var util = require('util').util;
+
 var sqliter = require("sqliter").sqliter;
 var sqlite = new sqliter("todaysdog");
 
@@ -273,7 +274,12 @@ var loginFacebook = function() {
 			initLikeArticle(userData);
 			// スタンプデータの初期化
 			initStamp(userData);
-			
+
+			// 通知設定の初期化
+//			if(! Ti.App.Properties.getString(userData.id + '_' + 'notice')) {
+//				Ti.App.Properties.setString(userData.id + '_' + 'notice', '17:18');
+//			}
+	
 			// メインウィンドウの表示
 			openMainWindow(userData);
 
@@ -305,7 +311,7 @@ if ( Facebook.loggedIn ) {
 }
 
 // アプリがバックグラウンドに変わった時に実行
-var service = Ti.App.iOS.registerBackgroundService({url:'notice.js'});
+var service = Ti.App.iOS.registerBackgroundService({url:'background.js'});
 
 // ---------------------------------------------------------------------
 

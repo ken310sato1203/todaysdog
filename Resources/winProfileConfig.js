@@ -42,7 +42,7 @@ exports.createWindow = function(_userData){
 	var noticeView = Ti.UI.createView(style.profileConfigListItemView);
 	noticeRow.add(noticeView);
 	var noticeLabel = Ti.UI.createLabel(style.profileConfigListItemLabel);
-	noticeLabel.text = '1日1回の通知時間';
+	noticeLabel.text = 'お知らせ時間';
 	var hourField = Ti.UI.createTextField(style.profileConfigListValueField);
 	hourField.value = Ti.App.Properties.getString(_userData.id + '_' + 'notice');
 	noticeView.add(noticeLabel);
@@ -102,7 +102,11 @@ exports.createWindow = function(_userData){
 		if (selectedIndex != null) {
 			hourValue = util.getFormattedHour(selectedIndex);
 			hourField.value = hourValue;
-			Ti.App.Properties.setString(_userData.id + '_' + 'notice', hourValue);
+			
+			// 通知設定の更新
+//			Ti.App.Properties.setString(_userData.id + '_' + 'notice', hourValue);
+			Ti.App.Properties.setString(_userData.id + '_' + 'notice', '18:' + hourValue);
+			Ti.App.Properties.setString(_userData.id + '_' + 'config', util.getFormattedNowDate());
 		}
 		hourPickerView.animate(slideOut);
 	});

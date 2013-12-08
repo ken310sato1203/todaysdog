@@ -784,7 +784,7 @@ exports.style = {
 		top : '30dp',
 		bottom : '10dp',
 		left: '7dp',
-		width: '296dp',
+		width: '306dp',
 		height : '90dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',

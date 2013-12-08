@@ -187,7 +187,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 							    });
 							    
 							    // 通知設定の更新
-							    updateNotice();
+								Ti.App.Properties.setString(_userData.id + '_' + 'today', util.getFormattedNowDate());
 	
 							} else {
 								util.errorDialog(e);
