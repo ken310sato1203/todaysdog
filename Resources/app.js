@@ -276,9 +276,9 @@ var loginFacebook = function() {
 			initStamp(userData);
 
 			// 通知設定の初期化
-//			if(! Ti.App.Properties.getString(userData.id + '_' + 'notice')) {
-//				Ti.App.Properties.setString(userData.id + '_' + 'notice', '17:18');
-//			}
+			if(! Ti.App.Properties.getString(userData.id + '_' + 'notice')) {
+				Ti.App.Properties.setString(userData.id + '_' + 'notice', '18:00');
+			}
 	
 			// メインウィンドウの表示
 			openMainWindow(userData);
