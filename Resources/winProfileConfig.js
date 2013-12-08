@@ -104,8 +104,7 @@ exports.createWindow = function(_userData){
 			hourField.value = hourValue;
 			
 			// 通知設定の更新
-//			Ti.App.Properties.setString(_userData.id + '_' + 'notice', hourValue);
-			Ti.App.Properties.setString(_userData.id + '_' + 'notice', '18:' + hourValue);
+			Ti.App.Properties.setString(_userData.id + '_' + 'notice', hourValue);
 			Ti.App.Properties.setString(_userData.id + '_' + 'config', util.getFormattedNowDate());
 		}
 		hourPickerView.animate(slideOut);

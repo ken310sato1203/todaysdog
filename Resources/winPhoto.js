@@ -251,13 +251,16 @@ exports.createWindow = function(_type, _articleData){
 		updateComment();
 	
 		// コメントフィールドの表示
+/*
 		var postButton = Ti.UI.createButton(style.photoCommentPostButton);
 		var postImage = Ti.UI.createImageView(style.photoCommentPostImage);
 		postButton.add(postImage);
+*/
 		var commentField = Ti.UI.createTextField(style.photoCommentField);
 		var dummyField = Ti.UI.createTextField(style.photoCommentField);
 		dummyField.top = '-50dp';
-		dummyField.keyboardToolbar = [commentField, postButton];
+//		dummyField.keyboardToolbar = [commentField, postButton];
+		dummyField.keyboardToolbar = [commentField];
 		photoWin.add(dummyField);
 
 		// コメントボタンのクリック
@@ -274,12 +277,12 @@ exports.createWindow = function(_type, _articleData){
 			Ti.API.debug('[event]dummyField.focus:');
 			commentField.focus();
 		});	
-	
+/*	
 		postButton.addEventListener('click',function(e){
 			Ti.API.debug('[event]postButton.click:');
 			addComment();
 		});
-	
+*/	
 		// コメントフィールドでキーボード確定でコメントリストに追加
 		commentField.addEventListener('return',function(e){
 			Ti.API.debug('[event]commentField.return:');

@@ -44,7 +44,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 	cameraPostWin.leftNavButton = backButton;
 
 	// 投稿ボタンの表示
-	var postButton = Titanium.UI.createButton(style.commonPlusButton);
+	var postButton = Titanium.UI.createButton(style.cameraPostButton);
 	cameraPostWin.rightNavButton = postButton;
 
 	var postScrollView = Titanium.UI.createScrollView(style.cameraPostScrollView);

@@ -22,6 +22,9 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// リフレッシュ時用格納リスト
 	var refreshTarget = [];
 
+	// 多重更新防止
+	var updateEnable = true;
+
 // ---------------------------------------------------------------------
 
 	// 日時の更新
@@ -190,7 +193,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				} else {
 					util.errorDialog(e);
 				}
-				friendsTableView.touchEnabled = true;	
+				updateEnable = true;
 			});			
 		}
 
@@ -285,7 +288,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	friendsWin.add(friendsTableView);
 
 	// ビューの更新
-	friendsTableView.touchEnabled = false;
 	updateArticle();
 
 // ---------------------------------------------------------------------
@@ -364,7 +366,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	friendsTableView.addEventListener('dragEnd',function(e){
 		// 下スクロールで、上部のヘッダがすべて表示されたらを最新データを更新
 	    if (pulling && !reloading && offset < -80){
-			friendsTableView.touchEnabled = false;
 	        pulling = false;
 	        reloading = true;
 	        e.source.headerPullView.pullLabel.text = 'Updating...';
@@ -386,8 +387,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	friendsTableView.addEventListener('scrollEnd',function(e){
         Ti.API.debug('[event]friendsTableView.scrollEnd:');
         if(e.contentOffset.y + e.size.height >= e.contentSize.height) {
-			if (nextArticleFlag) {
-				friendsTableView.touchEnabled = false;
+			if (updateEnable　&& nextArticleFlag) {
+				updateEnable = false;
 				updateArticle();
 			}
         }

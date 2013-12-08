@@ -157,7 +157,7 @@ exports.createWindow = function(_type, _userData, _stampData){
 	var backButton = Titanium.UI.createButton(style.commonBackButton);
 	stampWin.leftNavButton = backButton;
 	// 次へボタンの表示
-	var nextButton = Titanium.UI.createButton(style.commonNextButton);
+	var nextButton = Titanium.UI.createButton(style.stampButton);
 	nextButton.enabled = false;
 	stampWin.rightNavButton = nextButton;
 

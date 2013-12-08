@@ -16,6 +16,9 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// リフレッシュ時用格納リスト
 	var refreshTarget = [];
 
+	// 多重更新防止
+	var updateEnable = true;
+
 // ---------------------------------------------------------------------
 
 	// 記事の取得
@@ -92,7 +95,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			} else {
 				util.errorDialog(e);
 			}
-	    	photoListTableView.touchEnabled = true;			
+			updateEnable = true;
 		});
 	};
 
@@ -139,7 +142,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	photoListWin.add(photoListTableView);
 
 	// ビューの更新
-	photoListTableView.touchEnabled = false;
 	updateArticle();
 
 // ---------------------------------------------------------------------
@@ -201,7 +203,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	photoListTableView.addEventListener('dragEnd',function(e){
 		// 下スクロールで、上部のヘッダがすべて表示されたらを最新データを更新
 	    if (pulling && !reloading && offset < -80){
-	    	photoListTableView.touchEnabled = false;
 	        pulling = false;
 	        reloading = true;
 	        e.source.headerPullView.pullLabel.text = 'Updating...';
@@ -222,8 +223,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// スクロールの一番下で発生するイベント
 	photoListTableView.addEventListener('scrollEnd',function(){
         Ti.API.debug('[event]photoListTableView.scrollEnd:');
-		if (nextArticleFlag) {
-	    	photoListTableView.touchEnabled = false;
+		if (updateEnable　&& nextArticleFlag) {
+			updateEnable = false;
 			updateArticle();
 		}
 	});

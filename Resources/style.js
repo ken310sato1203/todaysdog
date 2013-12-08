@@ -438,13 +438,13 @@ exports.style = {
 
 	photoCommentField:{
 		top: '0dp',
-		width: '255dp',
+		width: '295dp',
 		height: '30dp',
 		backgroundColor: 'white',
 		borderColor:'#dedede',
-		borderRadius: '0',
+		borderRadius: '5',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		hintText: 'comment',
+		hintText: 'コメントを入力',
 		keyboardToolbarColor: '#f5f5f5',
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
         returnKeyType:Ti.UI.RETURNKEY_SEND,
@@ -705,12 +705,8 @@ exports.style = {
 		text: 'プロフィール', 
 	},
 	profileSaveButton:{
-//		width: '28dp',
-//		height: '28dp',
-//		backgroundImage:'images/icon/w_profile_save.png',
 		width: '50dp',
 		height: '25dp',
-//		backgroundColor: '#dedede',
 		backgroundImage: 'images/icon/titlebar10.png',
 		textAlign: 'center',
 		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
@@ -1805,6 +1801,15 @@ exports.style = {
 		shadowColor: '#696969', 
 		text: 'カメラ', 
 	},
+	cameraPostButton:{
+		width: '50dp',
+		height: '25dp',
+		backgroundImage: 'images/icon/titlebar10.png',
+		textAlign: 'center',
+		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
+		color: '#e74c3c',
+		title: '投稿',
+	},
 
 	cameraPostScrollView:{
 		layout: 'vertical',
@@ -2523,7 +2528,16 @@ exports.style = {
 		color: 'white', 
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
-		text: 'スタンプの選択', 
+		text: 'スタンプ', 
+	},
+	stampButton:{
+		width: '50dp',
+		height: '25dp',
+		backgroundImage: 'images/icon/titlebar10.png',
+		textAlign: 'center',
+		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
+		color: '#e74c3c',
+		title: '選択',
 	},
 
 	stampScrollView:{
@@ -2593,6 +2607,16 @@ exports.style = {
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
 	},
+	stampPostButton:{
+		width: '50dp',
+		height: '25dp',
+		backgroundImage: 'images/icon/titlebar10.png',
+		textAlign: 'center',
+		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
+		color: '#e74c3c',
+		title: '記録',
+	},
+
 	stampPostTableView:{
 		top: '10dp',
 		// 下のタブで表示されない余白分

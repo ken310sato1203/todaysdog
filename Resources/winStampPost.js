@@ -227,7 +227,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	postWin.leftNavButton = backButton;
 
 	// 投稿ボタンの表示
-	var postButton = Ti.UI.createButton(style.commonPlusButton);
+	var postButton = Ti.UI.createButton(style.stampPostButton);
 	postWin.rightNavButton = postButton;
 
 	// 日付
@@ -370,7 +370,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 		Ti.API.debug('[event]postButton.click:');
 
 		var alertDialog = Titanium.UI.createAlertDialog({
-			title: '投稿しますか？',
+			title: '記録しますか？',
 			buttonNames: ['キャンセル','OK'],
 			cancel: 1
 		});
