@@ -220,7 +220,7 @@ exports.createWindow = function(_userData){
 			}
 	
 			// タイトルの年月
-			monthTitle.text =  year + ' ' + monthName[month-1];
+			monthTitle.text = year + '年' + month + '月';
 			// カレンダーの表示
 			var articleList = getArticleList(year, month);
 			thisDiaryView = getCalView(articleList, year, month);
@@ -242,7 +242,7 @@ exports.createWindow = function(_userData){
 			}
 	
 			// タイトルの年月
-			monthTitle.text =  year + ' ' + monthName[month-1];
+			monthTitle.text = year + '年' + month + '月';
 			// カレンダーの表示
 			var articleList = getArticleList(year, month);
 			thisDiaryView = getCalView(articleList, year, month);
@@ -256,7 +256,7 @@ exports.createWindow = function(_userData){
 		year = _year;
 		month = _month;
 		// タイトルの年月
-		monthTitle.text =  year + ' ' + monthName[month-1];
+		monthTitle.text = year + '年' + month + '月';
 		// ビューの再作成
 		calendarWin.remove(thisDiaryView);
 		// カレンダーの表示
@@ -271,7 +271,7 @@ exports.createWindow = function(_userData){
 	var titleView = Ti.UI.createView(style.calendarTitleView);
 	calendarWin.titleControl = titleView;
 	var monthTitle = Ti.UI.createLabel(style.calendarTitleLabel);
-	monthTitle.text =  year + ' ' + monthName[month-1];
+	monthTitle.text = year + '年' + month + '月';
 	titleView.add(monthTitle);
 	var prevImage = Ti.UI.createImageView(style.calendarPrevImage);
 	titleView.add(prevImage);

@@ -184,7 +184,8 @@ exports.createWindow = function(_userData, _diaryData){
 			scrollPosition(timeTableView);
 			timeWin.add(timeTableView);
 			// タイトルの表示
-			monthTitle.text =  monthName[_diaryData.month - 1] + ' ' + _diaryData.day;	
+//			monthTitle.text =  monthName[_diaryData.month - 1] + ' ' + _diaryData.day;
+			monthTitle.text =  month + '月' + day + '日';			
 
 /*
 			model.getCloudStampList({
@@ -214,7 +215,8 @@ exports.createWindow = function(_userData, _diaryData){
 			scrollPosition(timeTableView);
 			timeWin.add(timeTableView);		
 			// タイトルの表示
-			monthTitle.text =   monthName[_diaryData.month - 1] + ' ' + _diaryData.day;	
+//			monthTitle.text =   monthName[_diaryData.month - 1] + ' ' + _diaryData.day;	
+			monthTitle.text =  month + '月' + day + '日';
 		}
 
 	};
@@ -225,8 +227,6 @@ exports.createWindow = function(_userData, _diaryData){
 	// タイトルの表示
 //	var titleView = Ti.UI.createView(style.timeTitleView);	
 	var monthTitle = Ti.UI.createLabel(style.timeTitleLabel);
-	var weekday = util.diary.weekday[new Date(year, month-1, day).getDay()];
-	monthTitle.text =  month + '/' + day + ' ' + weekday.text;
 	timeWin.titleControl = monthTitle;
 
 	// 戻るボタンの表示

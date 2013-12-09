@@ -13,11 +13,14 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// 記事データの取得ページ
 	var articlePage = 1;
 	// 記事データの取得件数
-	var articleCount = 6;
+	var articleCount = 10;
 	// 記事データの取得開始日（n日前）
 	var articleDay = 60;
 	// 更新時に読み込むフラグ
 	var nextArticleFlag = true;
+
+	// 日付の見出しチェック
+	var checkDate = null;
 
 	// リフレッシュ時用格納リスト
 	var refreshTarget = [];
@@ -51,14 +54,10 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	};
 
 	// フォローユーザの記事の取得
-	var getFriendsArticleTableRow = function(_articleList) {
-		Ti.API.debug('[func]getFriendsArticleTableRow:');
-		var articleRow = Ti.UI.createTableViewRow(style.friendsArticleTableRow);
-		var articleListView = Ti.UI.createView(style.friendsArticleListView);
-		articleRow.add(articleListView);
-		
-		var checkDate = null;
-		
+	var getFriendsArticleView = function(_articleList) {
+		Ti.API.debug('[func]getFriendsArticleView:');
+
+		var articleListView = Ti.UI.createView(style.friendsArticleListView);		
 		for (var i=0; i<_articleList.length; i++) {	
 
 			var date = util.getDateElement(_articleList[i].date);
@@ -130,8 +129,9 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				photoWin.prevWin = friendsWin;
 				win.openTabWindow(photoWin, {animated:true});
 			});
+			
 		}
-		return articleRow;
+		return articleListView;
 	};
 
 
@@ -150,6 +150,10 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// 記事の更新
 	var updateArticle = function() {
 		Ti.API.debug('[func]updateArticle:');
+		// 取得した記事をテーブルに追加
+		// Row自体を追加するとスクロールがスムーズでないのでRowにViewを追加
+		actInd.show();
+		tabGroup.add(actInd);
 		// 日時の更新
 		updateTime();
 
@@ -176,8 +180,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				Ti.API.debug('[func]getCloudTodayArticle.callback:');
 				if (e.success) {
 					if (e.articleList.length > 0) {
-						// 取得した記事をテーブルに追加
-						friendsTableView.appendRow(getFriendsArticleTableRow(e.articleList), {animated:true});
+						articleRow.add(getFriendsArticleView(e.articleList));
+						actInd.hide();
+						// Rowはデータがなくても高さがあるので背景色が残ってしまうため
+						// データ削除時に一時的に白にして更新後戻す
+						articleRow.backgroundColor = '#dedede';
+
 						if (e.meta.total_pages == articlePage) {
 							nextArticleFlag = false;
 						} else if (e.meta.total_pages > articlePage) {
@@ -285,7 +293,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 	var friendsTableView = Ti.UI.createTableView(style.friendsTableView);
 	friendsTableView.headerPullView = getTableHeader();
+	var articleRow = Ti.UI.createTableViewRow(style.friendsArticleTableRow);
+	friendsTableView.appendRow(articleRow);
 	friendsWin.add(friendsTableView);
+
+	// 投稿時のロード用画面
+	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
 
 	// ビューの更新
 	updateArticle();
@@ -341,7 +354,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	    _tableView.headerPullView.pullLabel.text = 'Pull down to refresh...';
 	    _tableView.setContentInsets({top:0}, {animated:true});
 	};
-	 
+
 	// スクロールで発生するイベント
 	friendsTableView.addEventListener('scroll',function(e){
 		// 表示部分の最上位置からのオフセット
@@ -372,27 +385,34 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	        e.source.headerPullView.updateArrowImage.hide();
 	        e.source.headerPullView.updateIndicator.show();
 	        e.source.setContentInsets({top:80}, {animated:true});
+	        // アニメーション終わって更新
 	        setTimeout(function(){
-	        	resetPullHeader(e.source);
 				// ビューの更新
 				friendsTableView.data = [];
+				articleRow = Ti.UI.createTableViewRow(style.friendsArticleTableRow);
+				// Rowはデータがなくても高さがあるので背景色が残ってしまうため
+				// データ削除時に一時的に白にして更新後戻す
+				articleRow.backgroundColor = 'white';
+				friendsTableView.appendRow(articleRow);
+
 		    	articlePage = 1;
 		    	nextArticleFlag = true;
+	        	resetPullHeader(e.source);
 	        	updateArticle();
 	        }, 2000);
 	    }
-	});
+	}); 
 
 	// スクロールの一番下で発生するイベント
 	friendsTableView.addEventListener('scrollEnd',function(e){
         Ti.API.debug('[event]friendsTableView.scrollEnd:');
-        if(e.contentOffset.y + e.size.height >= e.contentSize.height) {
-			if (updateEnable　&& nextArticleFlag) {
+        if(e.contentSize.height > 80 && e.contentSize.height <= e.contentOffset.y + e.size.height) {
+			if (updateEnable && nextArticleFlag) {
 				updateEnable = false;
 				updateArticle();
 			}
         }
 	});
-	
+
 	return friendsWin;
 };

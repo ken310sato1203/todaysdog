@@ -181,6 +181,7 @@ exports.createWindow = function(_userData){
 	// 前月カレンダーの表示
 	var prevCalView = function() {
 		Ti.API.debug('[func]prevCalView:');
+
 		// 多重クリック防止
 		if (slideEnable) {
 			slideView.left = style.commonSize.screenWidth + 'dp';
@@ -193,7 +194,7 @@ exports.createWindow = function(_userData){
 			}
 	
 			// タイトルの年月
-			monthTitle.text =  year + ' ' + monthName[month-1];
+			monthTitle.text = year + '年' + month + '月';
 			// 当月のスタンプデータ取得
 			var stampList = model.getLocalStampList({
 				userId: _userData.id,
@@ -204,10 +205,10 @@ exports.createWindow = function(_userData){
 			// カレンダーの表示
 			thisDiaryView = getCalView(stampList, year, month);
 			diaryWin.add(thisDiaryView);
-/*
-			var day = parseInt(offset/45);
-			thisDiaryView.scrollToIndex(day-3 > 0? day-3 : 0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
-*/
+
+			// 前のポジションに移動
+			var day = Math.round(offset / 45);
+			thisDiaryView.scrollToIndex(day, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
 			thisDiaryView.visible = true;
 		}
 	};
@@ -227,7 +228,7 @@ exports.createWindow = function(_userData){
 			}
 	
 			// タイトルの年月
-			monthTitle.text =  year + ' ' + monthName[month-1];
+			monthTitle.text = year + '年' + month + '月';
 			// 当月のスタンプデータ取得
 			var stampList = model.getLocalStampList({
 				userId: _userData.id,
@@ -238,10 +239,10 @@ exports.createWindow = function(_userData){
 			// カレンダーの表示
 			thisDiaryView = getCalView(stampList, year, month);
 			diaryWin.add(thisDiaryView);
-/*
-			var day = parseInt(offset/45);
-			thisDiaryView.scrollToIndex(day-3 > 0? day-3 : 0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
-*/
+
+			// 前のポジションに移動
+			var day = Math.round(offset / 45);
+			thisDiaryView.scrollToIndex(day, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
 			thisDiaryView.visible = true;
 		}
 	};
@@ -253,7 +254,7 @@ exports.createWindow = function(_userData){
 		year = _year;
 		month = _month;
 		// タイトルの年月
-		monthTitle.text =  year + ' ' + monthName[month-1];
+		monthTitle.text = year + '年' + month + '月';
 		// ビューの再作成
 		if(thisDiaryView) {
 			diaryWin.remove(thisDiaryView);
@@ -270,7 +271,8 @@ exports.createWindow = function(_userData){
 		thisDiaryView = getCalView(stampList, year, month);
 		diaryWin.add(thisDiaryView);
 		// 今日の日にスクロール
-		thisDiaryView.scrollToIndex(_day-3 > 0? _day-3 : 0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
+		thisDiaryView.scrollToIndex(_day-3 > 0 ? _day-3 : 0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+		offset = _day-3 > 0 ? (_day-3) * 45: 0;
 		thisDiaryView.visible = true;
 	};
 
@@ -280,7 +282,6 @@ exports.createWindow = function(_userData){
 	var titleView = Ti.UI.createView(style.diaryTitleView);
 	diaryWin.titleControl = titleView;
 	var monthTitle = Ti.UI.createLabel(style.diaryTitleLabel);
-	monthTitle.text =  year + ' ' + monthName[month-1];
 	titleView.add(monthTitle);
 	var prevImage = Ti.UI.createImageView(style.diaryPrevImage);
 	titleView.add(prevImage);
@@ -359,11 +360,12 @@ exports.createWindow = function(_userData){
 
 		updateCalView(nowYear, nowMonth, nowDay);
 	});
-/*
-	diaryWin.addEventListener('scroll',function(e) {    
+
+	diaryWin.addEventListener('scroll',function(e) {
+		// ポジションを取得
 		offset = e.contentOffset.y;
 	});
-*/
+
 	// 更新用イベント
 	diaryWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]diaryWin.refresh:');

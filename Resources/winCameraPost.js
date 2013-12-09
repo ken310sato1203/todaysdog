@@ -4,35 +4,6 @@ exports.createWindow = function(_type, _userData, _photoImage){
 	Ti.API.debug('[func]winCameraPost.createWindow:');
 	Ti.API.debug('_type:' + _type);
 
-	// 通知設定の更新
-	var updateNotice = function() {
-		Ti.API.debug('[func]updateNotice:');
-		// 通知設定の初期化
-		Ti.App.iOS.cancelAllLocalNotifications();
-		
-		var userId = _userData.id;
-		var message = '今日のワンコを写真に撮ろう！';
-		var name = _userData.name;
-		if (name) {
-			message = "今日の「" +name + "」さんを写真に撮ろう！";
-		}
-		var hour = '18:00';
-		var notice = Ti.App.Properties.getString(userId + '_' + 'notice');
-		if (notice) {
-			hour = notice;
-		}
-		// 通知を明日に設定変更
-		var now = new Date();
-		var time = String.format("%04.0f/%02.0f/%02.0f ", now.getFullYear(), now.getMonth() + 1, now.getDate() + 1) + hour;	
-		
-		Ti.App.iOS.scheduleLocalNotification({
-			alertBody: message,
-			alertAction: 'OK',
-			date: new Date(time),
-			repeat: 'daily'
-		});	
-	};
-
 // ---------------------------------------------------------------------
 	var cameraPostWin = Ti.UI.createWindow(style.cameraPostWin);
 	// タイトルの表示

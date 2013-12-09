@@ -223,7 +223,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// スクロールの一番下で発生するイベント
 	photoListTableView.addEventListener('scrollEnd',function(){
         Ti.API.debug('[event]photoListTableView.scrollEnd:');
-		if (updateEnable　&& nextArticleFlag) {
+		if (updateEnable && nextArticleFlag) {
 			updateEnable = false;
 			updateArticle();
 		}

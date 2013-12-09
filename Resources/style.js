@@ -10,10 +10,10 @@ exports.style = {
 	},
 
 	commonActivityIndicator:{
-//		backgroundColor: 'black',
-		opacity: 0.7,
 		width: '100%',
 		height: '100%',
+//		backgroundColor: 'black',
+		opacity: 0.7,
 		style: Ti.UI.iPhone.ActivityIndicatorStyle.DARK,
 		font: {fontSize:14, fontWeight:'bold'},
 		color: 'gray',
@@ -1744,6 +1744,15 @@ exports.style = {
 		shadowColor: '#696969', 
 		text: 'カメラ', 
 	},
+	cameraNextButton:{
+		width: '50dp',
+		height: '25dp',
+		backgroundImage: 'images/icon/titlebar10.png',
+		textAlign: 'center',
+		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
+		color: '#e74c3c',
+		title: '次へ',
+	},
 
 	cameraOverlayView:{
 		top: '0dp',
@@ -2174,9 +2183,11 @@ exports.style = {
 		data: [],
 	},
 	friendsArticleTableRow:{ 
+		layout: 'vertical',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
+//		backgroundColor: '#dedede',
+		backgroundColor: 'white',
 		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},

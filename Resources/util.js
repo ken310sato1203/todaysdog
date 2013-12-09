@@ -10,7 +10,7 @@ exports.util = {
 	diary:{
 		monthName:['January','February','March','April','May','June','July','August','September','October','November','December'],
 		weekday:[
-			{text:'SUN',color:'#CD5C5C'},
+			{text:'SUN',color:'#CD5C5C',},
 			{text:'MON',color:'#3a4756'},
 			{text:'TUE',color:'#3a4756'},
 			{text:'WED',color:'#3a4756'},
