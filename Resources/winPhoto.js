@@ -56,6 +56,9 @@ exports.createWindow = function(_type, _articleData){
 						textView.add(timeLabel);
 					}
 
+					commentBottomView = Ti.UI.createView(style.photoCommentBottomView);
+					commentListView.add(commentBottomView);
+
 				} else {
 					if (commentRow.getChildren().length > 0) {
 						commentRow.remove(commentListView);				
@@ -96,7 +99,7 @@ exports.createWindow = function(_type, _articleData){
 					commentField.value = '';
 					commentField.blur();
 					if (photoWin.prevWin != null) {
-						photoWin.prevWin.fireEvent('refresh', {id:_articleData.id, like:0, comment:1});
+						photoWin.prevWin.fireEvent('refresh', {index:_articleData.index, like:0, comment:1});
 					}
 
 				} else {
@@ -321,7 +324,7 @@ exports.createWindow = function(_type, _articleData){
 					Ti.API.debug('Success:');
 					likeStampImage.clickFlag = false;
 					if (photoWin.prevWin != null) {
-						photoWin.prevWin.fireEvent('refresh', {id:_articleData.id, like:-1, comment:0});
+						photoWin.prevWin.fireEvent('refresh', {index:_articleData.index, like:-1, comment:0});
 					}
 
 					// ローカルから削除
@@ -351,7 +354,7 @@ exports.createWindow = function(_type, _articleData){
 					likeStampImage.clickFlag = true;
 					likeStampImage.reviewId = e.reviews[0].id;
 					if (photoWin.prevWin != null) {
-						photoWin.prevWin.fireEvent('refresh', {id:_articleData.id, like:1, comment:0});
+						photoWin.prevWin.fireEvent('refresh', {index:_articleData.index, like:1, comment:0});
 					}
 
 					// ローカルに登録

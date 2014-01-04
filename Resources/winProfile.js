@@ -150,17 +150,17 @@ exports.createWindow = function(_userData){
 		var infoView = Ti.UI.createView(style.profileInfoView);
 		profileInfoRow.add(infoView);
 
-		var nameView = Ti.UI.createView(style.profileInfoNameView);
-		infoView.add(nameView);
+//		var nameView = Ti.UI.createView(style.profileInfoNameView);
+//		infoView.add(nameView);
 		
 		if (_userData.name != '') {
 			var nameLabel = Ti.UI.createLabel(style.profileInfoNameLabel);
 			nameLabel.text = _userData.name;
-			nameView.add(nameLabel);
+			infoView.add(nameLabel);
 		}
 		var userLabel = Ti.UI.createLabel(style.profileInfoUserLabel);
 		userLabel.text = _userData.user;
-		nameView.add(userLabel);
+		infoView.add(userLabel);
 	
 		if (_userData.breed != '') {
 			var breedLabel = Ti.UI.createLabel(style.profileInfoBreedLabel);

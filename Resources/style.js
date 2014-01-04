@@ -10,9 +10,6 @@ exports.style = {
 	},
 
 	commonActivityIndicator:{
-		width: '100%',
-		height: '100%',
-//		backgroundColor: 'black',
 		opacity: 0.7,
 		style: Ti.UI.iPhone.ActivityIndicatorStyle.DARK,
 		font: {fontSize:14, fontWeight:'bold'},
@@ -54,18 +51,13 @@ exports.style = {
 	    font: {fontSize:12},
 	    textAlign: 'center',
 	},
+
 	commonUpdateIndicator:{
 	    left: '20dp',
-	    bottom: '13dp',
-	    width: '30dp',
-	    height: '30dp',
-	    image:'images/whiteArrow.png',
-	    left: '20dp',
-	    bottom: '10dp',
-	    width: '23dp',
-	    height: '60dp',
+	    bottom: '20dp',
+		style: Ti.UI.iPhone.ActivityIndicatorStyle.PLAIN,
 	},
-	
+
 	commonBackButton:{
 		width: '28dp',
 		height: '28dp',
@@ -435,6 +427,13 @@ exports.style = {
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#696969',
 	},
+	photoCommentBottomView:{
+		top: '0dp',
+		left: '0dp',
+		width: '100%',
+		height: '40dp',
+		backgroundColor: 'yellow',
+	},
 
 	photoCommentField:{
 		top: '0dp',
@@ -610,6 +609,7 @@ exports.style = {
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
+/*
 	profileInfoNameView:{
 		layout: 'horizontal',
 		top: '0dp',
@@ -617,18 +617,23 @@ exports.style = {
 		left: '0dp',
 		height: Ti.UI.SIZE,
 	},
+*/
 	profileInfoNameLabel:{
 		top: '0dp',
 		left: '0dp',
 		right: '5dp',
 		width: Ti.UI.SIZE,
+		height: '18dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
 	profileInfoUserLabel:{
 		top: '0dp',
+		bottom: '5dp',
 		left: '0dp',
+		right: '5dp',
 		width: Ti.UI.SIZE,
+		height: '18dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#696969',
 	},
@@ -2155,9 +2160,18 @@ exports.style = {
 //		barColor: '#a9a9a9',
 		barImage: 'images/icon/titlebar.png',
 		tabBarHidden: true,
-		title: 'わんとも',
 		// カスタムプロパティ
 		objectName : 'friendsWin',
+		prevWin : null,
+	},
+	friendsTitleLabel:{
+		width: '200dp',
+		textAlign: 'center',
+		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+		text: 'わんとも', 
 	},
 	friendsSearchButton:{
 		width: '28dp',
@@ -2174,52 +2188,38 @@ exports.style = {
 		title: '更新する',
 	},
 
-	friendsTableView:{ 
-		// 下のタブで表示されない余白分
+	friendsListView:{
+		top: '0dp',
+		left: '0dp',
 		bottom: '44dp',
-//		backgroundColor: '#dedede',
-		backgroundColor: 'white',
-		separatorColor: 'transparent',
-		data: [],
+		separatorStyle: Titanium.UI.iPhone.ListViewSeparatorStyle.NONE,
 	},
-	friendsArticleTableRow:{ 
-		layout: 'vertical',
+
+	friendsDataList:{
+		top: '0dp',
+		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-//		backgroundColor: '#dedede',
-		backgroundColor: 'white',
-		touchEnabled: false,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-	},
-	friendsDateView:{
-		top: '0dp',
-		width: '100%',
-		height: '30dp',
 		backgroundColor: '#eeeeee',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
 	},
 	friendsDateLabel:{
+		top: '0dp',
 		left: '10dp',
-//		font: {fontSize:15, fontWeight:'bold'},
+		width: '100%',
+		height: '30dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#696969',
 	},
 
-	friendsArticleListView:{
-		layout: 'vertical',
+	friendsArticleList:{
+		//  verticalだとバグのためエラーになる
+//		layout: 'vertical',
 		top: '0dp',
+		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-	},
-	friendsArticleView:{
-		layout: 'horizontal',
-		top: '0dp',
-		bottom: '1dp',
-		left: '0dp',
-		width: '100%',
-		height: Ti.UI.SIZE,
-		backgroundColor: 'white',
-		// カスタムプロパティ
-		articleData: null,
+//		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
 	},
 	friendsUserIconView:{
 		top: '5dp',
@@ -2228,29 +2228,12 @@ exports.style = {
 		width: '54dp',
 		height: '54dp',
 		borderRadius: '27dp',
-		touchEnabled: false,
-	},
-	friendsUserIconImage:{
-		width: '54dp',
-		height: '54dp',
-		defaultImage: '',
-		touchEnabled: false,
-	},
-	friendsTextView:{
-		layout: 'vertical',
-		top: '5dp',
-		bottom: '5dp',
-		left: '10dp',
-		right: '10dp',
-		// friendsUserIconImageの幅(10+55)と余白（10+10）を除いたサイズ
-		width: (Ti.Platform.displayCaps.platformWidth - 85) + 'dp',
-		height: Ti.UI.SIZE,
-		touchEnabled: false,
 	},
 	friendsNameView:{
 		layout: 'horizontal',
-		top: '0dp',
-		left: '0dp',
+		top: '5dp',
+		left: '74dp',
+		right: '15dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
@@ -2259,53 +2242,45 @@ exports.style = {
 		left: '0dp',
 		right: '5dp',
 		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
+//		height: Ti.UI.SIZE,
+		height: '16dp',
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-		touchEnabled: false,
 	},
 	friendsUserLabel:{
 		top: '0dp',
 		left: '0dp',
+		right: '5dp',
 		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
+//		height: Ti.UI.SIZE,
+		height: '16dp',
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#696969',
-		touchEnabled: false,
 	},
 	friendsTextLabel:{
-		top: '0dp',
-		left: '0dp',
-		width: '100%',
+		top: '22dp',
+		bottom: '22dp',
+		left: '74dp',
+		right: '15dp',
+		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-		touchEnabled: false,
-	},
-
-	friendsTimeView:{
-		top: '5dp',
-		left: '0dp',
-		width: '100%',
-		height: Ti.UI.SIZE,
 	},
 	friendsTimeLabel:{
-		bottom: '0dp',
-		left: '0dp',
+		bottom: '5dp',
+		left: '74dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		textAlign: 'right',
+		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#696969',
 	},
-
 	friendsCountView:{
 		layout: 'horizontal',
-		top: '0dp',
-		right: '0dp',
+		bottom: '5dp',
+		right: '10dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
@@ -2321,7 +2296,7 @@ exports.style = {
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
-		font: {fontSize:11, fontFamily:'Helvetica Neue'},
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
 	friendsCommentIconImage:{
@@ -2336,31 +2311,57 @@ exports.style = {
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
-		font: {fontSize:11, fontFamily:'Helvetica Neue'},
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
+	friendsArticleView:{
+		top: '0dp',
+		left: '0dp',
+		width: '100%',
+		height: '64dp',
+		backgroundColor: 'yellow',
+		// カスタムプロパティ
+		articleData: null,
+	},
+
+	friendsNextList:{
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#eeeeee',
+//		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
+	},
+	friendsNextLabel:{
+		top: '0dp',
+		width: '100%',
+		height: '50dp',
+		textAlign: 'center',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+
+	friendsNoDataList:{
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: '50dp',
+		backgroundColor: '#eeeeee',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
+	},
+	friendsNoDataLabel:{
+		top: '0dp',
+		width: '100%',
+		height: '100%',
+		textAlign: 'center',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+
 	friendsPreloadImage:{
 		width: '0dp',
 		height: '0dp',
 		visible:false
-	},
-
-	friendsNoDataTableRow:{ 
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		touchEnabled: false,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-	},
-	friendsNoDataView:{
-		top: '0dp',
-		left: '0dp',
-		width: '100%',
-		height: '100%',
-	},
-	friendsNoDataLabel:{
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-		text: '投稿された記事はありませんでした'
 	},
 
 // winToay -------------------------------------------------------
@@ -2368,7 +2369,7 @@ exports.style = {
 		backgroundColor: 'white',
 //		barColor: '#a9a9a9',
 		barImage: 'images/icon/titlebar.png',
-		backButtonTitleImage: 'images/icon/titlebar.png',
+//		backButtonTitleImage: 'images/icon/titlebar.png',
 		// タイトルバーを隠す
 //		navBarHidden: true,
 		tabBarHidden: true,
@@ -2526,7 +2527,7 @@ exports.style = {
 		backgroundColor: '#dedede',
 //		barColor: '#a9a9a9',
 		barImage: 'images/icon/titlebar.png',
-		backButtonTitleImage: null,
+//		backButtonTitleImage: null,
 		tabBarHidden: true,
 		// カスタムプロパティ
 		objectName : 'stampWin',

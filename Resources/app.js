@@ -60,7 +60,7 @@ var openMainWindow = function(_userData) {
 	tabGroup.addTab(tab4);
 	
 	// 初期表示のウィンドウを設定
-	tabGroup.setActiveTab(tab2);
+	tabGroup.setActiveTab(tab1);
 	tabGroup.open();
 
 	// カスタムタブを上から表示
