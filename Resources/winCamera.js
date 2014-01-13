@@ -9,17 +9,21 @@ exports.createWindow = function(_type, _userData){
 		Ti.API.debug('[func]editImage:');
 		var croppedImage = null;
 		if (_type == 'photo_camera') {
-			var resizedImage = _image.imageAsResized(640, _image.height * 640 / _image.width);
+//			var resizedImage = _image.imageAsResized(640, _image.height * 640 / _image.width);
+			var resizedImage = _image.imageAsResized(1280, _image.height * 1280 / _image.width);
 			croppedImage = resizedImage.imageAsCropped({
 				width: resizedImage.width, 
 				height: resizedImage.width * 3 / 4,
 				x: 0, y: 200
 			});
 		} else {
-			var resizedImage = _image.imageAsResized(640, _image.height * 640 / _image.width);
+//			var resizedImage = _image.imageAsResized(640, _image.height * 640 / _image.width);
+			var resizedImage = _image.imageAsResized(1280, _image.height * 1280 / _image.width);
 			croppedImage = resizedImage.imageAsCropped({
-				width: 640,
-				height: 640,
+//				width: 640,
+				width: 1280,
+//				height: 640,
+				height: 1280,
 				x: 0, y: 100
 			});
 		}

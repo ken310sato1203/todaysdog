@@ -196,7 +196,7 @@ exports.style = {
 		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
 		color: 'white',
 	},
-
+/*
 	photoTableView:{ 
 		// 下のタブで表示されない余白分
 		bottom: '44dp',
@@ -212,6 +212,7 @@ exports.style = {
 		touchEnabled: false,
 	},
 
+*/
 	photoArticleView:{
 		layout: 'vertical',
 		width: Ti.UI.SIZE,
@@ -219,6 +220,7 @@ exports.style = {
 		backgroundColor: '#dedede',
 	},
 	photoPhotoView:{
+		top: '0dp',
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
 		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
 		backgroundColor: 'white',
@@ -233,11 +235,11 @@ exports.style = {
 		articleData: null,
 	},
 	photoArticleTextView:{
-		layout: 'horizontal',
+//		layout: 'horizontal',
 		top: '0dp',
-		bottom: '1dp',
+//		bottom: '1dp',
 		left: '0dp',
-		width: Ti.UI.SIZE,
+		width: '100%',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
 	},
@@ -246,8 +248,8 @@ exports.style = {
 		top: '5dp',
 		bottom: '5dp',
 		left: '10dp',
-		right: '10dp',
-		width: '100%',
+		right: '74dp',
+		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
 	photoNameLabel:{
@@ -285,7 +287,6 @@ exports.style = {
 		height: '54dp',
 		defaultImage: '',
 		image: 'images/icon/b_like_before.png',
-		touchEnabled: false,
 		visible: false,
 		// カスタムプロパティ
 		clickFlag: false,
@@ -325,6 +326,7 @@ exports.style = {
 		font: {fontSize:11, fontFamily:'Helvetica Neue'},
 		color: '#000',
 		text: 'コメントする',
+		enabled: false,
 	},
 	photoShareActionView:{
 		layout: 'horizontal',
@@ -353,6 +355,7 @@ exports.style = {
 		font: {fontSize:11, fontFamily:'Helvetica Neue'},
 		color: '#000',
 		text: 'シェアする',
+		touchEnabled: false,
 	},
 
 	photoCommentTableRow:{ 
@@ -432,7 +435,6 @@ exports.style = {
 		left: '0dp',
 		width: '100%',
 		height: '40dp',
-		backgroundColor: 'yellow',
 	},
 
 	photoCommentField:{
@@ -471,6 +473,45 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		defaultImage: '',
 		backgroundColor: 'black',
+	},
+
+	photoListView:{
+		top: '0dp',
+		left: '0dp',
+		bottom: '44dp',
+		separatorStyle: Titanium.UI.iPhone.ListViewSeparatorStyle.NONE,
+	},
+	photoArticleList:{
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+//		backgroundColor: '#eeeeee',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
+	},
+	photoActionList:{
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#eeeeee',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
+	},
+	photoCommentList:{
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#eeeeee',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
+	},
+	photoBottomList:{
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#eeeeee',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
 	},
 
 // winProfile -------------------------------------------------------
@@ -544,6 +585,7 @@ exports.style = {
 		height: Ti.UI.SIZE,
 //		backgroundColor: 'white',
 //		scrollable: false,
+		separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		data: [],
 	},
 
@@ -552,6 +594,7 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		backgroundColor: '#dedede',
 	},
 	profileIconView:{
 		top: '8dp',
@@ -570,9 +613,11 @@ exports.style = {
 	profileCountView:{
 		layout: 'horizontal',
 		top: '0dp',
+		bottom: '1dp',
 		left: '0dp',
-		width: Ti.UI.SIZE,
+		width: '100%',
 		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
 	},
 	profileCountDataView:{
 		layout: 'vertical',
@@ -2213,13 +2258,11 @@ exports.style = {
 	},
 
 	friendsArticleList:{
-		//  verticalだとバグのためエラーになる
-//		layout: 'vertical',
 		top: '0dp',
 		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-//		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
 	},
 	friendsUserIconView:{
 		top: '5dp',
@@ -2330,7 +2373,7 @@ exports.style = {
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#eeeeee',
-//		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
 	},
 	friendsNextLabel:{
 		top: '0dp',

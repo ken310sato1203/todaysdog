@@ -66,7 +66,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 						text: date.year + '/' + date.month + '/' + date.day,
 					},
 				}];
-				listSection.appendItems(dateItem, {animated:true, animationStyle:Titanium.UI.iPhone.RowAnimationStyle.FADE});
+				listSection.appendItems(dateItem);
 
 			}
 
@@ -74,7 +74,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				articleData: _articleList[i],
 				template: 'article',
 				friendsUserIconView: {
-					backgroundImage: _articleList[i].icon
+					backgroundImage: _articleList[i].icon,
 				},
 				friendsNameLabel: {
 					text: _articleList[i].name,
@@ -99,7 +99,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 					text: _articleList[i].comment < 1000 ? _articleList[i].comment : 'たくさん',
 				},
 			}];
-			listSection.appendItems(articleItem, {animated:true, animationStyle:Titanium.UI.iPhone.RowAnimationStyle.FADE});
+			listSection.appendItems(articleItem);
 
 		}
 	};
@@ -115,7 +115,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			},
 		}];
 
-		listSection.appendItems(noDataItem, {animated:true, animationStyle:Titanium.UI.iPhone.RowAnimationStyle.FADE});
+		listSection.appendItems(noDataItem);
 	};
 
 	// 記事の更新
@@ -168,7 +168,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 								},
 							}];
 
-							listSection.appendItems(nextItem, {animated:true, animationStyle:Titanium.UI.iPhone.RowAnimationStyle.FADE});
+							listSection.appendItems(nextItem);
 
 						}
 					} else {
@@ -283,7 +283,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			}]
 		}]
 	};
-	
 	var nextListTemplate = {
 		properties: style.friendsNextList,
 		childTemplates: [{
@@ -292,7 +291,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			properties: style.friendsNextLabel,
 		}]
 	};
-
 	var noDataListTemplate = {
 		properties: style.friendsNoDataList,
 		childTemplates: [{
@@ -300,8 +298,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			bindId: 'friendsNoDataLabel',
 			properties: style.friendsNoDataLabel,
 		}]
-	};
-	
+	};	
 	var listView = Ti.UI.createListView(style.friendsListView);
 	listView.templates = {
 		'article': articleListTemplate,
