@@ -6,6 +6,8 @@ exports.createWindow = function(_type, _articleData){
 
 	var loginId = model.getLoginId();
 
+	// 初回読み込み時
+	var initFlag = true;
 	// ライクリストの表示件数
 	var likeCount = 5;
 	// コメントリストの表示件数
@@ -103,6 +105,17 @@ exports.createWindow = function(_type, _articleData){
 	// コメントリストの更新
 	var updateComment = function() {
 		Ti.API.debug('[func]updateComment:');
+		// 初回のみコメントの読み込み中を表示
+		if (initFlag) {
+			var loadItem = [{
+				template: 'load',
+				photoCommentLoadLabel: {
+					text: '読み込み中',
+					hegiht: '20dp'
+				},
+			}];
+			listSection.appendItems(loadItem);
+		}
 
 		// コメントリストの取得
 		model.getCloudCommentList({
@@ -151,6 +164,16 @@ exports.createWindow = function(_type, _articleData){
 						template: 'bottom',
 					}];
 					listSection.appendItems(bottomItem);					
+				}
+
+				// 初回のみコメントの読み込み中を削除
+				if (initFlag) {
+					// 続きを読むの行をdeleteだとうまくいかないのでupdateで高さを0にし、追加後に反映
+					var item = listSection.getItemAt(2);			
+					item.photoCommentLoadLabel.text = '';
+					item.photoCommentLoadLabel.height = '0dp';
+					listSection.updateItemAt(2, item);
+					initFlag = false;
 				}
 	
 			} else {
@@ -382,6 +405,14 @@ exports.createWindow = function(_type, _articleData){
 			}]
 		}]
 	};
+	var loadListTemplate = {
+		properties: style.photoCommentLoadList,
+		childTemplates: [{
+			type: 'Ti.UI.Label',
+			bindId: 'photoCommentLoadLabel',
+			properties: style.photoCommentLoadLabel,
+		}]
+	};
 	var commentListTemplate = {
 		properties: style.photoCommentList,
 		childTemplates: [{
@@ -425,6 +456,7 @@ exports.createWindow = function(_type, _articleData){
 	listView.templates = {
 		'article': articleListTemplate,
 		'action': actionListTemplate,
+		'load': loadListTemplate,
 		'comment': commentListTemplate,
 		'bottom': bottomListTemplate
    };

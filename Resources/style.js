@@ -488,37 +488,39 @@ exports.style = {
 		separatorStyle: Titanium.UI.iPhone.ListViewSeparatorStyle.NONE,
 	},
 	photoArticleList:{
-		top: '0dp',
-		left: '0dp',
-		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 //		backgroundColor: '#eeeeee',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
 	},
 	photoActionList:{
-		top: '0dp',
-		left: '0dp',
-		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#eeeeee',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
 	},
 	photoCommentList:{
-		top: '0dp',
-		left: '0dp',
-		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#eeeeee',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
 	},
 	photoBottomList:{
-		top: '0dp',
-		left: '0dp',
-		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
 	},
+
+	photoCommentLoadList:{
+		height: Ti.UI.SIZE,
+//		backgroundColor: '#eeeeee',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
+	},
+	photoCommentLoadLabel:{
+		width: '100%',
+		height: '35dp',
+		textAlign: 'center',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+
 
 // winProfile -------------------------------------------------------
 	profileWin:{
@@ -2249,9 +2251,6 @@ exports.style = {
 	},
 
 	friendsDataList:{
-		top: '0dp',
-		left: '0dp',
-		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#eeeeee',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
@@ -2266,9 +2265,109 @@ exports.style = {
 	},
 
 	friendsArticleList:{
-//		layout: 'vertical',
-		top: '0dp',
+		height: Ti.UI.SIZE,
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
+	},
+	friendsUserIconView:{
+		top: '5dp',
+		bottom: '5dp',
+		left: '10dp',
+		width: '54dp',
+		height: '54dp',
+		borderRadius: '27dp',
+	},
+	friendsNameView:{
+		layout: 'horizontal',
+		top: '5dp',
+		left: '74dp',
+		right: '15dp',
 		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	friendsNameLabel:{
+		top: '0dp',
+		left: '0dp',
+		right: '5dp',
+		width: Ti.UI.SIZE,
+		height: '16dp',
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+	},
+	friendsUserLabel:{
+		top: '0dp',
+		left: '0dp',
+		right: '5dp',
+		width: Ti.UI.SIZE,
+		height: '16dp',
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+	friendsTextLabel:{
+		top: '22dp',
+		bottom: '22dp',
+		left: '74dp',
+		right: '15dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+	},
+	friendsTimeLabel:{
+		bottom: '5dp',
+		left: '74dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+	friendsCountView:{
+		layout: 'horizontal',
+		bottom: '5dp',
+		right: '10dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	friendsLikeIconImage:{
+		left: '0dp',
+		width: '18dp',
+		height: '18dp',
+		defaultImage: '',
+		image: 'images/icon/b_like.png',
+	},
+	friendsLikeLabel:{
+		left: '6dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+	friendsCommentIconImage:{
+		left: '12dp',
+		width: '18dp',
+		height: '18dp',
+		defaultImage: '',
+		image: 'images/icon/b_comment_square.png',
+	},
+	friendsCommentLabel:{
+		left: '6dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+	friendsSeparateView:{
+		bottom: '0dp',
+		width: '100%',
+		height: '1dp',
+		backgroundColor: '#dedede',
+	},
+
+/*
+	friendsArticleList:{
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
@@ -2390,11 +2489,9 @@ exports.style = {
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
+*/
 
 	friendsNextList:{
-		top: '0dp',
-		left: '0dp',
-		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#eeeeee',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
@@ -2409,9 +2506,6 @@ exports.style = {
 	},
 
 	friendsNoDataList:{
-		top: '0dp',
-		left: '0dp',
-		width: Ti.UI.SIZE,
 		height: '50dp',
 		backgroundColor: '#eeeeee',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
