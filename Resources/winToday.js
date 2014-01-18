@@ -116,6 +116,7 @@ exports.createWindow = function(_userData){
 				Ti.API.debug('[event]cameraImage.click:');
 				// 多重クリック防止
 				cameraImage.touchEnabled = false;
+				cameraImage.opacity = 0.5;
 				var dialog = Titanium.UI.createOptionDialog({
 					options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
 					cancel:2
@@ -131,11 +132,16 @@ exports.createWindow = function(_userData){
 							var cameraWin = win.createCameraWindow('photo_camera', _userData);
 							cameraWin.prevWin = todayWin;
 							win.openTabWindow(cameraWin, {animated:true});
+							cameraImage.opacity = 1.0;
 							break;
 						case 1:
 							var cameraWin = win.createCameraWindow('photo_select', _userData);
 							cameraWin.prevWin = todayWin;
 							win.openTabWindow(cameraWin, {animated:true});
+							cameraImage.opacity = 1.0;
+							break;
+						case 2:
+							cameraImage.opacity = 1.0;
 							break;
 					}
 				});
@@ -169,11 +175,13 @@ exports.createWindow = function(_userData){
 			Ti.API.debug('[event]editImage.click:');
 			// 多重クリック防止
 			editImage.touchEnabled = false;
+			editImage.opacity = 0.5;
 			var type = "today";
 			var stampWin = win.createStampWindow(type, _userData, null);	
 			stampWin.prevWin = todayWin;
 			win.openTabWindow(stampWin, {animated:true});
 			editImage.touchEnabled = true;
+			editImage.opacity = 1.0;
 		});
 
 		var timeView = getTimeTableView(_stampList);

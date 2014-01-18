@@ -476,10 +476,10 @@ exports.createWindow = function(_type, _articleData){
 	titleIconImage.addEventListener('click',function(e){
 		Ti.API.debug('[event]titleIconImage.click:');
 		if (userData.id != loginId) {
-			e.source.opacity = 0.5;
+			titleIconImage.opacity = 0.5;
 			var profileWin = win.createProfileWindow(userData);
 			win.openTabWindow(profileWin, {animated:true});
-			e.source.opacity = 1.0;
+			titleIconImage.opacity = 1.0;
 		}
 	});
 

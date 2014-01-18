@@ -10,11 +10,17 @@ exports.style = {
 	},
 
 	commonActivityIndicator:{
-		opacity: 0.7,
+//		opacity: 0.7,
 		style: Ti.UI.iPhone.ActivityIndicatorStyle.DARK,
 		font: {fontSize:14, fontWeight:'bold'},
 		color: 'gray',
 		message: 'Loading...',
+	},
+	commonActivityBackView:{
+		opacity: 0.7,
+		width: '100%',
+		height: '100%',
+		backgroundColor: 'white',
 	},
 
 	commonTableHeader:{
@@ -202,13 +208,13 @@ exports.style = {
 		bottom: '44dp',
 		backgroundColor: 'white',
 		separatorColor: 'transparent',
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		data: [],
 	},
 	photoArticleTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		touchEnabled: false,
 	},
 
@@ -362,8 +368,8 @@ exports.style = {
 		top: '0dp',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
-		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		touchEnabled: false,
 	},
 	photoCommentListView:{
 		layout: 'vertical',
@@ -413,7 +419,7 @@ exports.style = {
 		color: '#000',
 	},
 	photoCommentTextLabel:{
-		top: '0dp',
+		top: '5dp',
 		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -422,7 +428,7 @@ exports.style = {
 		color: '#000',
 	},
 	photoCommentTimeLabel:{
-		top: '0dp',
+		top: '5dp',
 		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -510,7 +516,7 @@ exports.style = {
 		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		backgroundColor: '#eeeeee',
+		backgroundColor: 'white',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
 	},
 
@@ -592,8 +598,8 @@ exports.style = {
 	profileCountTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		touchEnabled: false,
 		backgroundColor: '#dedede',
 	},
 	profileIconView:{
@@ -642,8 +648,8 @@ exports.style = {
 	profileInfoTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-//		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+//		touchEnabled: false,
 	},
 	profileInfoView:{
 		layout: 'vertical',
@@ -708,8 +714,8 @@ exports.style = {
 	profilePhotoTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		touchEnabled: false,
 	},
 	profilePhotoView:{
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
@@ -769,6 +775,8 @@ exports.style = {
 		width: '100%',
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
+		separatorColor: 'transparent',
+		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 //		scrollable: false,
 		data: [],
 	},
@@ -777,6 +785,7 @@ exports.style = {
 		height: Ti.UI.SIZE,
 //		selectedBackgroundColor: 'white',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		backgroundColor: '#dedede',
 		// カスタムプロパティ
 		objectName: null,
 	},
@@ -794,6 +803,7 @@ exports.style = {
 	profileEditListItemView:{
 		layout: 'absolute',
 		top: '0dp',
+		bottom: '1dp',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
 	},
@@ -908,6 +918,8 @@ exports.style = {
 		width: '100%',
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
+		separatorColor: 'transparent',
+		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 //		scrollable: false,
 		data: [],
 	},
@@ -916,6 +928,7 @@ exports.style = {
 		height: Ti.UI.SIZE,
 //		selectedBackgroundColor: 'white',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		backgroundColor: '#dedede',
 		// カスタムプロパティ
 		objectName: null,
 	},
@@ -933,6 +946,7 @@ exports.style = {
 	profileConfigListItemView:{
 		layout: 'absolute',
 		top: '0dp',
+		bottom: '1dp',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
 	},
@@ -1061,15 +1075,15 @@ exports.style = {
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
-		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		touchEnabled: false,
 	},
 	photoListNextTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
-		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		touchEnabled: false,
 	},
 
 	photoListArticleListView:{
@@ -1262,13 +1276,13 @@ exports.style = {
 		bottom: '44dp',
 		backgroundColor: 'white',
 		separatorColor: 'transparent',
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		data: [],
 	},
 	userListUserTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		touchEnabled: false,
 	},
 	userListNextTableRow:{ 
@@ -1337,8 +1351,8 @@ exports.style = {
 	userListNoDataTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		touchEnabled: false,
 	},
 	userListNoDataView:{
 		top: '0dp',
@@ -1376,13 +1390,13 @@ exports.style = {
 		bottom: '1dp',
 		height: Ti.UI.SIZE,
 		separatorColor: 'transparent',
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		data: [],
 	},
 	userListSearchTableRow:{
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		touchEnabled: false,
 	},
 	userListSearchView:{
@@ -1439,13 +1453,13 @@ exports.style = {
 		top: '10dp',
 		backgroundColor: '#dedede',
 		separatorColor: 'transparent',
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		data: [],
 	},
 	commentListUserTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		touchEnabled: false,
 	},
 	commentListNextTableRow:{ 
@@ -1601,8 +1615,8 @@ exports.style = {
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
-		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		touchEnabled: false,
 	},
 	mydogArticleSlideView:{
 		layout: 'horizontal',
@@ -1692,7 +1706,6 @@ exports.style = {
 		backgroundColor: 'white',
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		data: [],
 //		visible: false,
 	},
@@ -1700,6 +1713,7 @@ exports.style = {
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
 
 	calendarHeaderView:{
@@ -1795,13 +1809,13 @@ exports.style = {
 		text: 'カメラ', 
 	},
 	cameraNextButton:{
-		width: '50dp',
+		width: '75dp',
 		height: '25dp',
 		backgroundImage: 'images/icon/titlebar10.png',
 		textAlign: 'center',
 		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
 		color: '#e74c3c',
-		title: '次へ',
+		title: '切り取る',
 	},
 
 	cameraOverlayView:{
@@ -1945,16 +1959,12 @@ exports.style = {
 		nextWin: null,
 	},
 	diaryTitleView:{
-		layout: 'absolute',
-//		top: '0dp',
-//		left: '0dp',
-		width: '276dp',
+//		layout: 'horizontal',
+		width: '180dp',
 		height: Ti.UI.SIZE,
-//		backgroundColor: 'yellow',
 	},
 	diaryTitleLabel:{
-		top: '0dp',
-		left: '0dp',
+		width: Ti.UI.SIZE,
 		textAlign: 'center',
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 
@@ -1962,14 +1972,12 @@ exports.style = {
 		shadowColor: '#696969', 
 	},
 	diaryPrevImage:{
-		top : '0dp',
-		right: '30dp',
+		left: '0dp',
 		width: '28dp',
 		height: '28dp',
 		image:'images/icon/w_arrow_left.png',
 	},
 	diaryNextImage:{
-		top : '0dp',
 		right: '0dp',
 		width: '28dp',
 		height: '28dp',
@@ -1985,7 +1993,6 @@ exports.style = {
 		backgroundColor: '#dedede',
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		data: [],
 		visible: false,
 	},
@@ -1993,6 +2000,7 @@ exports.style = {
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		// カスタムプロパティ
 		diaryData: null,
 	},
@@ -2120,7 +2128,6 @@ exports.style = {
 		backgroundColor: '#dedede',
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		data: [],
 		visible: false,
 	},
@@ -2128,6 +2135,7 @@ exports.style = {
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		// カスタムプロパティ
 		timeData: null,
 	},
@@ -2258,11 +2266,20 @@ exports.style = {
 	},
 
 	friendsArticleList:{
+//		layout: 'vertical',
 		top: '0dp',
-		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
+	},
+	friendsArticleView:{
+		layout: 'horizontal',
+		top: '0dp',
+	    bottom: '1dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
 	},
 	friendsUserIconView:{
 		top: '5dp',
@@ -2272,11 +2289,19 @@ exports.style = {
 		height: '54dp',
 		borderRadius: '27dp',
 	},
+	friendsTextView:{
+		layout: 'vertical',
+		top: '5dp',
+		bottom: '5dp',
+		left: '10dp',
+		// photoCommentUserIconImage(10+54)と余白（10+10）を除いたサイズ
+		width: (Ti.Platform.displayCaps.platformWidth - 84) + 'dp',
+		height: Ti.UI.SIZE,
+	},
 	friendsNameView:{
 		layout: 'horizontal',
 		top: '5dp',
-		left: '74dp',
-		right: '15dp',
+		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
@@ -2285,35 +2310,43 @@ exports.style = {
 		left: '0dp',
 		right: '5dp',
 		width: Ti.UI.SIZE,
-//		height: Ti.UI.SIZE,
-		height: '16dp',
+		height: Ti.UI.SIZE,
+//		height: '16dp',
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 	},
 	friendsUserLabel:{
 		top: '0dp',
 		left: '0dp',
-		right: '5dp',
+//		right: '5dp',
 		width: Ti.UI.SIZE,
-//		height: Ti.UI.SIZE,
-		height: '16dp',
+		height: Ti.UI.SIZE,
+//		height: '16dp',
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#696969',
 	},
 	friendsTextLabel:{
-		top: '22dp',
-		bottom: '22dp',
-		left: '74dp',
-		right: '15dp',
+		top: '5dp',
+//		bottom: '22dp',
+		left: '0dp',
+//		right: '15dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 	},
+
+	friendsTimeView:{
+		top: '5dp',
+		left: '0dp',
+		right: '10dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+	},
 	friendsTimeLabel:{
-		bottom: '5dp',
-		left: '74dp',
+		bottom: '0dp',
+		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
@@ -2322,8 +2355,8 @@ exports.style = {
 	},
 	friendsCountView:{
 		layout: 'horizontal',
-		bottom: '5dp',
-		right: '10dp',
+		bottom: '0dp',
+		right: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
@@ -2356,15 +2389,6 @@ exports.style = {
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
-	},
-	friendsArticleView:{
-		top: '0dp',
-		left: '0dp',
-		width: '100%',
-		height: '64dp',
-		backgroundColor: 'yellow',
-		// カスタムプロパティ
-		articleData: null,
 	},
 
 	friendsNextList:{
@@ -2442,13 +2466,13 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		data: [],
 	},
 	todayTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
 
 	todayPhotoView:{
@@ -2523,7 +2547,6 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		scrollable: false,
 		data: [],
 	},
@@ -2531,6 +2554,7 @@ exports.style = {
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		// カスタムプロパティ
 		timeData: null,
 	},
@@ -2679,19 +2703,23 @@ exports.style = {
 		width: '100%',
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
+		separatorColor: 'transparent',
+		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		scrollable: false,
 		data: [],
 	},
 	stampPostTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		touchEnabled: false,
+		backgroundColor: '#dedede',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		touchEnabled: false,
 		// カスタムプロパティ
 		objectName: null,
 	},
 
 	stampPostStampView:{
+		bottom: '1dp',
 		width: '284dp',
 		height: '52dp',
 		backgroundColor: 'white',
@@ -2733,6 +2761,7 @@ exports.style = {
 	},
 
 	stampPostListView:{
+		bottom: '1dp',
 		width: '284dp',
 		height: '52dp',
 		backgroundColor: 'white',
@@ -2875,8 +2904,8 @@ exports.style = {
 	stampHistoryTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		touchEnabled: false,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		touchEnabled: false,
 	},
 	stampHistoryView:{
 		layout: 'absolute',

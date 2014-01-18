@@ -281,10 +281,10 @@ exports.createWindow = function(_userData){
 	// タイトルの表示
 	var titleView = Ti.UI.createView(style.diaryTitleView);
 	diaryWin.titleControl = titleView;
-	var monthTitle = Ti.UI.createLabel(style.diaryTitleLabel);
-	titleView.add(monthTitle);
 	var prevImage = Ti.UI.createImageView(style.diaryPrevImage);
 	titleView.add(prevImage);
+	var monthTitle = Ti.UI.createLabel(style.diaryTitleLabel);
+	titleView.add(monthTitle);
 	var nextImage = Ti.UI.createImageView(style.diaryNextImage);
 	titleView.add(nextImage);
 

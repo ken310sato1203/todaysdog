@@ -357,6 +357,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 
 	// ロード用画面
 	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
+	var actBackView = Titanium.UI.createView(style.commonActivityBackView);
 
 // ---------------------------------------------------------------------
 	// 戻るボタンをクリック
@@ -368,48 +369,38 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	// 投稿ボタンをクリック
 	postButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]postButton.click:');
-
-		var alertDialog = Titanium.UI.createAlertDialog({
-			title: '記録しますか？',
-			buttonNames: ['キャンセル','OK'],
-			cancel: 1
-		});
-		alertDialog.show();
-
-		alertDialog.addEventListener('click',function(alert){
-			Ti.API.debug('[event]alertDialog.click:');						
-			// OKの場合
-			if(alert.index == 1){
-				actInd.show();
-				tabGroup.add(actInd);
-				
-				for (var i=0; i<_stampDataList.length; i++) {	
-					// フィールドの値をセット
-					var date = util.getDate(dateValue.text);
-					_stampDataList[i].year = date.getFullYear();
-					_stampDataList[i].month = date.getMonth() + 1;
-					_stampDataList[i].day = date.getDate();
-					if(allSwitch.value == true) {
-						_stampDataList[i].hour = -1;
-					} else {
-						_stampDataList[i].hour = util.getHour(hourValue.text);
-					}
-				}
-
-				model.addCloudStampList(_stampDataList, function(e) {
-					Ti.API.debug('[func]cloudAddStampList.callback:');
-					if (e.success) {
-						Ti.API.debug('Success:');
-						// ローカルに登録
-						model.addLocalStampList(e.stampDataList);
-						model.addLocalStampHistoryList(_stampDataList);
-						closePostWin();
-					} else {
-						util.errorDialog(e);
-					}
-					actInd.hide();
-				});
+		postButton.enabled = false;
+		postWin.add(actBackView);
+		actInd.show();
+		tabGroup.add(actInd);
+		
+		for (var i=0; i<_stampDataList.length; i++) {	
+			// フィールドの値をセット
+			var date = util.getDate(dateValue.text);
+			_stampDataList[i].year = date.getFullYear();
+			_stampDataList[i].month = date.getMonth() + 1;
+			_stampDataList[i].day = date.getDate();
+			if(allSwitch.value == true) {
+				_stampDataList[i].hour = -1;
+			} else {
+				_stampDataList[i].hour = util.getHour(hourValue.text);
 			}
+		}
+
+		model.addCloudStampList(_stampDataList, function(e) {
+			Ti.API.debug('[func]cloudAddStampList.callback:');
+			if (e.success) {
+				Ti.API.debug('Success:');
+				// ローカルに登録
+				model.addLocalStampList(e.stampDataList);
+				model.addLocalStampHistoryList(_stampDataList);
+				closePostWin();
+			} else {
+				util.errorDialog(e);
+			}
+			actInd.hide();
+			actBackView.hide();
+			postButton.enabled = true;
 		});
 	});
 

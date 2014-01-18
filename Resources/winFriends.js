@@ -88,18 +88,19 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				friendsTimeLabel: {
 					text: date.hour + ":" + date.minute,
 				},
-				friendsLikeIconImage: {
-				},
 				friendsLikeLabel: {
-					text: _articleList[i].like < 1000 ? _articleList[i].like : 'たくさん',
-				},
-				friendsCommentIconImage: {
+					text: _articleList[i].like,
 				},
 				friendsCommentLabel: {
-					text: _articleList[i].comment < 1000 ? _articleList[i].comment : 'たくさん',
+					text: _articleList[i].comment,
 				},
 			}];
 			listSection.appendItems(articleItem);
+
+			// winPhotoで画像がすぐに表示されるよう、winFriendsでロードしておく（画面上には表示しない）
+            var preloadImage = Ti.UI.createImageView(style.friendsPreloadImage);
+            preloadImage.image = _articleList[i].photo;
+            friendsWin.add(preloadImage);
 
 		}
 	};
@@ -237,49 +238,64 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		properties: style.friendsArticleList,
 		childTemplates: [{
 			type: 'Ti.UI.View',
-			bindId: 'friendsUserIconView',
-			properties: style.friendsUserIconView
-		},{
-			type: 'Ti.UI.View',
-			bindId: 'friendsNameView',
-			properties: style.friendsNameView,
+			bindId: 'friendsArticleView',
+			properties: style.friendsArticleView,
 			childTemplates: [{
-				type: 'Ti.UI.Label',
-				bindId: 'friendsNameLabel',
-				properties: style.friendsNameLabel,
+				type: 'Ti.UI.View',
+				bindId: 'friendsUserIconView',
+				properties: style.friendsUserIconView
 			},{
-				type: 'Ti.UI.Label',
-				bindId: 'friendsUserLabel',
-				properties: style.friendsUserLabel
-			}]
-		},{
-			type: 'Ti.UI.Label',
-			bindId: 'friendsTextLabel',
-			properties: style.friendsTextLabel
-		},{
-			type: 'Ti.UI.Label',
-			bindId: 'friendsTimeLabel',
-			properties: style.friendsTimeLabel
-		},{
-			type: 'Ti.UI.View',
-			bindId: 'friendsCountView',
-			properties: style.friendsCountView,
-			childTemplates: [{
-				type: 'Ti.UI.ImageView',
-				bindId: 'friendsLikeIconImage',
-				properties: style.friendsLikeIconImage
-			},{
-				type: 'Ti.UI.Label',
-				bindId: 'friendsLikeLabel',
-				properties: style.friendsLikeLabel
-			},{
-				type: 'Ti.UI.ImageView',
-				bindId: 'friendsCommentIconImage',
-				properties: style.friendsCommentIconImage
-			},{
-				type: 'Ti.UI.Label',
-				bindId: 'friendsCommentLabel',
-				properties: style.friendsCommentLabel
+				type: 'Ti.UI.View',
+				bindId: 'friendsTextView',
+				properties: style.friendsTextView,
+				childTemplates: [{
+					type: 'Ti.UI.View',
+					bindId: 'friendsNameView',
+					properties: style.friendsNameView,
+					childTemplates: [{
+						type: 'Ti.UI.Label',
+						bindId: 'friendsNameLabel',
+						properties: style.friendsNameLabel
+					},{
+						type: 'Ti.UI.Label',
+						bindId: 'friendsUserLabel',
+						properties: style.friendsUserLabel
+					}]
+				},{
+					type: 'Ti.UI.Label',
+					bindId: 'friendsTextLabel',
+					properties: style.friendsTextLabel
+				},{
+					type: 'Ti.UI.View',
+					bindId: 'friendsTimeView',
+					properties: style.friendsTimeView,
+					childTemplates: [{
+						type: 'Ti.UI.Label',
+						bindId: 'friendsTimeLabel',
+						properties: style.friendsTimeLabel
+					},{
+						type: 'Ti.UI.View',
+						bindId: 'friendsCountView',
+						properties: style.friendsCountView,
+						childTemplates: [{
+							type: 'Ti.UI.ImageView',
+							bindId: 'friendsLikeIconImage',
+							properties: style.friendsLikeIconImage
+						},{
+							type: 'Ti.UI.Label',
+							bindId: 'friendsLikeLabel',
+							properties: style.friendsLikeLabel
+						},{
+							type: 'Ti.UI.ImageView',
+							bindId: 'friendsCommentIconImage',
+							properties: style.friendsCommentIconImage
+						},{
+							type: 'Ti.UI.Label',
+							bindId: 'friendsCommentLabel',
+							properties: style.friendsCommentLabel
+						}]
+					}]
+				}]
 			}]
 		}]
 	};

@@ -43,6 +43,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 
 	// 投稿時のロード用画面
 	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
+	var actBackView = Titanium.UI.createView(style.commonActivityBackView);
 
 // ---------------------------------------------------------------------
 	// 戻るボタンをクリック
@@ -101,6 +102,8 @@ exports.createWindow = function(_type, _userData, _photoImage){
 			alertDialog.addEventListener('click',function(alert){
 				// OKの場合
 				if(alert.index == 1){
+					postButton.enabled = false;
+					postWin.add(actBackView);
 					actInd.show();
 					tabGroup.add(actInd);
 	
@@ -164,6 +167,8 @@ exports.createWindow = function(_type, _userData, _photoImage){
 								util.errorDialog(e);
 							}
 							actInd.hide();
+							actBackView.hide();
+							postButton.enabled = true;
 						});
 						
 					} else {
@@ -189,6 +194,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 								util.errorDialog(e);
 							}
 							actInd.hide();
+							postButton.enabled = true;
 						});
 					}
 				}

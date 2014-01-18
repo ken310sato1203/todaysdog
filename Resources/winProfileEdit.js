@@ -299,47 +299,36 @@ exports.createWindow = function(_userData){
 	// 「保存」ボタン
 	saveButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]saveButton.click:');
-		var alertDialog = Titanium.UI.createAlertDialog({
-			title: '保存しますか？',
-			buttonNames: ['キャンセル','OK'],
-			cancel: 1
-		});
-		alertDialog.show();
+		saveButton.enabled = false;
+		actInd.show();
+		tabGroup.add(actInd);
+		
+		_userData.name = nameField.value;
+		_userData.breed = breedField.value;
+		_userData.sex = sexValue.text;
+		_userData.birth = birthValue.text;
+		_userData.memo = memoField.value;
 
-		alertDialog.addEventListener('click',function(alert){
-			Ti.API.debug('[event]alertDialog.click:');						
-			// OKの場合
-			if (alert.index == 1) {
-				actInd.show();
-				tabGroup.add(actInd);
-				
-				_userData.name = nameField.value;
-				_userData.breed = breedField.value;
-				_userData.sex = sexValue.text;
-				_userData.birth = birthValue.text;
-				_userData.memo = memoField.value;
-		
-				// ユーザデータの更新
-				model.updateCloudUser({
-					name: _userData.name,
-					breed: _userData.breed,
-					sex: _userData.sex,
-					birth: _userData.birth,
-					memo: _userData.memo
-				}, function(e) {
-					if (e.success) {
-						Ti.API.debug('[func]updateCloudUser.callback:');
-						if (profileEditWin.prevWin != null) {
-							profileEditWin.prevWin.fireEvent('refresh');
-						}
-						profileEditWin.close({animated:true});
-		
-					} else {
-						util.errorDialog(e);
-					}
-					actInd.hide();
-				});
+		// ユーザデータの更新
+		model.updateCloudUser({
+			name: _userData.name,
+			breed: _userData.breed,
+			sex: _userData.sex,
+			birth: _userData.birth,
+			memo: _userData.memo
+		}, function(e) {
+			if (e.success) {
+				Ti.API.debug('[func]updateCloudUser.callback:');
+				if (profileEditWin.prevWin != null) {
+					profileEditWin.prevWin.fireEvent('refresh');
+				}
+				profileEditWin.close({animated:true});
+
+			} else {
+				util.errorDialog(e);
 			}
+			actInd.hide();
+			saveButton.enabled = true;
 		});
 	});
 

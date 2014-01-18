@@ -132,7 +132,7 @@ exports.createWindow = function(_type, _userData){
 	} else {
 		frameView.top = '50dp';
 		frameView.width = Ti.Platform.displayCaps.platformWidth + 'dp';
-		frameView.height = Ti.Platform.displayCaps.platformWidth + 'dp';		
+		frameView.height = Ti.Platform.displayCaps.platformWidth + 'dp';
 	}
 	overlayView.add(frameView);
 
