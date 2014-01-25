@@ -43,9 +43,11 @@ exports.createWindow = function(_userData, _stampData){
 		for (var i=0; i<historyList.length; i++) {
 			var historyRow = Titanium.UI.createTableViewRow(style.stampHistoryTableRow);
 			historyRowList.push(historyRow);
+			var historyView = Ti.UI.createView(style.stampHistoryView);
+			historyRow.add(historyView);
 			var historyLabel = Ti.UI.createLabel(style.stampHistoryLabel);
 			historyLabel.text = historyList[i];
-			historyRow.add(historyLabel);
+			historyView.add(historyLabel);
 		}
 	}
 	historyTableView.data = historyRowList;
@@ -126,15 +128,17 @@ exports.createWindow = function(_userData, _stampData){
 	// 履歴クリックでチェックし入力テキストにコピー
 	historyTableView.addEventListener('click',function(e){
 		Ti.API.debug('[event]historyTableView.click:');
-		var tableRow = historyTableView.data[0].rows;
-		if (tableRow != null) {
-			for (var i=0; i<tableRow.length; i++) {
-				tableRow[i].hasCheck = false;
+		if (e.source.objectName == 'stampHistoryLabel') {
+			var tableRow = historyTableView.data[0].rows;
+			if (tableRow != null) {
+				for (var i=0; i<tableRow.length; i++) {
+					tableRow[i].hasCheck = false;
+				}
 			}
+			e.row.hasCheck = true;
+			textArea.value = e.source.text;
+			backButton.fireEvent('click');
 		}
-		e.row.hasCheck = true;
-		textArea.value = e.source.text;
-		backButton.fireEvent('click');
 	});
 
 	// 画面クリックでコメントフィールドのフォーカスを外す

@@ -4,32 +4,38 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	Ti.API.debug('[func]winStampPost.createWindow:');
 	Ti.API.debug('_type:' + _type);
 
+	// stampRowの取得
+	var getStampRow = function(_stampData) {
+		Ti.API.debug('[func]getStampRow:');
+
+		var stampRow = Ti.UI.createTableViewRow(style.stampPostTableRow);
+		stampRow.objectName = "stamp";
+		stampRow.stampData = _stampData;
+		var stampView = Titanium.UI.createView(style.stampPostStampView);
+		stampRow.add(stampView);
+		var postImage = Titanium.UI.createImageView(style.stampPostImage);
+		postImage.image = 'images/icon/' + _stampData.stamp + '.png';
+		stampView.add(postImage);		
+		var postLabel = Ti.UI.createLabel(style.stampPostTextLabel);
+		postLabel.text = _stampData.textList[0];
+		stampView.add(postLabel);
+		var minusView = Titanium.UI.createView(style.stampPostMinusView);
+		stampView.add(minusView);
+		var minusImage = Titanium.UI.createImageView(style.stampPostMinusImage);
+		minusView.add(minusImage);
+
+		return stampRow;
+	};
+
+
 	// Viewの取得
-	var getPostView = function() {
-		Ti.API.debug('[func]getPostView:');
-		var targetView = Ti.UI.createTableView(style.stampPostTableView);
+	var setPostTableView = function() {
+		Ti.API.debug('[func]setPostTableView:');
 		var rowList = [];
 
 		// スタンプ
-		for (var i=0; i<_stampDataList.length; i++) {	
-			var stampRow = Ti.UI.createTableViewRow(style.stampPostTableRow);
-			stampRow.objectName = "stamp";
-			stampRow.stampData = _stampDataList[i];
-			rowList.push(stampRow);
-			var stampView = Titanium.UI.createView(style.stampPostStampView);
-			stampRow.add(stampView);
-	
-			var postImage = Titanium.UI.createImageView(style.stampPostImage);
-			postImage.image = 'images/icon/' + _stampDataList[i].stamp + '.png';
-			stampView.add(postImage);		
-			var postLabel = Ti.UI.createLabel(style.stampPostTextLabel);
-			postLabel.text = _stampDataList[i].textList[0];
-			stampView.add(postLabel);
-//			var minusView = Titanium.UI.createView(style.stampPostMinusView);
-//			stampView.add(minusView);
-			var minusImage = Titanium.UI.createImageView(style.stampPostMinusImage);
-//			minusView.add(minusImage);
-			stampView.add(minusImage);
+		for (var i=0; i<_stampDataList.length; i++) {			
+			rowList.push(getStampRow(_stampDataList[i]));
 		}
 
 		// 日付
@@ -68,63 +74,8 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 		allView.add(allLabel);
 		allView.add(allSwitch);
 
-		targetView.setData(rowList);
+		postTableView.setData(rowList);
 
-		// フィールドをクリックで入力フィールド・選択ビューを表示
-		targetView.addEventListener('click', function(e){
-			Ti.API.debug('[event]postView.click:');
-	
-			if (e.rowData.objectName != null){
-				var targetName = e.rowData.objectName;
-				if (targetName == "stamp"){
-					// マイナスボタンを押すと削除
-					if (e.source.objectName == "minus"){
-						if (_stampDataList.length == 1) {
-							if (_stampDataList[0].event == null) {
-								postWin.close({animated:true});
-							} else {
-								// 登録済みのスタンプデータを削除する場合
-								removeStampData(_stampDataList[0]);
-							}
-
-						} else {
-							targetView.deleteRow(e.index);
-							_stampDataList.splice(e.index, 1);
-						}
-
-					} else {
-						var textWin = win.createStampTextWindow(_userData, e.rowData.stampData);
-						textWin.prevWin = postWin;
-						win.openTabWindow(textWin, {animated:true});
-					}
-						
-				} else if (targetName == "date"){
-					datePicker.value = util.getDate(dateValue.text);
-					datePickerView.animate(slideIn);
-	
-				} else if (targetName == "hour"){
-					if(allSwitch.value == false) {
-						hourPicker.setSelectedRow(0, util.getHour(hourValue.text));
-						// アニメーションがうまく動かないので時間遅らせて表示
-						setTimeout(function() {
-							hourPickerView.animate(slideIn);
-						}, 100);
-					}
-				}
-	
-				if (selectedName != targetName){
-					if (selectedName == "date"){
-						datePickerView.animate(slideOut);
-	
-					} else if (targetName == "hour"){
-						hourPickerView.animate(slideOut);
-					}
-				}				
-				selectedName = targetName;
-			}
-		});
-
-		return targetView;
 	};
 
 	// 登録済みのスタンプデータを削除する場合
@@ -238,7 +189,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	// 時間
 	var hourValue = Ti.UI.createLabel(style.stampPostListValueLabel);
 	if (_stampDataList[0].hour == "-1") {
-		hourValue.text = '-';
+		hourValue.text = '指定なし';
 		hourValue.source = '00:00';
 		allSwitch.value = true;
 	} else {
@@ -253,8 +204,11 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	var slideIn =  Titanium.UI.createAnimation({bottom:0});
 	var slideOut =  Titanium.UI.createAnimation({bottom:-259});
 
-	var postView = getPostView();
-	postWin.add(postView);
+	var postScrollView = Ti.UI.createScrollView(style.stampPostScrollView);
+	postWin.add(postScrollView);
+	var postTableView = Ti.UI.createTableView(style.stampPostTableView);
+	postScrollView.add(postTableView);
+	setPostTableView();
 
 	// 日付選択
 	var datePickerView = Titanium.UI.createView(style.stampPostListPickerView);
@@ -339,6 +293,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 		if (selectedIndex != null) {
 			hourValue.text = util.getFormattedHour(selectedIndex);
 			hourValue.source = hourValue.text;
+			allSwitch.value = false;
 		}
 		hourPickerView.animate(slideOut);
 	});
@@ -348,8 +303,8 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 
 	// 終日選択
 	allSwitch.addEventListener('change',function(e){
-	   if (e.value == true) {
-	   		hourValue.text = '-';
+	   if (e.value) {
+	   		hourValue.text = '指定なし';
 	   } else {
 			hourValue.text = hourValue.source;
 	   }
@@ -365,6 +320,67 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 		Ti.API.debug('[event]backButton.click:');
 		postWin.close({animated:true});
 	});	
+
+	// フィールドをクリックで入力フィールド・選択ビューを表示
+	postTableView.addEventListener('click', function(e){
+		Ti.API.debug('[event]postTableView.click:');
+
+		if (e.rowData.objectName != null){
+			var targetName = e.rowData.objectName;
+			if (targetName == "stamp"){
+				// マイナスボタンを押すと削除
+				if (e.source.objectName == "minus"){
+					if (_stampDataList.length == 1) {
+						if (_stampDataList[0].event == null) {
+							postWin.close({animated:true});
+						} else {
+							// 登録済みのスタンプデータを削除する場合
+							removeStampData(_stampDataList[0]);
+						}
+
+					} else {
+						postTableView.deleteRow(e.index);
+						_stampDataList.splice(e.index, 1);
+					}
+
+				} else {
+					var textWin = win.createStampTextWindow(_userData, e.rowData.stampData);
+					textWin.prevWin = postWin;
+					win.openTabWindow(textWin, {animated:true});
+				}
+					
+			} else if (targetName == "date"){
+				datePicker.value = util.getDate(dateValue.text);
+				datePickerView.animate(slideIn);
+
+			} else if (targetName == "hour"){
+//					if(allSwitch.value == false) {
+					hourPicker.setSelectedRow(0, util.getHour(hourValue.source));
+					// アニメーションがうまく動かないので時間遅らせて表示
+					setTimeout(function() {
+						hourPickerView.animate(slideIn);
+					}, 100);
+//					}
+
+			} else if (targetName == "all"){
+				if (allSwitch.value) {
+					allSwitch.value = false;
+				} else {
+					allSwitch.value = true;
+				}
+			}
+
+			if (selectedName != targetName){
+				if (selectedName == "date"){
+					datePickerView.animate(slideOut);
+
+				} else if (targetName == "hour"){
+					hourPickerView.animate(slideOut);
+				}
+			}				
+			selectedName = targetName;
+		}
+	});
 
 	// 投稿ボタンをクリック
 	postButton.addEventListener('click', function(e){
@@ -411,16 +427,10 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 		for (var i=0; i<_stampDataList.length; i++) {
 			if (_stampDataList[i].stamp == e.stampData.stamp) {
 				_stampDataList[i].textList = e.stampData.textList;
+				postTableView.updateRow(i,getStampRow(_stampDataList[i]));
+				break;
 			}
 		}
-		// ビューの再作成
-		postWin.remove(postView);
-		postWin.remove(datePickerView);
-		postWin.remove(hourPickerView);
-		postView = getPostView();
-		postWin.add(postView);
-		postWin.add(datePickerView);
-		postWin.add(hourPickerView);
 	});
 
 	return postWin;

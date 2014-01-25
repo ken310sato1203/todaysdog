@@ -14,14 +14,21 @@ exports.createWindow = function(_userData){
 		var targetView = Ti.UI.createView(style.todayTimeStampView);
 		targetView.stampData = _rowStamp;
 
-		var stampLabel = Ti.UI.createLabel(style.todayTimeStampLabel);
-
-		stampLabel.text = _rowStamp.textList[0];
-		targetView.add(stampLabel);
+		var hourLabel = Ti.UI.createLabel(style.todayTimeHourLabel);
+		if (_rowStamp.hour == -1) {
+			hourLabel.text =  '終日 ';		
+		} else {
+			hourLabel.text =  _rowStamp.hour + ':00 ';
+		}
+//		targetView.add(hourLabel);
 
 		var stampImage = Ti.UI.createImageView(style.todayTimeStampImage);
 		stampImage.image = 'images/icon/' + _rowStamp.stamp + '.png';
 		targetView.add(stampImage);
+
+		var stampLabel = Ti.UI.createLabel(style.todayTimeStampLabel);
+		stampLabel.text =  _rowStamp.textList[0];
+		targetView.add(stampLabel);
 
 		return targetView;
 	};
@@ -65,7 +72,6 @@ exports.createWindow = function(_userData){
 				targetTab.open(timeWin, {animated:false});	
 				tabGroup.activeTab = targetTab;
 			});
-
 		}
 
 		targetView.setData(rowList);

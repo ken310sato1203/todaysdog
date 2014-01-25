@@ -481,7 +481,7 @@ exports.style = {
 		backgroundColor: 'black',
 	},
 
-	photoListView:{
+	photoTableListView:{
 		top: '0dp',
 		left: '0dp',
 		bottom: '44dp',
@@ -2243,7 +2243,7 @@ exports.style = {
 		title: '更新する',
 	},
 
-	friendsListView:{
+	friendsTableListView:{
 		top: '0dp',
 		left: '0dp',
 		bottom: '44dp',
@@ -2662,7 +2662,18 @@ exports.style = {
 		stampData : null,
 		objectName : 'todayTimeStampView',
 	},
+	todayTimeHourLabel:{
+		top: '0dp',
+		left: '0dp',
+		width: '34dp',
+		height: '44dp',
+		textAlign: 'right',
+		font : {fontSize:12, fontWeight:'bold'},
+		color: '#3a4756',
+	},
 	todayTimeStampImage:{
+		top: '0dp',
+//		left: '36dp',
 		left: '0dp',
 		width : '32dp',
 		height : '32dp',
@@ -2672,6 +2683,8 @@ exports.style = {
 		objectName : 'todayTimeStampImage',
 	},
 	todayTimeStampLabel:{
+		top: '0dp',
+//		left: '47dp',
 		left: '36dp',
 		right: '10dp',
 //		width: '190dp',
@@ -2790,10 +2803,21 @@ exports.style = {
 		title: '記録',
 	},
 
-	stampPostTableView:{
+	stampPostScrollView:{
+		layout: 'vertical',
 		top: '10dp',
-		// 下のタブで表示されない余白分
 		bottom: '44dp',
+		contentWidth:'auto',
+		contentHeight:'auto',
+		showVerticalScrollIndicator:true,
+		showHorizontalScrollIndicator:true,
+		backgroundColor: '#dedede',
+	},
+
+	stampPostTableView:{
+//		top: '10dp',
+		// 下のタブで表示されない余白分
+//		bottom: '44dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
@@ -2806,8 +2830,8 @@ exports.style = {
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		touchEnabled: false,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.GRAY,
+//		touchEnabled: false,
 		// カスタムプロパティ
 		objectName: null,
 	},
@@ -2834,7 +2858,7 @@ exports.style = {
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
-/*
+
 	stampPostMinusView:{
 		right: '0dp',
 		width: '48dp',
@@ -2842,16 +2866,12 @@ exports.style = {
 		// カスタムプロパティ
 		objectName: 'minus',
 	},
-*/
 	stampPostMinusImage:{
-		right: '10dp',
 		width : '28dp',
 		height : '28dp',
 		defaultImage: '',
 		image : 'images/icon/diary_minus.png',
-//		touchEnabled: false,
-		// カスタムプロパティ
-		objectName: 'minus',
+		touchEnabled: false,
 	},
 
 	stampPostListView:{
@@ -2926,7 +2946,37 @@ exports.style = {
 		type:Ti.UI.PICKER_TYPE_PLAIN,
 		value: null,
 	},
-
+/*
+	stampPostTableListView:{
+		top: '10dp',
+//		left: '0dp',
+		bottom: '44dp',
+		width: '284dp',
+		backgroundColor: '#dedede',
+		separatorStyle: Titanium.UI.iPhone.ListViewSeparatorStyle.NONE,
+		canScroll: false,
+	},
+	stampPostTextList:{
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
+	},
+	stampPostDateList:{
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
+	},
+	stampPostHourList:{
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
+	},
+	stampPostAllList:{
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
+	},
+*/
 // winStampText -------------------------------------------------------
 	stampTextWin:{
 		backgroundColor: '#dedede',
@@ -2992,24 +3042,32 @@ exports.style = {
 		bottom: '10dp',
 		width: '284dp',
 		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		separatorColor: 'transparent',
+		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 //		scrollable: false,
 		data: [],
 	},
 	stampHistoryTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		touchEnabled: false,
 	},
 	stampHistoryView:{
-		layout: 'absolute',
+//		layout: 'horizontal',
 		top: '0dp',
-		height: Ti.UI.SIZE,
+		bottom: '1dp',
+		width: '100%',
+		height: '35dp',
+		backgroundColor: 'white',
 	},
 	stampHistoryLabel:{
 		left: '15dp',
+		right: '15dp',
 		width: '100%',
-		height: '35dp',
+		height: '100%',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
 		// カスタムプロパティ

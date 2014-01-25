@@ -1039,7 +1039,7 @@ exports.model = {
 				.where("user","=",params.userId)
 				.and_where("date",">=",util.getCloudFormattedDateTime(startDate))
 				.and_where("date","<",util.getCloudFormattedDateTime(endDate))
-				.order_by("date asc, created_at asc")
+				.order_by("date asc, duration asc, created_at asc")
 				.execute().getResult();
 
 			var result = [];

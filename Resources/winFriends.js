@@ -66,7 +66,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 						text: date.year + '/' + date.month + '/' + date.day,
 					},
 				}];
-				listSection.appendItems(dateItem);
+				listSection.appendItems(dateItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
 
 			}
 
@@ -95,7 +95,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 					text: _articleList[i].comment,
 				},
 			}];
-			listSection.appendItems(articleItem);
+			listSection.appendItems(articleItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
 
 			// winPhotoで画像がすぐに表示されるよう、winFriendsでロードしておく（画面上には表示しない）
             var preloadImage = Ti.UI.createImageView(style.friendsPreloadImage);
@@ -116,7 +116,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			},
 		}];
 
-		listSection.appendItems(noDataItem);
+		listSection.appendItems(noDataItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
 	};
 
 	// 記事の更新
@@ -168,7 +168,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 									text: '続きを読む',
 								},
 							}];
-							listSection.appendItems(nextItem);
+							listSection.appendItems(nextItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
 
 						}
 					} else {
@@ -225,7 +225,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 	var dateListTemplate = {
 		properties: style.friendsDataList,
-		events: {},
 		childTemplates: [{
 			type: 'Ti.UI.Label',
 			bindId: 'friendsDateLabel',
@@ -370,7 +369,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			properties: style.friendsNoDataLabel,
 		}]
 	};	
-	var listView = Ti.UI.createListView(style.friendsListView);
+	var listView = Ti.UI.createListView(style.friendsTableListView);
 	listView.templates = {
 		'article': articleListTemplate,
 		'date': dateListTemplate,
@@ -458,7 +457,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// ライク・コメント編集を反映
 	friendsWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]friendsWin.refresh:');
-		if(e.index) {
+		if(e.index != null) {
 			var item = listSection.getItemAt(e.index);
 			item.friendsLikeLabel.text += e.like;
 			item.friendsCommentLabel.text += e.comment;

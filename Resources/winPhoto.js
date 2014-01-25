@@ -452,7 +452,7 @@ exports.createWindow = function(_type, _articleData){
 		}]
 	};
 	
-	var listView = Ti.UI.createListView(style.photoListView);
+	var listView = Ti.UI.createListView(style.photoTableListView);
 	listView.templates = {
 		'article': articleListTemplate,
 		'action': actionListTemplate,

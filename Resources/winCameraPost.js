@@ -103,7 +103,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 				// OKの場合
 				if(alert.index == 1){
 					postButton.enabled = false;
-					postWin.add(actBackView);
+					cameraPostWin.add(actBackView);
 					actInd.show();
 					tabGroup.add(actInd);
 	
