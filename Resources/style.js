@@ -742,6 +742,11 @@ exports.style = {
 		// カスタムプロパティ
 		objectName : 'profileEditWin',
 	},
+	profileEditCloseButton:{
+		width: '28dp',
+		height: '28dp',
+		backgroundImage:'images/icon/w_x.png',
+	},
 
 	profileEditTitleView:{
 		layout: 'absolute',
@@ -774,8 +779,10 @@ exports.style = {
 
 	profileEditTableView:{ 
 		top: '0dp',
+		// 下のタブで表示されない余白分
+		bottom: '44dp',
 		width: '100%',
-		height: Ti.UI.SIZE,
+		height: '100%',
 		backgroundColor: '#dedede',
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
@@ -786,7 +793,7 @@ exports.style = {
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 //		selectedBackgroundColor: 'white',
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.GRAY,
 		backgroundColor: '#dedede',
 		// カスタムプロパティ
 		objectName: null,
@@ -836,7 +843,7 @@ exports.style = {
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
         returnKeyType:Ti.UI.RETURNKEY_DONE,
         borderStyle:Ti.UI.INPUT_BORDERSTYLE_NONE,
-        touchEnabled: true,
+        touchEnabled: false,
 	},
 	profileEditListTextArea:{
 		top : '30dp',
@@ -850,7 +857,7 @@ exports.style = {
 		hintText: '入力してください',
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
         returnKeyType:Ti.UI.RETURNKEY_DONE,
-        touchEnabled: true,
+        touchEnabled: false,
 	},
 
 	profileEditListPickerView:{
@@ -918,7 +925,7 @@ exports.style = {
 	profileConfigTableView:{ 
 		top: '0dp',
 		width: '100%',
-		height: Ti.UI.SIZE,
+		height: '100%',
 		backgroundColor: '#dedede',
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
@@ -1663,15 +1670,17 @@ exports.style = {
 		// カスタムプロパティ
 		objectName : 'calendarWin',
 	},
+	calendarCloseButton:{
+		width: '28dp',
+		height: '28dp',
+		backgroundImage:'images/icon/w_x.png',
+	},
 	calendarTitleView:{
-		layout: 'absolute',
-		left: '0dp',
-		width: '276dp',
+		width: '180dp',
 		height: Ti.UI.SIZE,
 	},
 	calendarTitleLabel:{
-		top: '0dp',
-		left: '0dp',
+		width: Ti.UI.SIZE,
 		textAlign: 'center',
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 
@@ -1679,15 +1688,13 @@ exports.style = {
 		shadowColor: '#696969', 
 	},
 	calendarPrevImage:{
-		top : '0dp',
-		right: '47dp',
+		left: '0dp',
 		width: '28dp',
 		height: '28dp',
 		image:'images/icon/w_arrow_left.png',
 	},
 	calendarNextImage:{
-		top : '0dp',
-		right: '17dp',
+		right: '0dp',
 		width: '28dp',
 		height: '28dp',
 		image:'images/icon/w_arrow_right.png',
@@ -1792,7 +1799,43 @@ exports.style = {
 		height: '16dp',
 		backgroundColor : '#87CEFA',
 	},
-
+	calendarPhotoWin:{
+		backgroundColor: 'white',
+	},
+	calendarPhotoView:{
+		layout : 'vertical',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		touchEnabled: false,
+	},
+	calendarPhotoImage:{
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		defaultImage: '',
+		touchEnabled: false,
+	},
+	calendarPhotoTextLabel:{
+		top: '5dp',
+		left: '10dp',
+		right: '10dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#000',
+		touchEnabled: false,
+	},
+	calendarPhotoTimeLabel:{
+		top: '5dp',
+		bottom: '5dp',
+		left: '10dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
 
 // winCamera -------------------------------------------------------
 	cameraWin:{
@@ -2002,7 +2045,7 @@ exports.style = {
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
 		// カスタムプロパティ
 		diaryData: null,
 	},
@@ -2111,6 +2154,7 @@ exports.style = {
 		width: '28dp',
 		height: '28dp',
 		backgroundImage: 'images/icon/titlebar.png',
+		backgroundSelectedImage: 'images/icon/titlebar.png',
 		// カスタムプロパティ
 		listFlag : false,
 	},
@@ -2137,7 +2181,7 @@ exports.style = {
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
 		// カスタムプロパティ
 		timeData: null,
 	},
@@ -2175,7 +2219,7 @@ exports.style = {
 		height: Ti.UI.SIZE,
 	},
 	timeStampView:{
-		top: '6dp',
+		top: '3dp',
 		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -2184,7 +2228,8 @@ exports.style = {
 		objectName : 'timeStampView',
 	},
 	timeStampImage:{
-		top: '0dp',
+		top: '3dp',
+		bottom: '3dp',
 		left: '0dp',
 		width : '32dp',
 		height : '32dp',

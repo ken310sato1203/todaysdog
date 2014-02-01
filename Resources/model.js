@@ -1,6 +1,6 @@
 //モデル
 
-var loginId = null;
+var loginUser = null;
 
 var breedList = [];
 var sexList = [];
@@ -557,15 +557,15 @@ exports.model = {
 		});
 	},
 
-	// ログインIDの登録
-	setLoginId:function(_id){
-		Ti.API.debug('[func]setLoginId:');
-		loginId = _id;
+	// ログインユーザの登録
+	setLoginUser:function(_user){
+		Ti.API.debug('[func]setLoginUser:');
+		loginUser = _user;
 	},
-	// ログインIDの取得
-	getLoginId:function(){
-		Ti.API.debug('[func]getLoginId:');
-		return loginId;
+	// ログインユーザの取得
+	getLoginUser:function(){
+		Ti.API.debug('[func]getLoginUser:');
+		return loginUser;
 	},
 
 	// 指定ユーザの記事リストから指定月の記事を取得

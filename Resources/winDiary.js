@@ -321,12 +321,16 @@ exports.createWindow = function(_userData){
 	// 前月ボタンをクリック
 	prevImage.addEventListener('click', function(e){
 		Ti.API.debug('[event]prevImage.click:');
+		e.source.opacity = 0.5;
 		prevCalView();
+		e.source.opacity = 1.0;
 	});
 	// 翌月ボタンをクリック
 	nextImage.addEventListener('click', function(e){
 		Ti.API.debug('[event]nextImage.click:');
+		e.source.opacity = 0.5;
 		nextCalView();
+		e.source.opacity = 1.0;
 	});
 
 	// スライド中はクリックイベントを禁止
@@ -352,13 +356,15 @@ exports.createWindow = function(_userData){
 	// タイトルの年月をクリックした時
 	monthTitle.addEventListener('click', function(e) {
 		Ti.API.debug('[event]monthTitle.click:');
+		e.source.opacity = 0.5;
 		// 今日の日付の取得
 		now = new Date();
 		nowYear = now.getFullYear();
 		nowMonth = now.getMonth() + 1;
 		nowDay = now.getDate();
-
+		// カレンダー更新
 		updateCalView(nowYear, nowMonth, nowDay);
+		e.source.opacity = 1.0;
 	});
 
 	diaryWin.addEventListener('scroll',function(e) {

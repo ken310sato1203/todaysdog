@@ -3,8 +3,6 @@
 exports.createWindow = function(_userData){
 	Ti.API.debug('[func]winProfileConfig.createWindow:');
 
-	var loginId = model.getLoginId();
-
 	// 選択ビュー表示用アニメーション
 	var slideIn =  Titanium.UI.createAnimation({bottom:0});
 	var slideOut =  Titanium.UI.createAnimation({bottom:-259});

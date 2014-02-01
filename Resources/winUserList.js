@@ -4,7 +4,7 @@ exports.createWindow = function(_type, _userData){
 	Ti.API.debug('[func]winUserList.createWindow:');
 	Ti.API.debug('_type:' + _type);
 
-	var loginId = model.getLoginId();
+	var loginUser = model.getLoginUser();
 
 	// ユーザ一覧の表示件数
 	var userCount = 9;
@@ -50,7 +50,7 @@ exports.createWindow = function(_type, _userData){
 			// 各ユーザ一覧のタップでプロフィール画面へ遷移
 			iconView.addEventListener('click',function(e){
 				Ti.API.debug('[event]iconView.click:');
-				if (e.source.userData.id != loginId) {
+				if (e.source.userData.id != loginUser.id) {
 					e.source.opacity = 0.5;
 					var profileWin = win.createProfileWindow(e.source.userData);
 					win.openTabWindow(profileWin, {animated:true});
@@ -58,7 +58,7 @@ exports.createWindow = function(_type, _userData){
 				}
 			});
 
-			if (_userList[i].id != loginId) {
+			if (_userList[i].id != loginUser.id) {
 				// 「フォローする」未フォローユーザをフォローするボタン
 				var followButton = Titanium.UI.createButton(style.userFollowButton);
 				userView.add(followButton);
@@ -66,7 +66,7 @@ exports.createWindow = function(_type, _userData){
 				var followButtonLabel = Ti.UI.createLabel(style.userFollowButtonLabel);
 				followButton.add(followButtonLabel);
 	
-				if (model.checkLocalFriendsList(loginId, _userList[i].id)) {
+				if (model.checkLocalFriendsList(loginUser.id, _userList[i].id)) {
 					followButton.backgroundColor = '#dedede';
 					followButton.clickFlag = true;
 					followButtonLabel.text = 'フォロー中';
@@ -97,7 +97,7 @@ exports.createWindow = function(_type, _userData){
 								model.removeCloudFriends(source.id, function(e) {
 									Ti.API.debug('[func]removeCloudFriends.callback:');
 									if (e.success) {
-										model.removeLocalFriendsList(loginId, source.id);
+										model.removeLocalFriendsList(loginUser.id, source.id);
 										source.backgroundColor = 'white';
 										source.clickFlag = false;
 										source.getChildren()[0].text = 'フォローする';
@@ -119,7 +119,7 @@ exports.createWindow = function(_type, _userData){
 						model.addCloudFriends(source.id, function(e) {
 							Ti.API.debug('[func]addCloudFriends.callback:');
 							if (e.success) {
-								model.addLocalFriendsList(loginId, [source]);
+								model.addLocalFriendsList(loginUser.id, [source]);
 								source.backgroundColor = '#dedede';
 								source.clickFlag = true;
 								source.getChildren()[0].text = 'フォロー中';

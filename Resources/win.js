@@ -158,6 +158,10 @@ exports.win = {
 			// tabImageをクリック
 			tabImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]tabImage.click:');
+				e.source.opacity = 0.5;
+				setTimeout(function(){
+					e.source.opacity = 1.0;
+		        }, 200);
 				tabGroup.activeTab = tabGroup.tabs[e.source.tabIndex];
 			});
 		}

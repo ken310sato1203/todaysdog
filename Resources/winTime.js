@@ -75,7 +75,6 @@ exports.createWindow = function(_userData, _diaryData){
 	
 			hourView.addEventListener('click',function(e){
 				Ti.API.debug('[event]hourView.click:');
-
 				// 多重クリック防止
 				if (clickEnable) {
 					if (e.source.objectName == 'timeStampView') {
@@ -235,6 +234,7 @@ exports.createWindow = function(_userData, _diaryData){
 
 	// リストボタンの表示
 	var listButton = Titanium.UI.createButton(style.timeListButton);
+
 	timeWin.rightNavButton = listButton;
 	// ボタンのbackgroundImageは後から変更できないのでImageViewの方で変更
 	var listImage = Ti.UI.createImageView(style.timeListImage);
@@ -255,6 +255,7 @@ exports.createWindow = function(_userData, _diaryData){
 	// リストボタンをクリック
 	listButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]listButton.click:');
+		listImage.opacity = 0.5;
 		// ビューの再作成
 		timeWin.remove(timeTableView);
 		var type = null;
@@ -273,6 +274,7 @@ exports.createWindow = function(_userData, _diaryData){
 		scrollPosition(timeTableView);
 		timeTableView.visible = true;
 		timeWin.add(timeTableView);
+		listImage.opacity = 1.0;
 	});
 
 /*

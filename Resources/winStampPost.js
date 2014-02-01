@@ -321,6 +321,14 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 		postWin.close({animated:true});
 	});	
 
+	// 右スワイプで前の画面に戻る
+	postWin.addEventListener('swipe',function(e){
+		Ti.API.debug('[event]postWin.swipe:');
+		if (e.direction == 'right') {
+			postWin.close({animated:true});
+		}
+	});
+
 	// フィールドをクリックで入力フィールド・選択ビューを表示
 	postTableView.addEventListener('click', function(e){
 		Ti.API.debug('[event]postTableView.click:');

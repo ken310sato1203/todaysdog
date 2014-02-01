@@ -4,7 +4,7 @@ exports.createWindow = function(_type, _articleData){
 	Ti.API.debug('[func]winPhoto.createWindow:');
 	Ti.API.debug('_type:' + _type);
 
-	var loginId = model.getLoginId();
+	var loginUser = model.getLoginUser();
 
 	// 初回読み込み時
 	var initFlag = true;
@@ -42,7 +42,7 @@ exports.createWindow = function(_type, _articleData){
 
 					// ローカルから削除
 					model.removeLocalLikeList({
-						userId: loginId,
+						userId: loginUser.id,
 						article: _articleData.id
 					});
 			
@@ -75,7 +75,7 @@ exports.createWindow = function(_type, _articleData){
 					}
 
 					// ローカルに登録
-					var likeList = [{user:loginId, article:_articleData.id, review:e.reviews[0].id}];
+					var likeList = [{user:loginUser.id, article:_articleData.id, review:e.reviews[0].id}];
 					model.addLocalLikeList(likeList);
 	
 				} else {
@@ -102,6 +102,56 @@ exports.createWindow = function(_type, _articleData){
 		listView.touchEnabled = true;
 	};
 
+	// コメントデータの取得
+	var getCommentItem = function(review) {
+		Ti.API.debug('[func]getCommentItem:');
+		var user = review.user;
+
+		var icon = '';
+		if (user.photo != null && user.photo.urls != null) {
+			icon = user.photo.urls.square_75; 
+		} else {
+			icon = user.icon;
+		}		
+
+		var name = '';
+		if (user.custom_fields && user.custom_fields.name != null) {
+			name = user.custom_fields.name; 
+		} else if (user.name != null) {
+			//コメント追加時
+			name = user.name; 
+		} else {
+			name = user.first_name + ' ' + user.last_name;
+		}
+
+		var time = '';
+		if (review.custom_fields && review.custom_fields.postDate != null) {
+			time = util.getFormattedDateTime(util.getDate(review.custom_fields.postDate));
+		} else if (review.time != null) {
+			//コメント追加時
+			time = review.time;
+		}
+
+		var commentItem = [{
+			template: 'comment',		
+			photoCommentUserIconView: {
+				backgroundImage: icon,
+			},
+			photoCommentNameLabel: {
+				text: name,
+			},
+			photoCommentTextLabel: {
+				text: review.content,
+			},
+			photoCommentTimeLabel: {
+				text: time,
+			}
+		}];
+		
+		return commentItem;
+	};
+
+
 	// コメントリストの更新
 	var updateComment = function() {
 		Ti.API.debug('[func]updateComment:');
@@ -119,47 +169,15 @@ exports.createWindow = function(_type, _articleData){
 
 		// コメントリストの取得
 		model.getCloudCommentList({
-			userId: loginId,
+			userId: loginUser.id,
 			postId: _articleData.id
 		}, function(e) {
 			if (e.success) {
 				Ti.API.debug('[func]getCloudCommentList.callback:');
 				if (e.reviews.length > 0) {
 					for (var i=0; i<e.reviews.length; i++) {
-						var review = e.reviews[i];
-						var user = review.user;
-
-						var name = '';
-						if (user.custom_fields && user.custom_fields.name != null) {
-							name = user.custom_fields.name; 
-						} else {
-							name = user.first_name + ' ' + user.last_name;
-						}
-
-						var time = '';
-						if (review.custom_fields && review.custom_fields.postDate != null) {
-							time = util.getFormattedDateTime(util.getDate(review.custom_fields.postDate));
-						}
-
-						var commentItem = [{
-							template: 'comment',		
-							photoCommentUserIconView: {
-								backgroundImage: user.photo.urls.square_75,
-							},
-							photoCommentNameLabel: {
-								text: name,
-							},
-							photoCommentTextLabel: {
-								text: review.content,
-							},
-							photoCommentTimeLabel: {
-								text: time,
-							}
-						}];
-						listSection.appendItems(commentItem);
-					
+						listSection.appendItems(getCommentItem(e.reviews[i]));					
 					}
-
 					var bottomItem = [{
 						template: 'bottom',
 					}];
@@ -193,7 +211,7 @@ exports.createWindow = function(_type, _articleData){
 			var commentData = {
 				no: _articleData.no, 
 				seq: null, 
-				user: loginId, 
+				user: loginUser.id, 
 				date: date, 
 				text: commentField.value
 			};
@@ -206,7 +224,14 @@ exports.createWindow = function(_type, _articleData){
 				Ti.API.debug('[func]addCloudCommentList.callback:');						
 				if (e.success) {
 					Ti.API.debug('Success:');
-					updateComment();
+					var review = {user:null, content:null};
+					review.user = model.getLoginUser();
+					review.content = commentField.value;
+					review.time = util.getFormattedNowDateTime();
+					// bottomの前に追加
+					listSection.insertItemsAt(listSection.items.length - 1, getCommentItem(review));
+					listView.scrollToItem(listView.sections.length - 1, listSection.items.length - 1);
+
 					commentField.value = '';
 					commentField.blur();
 					if (photoWin.prevWin != null) {
@@ -268,7 +293,7 @@ exports.createWindow = function(_type, _articleData){
 	var likeStampImage = {};
 	if (_type == "friends") {
 		var likeReviewId = model.getLocalLikeReviewId({
-			userId: loginId,
+			userId: loginUser.id,
 			article: _articleData.id
 		});
 		if (likeReviewId != null) {
@@ -281,7 +306,7 @@ exports.createWindow = function(_type, _articleData){
 /*
 		// ライクリストの取得
 		model.getCloudLikeList({
-			userId: loginId,
+			userId: loginUser.id,
 			postId: _articleData.id
 		}, function(e) {
 			if (e.success) {
@@ -507,7 +532,7 @@ exports.createWindow = function(_type, _articleData){
 	// タイトルアイコンのクリックでプロフィールを表示
 	titleIconImage.addEventListener('click',function(e){
 		Ti.API.debug('[event]titleIconImage.click:');
-		if (userData.id != loginId) {
+		if (userData.id != loginUser.id) {
 			titleIconImage.opacity = 0.5;
 			var profileWin = win.createProfileWindow(userData);
 			win.openTabWindow(profileWin, {animated:true});

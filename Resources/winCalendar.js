@@ -174,9 +174,35 @@ exports.createWindow = function(_userData){
 					target.dayImage.opacity = 0.5;
 
 					var type = "photoList";
+/*
 					var photoWin = win.createPhotoWindow(type, target.articleData);
 					photoWin.prevWin = calendarWin;
 					win.openTabWindow(photoWin, {animated:true});
+*/
+					var photoWin = Ti.UI.createWindow(style.calendarPhotoWin);
+					var photoView = Ti.UI.createView(style.calendarPhotoView);
+					photoWin.add(photoView);
+					var photoImage = Ti.UI.createImageView(style.calendarPhotoImage);
+					photoImage.image = target.articleData.photo;
+					var photoTextLabel = Ti.UI.createLabel(style.calendarPhotoTextLabel);
+					photoTextLabel.text = target.articleData.text;
+					var photoTimeLabel = Ti.UI.createLabel(style.calendarPhotoTimeLabel);
+					photoTimeLabel.text = target.articleData.date;
+					photoView.add(photoImage);
+					photoView.add(photoTextLabel);
+					photoView.add(photoTimeLabel);
+					photoWin.open({
+						modal: true,
+					    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
+					    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_CROSS_DISSOLVE
+					});
+
+					// フォト拡大画面にタップで戻る
+					photoWin.addEventListener('click',function(e){
+						Ti.API.debug('[event]photoWin.click:');
+						photoWin.close();				
+					});
+
 					target.dayImage.opacity = 1.0;
 				}
 	
@@ -279,7 +305,7 @@ exports.createWindow = function(_userData){
 	titleView.add(nextImage);
 
 	// 戻るボタンの表示
-	var backButton = Titanium.UI.createButton(style.commonBackButton);
+	var backButton = Titanium.UI.createButton(style.calendarCloseButton);
 	calendarWin.leftNavButton = backButton;
 
 	var thisDiaryView = null;
@@ -321,7 +347,8 @@ exports.createWindow = function(_userData){
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
-		calendarWin.close({animated:true});
+		// NavigationWindowを使用しているため、navWinを閉じる。
+		calendarWin.nav.close();
 	});
 
 	// スライド中はクリックイベントを禁止

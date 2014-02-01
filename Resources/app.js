@@ -31,7 +31,7 @@ var loginFlag = false;
 var openMainWindow = function(_userData) {
 	Ti.API.debug('[func]openMainWindow:');
 
-	model.setLoginId(_userData.id);
+	model.setLoginUser(_userData);
 	Ti.App.Properties.setString('userId', _userData.id);
 	if(_userData.name != '') {
 		Ti.App.Properties.setString(_userData.id + 'name', _userData.name);

@@ -291,7 +291,7 @@ exports.createWindow = function(_userData){
 
 	// カレンダーボタン
 	var calendarButton = Titanium.UI.createButton(style.todayCalendarButton);
-	todayWin.rightNavButton = calendarButton;
+	todayWin.leftNavButton = calendarButton;
 
 	var todayTableView = Ti.UI.createTableView(style.todayTableView);
 	todayTableView.headerPullView = getTableHeader();
@@ -307,7 +307,17 @@ exports.createWindow = function(_userData){
 		var type = "search";
 		var calendarWin = win.createCalendarWindow(_userData);
 		calendarWin.prevWin = todayWin;
-		win.openTabWindow(calendarWin, {animated:true});
+//		win.openTabWindow(calendarWin, {animated:true});
+		// 下から表示させるため、modalでウィンドウを表示。
+		// titleControlが表示されなかったので、NavigationWindowを使用。
+		var navWin = Ti.UI.iOS.createNavigationWindow({
+			modal: true,
+		    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
+		    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_COVER_VERTICAL,
+			window: calendarWin
+		});
+		calendarWin.nav = navWin;
+		navWin.open();
 	});
 
 	// 更新用イベント

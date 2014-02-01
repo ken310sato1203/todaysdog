@@ -3,7 +3,7 @@
 exports.createWindow = function(_userData){
 	Ti.API.debug('[func]winProfileEdit.createWindow:');
 
-	var loginId = model.getLoginId();
+	var loginUser = model.getLoginUser();
 
 	// 名前フィールドのチェック
 	var checkNameField = function() {
@@ -61,7 +61,7 @@ exports.createWindow = function(_userData){
 	profileEditWin.titleControl = titleView;
 
 	// 戻るボタンの表示
-	var backButton = Titanium.UI.createButton(style.commonBackButton);
+	var backButton = Titanium.UI.createButton(style.profileEditCloseButton);
 	profileEditWin.leftNavButton = backButton;
 
 	// 「保存」自分のプロフィールを編集するボタン
@@ -102,13 +102,6 @@ exports.createWindow = function(_userData){
 	nameView.add(nameLabel);
 	nameView.add(nameField);
 
-	// 入力フィールドのfocusは、親のprofileEditTableViewのclickイベントに遷移しないので直接呼び出す
-	nameField.addEventListener('focus', function(e){
-		Ti.API.debug('[event]nameField.click:');
-		var rowData = {objectName:'name'};
-		profileEditTableView.fireEvent('click', {rowData:rowData});
-	});
-
 	// 入力チェック
 	nameField.addEventListener('return',function(e){
 		Ti.API.debug('[event]nameField.return:');
@@ -132,13 +125,6 @@ exports.createWindow = function(_userData){
 	breedField.value = _userData.breed;
 	breedView.add(breedLabel);
 	breedView.add(breedField);
-
-	// 入力フィールドのfocusは、親のprofileEditTableViewのclickイベントに遷移しないので直接呼び出す
-	breedField.addEventListener('focus', function(e){
-		Ti.API.debug('[event]breedField.click:');
-		var rowData = {objectName:'breed'};
-		profileEditTableView.fireEvent('click', {rowData:rowData});
-	});
 
 	// 入力チェック
 	breedField.addEventListener('return',function(e){
@@ -245,13 +231,6 @@ exports.createWindow = function(_userData){
 	memoView.add(memoLabel);
 	memoView.add(memoField);
 
-	// 入力フィールドのfocusは、親のprofileEditTableViewのclickイベントに遷移しないので直接呼び出す
-	memoField.addEventListener('focus', function(e){
-		Ti.API.debug('[event]memoField.click:');
-		var rowData = {objectName:'memo'};
-		profileEditTableView.fireEvent('click', {rowData:rowData});
-	});
-
 	// 入力チェック
 	memoField.addEventListener('return',function(e){
 		Ti.API.debug('[event]memoField.return:');
@@ -287,12 +266,14 @@ exports.createWindow = function(_userData){
 				Ti.API.debug('[event]alertDialog.click:');						
 				// OKの場合
 				if (alert.index == 1) {
-					profileEditWin.close({animated:true});
+					// NavigationWindowを使用しているため、navWinを閉じる。
+					profileEditWin.nav.close({animated:true});
 				}
 			});
 
 		} else {
-			profileEditWin.close({animated:true});			
+			// NavigationWindowを使用しているため、navWinを閉じる。
+			profileEditWin.nav.close({animated:true});			
 		}
 	});
 
@@ -322,7 +303,8 @@ exports.createWindow = function(_userData){
 				if (profileEditWin.prevWin != null) {
 					profileEditWin.prevWin.fireEvent('refresh');
 				}
-				profileEditWin.close({animated:true});
+				// NavigationWindowを使用しているため、navWinを閉じる。
+				profileEditWin.nav.close({animated:true});
 
 			} else {
 				util.errorDialog(e);
@@ -338,26 +320,11 @@ exports.createWindow = function(_userData){
 	profileEditTableView.addEventListener('click', function(e){
 		Ti.API.debug('[event]profileEditTableView.click:');
 		// 自分のプロフィールは編集できる
-		if (loginId == _userData.id) {
+		if (loginUser.id == _userData.id) {
 			if (e.rowData.objectName != null){
 				var targetName = e.rowData.objectName;
-				if (targetName == "sex"){
-					var sexList = model.getSexList();
-					var selectedIndex = null;
-					for (var i=0; i<sexList.length; i++) {
-						if (sexList[i].value == sexValue.text){
-							selectedIndex = i;
-						}
-					}
-					sexPicker.setSelectedRow(0, selectedIndex);
-					sexPickerView.animate(slideIn);
-		
-				} else if (targetName == "birth"){
-					Ti.API.debug('birthValue.text:' + birthValue.text);
-					birthPicker.value = util.getDate(birthValue.text);
-					birthPickerView.animate(slideIn);
-				}				
-		
+
+				// 選択していたフィールドを閉じる
 				if (selectedName != targetName){
 					if (selectedName == "name"){
 						nameField.blur();
@@ -372,6 +339,30 @@ exports.createWindow = function(_userData){
 					}
 				}
 				selectedName = targetName;
+
+				// 選択したフィールドを開ける
+				if (targetName == "name"){
+					nameField.focus();
+				} else if (targetName == "breed"){
+					breedField.focus();
+				} else if (targetName == "sex"){
+					var sexList = model.getSexList();
+					var selectedIndex = null;
+					for (var i=0; i<sexList.length; i++) {
+						if (sexList[i].value == sexValue.text){
+							selectedIndex = i;
+						}
+					}
+					sexPicker.setSelectedRow(0, selectedIndex);
+					sexPickerView.animate(slideIn);
+		
+				} else if (targetName == "birth"){
+					Ti.API.debug('birthValue.text:' + birthValue.text);
+					birthPicker.value = util.getDate(birthValue.text);
+					birthPickerView.animate(slideIn);
+				} else if (targetName == "memo"){
+					memoField.focus();
+				}
 			}
 		}
 
@@ -381,14 +372,6 @@ exports.createWindow = function(_userData){
 	profileEditWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]profileEditWin.refresh:');
 
-	});
-
-	// 右スワイプで前の画面に戻る
-	profileEditWin.addEventListener('swipe',function(e){
-		Ti.API.debug('[event]profileEditWin.swipe:');
-		if (e.direction == 'right') {
-			profileEditWin.close({animated:true});
-		}
 	});
 
 	return profileEditWin;

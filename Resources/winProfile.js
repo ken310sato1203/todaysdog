@@ -3,7 +3,7 @@
 exports.createWindow = function(_userData){
 	Ti.API.debug('[func]winProfile.createWindow:');
 
-	var loginId = model.getLoginId();
+	var loginUser = model.getLoginUser();
 
 	// Viewの取得
 	var getProfileRowList = function() {
@@ -26,7 +26,7 @@ exports.createWindow = function(_userData){
 		// アイコンをクリック
 		iconView.addEventListener('click',function(e){
 			Ti.API.debug('[event]iconView.click:');
-			if (_userData.id == loginId) {
+			if (_userData.id == loginUser.id) {
 				var dialog = Titanium.UI.createOptionDialog({
 					options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
 					cancel:2
@@ -326,7 +326,7 @@ exports.createWindow = function(_userData){
 	//  ログアウトボタン
 	var configButton = Titanium.UI.createButton(style.profileConfigButton);
 	var b1 = Titanium.UI.createButton({title:'Left Nav'});
-	if (loginId == _userData.id) {
+	if (loginUser.id == _userData.id) {
 		profileWin.rightNavButton = configButton;
 		// tabGroupではleftNavButtonが使えない
 //		profileWin.leftNavButton = editButton;
@@ -336,7 +336,7 @@ exports.createWindow = function(_userData){
 	} else {
 		profileWin.leftNavButton = backButton;
 		titleView.add(titleLabel);
-		if (model.checkLocalFriendsList(loginId, _userData.id)) {
+		if (model.checkLocalFriendsList(loginUser.id, _userData.id)) {
 			profileWin.rightNavButton = unfollowButton;
 		} else {
 			profileWin.rightNavButton = followButton;
@@ -363,14 +363,15 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]editButton.click:');
 		var profileEditWin = win.createProfileEditWindow(_userData);
 		profileEditWin.prevWin = profileWin;
-		win.openTabWindow(profileEditWin, {animated:true});
-/*
-		profileEditWin.open({
+//		win.openTabWindow(profileEditWin, {animated:true});
+		// 下から表示させるため、modalでウィンドウを表示。
+		// titleControlが表示されなかったので、NavigationWindowを使用。
+		var navWin = Ti.UI.iOS.createNavigationWindow({
 			modal: true,
-			modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_CURRENT_CONTEXT,
-			modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_COVER_VERTICAL
+			window: profileEditWin
 		});
-*/
+		profileEditWin.nav = navWin;
+		navWin.open();
 	});
 
 	// ログアウトボタンをクリック
@@ -403,7 +404,7 @@ exports.createWindow = function(_userData){
 				model.removeCloudFriends(_userData.id, function(e) {
 					Ti.API.debug('[func]removeCloudFriends.callback:');
 					if (e.success) {
-						model.removeLocalFriendsList(loginId, _userData.id);
+						model.removeLocalFriendsList(loginUser.id, _userData.id);
 						followButton.enabled = true;
 						profileWin.rightNavButton = followButton;
 //						countFollowerLabel.text = _userData.follower;
@@ -428,7 +429,7 @@ exports.createWindow = function(_userData){
 		model.addCloudFriends(_userData.id, function(e) {
 			Ti.API.debug('[func]addCloudFriends.callback:');
 			if (e.success) {
-				model.addLocalFriendsList(loginId, [_userData]);
+				model.addLocalFriendsList(loginUser.id, [_userData]);
 				unfollowButton.enabled = true;
 				profileWin.rightNavButton = unfollowButton;
 //				countFollowerLabel.text = _userData.follower;

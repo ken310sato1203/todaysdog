@@ -4,7 +4,7 @@ exports.createWindow = function(_type, _userData, _stampData){
 	Ti.API.debug('[func]winStamp.createWindow:');
 	Ti.API.debug('_type:' + _type);
 
-	var loginId = model.getLoginId();
+	var loginUser = model.getLoginUser();
 
 	var now = null;
 	var user = null;
@@ -14,7 +14,7 @@ exports.createWindow = function(_type, _userData, _stampData){
 	var hour = null;
 
 	if (_stampData == null) {
-		user = loginId;
+		user = loginUser.id;
 		now = new Date();
 		year = now.getFullYear();
 		month = now.getMonth() + 1;
