@@ -6,7 +6,7 @@ exports.createWindow = function(_userData){
 	var now = null;
 
 // ---------------------------------------------------------------------
-
+/*
 	// StampViewの取得
 	var getStampView = function(_rowStamp) {
 		Ti.API.debug('[func]getStampView:');
@@ -32,14 +32,52 @@ exports.createWindow = function(_userData){
 
 		return targetView;
 	};
-
+*/
 	// Viewの取得
 	var getTimeTableView = function(_stampList) {
 		Ti.API.debug('[func]getTimeTableView:');
-		var targetView = Ti.UI.createTableView(style.todayTimeTableView);
+		var targetView = Ti.UI.createTableView(style.todayStampTableView);
 		var rowList = [];
 
-		// 当日のデータ		
+		var itemList = [
+			{text:'ごはん', imageList:[]}, 
+			{text:'うんち', imageList:[]}, 
+			{text:'さんぽ', imageList:[]}];
+		var indexList = { 
+			'stamp_restaurant1': 0, 'stamp_restaurant2': 0, 'stamp_restaurant3': 0, 
+			'stamp_favorite1': 1, 'stamp_favorite2': 1, 'stamp_favorite3': 1, 
+			'stamp_walking1': 2, 'stamp_walking2': 2, 'stamp_walking3': 2 };
+
+		// 当日のデータ
+		for (var i=0; i<_stampList.length; i++) {
+			if(_stampList[i].stamp in indexList) {
+				var stampImage = Ti.UI.createImageView(style.todayStampImage);
+				stampImage.image = 'images/icon/' + _stampList[i].stamp + '.png';
+				itemList[indexList[_stampList[i].stamp]].imageList.push(stampImage);
+			}
+		}
+
+		for (var i=0; i<itemList.length; i++) {
+			var row = Ti.UI.createTableViewRow(style.todayStampTableRow);
+			rowList.push(row);
+			
+			var stampMax = 4;
+			for (var j=0; j<stampMax; j++) {
+				var stampView = Ti.UI.createView(style.todayStampView);
+				if (itemList[i].imageList[j] != null) {
+					stampView.add(itemList[i].imageList[j]);				
+				} else {
+					var stampText = Ti.UI.createLabel(style.todayStampTextLabel);
+					stampText.text = itemList[i].text;
+					stampView.add(stampText);
+				}
+				row.add(stampView);
+			}
+		}
+		
+
+/*
+		// 当日のデータ
 		for (var i=0; i<_stampList.length; i++) {
 			var row = Ti.UI.createTableViewRow(style.todayTimeTableRow);
 			row.diaryData = {
@@ -73,6 +111,8 @@ exports.createWindow = function(_userData){
 				tabGroup.activeTab = targetTab;
 			});
 		}
+*/
+			
 
 		targetView.setData(rowList);
 		return targetView;
@@ -191,12 +231,14 @@ exports.createWindow = function(_userData){
 		});
 
 		var timeView = getTimeTableView(_stampList);
+/*
 		// スタンプの登録が３個より大きい場合、行数分の高さを追加
 		if (timeView.data[0]) {
 			if (timeView.data[0].rowCount > 3) {
 				diaryView.height = (timeView.data[0].rowCount * 40) + 'dp';
 			}
 		}
+*/
 		diaryView.add(timeView);
 
 		return diaryRow;

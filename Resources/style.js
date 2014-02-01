@@ -2644,13 +2644,15 @@ exports.style = {
 		left: '0dp',
 		width: Ti.UI.SIZE,
 		// スタンプの登録が３個以下の場合、３個分＋タブで表示されない余白分
-		height: (3 * 40 + 44) + 'dp',
+//		height: (3 * 40 + 44) + 'dp',
+		height: (3 * 51 + 44) + 'dp',
 		enabled: false,
 		backgroundColor: 'white',
 	},
 	todayDayView:{
 		layout: 'vertical',
 		top: '0dp',
+		left: '10dp',
 		width: '75dp',
 		height: Ti.UI.SIZE,
 		enabled: false,
@@ -2681,15 +2683,18 @@ exports.style = {
 		image : 'images/icon/b_edit.png',
 		backgroundColor: 'white',
 	},
-	todayTimeTableView:{
-		top: '5dp',
+	todayStampTableView:{
+		top: '10dp',
+		left: '10dp',
 		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		scrollable: false,
 		data: [],
 	},
-	todayTimeTableRow:{ 
+	todayStampTableRow:{ 
+		layout: 'horizontal',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
@@ -2697,6 +2702,31 @@ exports.style = {
 		// カスタムプロパティ
 		timeData: null,
 	},
+
+	todayStampTextLabel:{
+		font: {fontSize:10, fontFamily:'Helvetica Neue'},
+		color: 'white',
+	},
+	todayStampView:{
+		top: '0dp',
+		bottom: '5dp',
+		left: '0dp',
+		right: '5dp',
+		width: '44dp',
+		height: '44dp',
+		borderRadius: '22dp',
+		backgroundColor: '#eeeeee',
+	},
+	todayStampImage:{
+		width : '32dp',
+		height : '32dp',
+		defaultImage: '',
+		image : null,
+		// カスタムプロパティ
+		objectName : 'todayTimeStampImage',
+	},
+
+/*
 	todayTimeStampView:{
 		top: '0dp',
 		left: '0dp',
@@ -2740,6 +2770,7 @@ exports.style = {
 		// カスタムプロパティ
 		objectName : 'todayTimeStampLabel',
 	},
+*/
 	
 // winStamp -------------------------------------------------------
 	stampWin:{

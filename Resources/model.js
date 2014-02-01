@@ -25,9 +25,9 @@ sexList = [
 stampSelectList = [
 	{type:"one", title:"お天気",stampList:["stamp_sun","stamp_cloud","stamp_rain"]},
 	{type:"one", title:"体調",stampList:["stamp_barking1","stamp_barking2","stamp_barking3"]},
-	{type:"one", title:"ご飯",stampList:["stamp_restaurant1","stamp_restaurant2","stamp_restaurant3"]},
+	{type:"one", title:"ごはん",stampList:["stamp_restaurant1","stamp_restaurant2","stamp_restaurant3"]},
 	{type:"one", title:"うんち",stampList:["stamp_favorite1","stamp_favorite2","stamp_favorite3"]},
-	{type:"one", title:"散歩",stampList:["stamp_walking1","stamp_walking2","stamp_walking3"]},
+	{type:"one", title:"さんぽ",stampList:["stamp_walking1","stamp_walking2","stamp_walking3"]},
 	{type:"all", title:"薬・病院",stampList:["stamp_medicine","stamp_injection","stamp_plus"]},
 	{type:"all", title:"シャンプー\nホテル",stampList:["stamp_wash","stamp_cut","stamp_home"]},
 	{type:"all", title:"おでかけ\nイベント",stampList:["stamp_alarm","stamp_trip","stamp_star"]},
