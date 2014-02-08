@@ -27,6 +27,9 @@ Facebook.forceDialogAuth = true;
 // loginFlagで制御する
 var loginFlag = false;
 
+// 起動初回時のdiaryWinのスクロール、timeWinのオープンするためのフラグ
+var initDiaryFlag = true;
+
 // ---------------------------------------------------------------------
 var openMainWindow = function(_userData) {
 	Ti.API.debug('[func]openMainWindow:');
@@ -67,11 +70,6 @@ var openMainWindow = function(_userData) {
 	customTab = win.getCustomTabView();
 	customTab.open();
 
-	// diaryWinの今日の日スクロールが、なぜか25日以降の場合、一番下までスクロールしないので、
-	// createした後に再作成することで対応
-	var diaryWin = win.getTab("diaryTab").window;
-	diaryWin.fireEvent('refresh');
-	
 /*
 	// 最新情報を表示
 	tab2.addEventListener('focus', function(e){

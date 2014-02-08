@@ -2213,7 +2213,7 @@ exports.style = {
 	timeStampListView:{
 		layout: 'vertical',
 		top: '0dp',
-		bottom: '6dp',
+		bottom: '3dp',
 		left: '47dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -2567,7 +2567,6 @@ exports.style = {
 	friendsPreloadImage:{
 		width: '0dp',
 		height: '0dp',
-		visible:false
 	},
 
 // winToay -------------------------------------------------------

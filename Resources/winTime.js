@@ -13,6 +13,7 @@ exports.createWindow = function(_userData, _diaryData){
 	var year = _diaryData.year;
 	var month = _diaryData.month;
 	var day = _diaryData.day;
+	var weekday = _diaryData.weekday.text;
 
 	var monthName = util.diary.monthName;
 	var timeRange = util.diary.timeRange;
@@ -112,8 +113,8 @@ exports.createWindow = function(_userData, _diaryData){
 					var todayView = Ti.UI.createView(style.timeTodayView);
 					if (rowStampList.length > 1) {
 						// heigth100%指定だと実機でサイズが最大になるため、最小サイズで登録数によって拡張
-						// 上間下余白6dp+スタンプ32dp
-						todayView.height = (rowStampList.length * 38 + 6) + 'dp';
+						// (スタンプ32dp + 上下余白9dp) + 最下余白3dp
+						todayView.height = (rowStampList.length * 41 + 3) + 'dp';
 					}
 					hourView.add(todayView);
 				}
@@ -169,6 +170,10 @@ exports.createWindow = function(_userData, _diaryData){
 	var updateTableView = function() {
 		Ti.API.debug('[func]updateTableView:');
 		var type = "time";
+		// ビューの再作成
+		if(timeTableView) {
+			timeWin.remove(timeTableView);
+		}
 		if (_diaryData.stampList == null) {
 			// スタンプデータの取得
 			var stampList = model.getLocalStampList({
@@ -178,45 +183,13 @@ exports.createWindow = function(_userData, _diaryData){
 				day: day
 			});
 			_diaryData.stampList = stampList;
-			timeTableView = getTimeTableView(type);
-			timeTableView.visible = true;
-			scrollPosition(timeTableView);
-			timeWin.add(timeTableView);
-			// タイトルの表示
-//			monthTitle.text =  monthName[_diaryData.month - 1] + ' ' + _diaryData.day;
-			monthTitle.text =  month + '月' + day + '日';			
-
-/*
-			model.getCloudStampList({
-				userId: _userData.id,
-				year: year,
-				month: month,
-				day: day
-			}, function(e) {
-				if (e.success) {
-					Ti.API.debug('[func]getCloudStampList.callback:');
-					_diaryData.stampList = e.stampList;
-					timeTableView = getTimeTableView(type);
-					timeTableView.visible = true;
-					scrollPosition(timeTableView);
-					timeWin.add(timeTableView);
-					// タイトルの表示
-					monthTitle.text =  monthName[_diaryData.month - 1] + ' ' + _diaryData.day;	
-		
-				} else {
-					util.errorDialog(e);
-				}
-			});
-*/	
-		} else {
-			timeTableView = getTimeTableView(type);
-			timeTableView.visible = true;
-			scrollPosition(timeTableView);
-			timeWin.add(timeTableView);		
-			// タイトルの表示
-//			monthTitle.text =   monthName[_diaryData.month - 1] + ' ' + _diaryData.day;	
-			monthTitle.text =  month + '月' + day + '日';
 		}
+		timeTableView = getTimeTableView(type);
+		timeTableView.visible = true;
+		scrollPosition(timeTableView);
+		timeWin.add(timeTableView);
+		// タイトルの表示
+		dayTitle.text =  month + '月' + day + '日(' + weekday + ')';
 
 	};
 
@@ -225,8 +198,8 @@ exports.createWindow = function(_userData, _diaryData){
 	var timeWin = Ti.UI.createWindow(style.timeWin);
 	// タイトルの表示
 //	var titleView = Ti.UI.createView(style.timeTitleView);	
-	var monthTitle = Ti.UI.createLabel(style.timeTitleLabel);
-	timeWin.titleControl = monthTitle;
+	var dayTitle = Ti.UI.createLabel(style.timeTitleLabel);
+	timeWin.titleControl = dayTitle;
 
 	// 戻るボタンの表示
 	var backButton = Titanium.UI.createButton(style.commonBackButton);
@@ -250,6 +223,22 @@ exports.createWindow = function(_userData, _diaryData){
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
 		timeWin.close({animated:true});
+	});
+
+	// タイトルの年月をクリックした時
+	dayTitle.addEventListener('click', function(e) {
+		Ti.API.debug('[event]dayTitle.click:');
+		e.source.opacity = 0.5;
+
+		// 今日の日付の取得
+		now = new Date();
+		nowYear = now.getFullYear();
+		nowMonth = now.getMonth() + 1;
+		nowDay = now.getDate();
+		nowHour = now.getHours();
+		// カレンダー更新
+		updateTableView();
+		e.source.opacity = 1.0;
 	});
 
 	// リストボタンをクリック

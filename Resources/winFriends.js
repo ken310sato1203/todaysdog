@@ -286,73 +286,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
                     properties: style.friendsSeparateView,
             }]
     };
-/*	
-	var articleListTemplate = {
-		properties: style.friendsArticleList,
-		childTemplates: [{
-			type: 'Ti.UI.View',
-			bindId: 'friendsArticleView',
-			properties: style.friendsArticleView,
-			childTemplates: [{
-				type: 'Ti.UI.View',
-				bindId: 'friendsUserIconView',
-				properties: style.friendsUserIconView
-			},{
-				type: 'Ti.UI.View',
-				bindId: 'friendsTextView',
-				properties: style.friendsTextView,
-				childTemplates: [{
-					type: 'Ti.UI.View',
-					bindId: 'friendsNameView',
-					properties: style.friendsNameView,
-					childTemplates: [{
-						type: 'Ti.UI.Label',
-						bindId: 'friendsNameLabel',
-						properties: style.friendsNameLabel
-					},{
-						type: 'Ti.UI.Label',
-						bindId: 'friendsUserLabel',
-						properties: style.friendsUserLabel
-					}]
-				},{
-					type: 'Ti.UI.Label',
-					bindId: 'friendsTextLabel',
-					properties: style.friendsTextLabel
-				},{
-					type: 'Ti.UI.View',
-					bindId: 'friendsTimeView',
-					properties: style.friendsTimeView,
-					childTemplates: [{
-						type: 'Ti.UI.Label',
-						bindId: 'friendsTimeLabel',
-						properties: style.friendsTimeLabel
-					},{
-						type: 'Ti.UI.View',
-						bindId: 'friendsCountView',
-						properties: style.friendsCountView,
-						childTemplates: [{
-							type: 'Ti.UI.ImageView',
-							bindId: 'friendsLikeIconImage',
-							properties: style.friendsLikeIconImage
-						},{
-							type: 'Ti.UI.Label',
-							bindId: 'friendsLikeLabel',
-							properties: style.friendsLikeLabel
-						},{
-							type: 'Ti.UI.ImageView',
-							bindId: 'friendsCommentIconImage',
-							properties: style.friendsCommentIconImage
-						},{
-							type: 'Ti.UI.Label',
-							bindId: 'friendsCommentLabel',
-							properties: style.friendsCommentLabel
-						}]
-					}]
-				}]
-			}]
-		}]
-	};
-*/
+
 	var nextListTemplate = {
 		properties: style.friendsNextList,
 		childTemplates: [{

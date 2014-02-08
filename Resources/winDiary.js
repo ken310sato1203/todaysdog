@@ -152,20 +152,30 @@ exports.createWindow = function(_userData){
 
 			// 多重クリック防止
 			if (clickEnable) {
-				if (e.source.objectName != "diaryPhotoImage") {
-					clickEnable = false;
-					var timeWin = win.createTimeWindow(_userData, e.row.diaryData);
-					timeWin.addEventListener('open', function(){
-						// スライド前にopenイベントが発火するので1秒後にセット
-				        setTimeout(function(){
-							clickEnable = true;
-				        }, 1000);
-				    });
-
-					timeWin.prevWin = diaryWin;
-					diaryWin.nextWin = timeWin;
-					win.openTabWindow(timeWin, {animated:true});
+				clickEnable = false;
+				var diaryData = null;
+				var animatedFlag = true;
+				if (e.row) {
+					diaryData = e.row.diaryData;
+				} else {
+					// 初回起動時用initイベントで今日の日を指定
+					diaryData = e.source.data[0].rows[nowDay-1].diaryData;
+					animatedFlag = false;
 				}
+				
+				var timeWin = win.createTimeWindow(_userData, diaryData);
+				timeWin.addEventListener('open', function(){
+					// スライド前にopenイベントが発火するので1秒後にセット
+			        setTimeout(function(){
+						clickEnable = true;
+			        }, 1000);
+			    });
+
+				timeWin.prevWin = diaryWin;
+				diaryWin.nextWin = timeWin;
+				win.openTabWindow(timeWin, {animated:animatedFlag});
+				// 初回起動時は表示していなかったのでここで表示
+				thisDiaryView.visible = true;
 			}
 		});
 
@@ -273,7 +283,11 @@ exports.createWindow = function(_userData){
 		// 今日の日にスクロール
 		thisDiaryView.scrollToIndex(_day-3 > 0 ? _day-3 : 0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 		offset = _day-3 > 0 ? (_day-3) * 45: 0;
-		thisDiaryView.visible = true;
+		
+		// 初回起動時はtimeWinをオープンするため表示しない
+		if (initDiaryFlag == false) {
+			thisDiaryView.visible = true;
+		}
 	};
 
 // ---------------------------------------------------------------------
@@ -291,10 +305,8 @@ exports.createWindow = function(_userData){
 	var thisDiaryView = null;
 	var offset = null;
 
-	// 今日の日スクロールが、なぜか25日以降の場合、一番下までスクロールしないので、
-	// winDiaryを作成した後に、app.jsで再作成することで対応
-//	updateCalView(nowYear, nowMonth, nowDay);
-	
+	updateCalView(nowYear, nowMonth, nowDay);
+
 /*
 	// 当月のスタンプデータ取得
 	model.getCloudStampList({
@@ -389,6 +401,18 @@ exports.createWindow = function(_userData){
 		}
 	});
 
+	// 初回起動時用イベント
+	diaryWin.addEventListener('init', function(e){
+		Ti.API.debug('[event]diaryWin.init:');
+		// 今日の日付の取得
+		now = new Date();
+		nowDay = now.getDate();
+		// 今日の日にスクロール
+		thisDiaryView.scrollToIndex(nowDay-3 > 0 ? nowDay-3 : 0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+		offset = nowDay-3 > 0 ? (nowDay-3) * 45: 0;
+		// timeWinをオープン
+		thisDiaryView.fireEvent('click');
+	});
 
 	return diaryWin;
 };
