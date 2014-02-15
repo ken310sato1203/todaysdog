@@ -84,7 +84,8 @@ exports.createWindow = function(_type, _userData, _photoImage){
 	// 投稿ボタンをクリック
 	postButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]postButton.click:');
-
+		// コメントフィールドが表示されている場合下げる
+		textArea.blur();
 		if (textArea.value == textArea.hintText || textArea.value == "") {
 			var commentDialog = Titanium.UI.createAlertDialog({
 				title: 'コメントを入力してください',

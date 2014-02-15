@@ -1949,11 +1949,6 @@ exports.style = {
 
 	cameraPostIconView:{
 		top: '20dp',
-/*
-		width: '54dp',
-		height: '54dp',
-		borderRadius: '27dp',
-*/
 		width: '108dp',
 		height: '108dp',
 		borderRadius: '54dp',
@@ -1968,10 +1963,12 @@ exports.style = {
 
 	cameraPostImage:{
 		top : '10dp',
+//		top : '0dp',
 		bottom : '5dp',
 		left: '10dp',
 		right: '10dp',
 		width: '264dp',
+//		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		defaultImage: '',
 		backgroundColor: 'black',

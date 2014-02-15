@@ -160,12 +160,6 @@ exports.createWindow = function(_userData, _diaryData){
 		return targetView;
 	};
 
-	// 表示位置にスクロール
-	var scrollPosition = function(_view) {
-		Ti.API.debug('[func]scrollPosition:');
-		_view.scrollToIndex(_diaryData.timeIndex + 1, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-	};
-
 	// ビューの更新
 	var updateTableView = function() {
 		Ti.API.debug('[func]updateTableView:');
@@ -186,7 +180,8 @@ exports.createWindow = function(_userData, _diaryData){
 		}
 		timeTableView = getTimeTableView(type);
 		timeTableView.visible = true;
-		scrollPosition(timeTableView);
+		var position = _diaryData.timeIndex-1 > 0 ? _diaryData.timeIndex-1 : 0;
+		timeTableView.scrollToIndex(position, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 		timeWin.add(timeTableView);
 		// タイトルの表示
 		dayTitle.text =  month + '月' + day + '日(' + weekday + ')';
@@ -248,6 +243,7 @@ exports.createWindow = function(_userData, _diaryData){
 		// ビューの再作成
 		timeWin.remove(timeTableView);
 		var type = null;
+		var position = 0;
 		if (e.source.listFlag == false) {
 			type = "list";
 			e.source.listFlag = true;
@@ -257,10 +253,11 @@ exports.createWindow = function(_userData, _diaryData){
 			type = "time";
 			e.source.listFlag = false;
 			listImage.image = "images/icon/w_arrow_listup.png";
+			position = _diaryData.timeIndex-1 > 0 ? _diaryData.timeIndex-1 : 0;
 		}
 //		timeWin.rightNavButton = e.source;
 		timeTableView = getTimeTableView(type);
-		scrollPosition(timeTableView);
+		timeTableView.scrollToIndex(position, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 		timeTableView.visible = true;
 		timeWin.add(timeTableView);
 		listImage.opacity = 1.0;
