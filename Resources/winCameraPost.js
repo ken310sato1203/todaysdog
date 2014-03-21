@@ -16,6 +16,9 @@ exports.createWindow = function(_type, _userData, _photoImage){
 
 	// 投稿ボタンの表示
 	var postButton = Titanium.UI.createButton(style.cameraPostButton);
+	if (_type == 'icon_camera' || _type == 'icon_select') {
+		postButton.title = '設定';
+	}
 	cameraPostWin.rightNavButton = postButton;
 
 	var postScrollView = Titanium.UI.createScrollView(style.cameraPostScrollView);
@@ -28,11 +31,14 @@ exports.createWindow = function(_type, _userData, _photoImage){
 	var	textArea = Ti.UI.createTextArea(style.cameraPostTextArea);
 
 	if (_type == 'photo_camera' || _type == 'photo_select') {
+		titleLabel.text = 'わんこ写真';
 		postImage = Titanium.UI.createImageView(style.cameraPostImage);
 		postImage.image = _photoImage;
 		postView.add(postImage);
 		postView.add(textArea);
-	} else {
+
+	} else if (_type == 'icon_camera') {
+		titleLabel.text = 'プロフィール画像';
 		postScrollView.backgroundColor = 'white';
 		iconView = Titanium.UI.createView(style.cameraPostIconView);
 		postScrollView.add(iconView);
@@ -172,7 +178,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 							postButton.enabled = true;
 						});
 						
-					} else {
+					} else if (_type == 'icon_camera') {
 						// ローカルに画像を保存
 						var fileName = _userData.id;
 						model.saveLocalImage(postImage.toBlob(), util.local.iconPath, fileName);

@@ -1851,16 +1851,15 @@ exports.style = {
 		color: 'white', 
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
-		text: 'カメラ', 
 	},
-	cameraNextButton:{
-		width: '75dp',
+	cameraSelectButton:{
+		width: '50dp',
 		height: '25dp',
 		backgroundImage: 'images/icon/titlebar10.png',
 		textAlign: 'center',
 		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
 		color: '#e74c3c',
-		title: '切り取る',
+		title: '選択',
 	},
 
 	cameraOverlayView:{
@@ -1874,8 +1873,14 @@ exports.style = {
 //		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
         borderColor: 'red',
         borderWidth: 1,
+        touchEnabled: false,
+	},
+	cameraFrameSpaceView:{
+		top: '0dp',
+//		backgroundColor: 'white',
 	},
 	cameraArticleScrollView:{
+		layout : 'vertical',
 		top: '0dp',
 //		width: Ti.Platform.displayCaps.platformWidth,
 //		height: Ti.Platform.displayCaps.platformWidth * 3 / 4,
@@ -1884,12 +1889,13 @@ exports.style = {
 		contentHeight:'auto',
 		showVerticalScrollIndicator:true,
 		showHorizontalScrollIndicator:true,
-		maxZoomScale:50,
-		minZoomScale:1,
+		// ピンチで画像修理が難しいのでズームさせない
+//		maxZoomScale:50,
+//		minZoomScale:1,
 		backgroundColor: '#dedede',
 	},
 	cameraArticleImage:{
-//		top : '0dp',
+		top : '0dp',
 //		left: '0dp',
 		defaultImage: '',
 		image : null,
@@ -1917,7 +1923,6 @@ exports.style = {
 		color: 'white', 
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
-		text: 'カメラ', 
 	},
 	cameraPostButton:{
 		width: '50dp',

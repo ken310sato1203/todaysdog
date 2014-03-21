@@ -6,6 +6,7 @@ exports.createWindow = function(_type, _userData){
 
 	var offsetX = 0;
 	var offsetY = 0;
+	var currentScale = 1;
 
 	// 画像のリサイズ・切り抜き
 	var editImage = function(_image) {
@@ -18,13 +19,17 @@ exports.createWindow = function(_type, _userData){
 			croppedImage = resizedImage.imageAsCropped({
 				width: resizedImage.width, 
 				height: resizedImage.width * 3 / 4,
-				x: 0, y: 200
+				x: 0, 
+				y: 200
 			});
+			return croppedImage;
 */
-			croppedImage = _image.imageAsCropped({
-				width: _image.width, 
-				height: _image.width * 3 / 4,
-				x: offsetX, y: offsetY * ( _image.width / Ti.Platform.displayCaps.platformWidth )
+			var resizedImage = _image.imageAsResized(_image.width, _image.height);
+			croppedImage = resizedImage.imageAsCropped({
+				width: resizedImage.width, 
+				height: resizedImage.width * 3 / 4,
+				x: 0, 
+				y: 100 * ( _image.width / style.commonSize.screenWidth )
 			});
 			if (_image.width > 640) {
 				return croppedImage.imageAsResized(640, 480);
@@ -32,29 +37,59 @@ exports.createWindow = function(_type, _userData){
 				return croppedImage;
 			}
 
-		} else if (_type == 'photo_select') {
-			croppedImage = _image.imageAsCropped({
-				width: _image.width, 
-				height: _image.width * 3 / 4,
-				x: offsetX, y: offsetY * ( _image.width / Ti.Platform.displayCaps.platformWidth )
+		} else if (_type == 'icon_camera') {
+/*
+			var resizedImage = _image.imageAsResized(640, _image.height * 640 / _image.width);
+			croppedImage = resizedImage.imageAsCropped({
+				width: resizedImage.width, 
+				height: resizedImage.width,
+				x: 0, 
+				y: 140
 			});
-			if (_image.width > 640) {
-				return croppedImage.imageAsResized(640, 480);
-			} else {
-				return croppedImage;
-			}
-
-		} else {
-			croppedImage = _image.imageAsCropped({
-				width: 640,
-				height: 640,
-				x: 0, y: 100
+			return croppedImage;
+*/
+			var resizedImage = _image.imageAsResized(_image.width, _image.height);
+			croppedImage = resizedImage.imageAsCropped({
+				width: resizedImage.width, 
+				height: resizedImage.width,
+				x: 0, 
+				y: 50 * ( _image.width / style.commonSize.screenWidth )
 			});
 			if (_image.width > 640) {
 				return croppedImage.imageAsResized(640, 640);
 			} else {
 				return croppedImage;
 			}
+
+		} else if (_type == 'photo_select') {
+			// 先にリサイズすると、切り取る座標が変わってしまい、
+			// 切取りを先にするとバグで反転してしまう、リサイズすると反転しないので、同じサイズでリサイズ
+			var resizedImage = _image.imageAsResized(_image.width, _image.height);
+			croppedImage = resizedImage.imageAsCropped({
+				width: resizedImage.width * currentScale, 
+				height: resizedImage.width * 3 / 4 * currentScale,
+				x: offsetX,
+				y: offsetY * ( _image.width / style.commonSize.screenWidth )
+			});
+			if (_image.width > 640) {
+				return croppedImage.imageAsResized(640, 480);
+			} else {
+				return croppedImage;
+			}
+
+/*
+			// imageAsCroppedすると反転するバグがあり、同じサイズでimageAsResizedをしておく反転しない
+			croppedImage = _image.imageAsResized(_image.width, _image.height).imageAsCropped({
+				width: _image.width, 
+				height: _image.width * 3 / 4,
+				x: offsetX, y: offsetY * ( _image.width / style.commonSize.screenWidth )
+			});
+			if (_image.width > 640) {
+				return croppedImage.imageAsResized(640, 480);
+			} else {
+				return croppedImage;
+			}
+*/
 		}
 	};
 
@@ -63,7 +98,7 @@ exports.createWindow = function(_type, _userData){
 		Ti.API.debug('[func]openCameraPostWindow:');
 		var cameraPostWin = win.createCameraPostWindow(_type, _userData, _image);
 		cameraPostWin.prevWin = cameraWin;
-		win.openTabWindow(cameraPostWin, {animated:false});
+		win.openTabWindow(cameraPostWin, {animated:true});
 	};
 
 	// 写真撮影
@@ -73,6 +108,7 @@ exports.createWindow = function(_type, _userData){
 			success:function(e) {
 				Ti.API.debug('success:');
 				openCameraPostWindow(editImage(e.media));
+				actInd.hide();
 			},
 			cancel: function(e) {
 				Ti.API.debug('cancel:');
@@ -98,11 +134,10 @@ exports.createWindow = function(_type, _userData){
 		Ti.Media.openPhotoGallery({
 			success: function(e) {
 				Ti.API.debug('success:');
-				var scale = Ti.Platform.displayCaps.platformWidth / e.media.width;
-				if (_type == 'photo_camera' || _type == 'photo_select') {
-					offsetY = ( e.media.height * scale - Ti.Platform.displayCaps.platformWidth * 3 / 4 ) / 2;
-				} else {
-					offsetY = ( e.media.height * scale - Ti.Platform.displayCaps.platformWidth ) / 2;
+				// 写真の真ん中に合わせる
+				var scale = style.commonSize.screenWidth / e.media.width;
+				if (_type == 'photo_select') {
+					offsetY = ( e.media.height * scale - style.commonSize.screenWidth * 3 / 4 ) / 2;
 				}
 				articleScrollView.setContentOffset({x:0, y:offsetY}, {animated:false});
 				articleImage.image = e.media;
@@ -110,8 +145,7 @@ exports.createWindow = function(_type, _userData){
 			},
 			cancel: function(e) {
 				Ti.API.debug('cancel:');
-//				cameraWin.close({animated:true});
-				articleImage.image = 'images/photo/today_sakura2.jpg';
+				cameraWin.close({animated:true});
 			},
 			error: function(e) {
 				Ti.API.debug('error:');
@@ -134,41 +168,66 @@ exports.createWindow = function(_type, _userData){
 	var backButton = Titanium.UI.createButton(style.commonBackButton);
 	cameraWin.leftNavButton = backButton;
 
-	// 次へボタンの表示
-	var postButton = Titanium.UI.createButton(style.cameraNextButton);
-	cameraWin.rightNavButton = postButton;
+	// 選択ボタンの表示
+	var selectButton = Titanium.UI.createButton(style.cameraSelectButton);
+
+	var articleScrollView = Titanium.UI.createScrollView(style.cameraArticleScrollView);
+	articleScrollView.width = style.commonSize.screenWidth + 'dp';
+
+	// フレームの上部余白部分
+	var frameHeadView = Titanium.UI.createView(style.cameraFrameSpaceView);
+	frameHeadView.height = '50dp';
+	articleScrollView.add(frameHeadView);
 
 	// 写真の表示
-	var articleScrollView = Titanium.UI.createScrollView(style.cameraArticleScrollView);
-	if (_type == 'photo_camera' || _type == 'photo_select') {
-		articleScrollView.width = Ti.Platform.displayCaps.platformWidth + 'dp';
-		articleScrollView.height = (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp';
-	} else {
-		articleScrollView.width = Ti.Platform.displayCaps.platformWidth + 'dp';
-		articleScrollView.height = Ti.Platform.displayCaps.platformWidth + 'dp';		
-	}
 	var articleImage = Ti.UI.createImageView(style.cameraArticleImage);
 	articleScrollView.add(articleImage);
 	cameraWin.add(articleScrollView);
 
+	// フレームの下部余白部分
+	var frameFooterView = Titanium.UI.createView(style.cameraFrameSpaceView);
+	articleScrollView.add(frameFooterView);
+
 	// 撮影時のオーバーレイ
 	var overlayView = Titanium.UI.createView(style.cameraOverlayView);
+	// フレーム
 	var frameView = Titanium.UI.createView(style.cameraFrameView);
-	if (_type == 'photo_camera' || _type == 'photo_select') {
+	// 投稿時のロード用画面
+	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
+
+	if (_type == 'photo_camera') {
+		titleLabel.text = '取り込み中';
 		frameView.top = '100dp';
-		frameView.width = Ti.Platform.displayCaps.platformWidth + 'dp';
-		frameView.height = (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp';
-	} else {
+		frameView.width = style.commonSize.screenWidth + 'dp';
+		frameView.height = (style.commonSize.screenWidth * 3 / 4) + 'dp';
+		overlayView.add(frameView);
+		actInd.show();
+		tabGroup.add(actInd);
+
+	} else if (_type == 'icon_camera') {
+		titleLabel.text = '取り込み中';
 		frameView.top = '50dp';
-		frameView.width = Ti.Platform.displayCaps.platformWidth + 'dp';
-		frameView.height = Ti.Platform.displayCaps.platformWidth + 'dp';
+		frameView.width = style.commonSize.screenWidth + 'dp';
+		frameView.height = style.commonSize.screenWidth + 'dp';
+		overlayView.add(frameView);
+		actInd.show();
+		tabGroup.add(actInd);
+
+	} else if (_type == 'photo_select') {
+		titleLabel.text = 'わんこ写真';
+		cameraWin.rightNavButton = selectButton;
+		frameView.top = '50dp';
+		frameView.width = style.commonSize.screenWidth + 'dp';
+		frameView.height = (style.commonSize.screenWidth * 3 / 4) + 'dp';		
+		// 全体の高さーフレームの高さー（ステータスバー(20)＋タイトルバー(44)＋上部余白(50)）
+		frameFooterView.height = (style.commonSize.screenHeight - (style.commonSize.screenWidth * 3 / 4) - 114) + 'dp';
+		cameraWin.add(frameView);
 	}
-	overlayView.add(frameView);
 
 	if (_type == 'photo_camera' || _type == 'icon_camera') {
 		startCamera();
 		
-	} else if (_type == 'photo_select' || _type == 'icon_select') {
+	} else if (_type == 'photo_select') {
 		pickupPhoto();
 	}
 
@@ -177,17 +236,16 @@ exports.createWindow = function(_type, _userData){
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
-		if (_type == 'photo_select' || _type == 'icon_select') {
+		if (_type == 'photo_select') {
 			articleImage.image = null;
 			pickupPhoto();
 		}
 	});	
 
-	// 投稿ボタンをクリック
-	postButton.addEventListener('click', function(e){
-		Ti.API.debug('[event]postButton.click:');
-		if (_type == 'photo_select' || _type == 'icon_select') {
-//			var photoImage = articleScrollView.toImage();
+	// 選択ボタンをクリック
+	selectButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]selectButton.click:');
+		if (_type == 'photo_select') {
 			openCameraPostWindow(editImage(articleImage.toBlob()));
 		}
 	});
@@ -195,11 +253,20 @@ exports.createWindow = function(_type, _userData){
 	// スクロールイベント
 	articleScrollView.addEventListener('scroll', function(e){
 		Ti.API.debug('[event]articleScrollView.scroll:');
-		Ti.API.info('x=' + e.x + ' y=' + e.y);
+//		Ti.API.info('x=' + e.x + ' y=' + e.y);
+		Ti.API.info('top=' + articleScrollView.contentOffset.y);
 		offsetX = e.x;
 		offsetY = e.y;		
 	});
 
+/*
+	// 拡大縮小イベント ※ピンチ後の画像修正が難しいのでやめる
+	articleScrollView.addEventListener('pinch', function(e){
+		Ti.API.debug('[event]articleScrollView.pinch:');
+		Ti.API.info('scale=' + e.scale);
+		currentScale = e.scale;
+	});
+*/
 	// 撮影用イベント
 	cameraWin.addEventListener('openCamera', function(e){
 		Ti.API.debug('[event]cameraWin.openCamera:');

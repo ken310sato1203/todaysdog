@@ -27,9 +27,10 @@ exports.createWindow = function(_userData){
 		iconView.addEventListener('click',function(e){
 			Ti.API.debug('[event]iconView.click:');
 			if (_userData.id == loginUser.id) {
+				// アルバムから選ぶと横長写真の対応が難しいので撮影のみとする
 				var dialog = Titanium.UI.createOptionDialog({
-					options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
-					cancel:2
+					options:['撮影する', 'キャンセル'],
+					cancel:1
 				});
 				dialog.show();
 	
@@ -38,11 +39,6 @@ exports.createWindow = function(_userData){
 					switch( e.index ) {
 						case 0:
 							var cameraWin = win.createCameraWindow('icon_camera', _userData);
-							cameraWin.prevWin = profileWin;
-							win.openTabWindow(cameraWin, {animated:true});
-							break;
-						case 1:
-							var cameraWin = win.createCameraWindow('icon_select', _userData);
 							cameraWin.prevWin = profileWin;
 							win.openTabWindow(cameraWin, {animated:true});
 							break;
