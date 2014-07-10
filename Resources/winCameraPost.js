@@ -166,7 +166,11 @@ exports.createWindow = function(_type, _userData, _photoImage){
 								todayWin.addEventListener('refresh', function(){
 									cameraPostWin.close({animated:false});
 							    });
-							    
+/*							    
+							    var friendsWin = win.getTab("friendsTab").window;
+								friendsWin.fireEvent('insert');
+							    tabGroup.activeTab = win.getTab("friendsTab");
+*/							    
 							    // 通知設定の更新
 								Ti.App.Properties.setString(_userData.id + '_' + 'today', util.getFormattedNowDate());
 	
@@ -182,7 +186,10 @@ exports.createWindow = function(_type, _userData, _photoImage){
 						// ローカルに画像を保存
 						var fileName = _userData.id;
 						model.saveLocalImage(postImage.toBlob(), util.local.iconPath, fileName);
-						model.updateCloudUserIcon({icon: postImage.toBlob()}, function(e) {
+						model.updateCloudUserIcon({
+							user: _userData.user,
+							icon: postImage.toBlob()
+						}, function(e) {
 							Ti.API.debug('[func]updateCloudUserIcon.callback:');
 							if (e.success) {
 								_userData.icon = util.local.iconPath + fileName + '.png';

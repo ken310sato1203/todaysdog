@@ -115,11 +115,13 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	// Windowクローズ時の更新処理
 	var closePostWin = function() {
 		Ti.API.debug('[func]closePostWin:');
+		
+		var weekday = util.diary.weekday[new Date(_stampDataList[0].year, _stampDataList[0].month, _stampDataList[0].day).getDay()];
 		var diaryData = {
 			year: _stampDataList[0].year,
 			month: _stampDataList[0].month,
 			day: _stampDataList[0].day,
-			weekday: null,
+			weekday: weekday,
 			todayFlag: false,
 			stampList: null,
 			articleData: null,
@@ -141,6 +143,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 			postWin.prevWin.close({animated:false});
 		}
 
+/*
 		// todayWinの更新
 		var todayWin = win.getTab("todayTab").window;
 		todayWin.fireEvent('refresh');
@@ -149,9 +152,16 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 				postWin.close({animated:false});
 		    });
 		}
-
+*/
 		// diaryWinの更新
-		var diaryWin = win.getTab("diaryTab").window;
+		var targetTab = win.getTab("diaryTab");
+		var diaryWin = targetTab.window;
+		if (initDiaryFlag) {
+			// 初回起動時にdiaryWinの今日の日スクロールが、なぜか25日以降の場合、一番下までスクロールしないので、
+			// タブクリック時にスクロールを実行、またtimeWinをオープン
+			initDiaryFlag = false;
+			diaryWin.fireEvent('init');
+		}
 		diaryWin.fireEvent('refresh', {diaryData:diaryData});
 		// timeWinの更新
 		var timeWin = diaryWin.nextWin;
@@ -162,8 +172,15 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 					postWin.close({animated:false});
 			    });
 			}
+		} else {
+			// timeWinを新規オープン
+			var timeWin = win.createTimeWindow(_userData, diaryData);
+			timeWin.prevWin = diaryWin;
+			diaryWin.nextWin = timeWin;
+			targetTab.open(timeWin, {animated:false});	
 		}
-
+		tabGroup.activeTab = targetTab;
+		postWin.close({animated:false});
 	};
 						
 // ---------------------------------------------------------------------

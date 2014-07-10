@@ -364,7 +364,7 @@ var makeQuery = {
 			this.q += " LIMIT " + _value;
 		}
 		else{
-			console.log("sqlite:makeQuery.limit - value is number");
+			console.log("sqlite:makeQuery.limit - value is number : " + _value);
 			return false;
 		}
 		
@@ -375,7 +375,7 @@ var makeQuery = {
 			this.q += " OFFSET " + _value;
 		}
 		else{
-			console.log("sqlite:makeQuery.offset - value is number");
+			console.log("sqlite:makeQuery.offset - value is number : " + _value);
 			return false;
 		}
 		

@@ -174,8 +174,6 @@ exports.createWindow = function(_userData){
 				timeWin.prevWin = diaryWin;
 				diaryWin.nextWin = timeWin;
 				win.openTabWindow(timeWin, {animated:animatedFlag});
-				// 初回起動時は表示していなかったのでここで表示
-				thisDiaryView.visible = true;
 			}
 		});
 
@@ -219,7 +217,7 @@ exports.createWindow = function(_userData){
 			// 前のポジションに移動
 			var day = Math.round(offset / 45);
 			thisDiaryView.scrollToIndex(day, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
-			thisDiaryView.visible = true;
+//			thisDiaryView.visible = true;
 		}
 	};
 
@@ -253,7 +251,7 @@ exports.createWindow = function(_userData){
 			// 前のポジションに移動
 			var day = Math.round(offset / 45);
 			thisDiaryView.scrollToIndex(day, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
-			thisDiaryView.visible = true;
+//			thisDiaryView.visible = true;
 		}
 	};
 
@@ -285,9 +283,9 @@ exports.createWindow = function(_userData){
 		offset = _day-3 > 0 ? (_day-3) * 45: 0;
 		
 		// 初回起動時はtimeWinをオープンするため表示しない
-		if (initDiaryFlag == false) {
-			thisDiaryView.visible = true;
-		}
+//		if (initDiaryFlag == false) {
+//			thisDiaryView.visible = true;
+//		}
 	};
 
 // ---------------------------------------------------------------------
@@ -410,8 +408,7 @@ exports.createWindow = function(_userData){
 		// 今日の日にスクロール
 		thisDiaryView.scrollToIndex(nowDay-3 > 0 ? nowDay-3 : 0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 		offset = nowDay-3 > 0 ? (nowDay-3) * 45: 0;
-		// timeWinをオープン
-		thisDiaryView.fireEvent('click');
+//		thisDiaryView.visible = true;
 	});
 
 	return diaryWin;

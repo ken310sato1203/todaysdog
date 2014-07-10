@@ -10,17 +10,16 @@ exports.style = {
 	},
 
 	commonActivityIndicator:{
-//		opacity: 0.7,
 		style: Ti.UI.iPhone.ActivityIndicatorStyle.DARK,
 		font: {fontSize:14, fontWeight:'bold'},
 		color: 'gray',
 		message: 'Loading...',
 	},
 	commonActivityBackView:{
-		opacity: 0.7,
 		width: '100%',
 		height: '100%',
 		backgroundColor: 'white',
+		opacity: 0.7,
 	},
 
 	commonTableHeader:{
@@ -170,6 +169,7 @@ exports.style = {
 		height: '28dp',
 		borderRadius: '14dp',
 		backgroundColor: 'white',
+		touchEnabled: false,
 	},
 	photoTitleIconImage:{
 		width: '28dp',
@@ -617,6 +617,7 @@ exports.style = {
 		width: '54dp',
 		height: '54dp',
 		defaultImage: '',
+		touchEnabled: false,
 	},
 	profileCountView:{
 		layout: 'horizontal',
@@ -1133,16 +1134,6 @@ exports.style = {
 		font: {fontSize:11, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
-	photoListPhotoFullWin:{
-		backgroundColor: 'black',
-		tabBarHidden: true,
-	},
-	photoListPhotoFullImage:{
-//		top: '0dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		defaultImage: '',
-	},
 
 	photoListFriendsArticleListView:{
 		layout: 'horizontal',
@@ -1247,6 +1238,45 @@ exports.style = {
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
 		text: 'データがありません'
+	},
+
+	photoListFullPhotoWin:{
+		backgroundColor: 'black',
+	},
+	photoListFullPhotoView:{
+		layout : 'vertical',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+		touchEnabled: false,
+	},
+	photoListFullPhotoImage:{
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		defaultImage: '',
+		touchEnabled: false,
+	},
+	photoListFullPhotoTextLabel:{
+		top: '5dp',
+		left: '10dp',
+		right: '10dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#000',
+		touchEnabled: false,
+	},
+	photoListFullPhotoTimeLabel:{
+		top: '5dp',
+		bottom: '5dp',
+		left: '10dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#696969',
 	},
 
 // winUserList -------------------------------------------------------
@@ -1799,23 +1829,24 @@ exports.style = {
 		height: '16dp',
 		backgroundColor : '#87CEFA',
 	},
-	calendarPhotoWin:{
-		backgroundColor: 'white',
+	calendarFullPhotoWin:{
+		backgroundColor: 'black',
 	},
-	calendarPhotoView:{
+	calendarFullPhotoView:{
 		layout : 'vertical',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
 		touchEnabled: false,
 	},
-	calendarPhotoImage:{
+	calendarFullPhotoImage:{
 		top: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		defaultImage: '',
 		touchEnabled: false,
 	},
-	calendarPhotoTextLabel:{
+	calendarFullPhotoTextLabel:{
 		top: '5dp',
 		left: '10dp',
 		right: '10dp',
@@ -1826,7 +1857,7 @@ exports.style = {
 		color: '#000',
 		touchEnabled: false,
 	},
-	calendarPhotoTimeLabel:{
+	calendarFullPhotoTimeLabel:{
 		top: '5dp',
 		bottom: '5dp',
 		left: '10dp',
@@ -2041,7 +2072,7 @@ exports.style = {
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		data: [],
-		visible: false,
+//		visible: false,
 	},
 	diaryTableRow:{ 
 		width: Ti.UI.SIZE,
@@ -2323,6 +2354,10 @@ exports.style = {
 		height: '54dp',
 		borderRadius: '27dp',
 	},
+	friendsUserIconImage:{
+		width: '72dp',
+		height: '54dp',
+	},
 	friendsNameView:{
 		layout: 'horizontal',
 		top: '5dp',
@@ -2602,88 +2637,176 @@ exports.style = {
 	todayTableView:{
 		top: '0dp',
 		// 下のタブで表示されない余白分
-		bottom: '44dp',
+//		bottom: '44dp',
 		height: Ti.UI.SIZE,
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
+		scrollable: false,
 		data: [],
 	},
 	todayTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
+//		backgroundColor: '#eeeeee',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
-
-	todayPhotoView:{
-		width: Ti.Platform.displayCaps.platformWidth + 'dp',
-		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
-		backgroundColor: '#eeeeee',
-	},
-	todayPhotoImage:{
+	todayMenuView:{
+		layout: 'horizontal',
 		top: '0dp',
-//		width: Ti.Platform.displayCaps.platformWidth + 'dp',
-//		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		defaultImage: '',
-		image : null,
-		// カスタムプロパティ
-		displayFlag: false,
+	},
+	todayCameraView:{
+		top: '10dp',
+		bottom: '10dp',
+		left: '30dp',
+		width: '54dp',
+		height: '54dp',
+		borderRadius: '27dp',
+		backgroundColor: 'white',
 	},
 	todayCameraImage:{
-//		width: '64dp',
-//		height: '64dp',
 		width: '54dp',
 		height: '54dp',
 		defaultImage: '',
 		image: 'images/icon/b_camera.png',
+		touchEnabled: false,
+		// カスタムプロパティ
+		articleData: null,
 	},
-	todayDiaryView:{
-		layout: 'horizontal',
-		top: '0dp',
-		left: '0dp',
-		width: Ti.UI.SIZE,
-		// スタンプの登録が３個以下の場合、３個分＋タブで表示されない余白分
-//		height: (3 * 40 + 44) + 'dp',
-		height: (3 * 51 + 44) + 'dp',
-		enabled: false,
-		backgroundColor: 'white',
-	},
+
 	todayDayView:{
-		layout: 'vertical',
-		top: '0dp',
-		left: '10dp',
-		width: '75dp',
-		height: Ti.UI.SIZE,
-		enabled: false,
+		layout: 'absolute',
+		top: '10dp',
+		bottom: '10dp',
+		left: '30dp',
+		width: '54dp',
+		height: '54dp',
+		borderRadius: '27dp',
 		backgroundColor: 'white',
 	},
 	todayDayLabel:{
-		top: '10dp',
+		top: '13dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
 		textAlign: 'center',
-		font : {fontSize:18, fontWeight:'bold'},
+		font : {fontSize:16, fontWeight:'bold'},
 		color: '#3a4756',
+//		backgroundColor: 'yellow',
 	},
 	todayWeekdayLabel:{
-		top: '0dp',
+		bottom: '7dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
 		textAlign: 'center',
 		font : {fontSize:14, fontWeight:'bold'},
+//		backgroundColor: 'blue',
+	},
+	todayEditView:{
+		top: '10dp',
+		bottom: '10dp',
+		left: '30dp',
+		width: '54dp',
+		height: '54dp',
+		borderRadius: '27dp',
+		backgroundColor: 'white',
 	},
 	todayEditImage:{
-		top: '3dp',
-//		width: '64dp',
-//		height: '64dp',
 		width: '54dp',
 		height: '54dp',
 		defaultImage: '',
-		image : 'images/icon/b_edit.png',
+		image : 'images/icon/b_edit_w.png',
+		touchEnabled: false,
+	},
+
+	todayPhotoView:{
+		top: '0dp',
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
+	},
+	todayPhotoImage:{
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		defaultImage: '',
+	},
+	todayFullPhotoWin:{
+		backgroundColor: 'black',
+	},
+	todayFullPhotoView:{
+		layout : 'vertical',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+		touchEnabled: false,
+	},
+	todayPhotoTextView:{
+		layout : 'vertical',
+		bottom: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+		opacity: 0.8,
+	},
+	todayPhotoTextLabel:{
+		top: '5dp',
+		left: '10dp',
+		right: '10dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#000',
+		touchEnabled: false,
+	},
+	todayPhotoTimeLabel:{
+		top: '5dp',
+		bottom: '5dp',
+		left: '10dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+
+	todayStampScrollView:{
+		layout: 'horizontal',
+		// 下のタブで表示されない余白分
+		top: '0dp',
+		contentWidth:'auto',
+		contentHeight:'auto',
+		showVerticalScrollIndicator:true,
+		showHorizontalScrollIndicator:true,
 		backgroundColor: 'white',
 	},
+	todayStampView:{
+		top: '10dp',
+		bottom: '10dp',
+		left: '20dp',
+		width: '54dp',
+		height: '54dp',
+		borderRadius: '27dp',
+		backgroundColor: 'white',
+		// カスタムプロパティ
+		objectName : 'todayStampView',
+	},
+	todayStampImage:{
+		width : '32dp',
+		height : '32dp',
+		defaultImage: '',
+		image : null,
+		touchEnabled: false,
+		// カスタムプロパティ
+		objectName : 'todayStampImage',
+	},
+	todaySpaceView:{
+		top: '0dp',
+		width: '20dp',
+		height: Ti.UI.SIZE,
+	},
+
+/*
 	todayStampTableView:{
 		top: '10dp',
 		left: '10dp',
@@ -2718,14 +2841,7 @@ exports.style = {
 		borderRadius: '22dp',
 		backgroundColor: '#eeeeee',
 	},
-	todayStampImage:{
-		width : '32dp',
-		height : '32dp',
-		defaultImage: '',
-		image : null,
-		// カスタムプロパティ
-		objectName : 'todayTimeStampImage',
-	},
+*/
 
 /*
 	todayTimeStampView:{

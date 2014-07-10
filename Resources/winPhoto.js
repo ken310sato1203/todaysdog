@@ -135,7 +135,10 @@ exports.createWindow = function(_type, _articleData){
 		var commentItem = [{
 			template: 'comment',		
 			photoCommentUserIconView: {
-				backgroundImage: icon,
+//				backgroundImage: icon,
+			},
+			photoCommentUserIconImage: {
+				image: icon,
 			},
 			photoCommentNameLabel: {
 				text: name,
@@ -258,6 +261,7 @@ exports.createWindow = function(_type, _articleData){
 	photoWin.titleControl = titleView;
 
 	var titleIconView = Ti.UI.createView(style.photoTitleIconView);
+//	titleIconView.backgroundImage = _articleData.icon;
 	titleView.add(titleIconView);
 	var titleIconImage = Ti.UI.createImageView(style.photoTitleIconImage);
 	titleIconImage.image = _articleData.icon;
@@ -268,7 +272,7 @@ exports.createWindow = function(_type, _articleData){
 		Ti.API.debug('[func]getCloudUser.callback:');
 		if (e.success) {
 			userData = e.userList[0];
-			titleIconImage.touchEnabled = true;
+			titleIconView.touchEnabled = true;
 		} else {
 			util.errorDialog(e);
 		}
@@ -448,6 +452,11 @@ exports.createWindow = function(_type, _articleData){
 				type: 'Ti.UI.View',
 				bindId: 'photoCommentUserIconView',
 				properties: style.photoCommentUserIconView,
+				childTemplates: [{
+					type: 'Ti.UI.ImageView',
+					bindId: 'photoCommentUserIconImage',
+					properties: style.photoCommentUserIconImage,
+				}]
 			},{
 				type: 'Ti.UI.View',
 				bindId: 'photoCommentTextView',
@@ -530,13 +539,13 @@ exports.createWindow = function(_type, _articleData){
 	});
 
 	// タイトルアイコンのクリックでプロフィールを表示
-	titleIconImage.addEventListener('click',function(e){
-		Ti.API.debug('[event]titleIconImage.click:');
+	titleIconView.addEventListener('click',function(e){
+		Ti.API.debug('[event]titleIconView.click:');
 		if (userData.id != loginUser.id) {
-			titleIconImage.opacity = 0.5;
+			titleIconView.opacity = 0.5;
 			var profileWin = win.createProfileWindow(userData);
 			win.openTabWindow(profileWin, {animated:true});
-			titleIconImage.opacity = 1.0;
+			titleIconView.opacity = 1.0;
 		}
 	});
 

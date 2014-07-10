@@ -74,7 +74,10 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				articleData: _articleList[i],
 				template: 'article',
 				friendsUserIconView: {
-					backgroundImage: _articleList[i].icon,
+//					backgroundImage: _articleList[i].photo,
+				},
+				friendsUserIconImage: {
+					image: _articleList[i].photo,
 				},
 				friendsNameLabel: {
 					text: _articleList[i].name,
@@ -97,11 +100,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			}];
 			listSection.appendItems(articleItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
 
+/*
 			// winPhotoで画像がすぐに表示されるよう、winFriendsでロードしておく（画面上には表示しない）
             var preloadImage = Ti.UI.createImageView(style.friendsPreloadImage);
             preloadImage.image = _articleList[i].photo;
             friendsWin.add(preloadImage);
-
+*/
 		}
 	};
 
@@ -237,7 +241,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
             childTemplates: [{
                     type: 'Ti.UI.View',
                     bindId: 'friendsUserIconView',
-                    properties: style.friendsUserIconView
+                    properties: style.friendsUserIconView,
+		            childTemplates: [{
+                            type: 'Ti.UI.ImageView',
+                            bindId: 'friendsUserIconImage',
+                            properties: style.friendsUserIconImage
+		            }]
             },{
                     type: 'Ti.UI.View',
                     bindId: 'friendsNameView',
@@ -405,6 +414,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		if (e.direction == 'right') {
 			friendsWin.close({animated:true});
 		}
+	});
+	// 記事の追加
+	friendsWin.addEventListener('insert', function(e){
+		Ti.API.debug('[event]friendsWin.insert:');
+		listView.fireEvent('pullend');
+		
 	});
 
 	return friendsWin;

@@ -39,12 +39,41 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			articleView.add(photoImage);
 
 			// 各記事のタップでフォト画面へ遷移
-			articleView.addEventListener('click',function(e){
-				Ti.API.debug('[event]articleView.click:');
+			photoImage.addEventListener('click',function(e){
+				Ti.API.debug('[event]photoImage.click:');
+/*
 				var type = "photoList";
 				var photoWin = win.createPhotoWindow(type, e.source.articleData);
 				photoWin.prevWin = photoListWin;
 				win.openTabWindow(photoWin, {animated:true});
+*/
+				var target = e.source;
+				target.opacity = 0.5;
+				var photoWin = Ti.UI.createWindow(style.photoListFullPhotoWin);
+				var photoView = Ti.UI.createView(style.photoListFullPhotoView);
+				photoWin.add(photoView);
+				var photoImage = Ti.UI.createImageView(style.photoListFullPhotoImage);
+				photoImage.image = target.articleData.photo;
+				var photoTextLabel = Ti.UI.createLabel(style.photoListFullPhotoTextLabel);
+				photoTextLabel.text = target.articleData.text;
+				var photoTimeLabel = Ti.UI.createLabel(style.photoListFullPhotoTimeLabel);
+				photoTimeLabel.text = target.articleData.date;
+				photoView.add(photoImage);
+				photoView.add(photoTextLabel);
+				photoView.add(photoTimeLabel);
+				photoWin.open({
+					modal: true,
+				    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
+				    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_CROSS_DISSOLVE
+				});
+
+				// フォト拡大画面にタップで戻る
+				photoWin.addEventListener('click',function(e){
+					Ti.API.debug('[event]photoWin.click:');
+					photoWin.close();				
+				});
+
+				target.opacity = 1.0;
 			});
 		}
 		return articleRow;

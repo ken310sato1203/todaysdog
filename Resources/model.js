@@ -4,6 +4,7 @@ var loginUser = null;
 
 var breedList = [];
 var sexList = [];
+var stampTopList = [];
 var stampSelectList = [];
 var stampHistoryList = [];
 
@@ -22,15 +23,24 @@ sexList = [
 	{value:"女の子"},
 ];
 
+photoTodayList = [
+	{photo:"A0001"},
+	{photo:"A0002"},
+	{photo:"A0003"},
+	{photo:"A0004"},
+	{photo:"A0005"},
+	{photo:"A0006"},
+];
+
 stampSelectList = [
-	{type:"one", title:"お天気",stampList:["stamp_sun","stamp_cloud","stamp_rain"]},
-	{type:"one", title:"体調",stampList:["stamp_barking1","stamp_barking2","stamp_barking3"]},
-	{type:"one", title:"ごはん",stampList:["stamp_restaurant1","stamp_restaurant2","stamp_restaurant3"]},
-	{type:"one", title:"うんち",stampList:["stamp_favorite1","stamp_favorite2","stamp_favorite3"]},
-	{type:"one", title:"さんぽ",stampList:["stamp_walking1","stamp_walking2","stamp_walking3"]},
-	{type:"all", title:"薬・病院",stampList:["stamp_medicine","stamp_injection","stamp_plus"]},
-	{type:"all", title:"シャンプー\nホテル",stampList:["stamp_wash","stamp_cut","stamp_home"]},
-	{type:"all", title:"おでかけ\nイベント",stampList:["stamp_alarm","stamp_trip","stamp_star"]},
+	{type:"one", title:"お天気", stampList:["stamp_sun","stamp_cloud","stamp_rain"]},
+	{type:"one", title:"さんぽ", stampList:["stamp_walking1","stamp_walking2","stamp_walking3"]},
+	{type:"one", title:"うんち", stampList:["stamp_favorite1","stamp_favorite2","stamp_favorite3"]},
+	{type:"one", title:"ごはん", stampList:["stamp_restaurant1","stamp_restaurant2","stamp_restaurant3"]},
+	{type:"one", title:"体調", stampList:["stamp_barking1","stamp_barking2","stamp_barking3"]},
+	{type:"all", title:"薬・病院", stampList:["stamp_medicine","stamp_injection","stamp_plus"]},
+	{type:"all", title:"シャンプー\nホテル", stampList:["stamp_wash","stamp_cut","stamp_home"]},
+	{type:"all", title:"おでかけ\nイベント", stampList:["stamp_alarm","stamp_trip","stamp_star"]},
 ];
 
 stampHistoryList = [
@@ -785,6 +795,17 @@ exports.model = {
 		return articleList;
 	},
 	
+	// 記事データテーブルの件数取得
+	getCountLocalArticleList:function(_user){
+		Ti.API.debug('[func]getCountLocalArticleList:');
+		return sqlite.open(function(db){
+			var rows = db.select("count(user)").from("DogArticleTB")
+				.where("user","=",_user)
+				.execute().getResult();
+			return rows.field(0);
+		});
+	},
+
 	// ローカルから記事の取得
 	getLocalTodayArticle:function(params){
 		Ti.API.debug('[func]getLocalTodayArticle:');
@@ -815,15 +836,34 @@ exports.model = {
 		return articleList;
 	},
 
-	// 記事データテーブルの件数取得
-	getCountLocalArticleList:function(_user){
-		Ti.API.debug('[func]getCountLocalArticleList:');
-		return sqlite.open(function(db){
-			var rows = db.select("count(user)").from("DogArticleTB")
-				.where("user","=",_user)
+	// ローカルからランダムに記事の取得
+	getLocalRandomArticle:function(params){
+		Ti.API.debug('[func]getLocalRandomArticle:');
+		var articleList = sqlite.open(function(db){
+			var rows = db.select().from("DogArticleTB")
+				.where("user","=",params.userId)
+				.order_by("created_at asc")
+				.limit(params.limit)
+				.offset(params.offset)
 				.execute().getResult();
-			return rows.field(0);
-		});
+			var result = [];
+			while (rows.isValidRow()){
+				result.push({
+					user: params.user,
+					name: params.name,
+					icon: params.icon,
+					id: rows.fieldByName('post'),
+					userId: rows.fieldByName('user'),
+//					post: rows.fieldByName('post'),
+					text: rows.fieldByName('text'),
+					photo: rows.fieldByName('photo'),
+					date: util.getFormattedDateTime(rows.fieldByName('date'))
+				});
+				rows.next();
+			}
+			return result;
+		});		
+		return articleList;
 	},
 
 	// 指定ユーザのスタンプリストから指定月のデータを取得
@@ -1225,6 +1265,18 @@ exports.model = {
 		}, function (e) {
 			callback(e);
 		});
+	},
+
+	// 今日の写真のリストを取得
+	getPhotoTodayList:function(){
+		Ti.API.debug('[func]getPhotoTodayList:');
+		return photoTodayList;
+	},
+
+	// 今日のスタンプのリストを取得
+	getStampTodayList:function(){
+		Ti.API.debug('[func]getStampTodayList:');
+		return stampHistoryList;
 	},
 
 	// 選択スタンプのリストを取得

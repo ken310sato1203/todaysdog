@@ -34,10 +34,12 @@ exports.createWindow = function(_type, _userData){
 			var iconView = Ti.UI.createView(style.userListIconView);
 			// カスタムプロパティにユーザデータを格納
 			iconView.userData = _userList[i];
+//			iconView.backgroundImage = _userList[i].icon;
 			userView.add(iconView);
 			var iconImage = Ti.UI.createImageView(style.userListIconImage);
 			iconImage.image = _userList[i].icon;
 			iconView.add(iconImage);
+
 			var textLabel = Ti.UI.createLabel(style.userListTextLabel);
 			if (_userList[i].name != '') {
 				textLabel.text = _userList[i].name + '\n' + _userList[i].user;
