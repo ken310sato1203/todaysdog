@@ -237,8 +237,9 @@ exports.createWindow = function(_userData){
 		photoView.add(photoImage);
 //		photoImage.image = 'images/photo/' + _articleData.photo + '.jpg';
 		photoImage.image = _articleData.photo;
-
+		
 		var textView = Ti.UI.createView(style.todayPhotoTextView);
+		photoImage.textView = textView;
 		if ( textBottom > 0 ) {
 			textView.bottom = textBottom + 'dp';
 		}
@@ -250,11 +251,18 @@ exports.createWindow = function(_userData){
 		textView.add(photoTextLabel);
 		textView.add(photoTimeLabel);
 
-/*
 		// 写真をクリックした時
 		photoImage.addEventListener('click', function(e) {
 			Ti.API.debug('[event]photoImage.click:');
-			var target = e.source;
+			// テキストの表示
+			var target = e.source.textView;
+			if (target.visible) {
+				target.visible = false;
+			} else {
+				target.visible = true;
+			}
+			
+/*
 			if (target.articleData != null) {
 				var photoWin = Ti.UI.createWindow(style.todayFullPhotoWin);
 				var photoView = Ti.UI.createView(style.todayFullPhotoView);
@@ -280,8 +288,9 @@ exports.createWindow = function(_userData){
 					photoWin.close();				
 				});
 			}
-		});
 */
+		});
+
 		return photoRow;
 	};
 
