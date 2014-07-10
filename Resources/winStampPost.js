@@ -74,6 +74,21 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 		allView.add(allLabel);
 		allView.add(allSwitch);
 
+		// 記録
+		var postRow = Ti.UI.createTableViewRow(style.stampPostTableRow);
+		postRow.objectName = "post";
+		rowList.push(postRow);
+		var postView = Titanium.UI.createView(style.stampPostListView);
+		postView.top = '9dp';
+		postView.backgroundColor = '#e74c3c';
+		postRow.add(postView);
+
+		var postLabel = Ti.UI.createLabel(style.stampPostListItemLabel);
+		postLabel.text = '記録';
+		postLabel.left = null;
+		postLabel.color = 'white';
+		postView.add(postLabel);
+
 		postTableView.setData(rowList);
 
 	};
@@ -349,12 +364,14 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	// フィールドをクリックで入力フィールド・選択ビューを表示
 	postTableView.addEventListener('click', function(e){
 		Ti.API.debug('[event]postTableView.click:');
+		var target = e.source;
+		target.touchEnabled = false;
 
 		if (e.rowData.objectName != null){
 			var targetName = e.rowData.objectName;
 			if (targetName == "stamp"){
 				// マイナスボタンを押すと削除
-				if (e.source.objectName == "minus"){
+				if (target.objectName == "minus"){
 					if (_stampDataList.length == 1) {
 						if (_stampDataList[0].event == null) {
 							postWin.close({animated:true});
@@ -393,6 +410,9 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 				} else {
 					allSwitch.value = true;
 				}
+
+			} else if (targetName == "post"){
+				postButton.fireEvent('click');
 			}
 
 			if (selectedName != targetName){
@@ -405,6 +425,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 			}				
 			selectedName = targetName;
 		}
+		target.touchEnabled = true;
 	});
 
 	// 投稿ボタンをクリック
