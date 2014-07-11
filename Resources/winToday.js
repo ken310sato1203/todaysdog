@@ -118,6 +118,30 @@ exports.createWindow = function(_userData){
 		return targetView;
 	};
 */
+	// dayViewの取得
+	var getDayLabelView = function() {
+		Ti.API.debug('[func]getDayLabelView:');
+		// 日付
+		var dayLabelView = Ti.UI.createView(style.todayDayLabelView);
+
+		// 日時の更新
+		var nowDate = new Date();
+		now = util.getDateElement(nowDate);
+		now.weekday = util.diary.weekday[nowDate.getDay()];
+		now.today = util.getFormattedDate(nowDate);
+
+		var dayLabel = Ti.UI.createLabel(style.todayDayLabel);
+		dayLabelView.add(dayLabel);
+		dayLabel.text = now.month + '/' + now.day;
+//		dayLabel.text = Math.floor(Math.random() * 10);
+		var weekdayLabel = Ti.UI.createLabel(style.todayWeekdayLabel);
+		dayLabelView.add(weekdayLabel);
+		weekdayLabel.text = now.weekday.text;
+		weekdayLabel.color = now.weekday.color;
+
+		return dayLabelView;
+	};
+
 
 	// menuRowの取得
 	var getTodayMenuRow = function(_articleData) {
@@ -130,12 +154,12 @@ exports.createWindow = function(_userData){
 
 		// カメラの表示
 		var cameraView = Ti.UI.createView(style.todayCameraView);
+		todayWin.cameraView = cameraView;
 		menuView.add(cameraView);
 		var cameraImage = Ti.UI.createImageView(style.todayCameraImage);
 		cameraView.add(cameraImage);
 		// 今日の投稿が既にされている場合
 		if (_articleData) {
-			cameraView.articleData = _articleData;
 			cameraView.opacity = 0.3;
 			cameraView.touchEnabled = false;
 		}
@@ -144,58 +168,44 @@ exports.createWindow = function(_userData){
 		cameraView.addEventListener('click',function(e){
 			Ti.API.debug('[event]cameraView.click:');
 			var target = e.source;
-			if (target.articleData == null) {
-				// 多重クリック防止
-				target.touchEnabled = false;
-				target.opacity = 0.5;
-				var dialog = Titanium.UI.createOptionDialog({
-					options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
-					cancel:2
-	//					title:'写真を添付'
-				});
-				dialog.show();
-	
-				dialog.addEventListener('click',function(e) {
-					Ti.API.debug('[event]dialog.click:');
-					cameraView.touchEnabled = true;
-					switch( e.index ) {
-						case 0:
-							var cameraWin = win.createCameraWindow('photo_camera', _userData);
-							cameraWin.prevWin = todayWin;
-							win.openTabWindow(cameraWin, {animated:true});
-							cameraView.opacity = 1.0;
-							break;
-						case 1:
-							var cameraWin = win.createCameraWindow('photo_select', _userData);
-							cameraWin.prevWin = todayWin;
-							win.openTabWindow(cameraWin, {animated:true});
-							cameraView.opacity = 1.0;
-							break;
-						case 2:
-							cameraView.opacity = 1.0;
-							break;
-					}
-				});
-			}
+			// 多重クリック防止
+			target.touchEnabled = false;
+			target.opacity = 0.5;
+			var dialog = Titanium.UI.createOptionDialog({
+				options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
+				cancel:2
+//					title:'写真を添付'
+			});
+			dialog.show();
+
+			dialog.addEventListener('click',function(e) {
+				Ti.API.debug('[event]dialog.click:');
+				cameraView.touchEnabled = true;
+				switch( e.index ) {
+					case 0:
+						var cameraWin = win.createCameraWindow('photo_camera', _userData);
+						cameraWin.prevWin = todayWin;
+						win.openTabWindow(cameraWin, {animated:true});
+						cameraView.opacity = 1.0;
+						break;
+					case 1:
+						var cameraWin = win.createCameraWindow('photo_select', _userData);
+						cameraWin.prevWin = todayWin;
+						win.openTabWindow(cameraWin, {animated:true});
+						cameraView.opacity = 1.0;
+						break;
+					case 2:
+						cameraView.opacity = 1.0;
+						break;
+				}
+			});
 		});		
 
-		// 日時の更新
-		var nowDate = new Date();
-		now = util.getDateElement(nowDate);
-		now.weekday = util.diary.weekday[nowDate.getDay()];
-		now.today = util.getFormattedDate(nowDate);
-
-		// 日付
+		// 日付の表示
 		var dayView = Ti.UI.createView(style.todayDayView);
+		dayView.add(getDayLabelView());
 		menuView.add(dayView);
-
-		var dayLabel = Ti.UI.createLabel(style.todayDayLabel);
-		dayView.add(dayLabel);
-		dayLabel.text = now.month + '/' + now.day;
-		var weekdayLabel = Ti.UI.createLabel(style.todayWeekdayLabel);
-		dayView.add(weekdayLabel);
-		weekdayLabel.text = now.weekday.text;
-		weekdayLabel.color = now.weekday.color;
+		todayWin.dayView = dayView;
 	
 		// スタンプボタンの表示
 		var editView = Ti.UI.createView(style.todayEditView);
@@ -715,8 +725,35 @@ exports.createWindow = function(_userData){
 	todayWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]todayWin.refresh:');
 		// ビューの更新
-		todayTableView.data = [];
-		updateTableView();
+//		todayTableView.data = [];
+//		updateTableView();
+
+		todayWin.dayView.add(getDayLabelView());
+
+		// 日時の更新
+		var nowDate = new Date();
+		now = util.getDateElement(nowDate);
+		now.weekday = util.diary.weekday[nowDate.getDay()];
+		now.today = util.getFormattedDate(nowDate);
+
+		// 今日の記事データ取得
+		var articleList = model.getLocalTodayArticle({
+			userId:_userData.id, 
+			user:_userData.user, 
+			name:_userData.name, 
+			icon:_userData.icon, 
+			year: now.year,
+			month: now.month,
+			day: now.day
+		});
+		if(articleList.length > 0) {
+			todayWin.cameraView.opacity = 0.3;
+			todayWin.cameraView.touchEnabled = false;
+		} else {
+			todayWin.cameraView.opacity = 1.0;
+			todayWin.cameraView.touchEnabled = true;			
+		}
+
 	});
 
 	// 下スクロールで上部ヘッダがすべて表示するまでひっぱったかどうかのフラグ
@@ -771,8 +808,34 @@ exports.createWindow = function(_userData){
 	        setTimeout(function(){
 	        	resetPullHeader(e.source);
 				// ビューの更新
-				todayTableView.data = [];
-				updateTableView();
+//				todayTableView.data = [];
+//				updateTableView();
+				todayWin.dayView.add(getDayLabelView());
+
+				// 日時の更新
+				var nowDate = new Date();
+				now = util.getDateElement(nowDate);
+				now.weekday = util.diary.weekday[nowDate.getDay()];
+				now.today = util.getFormattedDate(nowDate);
+		
+				// 今日の記事データ取得
+				var articleList = model.getLocalTodayArticle({
+					userId:_userData.id, 
+					user:_userData.user, 
+					name:_userData.name, 
+					icon:_userData.icon, 
+					year: now.year,
+					month: now.month,
+					day: now.day
+				});
+				if(articleList.length > 0) {
+					todayWin.cameraView.opacity = 0.3;
+					todayWin.cameraView.touchEnabled = false;
+				} else {
+					todayWin.cameraView.opacity = 1.0;
+					todayWin.cameraView.touchEnabled = true;			
+				}
+
 	        }, 2000);
 	    }
 	});

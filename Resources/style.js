@@ -2641,7 +2641,7 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
-		scrollable: false,
+		scrollable: true,
 		data: [],
 	},
 	todayTableRow:{ 
@@ -2676,6 +2676,10 @@ exports.style = {
 	},
 
 	todayDayView:{
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	todayDayLabelView:{
 		layout: 'absolute',
 		top: '10dp',
 		bottom: '10dp',
