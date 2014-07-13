@@ -28,6 +28,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 
 	var iconView = null;
 	var postImage = null;
+	var saveImage = null;
 	var	textArea = Ti.UI.createTextArea(style.cameraPostTextArea);
 
 	if (_type == 'photo_camera' || _type == 'photo_select') {
@@ -36,6 +37,9 @@ exports.createWindow = function(_type, _userData, _photoImage){
 		postImage.image = _photoImage;
 		postView.add(postImage);
 		postView.add(textArea);
+		// 保存用
+		saveImage = Titanium.UI.createImageView(style.cameraSaveImage);
+		saveImage.image = _photoImage;
 
 	} else if (_type == 'icon_camera') {
 		titleLabel.text = 'プロフィール画像';
@@ -135,7 +139,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 						var nowDate = util.getFormattedDate(now);
 						var nowDateTime = util.getFormattedDateTime(now);
 						var fileName = _userData.id + "_" + nowDate;
-						model.saveLocalImage(postImage.toBlob(), util.local.photoPath, fileName);
+						model.saveLocalImage(saveImage.toBlob(), util.local.photoPath, fileName);
 	
 						var articleData = {
 							id: null, 

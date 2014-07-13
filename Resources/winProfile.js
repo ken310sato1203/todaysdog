@@ -21,8 +21,6 @@ exports.createWindow = function(_userData){
 //		iconView.backgroundImage = _userData.icon;
 		countView.add(iconView);
 
-//		util.errorDialog({message:_userData.icon});
-
 		var iconImage = Ti.UI.createImageView(style.profileIconImage);
 		iconImage.image = _userData.icon;
 		iconView.add(iconImage);

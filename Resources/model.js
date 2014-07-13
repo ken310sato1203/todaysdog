@@ -131,7 +131,7 @@ exports.model = {
 		photoFile.write(_imageBlob);
 	},
 
-	// ローカルに画像が保存されていることをチェック
+	// ローカルの画像を削除
 	deleteLocalImage:function(_dirPath, _fileName){
 		Ti.API.debug('[func]deleteLocalImage:');
 		var photoDir  = Ti.Filesystem.getFile(_dirPath);
@@ -235,9 +235,9 @@ exports.model = {
 					if (e2.success) {
 						// Cloudで付与されたidをセット
 						articleData.id = e2.posts[0].id;
-						// 取得できないので後でセット
+						// Cloudからすぐには取得できないので、あとからwinToday表示の時にセット
 //						articleData.photo = e2.posts[0].photo.urls.original;
-						articleData.photo = "";
+						articleData.photo = '';
 						e2.articleData = articleData;
 					}
 					callback(e2);
@@ -496,11 +496,8 @@ exports.model = {
 	getCloudArticlePost:function(params, callback){
 		Ti.API.debug('[func]getCloudArticlePost:');
 
-		Cloud.Posts.query({
-			event_id: params.postId,
-			order: '-created_at',
-			page : 1,
-			per_page : 1
+		Cloud.Posts.show({
+			post_id: params.postId
 		}, function (e) {
 			if (e.success) {
 				Ti.API.debug('success:');				
@@ -687,13 +684,13 @@ exports.model = {
 	},
 
 	// 記事データの写真URL追加
-	addLocalArticlePhoto:function(params){
-		Ti.API.debug('[func]updateLocalArticleList:');
+	updateLocalArticlePhoto:function(params){
+		Ti.API.debug('[func]updateLocalArticlePhoto:');
 		sqlite.open(function(db){
 			db.update("DogArticleTB").set({
 				photo:params.photo
 			})
-			.where("post","=",params.post)
+			.where("post","=",params.postId)
 			.execute();
 		});
 	},
@@ -842,7 +839,7 @@ exports.model = {
 		var articleList = sqlite.open(function(db){
 			var rows = db.select().from("DogArticleTB")
 				.where("user","=",params.userId)
-				.order_by("created_at asc")
+				.order_by("date desc")
 				.limit(params.limit)
 				.offset(params.offset)
 				.execute().getResult();

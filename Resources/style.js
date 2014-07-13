@@ -1999,15 +1999,18 @@ exports.style = {
 
 	cameraPostImage:{
 		top : '10dp',
-//		top : '0dp',
 		bottom : '5dp',
 		left: '10dp',
 		right: '10dp',
 		width: '264dp',
-//		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		defaultImage: '',
 		backgroundColor: 'black',
+	},
+	cameraSaveImage:{
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+		height: Ti.UI.SIZE,
+		defaultImage: '',
 	},
 	cameraPostTextArea:{
 		top : '0dp',
