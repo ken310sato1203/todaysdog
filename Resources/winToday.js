@@ -37,7 +37,7 @@ exports.createWindow = function(_userData){
 
 
 	// menuRowの取得
-	var getTodayMenuRow = function(_articleData) {
+	var getTodayMenuRow = function() {
 		Ti.API.debug('[func]getTodayMenuRow:');
 		// メニューの表示
 		var menuRow = Titanium.UI.createTableViewRow(style.todayTableRow);
@@ -154,52 +154,53 @@ exports.createWindow = function(_userData){
 	};
 
 	// photoViewの取得
-	var getTodayPhotoView = function() {
+	var getTodayPhotoView = function(_articleData) {
 		Ti.API.debug('[func]getTodayPhotoView:');
-		// 記事の取得
-		var articleList = [];
-		var countLocalArticleList = model.getCountLocalArticleList(_userData.id);
-		if (countLocalArticleList > 0) {
-			// ランダム記事データ取得
-			articleList = model.getLocalRandomArticle({
-				userId: _userData.id, 
-				user: _userData.user, 
-				name: _userData.name, 
-				icon: _userData.icon, 
-				limit: 1,
-				offset: Math.floor(Math.random() * (countLocalArticleList - 1)) + 1
-			});			
-		}
-		var articleData = null;
-		if (articleList.length > 0) {
-			articleData = articleList[0];
-		} else {
-			articleData = {
-				photo: 'images/photo/A0001.jpg',
-				text: '写真がない時に表示',
-				date: '20XX-XX-XX'
-			};
+		if (_articleData == null) {
+			// 記事の取得
+			var articleList = [];
+			var countLocalArticleList = model.getCountLocalArticleList(_userData.id);
+			if (countLocalArticleList > 0) {
+				// ランダム記事データ取得
+				articleList = model.getLocalRandomArticle({
+					userId: _userData.id, 
+					user: _userData.user, 
+					name: _userData.name, 
+					icon: _userData.icon, 
+					limit: 1,
+					offset: Math.floor(Math.random() * (countLocalArticleList - 1)) + 1
+				});			
+			}
+			if (articleList.length > 0) {
+				_articleData = articleList[0];
+			} else {
+				_articleData = {
+					photo: 'images/photo/A0001.jpg',
+					text: '写真がない時に表示',
+					date: '20XX-XX-XX'
+				};
+			}
 		}
 
 		var photoView = Ti.UI.createView(style.todayPhotoView);
 		var photoImage = Ti.UI.createImageView(style.todayPhotoImage);
 		photoView.add(photoImage);
 
-		var fileName = _userData.id + "_" + articleData.date.substring(0,10);
+		var fileName = _userData.id + "_" + _articleData.date.substring(0,10);
 		// ローカルに投稿写真が保存されてる場合
 		if (model.checkLocalImage(util.local.photoPath, fileName)) {
 			photoImage.image = util.local.photoPath + fileName + '.png';
 		} else {
-			if (articleData.photo == '') {
+			if (_articleData.photo == '') {
 				// 記事の取得
 				model.getCloudArticlePost({
-					postId: articleData.id
+					postId: _articleData.id
 				}, function(e) {
 					Ti.API.debug('[func]getCloudArticlePost.callback:');
 					if (e.success) {
 						photoImage.image = e.photo;
 						model.updateLocalArticlePhoto({
-							postId: articleData.id,
+							postId: _articleData.id,
 							photo: e.photo
 						});
 					} else {
@@ -207,7 +208,7 @@ exports.createWindow = function(_userData){
 					}
 				});
 			} else {
-				photoImage.image = articleData.photo;			
+				photoImage.image = _articleData.photo;			
 			}
 		}
 		
@@ -218,9 +219,9 @@ exports.createWindow = function(_userData){
 		}
 		photoView.add(textView);
 		var photoTextLabel = Ti.UI.createLabel(style.todayPhotoTextLabel);
-		photoTextLabel.text = articleData.text;
+		photoTextLabel.text = _articleData.text;
 		var photoTimeLabel = Ti.UI.createLabel(style.todayPhotoTimeLabel);
-		photoTimeLabel.text = articleData.date;
+		photoTimeLabel.text = _articleData.date;
 		textView.add(photoTextLabel);
 		textView.add(photoTimeLabel);
 
@@ -307,28 +308,8 @@ exports.createWindow = function(_userData){
 	var updateTableView = function() {
 		Ti.API.debug('[func]updateTableView:');
 		var rowList = [];
-		// 日時の更新
-		var nowDate = new Date();
-		now = util.getDateElement(nowDate);
-		now.weekday = util.diary.weekday[nowDate.getDay()];
-		now.today = util.getFormattedDate(nowDate);
-
-		// 今日の記事データ取得
-		var articleList = model.getLocalTodayArticle({
-			userId:_userData.id, 
-			user:_userData.user, 
-			name:_userData.name, 
-			icon:_userData.icon, 
-			year: now.year,
-			month: now.month,
-			day: now.day
-		});
-		var articleData = null;
-		if(articleList.length > 0) {
-			articleData = articleList[0];
-		}
 		// メニューの取得
-		rowList.push(getTodayMenuRow(articleData));
+		rowList.push(getTodayMenuRow());
 
 		// 今日のわんこ取得
 		var photoRow = Ti.UI.createTableViewRow(style.todayTableRow);
@@ -341,7 +322,6 @@ exports.createWindow = function(_userData){
 		todayWin.add(getTodayStampRow(stampList));
 
 		todayTableView.setData(rowList);
-
 	};
 
 	// 最上部から下スクロールで最新データを更新する用のヘッダを作成
@@ -412,6 +392,11 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]todayWin.refresh:');
 		// 日付の更新
 		todayWin.dayView.add(getDayLabelView());
+		// 記事の更新
+		if (e.articleData) {
+			// 投稿した写真を表示
+			todayWin.photoRow.add(getTodayPhotoView(e.articleData));			
+		}
 	});
 
 	// 下スクロールで上部ヘッダがすべて表示するまでひっぱったかどうかのフラグ

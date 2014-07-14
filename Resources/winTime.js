@@ -218,6 +218,7 @@ exports.createWindow = function(_userData, _diaryData){
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
 		timeWin.close({animated:true});
+		timeWin.prevWin.nextWin = null;
 	});
 
 	// タイトルの年月をクリックした時
@@ -275,6 +276,7 @@ exports.createWindow = function(_userData, _diaryData){
 		Ti.API.debug('[event]timeWin.swipe:');
 		if (e.direction == 'right') {
 			timeWin.close({animated:true});
+			timeWin.prevWin.nextWin = null;
 		}
 	});
 

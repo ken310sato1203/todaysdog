@@ -166,7 +166,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 									cameraPostWin.prevWin.close();
 								}
 								// todayWinの更新
-								todayWin.fireEvent('refresh');
+								todayWin.fireEvent('refresh', {articleData:articleData});
 								todayWin.addEventListener('refresh', function(){
 									cameraPostWin.close({animated:false});
 							    });

@@ -158,7 +158,6 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 			postWin.prevWin.close({animated:false});
 		}
 
-/*
 		// todayWinの更新
 		var todayWin = win.getTab("todayTab").window;
 		todayWin.fireEvent('refresh');
@@ -167,7 +166,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 				postWin.close({animated:false});
 		    });
 		}
-*/
+
 		// diaryWinの更新
 		var targetTab = win.getTab("diaryTab");
 		var diaryWin = targetTab.window;
@@ -194,7 +193,6 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 			diaryWin.nextWin = timeWin;
 			targetTab.open(timeWin, {animated:false});	
 		}
-		tabGroup.activeTab = targetTab;
 		postWin.close({animated:false});
 	};
 						
