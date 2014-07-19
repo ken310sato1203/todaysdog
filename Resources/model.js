@@ -699,8 +699,8 @@ exports.model = {
 	getAllCloudArticleList:function(params, callback){
 		Ti.API.debug('[func]getAllCloudArticleList:');
 		// 6ヶ月前以降のデータを取得
-		var now = new Date();
-		var startDate = new Date(now.getFullYear(), now.getMonth() + 1 - 6, now.getDate());
+		var now = util.getDateElement(new Date());
+		var startDate = new Date(now.year, now.month - 6, now.day);
 
 		Cloud.Posts.query({
 			where: {
@@ -888,8 +888,8 @@ exports.model = {
 	getAllCloudStampList:function(params, callback){
 		Ti.API.debug('[func]getAllCloudStampList:');
 		// 6ヶ月前以降のデータを取得
-		var now = new Date();		
-		var startDate = new Date(now.getFullYear(), now.getMonth() + 1 - 6, now.getDate());
+		var now = util.getDateElement(new Date());
+		var startDate = new Date(now.year, now.month - 6, now.day);
 
 		Cloud.Events.query({
 			where: {
@@ -1366,8 +1366,8 @@ exports.model = {
 	getAllCloudLikeList:function(params, callback){
 		Ti.API.debug('[func]getAllCloudLikeList:');
 		// 6ヶ月前以降のデータを取得
-		var now = new Date();		
-		var startDate = new Date(now.getFullYear(), now.getMonth() + 1 - 6, now.getDate());
+		var now = util.getDateElement(new Date());
+		var startDate = new Date(now.year, now.month - 6, now.day);
 
 		Cloud.Reviews.query({
 			where: {

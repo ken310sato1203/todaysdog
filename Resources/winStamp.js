@@ -5,23 +5,16 @@ exports.createWindow = function(_type, _userData, _stampData){
 	Ti.API.debug('_type:' + _type);
 
 	var loginUser = model.getLoginUser();
+	var user = loginUser.id;
 
-	var now = null;
-	var user = null;
-	var year = null;
-	var month = null;
-	var day = null;
-	var hour = null;
+	// 今日の日付の取得
+	var now = util.getDateElement(new Date());
+	var year = now.year;
+	var month = now.month;
+	var day = now.day;
+	var hour = now.hour;
 
-	if (_stampData == null) {
-		user = loginUser.id;
-		now = new Date();
-		year = now.getFullYear();
-		month = now.getMonth() + 1;
-		day = now.getDate();
-		hour = now.getHours();
-
-	} else {
+	if (_stampData != null) {
 		user = _stampData.user;
 		year = _stampData.year;
 		month = _stampData.month;

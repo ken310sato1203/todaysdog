@@ -7,6 +7,9 @@ exports.style = {
 		// 計算で遣う数値なので'dp'はつけない
 		screenWidth: Ti.Platform.displayCaps.platformWidth,
 		screenHeight: Ti.Platform.displayCaps.platformHeight,
+		// 写真がすべて表示されない場合高さを削るため、テキストの表示位置をあげる
+		// 写真の高さーステータスバー(20)＋タイトルバー(44)＋カスタムタブ(44)ーメニュー(74)ースタンプ(74)
+		textBottom: (Ti.Platform.displayCaps.platformWidth * 3 / 4) - (Ti.Platform.displayCaps.platformHeight - 20 - 88 - 148),
 	},
 
 	commonActivityIndicator:{
@@ -2192,13 +2195,14 @@ exports.style = {
 		backgroundImage: 'images/icon/titlebar.png',
 		backgroundSelectedImage: 'images/icon/titlebar.png',
 		// カスタムプロパティ
-		listFlag : false,
+		listFlag : true,
 	},
 	timeListImage:{
 		width: '28dp',
 		height: '28dp',
 		defaultImage: '',
-		image: 'images/icon/w_arrow_listup.png',
+//		image: 'images/icon/w_arrow_listup.png',
+		image: 'images/icon/w_arrow_listdown.png',
 	},
 
 	timeTableView:{
@@ -2288,6 +2292,56 @@ exports.style = {
 		height : '28dp',
 		defaultImage: '',
 		image : 'images/icon/diary_plus.png',
+	},
+	timeNoDataView:{
+		top: '0dp',
+		width: '100%',
+		height: '100%',
+		backgroundColor : 'white',
+	},
+	timeNoDataLabel:{
+		top: '0dp',
+		width: '100%',
+		height: '100%',
+		textAlign: 'center',
+		font : {fontSize:12, fontWeight:'bold'},
+		color: '#3a4756',
+		text: 'スタンプを選んでみよう', 
+	},
+	timeStampSelectScrollView:{
+		layout: 'horizontal',
+		// 下のタブで表示されない余白分
+		top: '0dp',
+		contentWidth:'auto',
+		contentHeight:'auto',
+		showVerticalScrollIndicator:true,
+		showHorizontalScrollIndicator:true,
+		backgroundColor: '#eeeeee',
+	},
+	timeStampSelectView:{
+		top: '10dp',
+		bottom: '10dp',
+		left: '20dp',
+		width: '54dp',
+		height: '54dp',
+		borderRadius: '27dp',
+		backgroundColor: 'white',
+		// カスタムプロパティ
+		objectName : 'todayStampView',
+	},
+	timeStampSelectImage:{
+		width : '32dp',
+		height : '32dp',
+		defaultImage: '',
+		image : null,
+		touchEnabled: false,
+		// カスタムプロパティ
+		objectName : 'todayStampImage',
+	},
+	timeSpaceView:{
+		top: '0dp',
+		width: '20dp',
+		height: Ti.UI.SIZE,
 	},
 
 // winFriends -------------------------------------------------------
@@ -2653,6 +2707,17 @@ exports.style = {
 //		backgroundColor: '#eeeeee',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
+	todayMenuScrollView:{
+//		layout: 'horizontal',
+		// 下のタブで表示されない余白分
+		top: '0dp',
+		contentWidth:'auto',
+		contentHeight:'auto',
+		showVerticalScrollIndicator:true,
+		showHorizontalScrollIndicator:true,
+		backgroundColor: '#eeeeee',
+	},
+
 	todayMenuView:{
 		layout: 'horizontal',
 		top: '0dp',
@@ -2709,7 +2774,7 @@ exports.style = {
 		font : {fontSize:14, fontWeight:'bold'},
 //		backgroundColor: 'blue',
 	},
-	todayEditView:{
+	todayCalendarView:{
 		top: '10dp',
 		bottom: '10dp',
 		left: '30dp',
@@ -2718,14 +2783,25 @@ exports.style = {
 		borderRadius: '27dp',
 		backgroundColor: 'white',
 	},
-	todayEditImage:{
-		width: '54dp',
-		height: '54dp',
+	todayCalendarImage:{
+		width : '30dp',
+		height : '30dp',
 		defaultImage: '',
-		image : 'images/icon/b_edit_w.png',
+		image : 'images/icon/b_calendar.png',
 		touchEnabled: false,
 	},
+	todaySpaceView:{
+		top: '0dp',
+		width: '30dp',
+		height: Ti.UI.SIZE,
+	},
 
+	todayArticleView:{
+		layout: 'vertical',
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
 	todayPhotoView:{
 		top: '0dp',
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
@@ -2749,11 +2825,11 @@ exports.style = {
 	},
 	todayPhotoTextView:{
 		layout : 'vertical',
-		bottom: '0dp',
+		top: '0dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
-		opacity: 0.8,
+//		opacity: 0.8,
 	},
 	todayPhotoTextLabel:{
 		top: '5dp',
@@ -2776,7 +2852,7 @@ exports.style = {
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#696969',
 	},
-
+/*
 	todayStampScrollView:{
 		layout: 'horizontal',
 		// 下のタブで表示されない余白分
@@ -2807,11 +2883,7 @@ exports.style = {
 		// カスタムプロパティ
 		objectName : 'todayStampImage',
 	},
-	todaySpaceView:{
-		top: '0dp',
-		width: '20dp',
-		height: Ti.UI.SIZE,
-	},
+*/
 
 /*
 	todayStampTableView:{

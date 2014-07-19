@@ -4,11 +4,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	Ti.API.debug('[func]winFriends.createWindow:');
 	Ti.API.debug('_type:' + _type);
 
-	var year = null;
-	var month = null;
-	var day = null;
-	var hour = null;
-	var weekday = null;
+	// 今日の日時
+	var now = null;
 	// 日付の見出しチェック
 	var checkDate = null;
 
@@ -26,18 +23,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	var updateEnable = true;
 
 // ---------------------------------------------------------------------
-
-	// 日時の更新
-	var updateTime = function() {
-		Ti.API.debug('[func]updateTime:');
-		var now = new Date();
-		year = now.getFullYear();
-		month = now.getMonth() + 1;
-		day = now.getDate();
-//		day = Math.floor(Math.random() * 2) + 1;
-		hour = now.getHours();
-		weekday = util.diary.weekday[now.getDay()];
-	};
 
 	// 日時の更新
 	var getDateView = function(_date) {
@@ -127,7 +112,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	var updateArticle = function() {
 		Ti.API.debug('[func]updateArticle:');
 		// 日時の更新
-		updateTime();
+		now = util.getDateElement(new Date());
 
 		// 友人リストを保管
 		var idList = model.getLocalFriendsList(_userData.id);
@@ -143,9 +128,9 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			// 今日の記事データ取得
 			model.getCloudTodayArticle({
 				idList: idList,
-				year: year,
-				month: month,
-				day: day - articleDay,
+				year: now.year,
+				month: now.month,
+				day: now.day - articleDay,
 				page: articlePage,
 				count: articleCount
 			}, function(e) {

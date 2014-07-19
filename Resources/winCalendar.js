@@ -4,14 +4,9 @@ exports.createWindow = function(_userData){
 	Ti.API.debug('[func]winCalendar.createWindow:');
 
 	// 今日の日付の取得
-	var now = new Date();
-	var nowYear = now.getFullYear();
-	var nowMonth = now.getMonth() + 1;
-	var nowDay = now.getDate();
-	var nowHour = now.getHours();
-
-	var year = nowYear;
-	var month = nowMonth;
+	var now = util.getDateElement(new Date());
+	var year = now.year;
+	var month = now.month;
 	var monthName = util.diary.monthName;
 	var weekday = util.diary.weekday;
 
@@ -51,8 +46,8 @@ exports.createWindow = function(_userData){
 
 		if ( params.currentFlag ) {
 			// 今日の日付表示
-			if ( params.day == nowDay ) {
-				if (params.year == nowYear && params.month == nowMonth) {
+			if ( params.day == now.day ) {
+				if (params.year == now.year && params.month == now.month) {
 //					dayView.backgroundColor = '#87CEFA';
 //					dayView.dayLabel.color = 'white';
 					var todayView = Ti.UI.createView(style.calendarTodayView);
@@ -375,18 +370,14 @@ exports.createWindow = function(_userData){
 	monthTitle.addEventListener('click', function(e) {
 		Ti.API.debug('[event]monthTitle.click:');
 		// 今日の日付の取得
-		now = new Date();
-		nowYear = now.getFullYear();
-		nowMonth = now.getMonth() + 1;
-		nowDay = now.getDate();
-
-		refreshCalView(nowYear, nowMonth, nowDay);
+		now = util.getDateElement(new Date());
+		refreshCalView(now.year, now.month, now.day);
 /*
-		if (year == nowYear && month == nowMonth) {
+		if (year == now.year && month == now.month) {
 			// 今日の日にスクロール
-			thisDiaryView.scrollToIndex(nowDay-3 > 0? nowDay-3 : 0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+			thisDiaryView.scrollToIndex(now.day-3 > 0? now.day-3 : 0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 		} else {
-			refreshCalView(nowYear, nowMonth, nowDay);
+			refreshCalView(now.year, now.month, now.day);
 		}
 */
 	});
@@ -400,11 +391,8 @@ exports.createWindow = function(_userData){
 
 		} else {
 			// 今日の日付の取得
-			now = new Date();
-			nowYear = now.getFullYear();
-			nowMonth = now.getMonth() + 1;
-			nowDay = now.getDate();
-			refreshCalView(nowYear, nowMonth, nowDay);
+			now = util.getDateElement(new Date());
+			refreshCalView(now.year, now.month, now.day);
 		}
 	});
 

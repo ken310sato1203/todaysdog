@@ -163,15 +163,15 @@ exports.win = {
 					e.source.opacity = 1.0;
 		        }, 200);
 
-				if (initDiaryFlag && e.source.tabIndex == 2) {
-					// 初回起動時にdiaryWinの今日の日スクロールが、なぜか25日以降の場合、一番下までスクロールしないので、
-					// タブクリック時にスクロールを実行、またtimeWinをオープン
-					initDiaryFlag = false;
+				if (e.source.tabIndex == 2) {
 					var diaryWin = win.getTab("diaryTab").window;
-					diaryWin.fireEvent('init');
+					if (tabGroup.activeTab.window.objectName != 'diaryWin') {
+						diaryWin.activeTab = tabGroup.tabs[e.source.tabIndex];						
+					}
+					diaryWin.fireEvent('refresh');
+				} else {
+					tabGroup.activeTab = tabGroup.tabs[e.source.tabIndex];					
 				}
-
-				tabGroup.activeTab = tabGroup.tabs[e.source.tabIndex];
 			});
 		}
 

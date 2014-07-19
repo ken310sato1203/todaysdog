@@ -4,16 +4,10 @@ exports.createWindow = function(_userData){
 	Ti.API.debug('[func]winDiary.createWindow:');
 
 	// 今日の日付の取得
-	var now = new Date();
-	var nowYear = now.getFullYear();
-	var nowMonth = now.getMonth() + 1;
-	var nowDay = now.getDate();
-	var nowHour = now.getHours();
-
-	var year = nowYear;
-	var month = nowMonth;
+	var now = util.getDateElement(new Date());
+	var year = now.year;
+	var month = now.month;
 	var monthName = util.diary.monthName;
-	var weekday = util.diary.weekday;
 
 	// 多重クリック防止
 	var slideEnable = true;
@@ -49,16 +43,16 @@ exports.createWindow = function(_userData){
 				year: _year,
 				month: _month,
 				day: i+1,
-				weekday: weekday[dayOfWeek],
+				weekday: util.diary.weekday[dayOfWeek],
 				todayFlag: false,
 				stampList: stampDay[i].data,
 //				articleData: articleList[i],
 				timeIndex: 9,
 			};
 
-			if (_year == nowYear && _month == nowMonth && i+1 == nowDay) {
+			if (_year == now.year && _month == now.month && i+1 == now.day) {
 				diaryData.todayFlag = true;
-				diaryData.timeIndex = nowHour;
+				diaryData.timeIndex = now.hour;
 			} else {
 				if (stampDay[i].data.length > 0) {
 					diaryData.timeIndex = stampDay[i].data[0].hour;
@@ -159,7 +153,7 @@ exports.createWindow = function(_userData){
 					diaryData = e.row.diaryData;
 				} else {
 					// 初回起動時用initイベントで今日の日を指定
-					diaryData = e.source.data[0].rows[nowDay-1].diaryData;
+					diaryData = e.source.data[0].rows[now.day-1].diaryData;
 					animatedFlag = false;
 				}
 				
@@ -215,8 +209,8 @@ exports.createWindow = function(_userData){
 			diaryWin.add(thisDiaryView);
 
 			// 前のポジションに移動
-			var day = Math.round(offset / 45);
-			thisDiaryView.scrollToIndex(day, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
+			var dayPosi = Math.round(offset / 45);
+			thisDiaryView.scrollToIndex(dayPosi, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
 //			thisDiaryView.visible = true;
 		}
 	};
@@ -249,8 +243,8 @@ exports.createWindow = function(_userData){
 			diaryWin.add(thisDiaryView);
 
 			// 前のポジションに移動
-			var day = Math.round(offset / 45);
-			thisDiaryView.scrollToIndex(day, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
+			var dayPosi = Math.round(offset / 45);
+			thisDiaryView.scrollToIndex(dayPosi, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
 //			thisDiaryView.visible = true;
 		}
 	};
@@ -303,7 +297,7 @@ exports.createWindow = function(_userData){
 	var thisDiaryView = null;
 	var offset = null;
 
-	updateCalView(nowYear, nowMonth, nowDay);
+	updateCalView(now.year, now.month, now.day);
 
 /*
 	// 当月のスタンプデータ取得
@@ -319,7 +313,7 @@ exports.createWindow = function(_userData){
 			thisDiaryView = getCalView(e.stampList, year, month);
 			diaryWin.add(thisDiaryView);
 			// 今日の日にスクロール
-			thisDiaryView.scrollToIndex(nowDay-3>0?nowDay-3:0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+			thisDiaryView.scrollToIndex(now.day-3>0?now.day-3:0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 			thisDiaryView.visible = true;
 		} else {
 			util.errorDialog(e);
@@ -368,12 +362,9 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]monthTitle.click:');
 		e.source.opacity = 0.5;
 		// 今日の日付の取得
-		now = new Date();
-		nowYear = now.getFullYear();
-		nowMonth = now.getMonth() + 1;
-		nowDay = now.getDate();
+		now = util.getDateElement(new Date());
 		// カレンダー更新
-		updateCalView(nowYear, nowMonth, nowDay);
+		updateCalView(now.year, now.month, now.day);
 		e.source.opacity = 1.0;
 	});
 
@@ -385,30 +376,45 @@ exports.createWindow = function(_userData){
 	// 更新用イベント
 	diaryWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]diaryWin.refresh:');
-		// ビューの再作成
-		if (e.diaryData) {
-			updateCalView(e.diaryData.year, e.diaryData.month, e.diaryData.day);			
-
-		} else {
-			// 今日の日付の取得
-			now = new Date();
-			nowYear = now.getFullYear();
-			nowMonth = now.getMonth() + 1;
-			nowDay = now.getDate();
-			updateCalView(nowYear, nowMonth, nowDay);
-		}
-	});
-
-	// 初回起動時用イベント
-	diaryWin.addEventListener('init', function(e){
-		Ti.API.debug('[event]diaryWin.init:');
 		// 今日の日付の取得
-		now = new Date();
-		nowDay = now.getDate();
-		// 今日の日にスクロール
-		thisDiaryView.scrollToIndex(nowDay-3 > 0 ? nowDay-3 : 0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-		offset = nowDay-3 > 0 ? (nowDay-3) * 45: 0;
-//		thisDiaryView.visible = true;
+		var diaryData = null;
+		if (e.diaryData) {
+			diaryData = e.diaryData;
+		} else {
+			now = util.getDateElement(new Date());
+			var dayOfWeek = (new Date(now.year, now.month - 1, now.day, 0, 0, 0)).getDay();
+			diaryData = {
+				year: now.year,
+				month: now.month,
+				day: now.day,
+				weekday: util.diary.weekday[dayOfWeek],
+				todayFlag: true,
+				stampList: null,
+				articleData: null,
+				timeIndex: now.hour,
+			};
+			
+		}
+
+		// 既存のtimeWinを後でクローズ
+		var oldWin = diaryWin.nextWin;
+		// timeWinを新規オープン
+		var timeWin = win.createTimeWindow(_userData, diaryData);
+		timeWin.prevWin = diaryWin;
+		diaryWin.nextWin = timeWin;
+		win.getTab("diaryTab").open(timeWin, {animated:false});
+
+		// 今日のtimeWinを表示した後でdiaryWinの更新、既存のtimeWinをクローズ
+		updateCalView(diaryData.year, diaryData.month, diaryData.day);
+		if (oldWin != null) {
+			oldWin.close({animated:false});
+		}
+		// タブクリック時の更新の場合、タブの切り替えを行う
+		if (diaryWin.activeTab != null) {
+			tabGroup.activeTab = diaryWin.activeTab;
+			diaryWin.activeTab = null;
+		}
+
 	});
 
 	return diaryWin;

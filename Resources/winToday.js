@@ -39,11 +39,15 @@ exports.createWindow = function(_userData){
 	// menuRowの取得
 	var getTodayMenuRow = function() {
 		Ti.API.debug('[func]getTodayMenuRow:');
+		// スタンプの表示
+		var menuScrollView = Ti.UI.createScrollView(style.todayMenuScrollView);
+		menuScrollView.top = 74 + (style.commonSize.screenWidth * 3 / 4) - textBottom;
+
 		// メニューの表示
-		var menuRow = Titanium.UI.createTableViewRow(style.todayTableRow);
-		menuRow.backgroundColor = '#eeeeee';
+//		var menuRow = Titanium.UI.createTableViewRow(style.todayTableRow);
+//		menuRow.backgroundColor = '#eeeeee';
 		var menuView = Ti.UI.createView(style.todayMenuView);
-		menuRow.add(menuView);
+		menuScrollView.add(menuView);
 
 		// カメラの表示
 		var cameraView = Ti.UI.createView(style.todayCameraView);
@@ -126,22 +130,32 @@ exports.createWindow = function(_userData){
 		todayWin.dayView = dayView;
 	
 		// スタンプボタンの表示
-		var editView = Ti.UI.createView(style.todayEditView);
-		menuView.add(editView);
-		var editImage = Ti.UI.createImageView(style.todayEditImage);
-		editView.add(editImage);
+		var calendarView = Ti.UI.createView(style.todayCalendarView);
+		menuView.add(calendarView);
+		var calendarImage = Ti.UI.createImageView(style.todayCalendarImage);
+		calendarView.add(calendarImage);
 	
 		// スタンプボタンをクリック
-		editView.addEventListener('click',function(e){
-			Ti.API.debug('[event]editView.click:');
+		calendarView.addEventListener('click',function(e){
+			Ti.API.debug('[event]calendarView.click:');
 			var target = e.source;
 			// 多重クリック防止
 			target.touchEnabled = false;
 			target.opacity = 0.5;
-			var type = "today";
-			var stampWin = win.createStampWindow(type, _userData, null);	
-			stampWin.prevWin = todayWin;
-			win.openTabWindow(stampWin, {animated:true});
+			var type = "search";
+			var calendarWin = win.createCalendarWindow(_userData);
+			calendarWin.prevWin = todayWin;
+	//		win.openTabWindow(calendarWin, {animated:true});
+			// 下から表示させるため、modalでウィンドウを表示。
+			// titleControlが表示されなかったので、NavigationWindowを使用。
+			var navWin = Ti.UI.iOS.createNavigationWindow({
+				modal: true,
+			    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
+			    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_COVER_VERTICAL,
+				window: calendarWin
+			});
+			calendarWin.nav = navWin;
+			navWin.open();
 			target.touchEnabled = true;
 			target.opacity = 1.0;
 		});
@@ -150,7 +164,8 @@ exports.createWindow = function(_userData){
 		var spaceView = Ti.UI.createView(style.todaySpaceView);		
 		menuView.add(spaceView);
 		
-		return menuRow;
+//		return menuRow;
+		return menuScrollView;
 	};
 
 	// photoViewの取得
@@ -182,7 +197,9 @@ exports.createWindow = function(_userData){
 			}
 		}
 
+		var articleView = Ti.UI.createView(style.todayArticleView);
 		var photoView = Ti.UI.createView(style.todayPhotoView);
+		articleView.add(photoView);
 		var photoImage = Ti.UI.createImageView(style.todayPhotoImage);
 		photoView.add(photoImage);
 
@@ -214,10 +231,12 @@ exports.createWindow = function(_userData){
 		
 		var textView = Ti.UI.createView(style.todayPhotoTextView);
 		photoImage.textView = textView;
+/*
 		if ( textBottom > 0 ) {
 			textView.bottom = textBottom + 'dp';
 		}
-		photoView.add(textView);
+*/
+		articleView.add(textView);
 		var photoTextLabel = Ti.UI.createLabel(style.todayPhotoTextLabel);
 		photoTextLabel.text = _articleData.text;
 		var photoTimeLabel = Ti.UI.createLabel(style.todayPhotoTimeLabel);
@@ -237,9 +256,10 @@ exports.createWindow = function(_userData){
 			}
 		});
 
-		return photoView;
+		return articleView;
 	};
 
+/*
 	// StampRowの取得
 	var getTodayStampRow = function(_stampList) {
 		Ti.API.debug('[func]getTodayStampRow:');
@@ -300,26 +320,18 @@ exports.createWindow = function(_userData){
 		var spaceView = Ti.UI.createView(style.todaySpaceView);
 		stampScrollView.add(spaceView);
 
-//		return stampRow;
 		return stampScrollView;
 	};
-
+*/
 	// ビューの更新
 	var updateTableView = function() {
 		Ti.API.debug('[func]updateTableView:');
 		var rowList = [];
-		// メニューの取得
-		rowList.push(getTodayMenuRow());
-
 		// 今日のわんこ取得
 		var photoRow = Ti.UI.createTableViewRow(style.todayTableRow);
 		rowList.push(photoRow);
 		photoRow.add(getTodayPhotoView());
 		todayWin.photoRow = photoRow;
-
-		// スタンプの表示
-		var stampList = model.getStampTodayList();
-		todayWin.add(getTodayStampRow(stampList));
 
 		todayTableView.setData(rowList);
 	};
@@ -356,37 +368,22 @@ exports.createWindow = function(_userData){
 	var todayTitle = Ti.UI.createLabel(style.todayTitleLabel);	
 	todayWin.titleControl = todayTitle;
 
-	// カレンダーボタン
-	var calendarButton = Titanium.UI.createButton(style.todayCalendarButton);
-	todayWin.rightNavButton = calendarButton;
-
 	var todayTableView = Ti.UI.createTableView(style.todayTableView);
 	todayTableView.headerPullView = getTableHeader();
 	todayWin.add(todayTableView);
 
 	// ビューの更新
 	updateTableView();
+/*
+	// スタンプの表示
+	var stampList = model.getStampTodayList();
+	todayWin.add(getTodayStampRow(stampList));
+*/
+
+	// メニューの表示
+	todayWin.add(getTodayMenuRow());
 
 // ---------------------------------------------------------------------
-	// カレンダーボタン
-	calendarButton.addEventListener('click', function(e){
-		Ti.API.debug('[event]calendarButton.click:');
-		var type = "search";
-		var calendarWin = win.createCalendarWindow(_userData);
-		calendarWin.prevWin = todayWin;
-//		win.openTabWindow(calendarWin, {animated:true});
-		// 下から表示させるため、modalでウィンドウを表示。
-		// titleControlが表示されなかったので、NavigationWindowを使用。
-		var navWin = Ti.UI.iOS.createNavigationWindow({
-			modal: true,
-		    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
-		    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_COVER_VERTICAL,
-			window: calendarWin
-		});
-		calendarWin.nav = navWin;
-		navWin.open();
-	});
-
 	// 更新用イベント
 	todayWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]todayWin.refresh:');

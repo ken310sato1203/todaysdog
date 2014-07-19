@@ -144,12 +144,9 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 		};
 
 		// 今日の日付
-		var now = new Date();
-		var year = now.getFullYear();
-		var month = now.getMonth() + 1;
-		var day = now.getDate();
+		var now = util.getDateElement(new Date());
 
-		if (diaryData.year == year && diaryData.month == month && diaryData.day == day) {
+		if (diaryData.year == now.year && diaryData.month == now.month && diaryData.day == now.day) {
 			diaryData.todayFlag = true;
 		}
 
@@ -170,29 +167,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 		// diaryWinの更新
 		var targetTab = win.getTab("diaryTab");
 		var diaryWin = targetTab.window;
-		if (initDiaryFlag) {
-			// 初回起動時にdiaryWinの今日の日スクロールが、なぜか25日以降の場合、一番下までスクロールしないので、
-			// タブクリック時にスクロールを実行、またtimeWinをオープン
-			initDiaryFlag = false;
-			diaryWin.fireEvent('init');
-		}
 		diaryWin.fireEvent('refresh', {diaryData:diaryData});
-		// timeWinの更新
-		var timeWin = diaryWin.nextWin;
-		if (timeWin != null) {
-			timeWin.fireEvent('refresh', {diaryData:diaryData});
-			if (_type == "time") {
-				timeWin.addEventListener('refresh', function(){
-					postWin.close({animated:false});
-			    });
-			}
-		} else {
-			// timeWinを新規オープン
-			var timeWin = win.createTimeWindow(_userData, diaryData);
-			timeWin.prevWin = diaryWin;
-			diaryWin.nextWin = timeWin;
-			targetTab.open(timeWin, {animated:false});	
-		}
 		postWin.close({animated:false});
 	};
 						
