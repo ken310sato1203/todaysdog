@@ -67,7 +67,7 @@ var openMainWindow = function(_userData) {
 	tabGroup.open();
 
 	// カスタムタブを上から表示
-	customTab = win.getCustomTabView();
+	customTab = win.getCustomTabWin();
 	customTab.open();
 
 /*

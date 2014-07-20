@@ -89,6 +89,12 @@ exports.style = {
 	tabHidden:{
 		// カスタムプロパティ
 	},
+	tabWin:{
+		bottom: '0dp',
+		left: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+	},
 	tabGroupView:{
 		layout: 'horizontal',
 		// ステータスバー(20)＋タイトルバー(44)が座標の開始位置なので、その分とタブバーの高さを引く
@@ -96,7 +102,7 @@ exports.style = {
 		bottom: '0dp',
 		left: '0dp',
 		width: '100%',
-		height: '44dp',
+		height: Ti.UI.SIZE,
 //		backgroundColor: '#E87C8C',
 		backgroundColor: '#e74c3c',
 //		backgroundColor: '#d86853',
@@ -2207,8 +2213,8 @@ exports.style = {
 
 	timeTableView:{
 		top: '1dp',
-		// 下のタブで表示されない余白分
-		bottom: '44dp',
+		// 下のタブで表示されない余白分(74+44)
+		bottom: '118dp',
 		left: '0dp',
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
 		backgroundColor: '#dedede',
@@ -2216,6 +2222,7 @@ exports.style = {
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		data: [],
 		visible: false,
+		editable: true,
 	},
 	timeTableRow:{ 
 		width: Ti.UI.SIZE,
@@ -2285,13 +2292,13 @@ exports.style = {
 		color: '#000',
 		touchEnabled: false,
 	},
-	timePlusImage:{
+	timeMinusImage:{
 		top: '8dp',
 		right: '8dp',
 		width : '28dp',
 		height : '28dp',
 		defaultImage: '',
-		image : 'images/icon/diary_plus.png',
+		image : 'images/icon/diary_minus.png',
 	},
 	timeNoDataView:{
 		top: '0dp',
@@ -2312,6 +2319,7 @@ exports.style = {
 		layout: 'horizontal',
 		// 下のタブで表示されない余白分
 		top: '0dp',
+		height: '74dp',
 		contentWidth:'auto',
 		contentHeight:'auto',
 		showVerticalScrollIndicator:true,

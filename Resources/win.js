@@ -125,8 +125,8 @@ exports.win = {
 	getTab:function(_objectName) {
 		Ti.API.debug('[func]getTab:');
 		var targetTab = null;
-		for (var i=0; i<customTab.children.length; i++) {
-			if (customTab.children[i].objectName == _objectName) {
+		for (var i=0; i<customTab.tabData.length; i++) {
+			if (customTab.tabData[i].objectName == _objectName) {
 				targetTab = tabGroup.tabs[i];
 				break;
 			}
@@ -135,16 +135,18 @@ exports.win = {
 	},
 	
 	// カスタムタブを取得
-	getCustomTabView:function() {
-		Ti.API.debug('[func]getCustomTabView:');
-		var tabGroupView = Ti.UI.createWindow(style.tabGroupView);
-
+	getCustomTabWin:function() {
+		Ti.API.debug('[func]getCustomTabWin:');
 		var tabData = [
 			{image:"images/icon/light_chat.png", text:"friends", objectName:"friendsTab"},
 			{image:"images/icon/light_plus.png", text:"today", objectName:"todayTab"},
 			{image:"images/icon/light_diary.png", text:"diary", objectName:"diaryTab"},
 			{image:"images/icon/light_pegman.png", text:"profile", objectName:"profileTab"},
 		];
+		var tabWin = Ti.UI.createWindow(style.tabWin);
+		tabWin.tabData = tabData;
+		var tabGroupView = Ti.UI.createView(style.tabGroupView);
+		tabWin.add(tabGroupView);
 
 		for (var i=0; i<tabData.length; i++) {
 			var tabView = Ti.UI.createView(style.tabView);
@@ -166,16 +168,17 @@ exports.win = {
 				if (e.source.tabIndex == 2) {
 					var diaryWin = win.getTab("diaryTab").window;
 					if (tabGroup.activeTab.window.objectName != 'diaryWin') {
-						diaryWin.activeTab = tabGroup.tabs[e.source.tabIndex];						
+						diaryWin.activeTab = tabGroup.tabs[e.source.tabIndex];
 					}
 					diaryWin.fireEvent('refresh');
+					
 				} else {
 					tabGroup.activeTab = tabGroup.tabs[e.source.tabIndex];					
 				}
 			});
 		}
 
-		return tabGroupView;
+		return tabWin;
 	},
 
 };
