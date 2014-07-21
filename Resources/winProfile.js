@@ -403,13 +403,13 @@ exports.createWindow = function(_userData){
 					Ti.API.debug('[func]removeCloudFriends.callback:');
 					if (e.success) {
 						model.removeLocalFriendsList(loginUser.id, _userData.id);
-						followButton.enabled = true;
 						profileWin.rightNavButton = followButton;
 //						countFollowerLabel.text = _userData.follower;
 					} else {
 						util.errorDialog(e);
 					}
 					actInd.hide();
+					followButton.enabled = true;
 				});		
 		    }
 			unfollowButton.enabled = true;
@@ -434,8 +434,8 @@ exports.createWindow = function(_userData){
 			} else {
 				util.errorDialog(e);
 			}
-			followButton.enabled = true;
 			actInd.hide();
+			followButton.enabled = true;
 		});
 	});
 

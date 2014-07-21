@@ -206,12 +206,11 @@ exports.createWindow = function(_userData){
 			});
 			// カレンダーの表示
 			thisDiaryView = getCalView(stampList, year, month);
-			diaryWin.add(thisDiaryView);
-
 			// 前のポジションに移動
 			var dayPosi = Math.round(offset / 45);
 			thisDiaryView.scrollToIndex(dayPosi, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
 //			thisDiaryView.visible = true;
+			diaryWin.add(thisDiaryView);
 		}
 	};
 
@@ -240,12 +239,11 @@ exports.createWindow = function(_userData){
 			});
 			// カレンダーの表示
 			thisDiaryView = getCalView(stampList, year, month);
-			diaryWin.add(thisDiaryView);
-
 			// 前のポジションに移動
 			var dayPosi = Math.round(offset / 45);
 			thisDiaryView.scrollToIndex(dayPosi, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
 //			thisDiaryView.visible = true;
+			diaryWin.add(thisDiaryView);
 		}
 	};
 

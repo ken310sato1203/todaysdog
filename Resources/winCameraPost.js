@@ -167,6 +167,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 								}
 								// todayWinの更新
 								todayWin.fireEvent('refresh', {articleData:articleData});
+								// 更新後に閉じる
 								todayWin.addEventListener('refresh', function(){
 									cameraPostWin.close({animated:false});
 							    });

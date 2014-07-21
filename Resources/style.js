@@ -2230,7 +2230,7 @@ exports.style = {
 		backgroundColor: '#dedede',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
 		// カスタムプロパティ
-		timeData: null,
+		stampData: null,
 	},
 
 	timeHourView:{
@@ -2271,7 +2271,7 @@ exports.style = {
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		// カスタムプロパティ
-		stampData : null,
+//		stampData : null,
 		objectName : 'timeStampView',
 	},
 	timeStampImage:{
@@ -2299,6 +2299,8 @@ exports.style = {
 		height : '28dp',
 		defaultImage: '',
 		image : 'images/icon/diary_minus.png',
+		// カスタムプロパティ
+		objectName : 'timeMinusImage',
 	},
 	timeNoDataView:{
 		top: '0dp',

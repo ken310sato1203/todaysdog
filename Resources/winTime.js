@@ -22,7 +22,7 @@ exports.createWindow = function(_userData, _diaryData){
 		Ti.API.debug('[func]getStampView:');
 
 		var targetView = Ti.UI.createView(style.timeStampView);
-		targetView.stampData = _rowStamp;
+//		targetView.stampData = _rowStamp;
 
 		var stampLabel = Ti.UI.createLabel(style.timeStampLabel);
 		stampLabel.text = _rowStamp.textList[0];
@@ -45,6 +45,7 @@ exports.createWindow = function(_userData, _diaryData){
 		for (var i=0; i<_diaryData.stampList.length; i++) {
 			var stampHour = _diaryData.stampList[i].hour;
 			var row = Ti.UI.createTableViewRow(style.timeTableRow);		
+			row.stampData = _diaryData.stampList[i];
 			var hourView = Ti.UI.createView(style.timeHourView);
 			row.add(hourView);
 
@@ -68,9 +69,11 @@ exports.createWindow = function(_userData, _diaryData){
 
 			var stampListView = Ti.UI.createView(style.timeStampListView);
 			hourView.add(stampListView);
-	
 			var stampView = getStampView(_diaryData.stampList[i]);
 			stampListView.add(stampView);	
+
+			var minusImage = Ti.UI.createImageView(style.timeMinusImage);
+			hourView.add(minusImage);
 
 			if (_type == "time" || (_type == "list" && _diaryData.stampList.length > 0)) {
 				rowList.push(row);
@@ -80,52 +83,49 @@ exports.createWindow = function(_userData, _diaryData){
 		targetView.addEventListener('click',function(e){
 			Ti.API.debug('[event]targetView.click:');
 			// 多重クリック防止
-			if (clickEnable && e.source.objectName == 'timeStampView') {
-				clickEnable = false;
-				var type = "time";
-				var postWin = win.createStampPostWindow(type, _userData, [e.source.stampData]);
-				postWin.addEventListener('open', function(){
-					// スライド前にopenイベントが発火するので1秒後にセット
-			        setTimeout(function(){
-						clickEnable = true;
-			        }, 1000);
-			    });
+			if (clickEnable) {
+				if (e.source.objectName == 'timeStampView') {
+					clickEnable = false;
+					var type = "time";
+					var postWin = win.createStampPostWindow(type, _userData, [e.row.stampData]);
+					postWin.addEventListener('open', function(){
+						// スライド前にopenイベントが発火するので1秒後にセット
+				        setTimeout(function(){
+							clickEnable = true;
+				        }, 1000);
+				    });	
+					postWin.prevWin = timeWin;
+					win.openTabWindow(postWin, {animated:true});
 
-				postWin.prevWin = timeWin;
-				win.openTabWindow(postWin, {animated:true});
-			}
-		});
-
-
-		targetView.addEventListener('delete',function(e){
-			Ti.API.debug('[event]targetView.delete:');
-			// 多重クリック防止
-			if (clickEnable && e.source.objectName == 'timeStampView') {
-				clickEnable = false;
-				actInd.show();
-				tabGroup.add(actInd);
-				var stampData = e.source.stampData;
-				var deleteIndex = e.index;
-				
-				// 登録データを削除する場合
-				model.removeCloudStampList(stampData, function(e) {
-					Ti.API.debug('[func]removeCloudStampList.callback:');						
-					if (e.success) {
-						Ti.API.debug('Success:');
-						model.removeLocalStampList(stampData);
-						// diaryWinの更新
-						var targetTab = win.getTab("diaryTab");
-						var diaryWin = targetTab.window;
-						_diaryData.stampList.splice(deleteIndex, 1);
-						diaryWin.fireEvent('refresh', {diaryData:_diaryData});
+				} else if (e.source.objectName == 'timeMinusImage') {
+					clickEnable = false;
+					actInd.show();
+					tabGroup.add(actInd);
+					var stampData = e.row.stampData;
+					var deleteIndex = e.index;
+					
+					// 登録データを削除する場合
+					model.removeCloudStampList(stampData, function(e) {
+						Ti.API.debug('[func]removeCloudStampList.callback:');						
+						if (e.success) {
+							Ti.API.debug('Success:');
+							model.removeLocalStampList(stampData);
+							// diaryWinの更新
+							var targetTab = win.getTab("diaryTab");
+							var diaryWin = targetTab.window;
+							_diaryData.stampList.splice(deleteIndex, 1);
+							diaryWin.fireEvent('refresh', {diaryData:_diaryData});
+						} else {
+							util.errorDialog(e);
+						}
 						actInd.hide();
 						clickEnable = true;
-					} else {
-						util.errorDialog(e);
-					}
-				});
+					});					
+				}
 			}
 		});
+
+
 
 /*
 		// 時間別に登録
@@ -451,11 +451,6 @@ exports.createWindow = function(_userData, _diaryData){
 		timeWin.remove(timeTableView);
 		_diaryData = e.diaryData;
 		updateTableView();
-
-		// 初期化後に呼び出し元の画面を閉じる
-		if (e.closeWin) {
-			e.closeWin.close({animated:false});
-		}
 	});
 
 /*
