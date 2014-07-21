@@ -144,9 +144,17 @@ exports.createWindow = function(_userData){
 		// プロフィール情報の表示
 		var profileInfoRow = Titanium.UI.createTableViewRow(style.profileInfoTableRow);
 		rowList.push(profileInfoRow);
+
+		var infoRowView = Ti.UI.createView(style.profileInfoRowView);
+		profileInfoRow.add(infoRowView);
+
+		var photoView = Ti.UI.createView(style.profilePhotoView);
+		infoRowView.add(photoView);
+		var photoImage = Ti.UI.createImageView(style.profilePhotoImage);
+		photoView.add(photoImage);
 	
 		var infoView = Ti.UI.createView(style.profileInfoView);
-		profileInfoRow.add(infoView);
+		infoRowView.add(infoView);
 
 //		var nameView = Ti.UI.createView(style.profileInfoNameView);
 //		infoView.add(nameView);
@@ -182,13 +190,6 @@ exports.createWindow = function(_userData){
 			memoLabel.text = _userData.memo;
 			infoView.add(memoLabel);
 		}
-
-		var profilePhotoRow = Titanium.UI.createTableViewRow(style.profilePhotoTableRow);
-		rowList.push(profilePhotoRow);
-		var photoView = Ti.UI.createView(style.profilePhotoView);
-		profilePhotoRow.add(photoView);				
-		var photoImage = Ti.UI.createImageView(style.profilePhotoImage);
-		photoView.add(photoImage);
 	
 		// フォトコレクションの取得
 		model.getCloudPhotoCollection({

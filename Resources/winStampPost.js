@@ -154,21 +154,13 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 		if (postWin.prevWin.objectName == 'stampWin') {
 			postWin.prevWin.close({animated:false});
 		}
-
-/*
-		// todayWinの更新
-		var todayWin = win.getTab("todayTab").window;
-		todayWin.fireEvent('refresh');
-		if (_type == "today") {
-			todayWin.addEventListener('refresh', function(){
-				postWin.close({animated:false});
-		    });
-		}
-*/
 		// diaryWinの更新
 		var targetTab = win.getTab("diaryTab");
 		var diaryWin = targetTab.window;
 		diaryWin.fireEvent('refresh', {diaryData:diaryData});
+		diaryWin.addEventListener('refresh', function(){
+			postWin.close({animated:true});
+	    });
 	};
 						
 // ---------------------------------------------------------------------

@@ -533,7 +533,8 @@ exports.style = {
 
 // winProfile -------------------------------------------------------
 	profileWin:{
-		backgroundColor: '#dedede',
+//		backgroundColor: '#dedede',
+		backgroundColor: 'white',
 //		barColor: '#e74c3c',
 		barImage: 'images/icon/titlebar.png',
 		tabBarHidden: true,
@@ -631,7 +632,7 @@ exports.style = {
 	profileCountView:{
 		layout: 'horizontal',
 		top: '0dp',
-		bottom: '1dp',
+//		bottom: '1dp',
 		left: '0dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
@@ -662,6 +663,11 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 //		touchEnabled: false,
+	},
+	profileInfoRowView:{
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
 	},
 	profileInfoView:{
 		layout: 'vertical',
@@ -730,9 +736,11 @@ exports.style = {
 		touchEnabled: false,
 	},
 	profilePhotoView:{
+		top: '0dp',
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
 		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
 		backgroundColor: 'white',
+		opacity: 0.3,
 	},
 	profilePhotoImage:{
 		top: '0dp',
@@ -2337,7 +2345,7 @@ exports.style = {
 		borderRadius: '27dp',
 		backgroundColor: 'white',
 		// カスタムプロパティ
-		objectName : 'todayStampView',
+		objectName : 'timeStampSelectView',
 	},
 	timeStampSelectImage:{
 		width : '32dp',
@@ -2346,7 +2354,25 @@ exports.style = {
 		image : null,
 		touchEnabled: false,
 		// カスタムプロパティ
-		objectName : 'todayStampImage',
+		objectName : 'timeStampSelectImage',
+	},
+	timeStampEditView:{
+		top: '10dp',
+		bottom: '10dp',
+		left: '20dp',
+		width: '54dp',
+		height: '54dp',
+		borderRadius: '27dp',
+		backgroundColor: 'white',
+		// カスタムプロパティ
+		objectName : 'timeStampEditView',
+	},
+	timeStampEditImage:{
+		width: '54dp',
+		height: '54dp',
+		defaultImage: '',
+		image : 'images/icon/b_edit_w.png',
+		touchEnabled: false,
 	},
 	timeSpaceView:{
 		top: '0dp',

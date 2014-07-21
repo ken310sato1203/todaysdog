@@ -208,36 +208,6 @@ exports.createWindow = function(_type, _userData, _stampData){
 		stampWin.remove(stampScrollView);
 		stampScrollView = getStampScrollView();
 		stampWin.add(stampScrollView);
-
-		// timeWinから遷移してきた場合
-		if (stampWin.prevWin != null) {
-			// timeWinを更新
-			stampWin.prevWin.fireEvent('refresh', {diaryData:e.diaryData});
-			// 複数の画面を同時にアニメーションさせるとエラーになるのでアニメーションさせない
-			stampWin.close({animated:false});
-
-		} else {
-			util.errorDialog({error: 'winStamp.refreshでエラー'});
-/*
-			var targetTab = win.getTab("diaryTab");
-			// timeWinがオープンしている場合
-			if (targetTab.window.nextWin != null) {
-				// timeWinを更新
-				targetTab.window.nextWin.fireEvent('refresh', {diaryData:diaryData});
-
-			} else {
-				// timeWinを新規オープン
-				var timeWin = win.createTimeWindow(_userData, diaryData);
-				timeWin.prevWin = targetTab.window;
-				targetTab.open(timeWin, {animated:false});
-
-				// diaryWinを更新
-				targetTab.window.fireEvent('refresh', {diaryData:diaryData});
-			}	
-			tabGroup.activeTab = targetTab;
-*/
-		}		
-
 	});
 
 	return stampWin;
