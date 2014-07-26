@@ -19,11 +19,13 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 		var postLabel = Ti.UI.createLabel(style.stampPostTextLabel);
 		postLabel.text = _stampData.textList[0];
 		stampView.add(postLabel);
+
+/*
 		var minusView = Titanium.UI.createView(style.stampPostMinusView);
 		stampView.add(minusView);
 		var minusImage = Titanium.UI.createImageView(style.stampPostMinusImage);
-		minusView.add(minusImage);
-
+		minusView.add(minusImage);			
+*/
 		return stampRow;
 	};
 
@@ -83,16 +85,14 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 		postView.backgroundColor = '#e74c3c';
 		postRow.add(postView);
 
-		var postLabel = Ti.UI.createLabel(style.stampPostListItemLabel);
-		postLabel.text = '記録';
-		postLabel.left = null;
-		postLabel.color = 'white';
+		var postLabel = Ti.UI.createLabel(style.stampPostListPostItemLabel);
 		postView.add(postLabel);
 
 		postTableView.setData(rowList);
 
 	};
 
+/*
 	// 登録済みのスタンプデータを削除する場合
 	var removeStampData = function(_stampData) {
 		Ti.API.debug('[func]removeStampData:');
@@ -117,19 +117,22 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 					if (e.success) {
 						Ti.API.debug('Success:');
 						model.removeLocalStampList(_stampData);
-						closePostWin();
+						refreshDiaryWin();
+						actInd.hide();
+						postWin.close({animated:true});
 					} else {
+						actInd.hide();
 						util.errorDialog(e);
 					}
-					actInd.hide();
 				});
 			}
 		});		
 	};
+*/
 
-	// Windowクローズ時の更新処理
-	var closePostWin = function() {
-		Ti.API.debug('[func]closePostWin:');
+	// diaryWinの更新処理
+	var refreshDiaryWin = function(_stampDataList) {
+		Ti.API.debug('[func]refreshDiaryWin:');
 		
 		var weekday = util.diary.weekday[new Date(_stampDataList[0].year, _stampDataList[0].month, _stampDataList[0].day).getDay()];
 		var diaryData = {
@@ -138,7 +141,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 			day: _stampDataList[0].day,
 			weekday: weekday,
 			todayFlag: false,
-			stampList: null,
+			stampList: _stampDataList,
 			articleData: null,
 			timeIndex: _stampDataList[0].hour,
 		};
@@ -157,10 +160,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 		// diaryWinの更新
 		var targetTab = win.getTab("diaryTab");
 		var diaryWin = targetTab.window;
-		diaryWin.fireEvent('refresh', {diaryData:diaryData});
-		diaryWin.addEventListener('refresh', function(){
-			postWin.close({animated:true});
-	    });
+		diaryWin.fireEvent('refresh', {diaryData:diaryData, timeWinUpdateFlag:true});
 	};
 						
 // ---------------------------------------------------------------------
@@ -335,6 +335,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 		if (e.rowData.objectName != null){
 			var targetName = e.rowData.objectName;
 			if (targetName == "stamp"){
+/*
 				// マイナスボタンを押すと削除
 				if (target.objectName == "minus"){
 					if (_stampDataList.length == 1) {
@@ -344,17 +345,17 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 							// 登録済みのスタンプデータを削除する場合
 							removeStampData(_stampDataList[0]);
 						}
-
 					} else {
 						postTableView.deleteRow(e.index);
 						_stampDataList.splice(e.index, 1);
 					}
 
 				} else {
+*/
 					var textWin = win.createStampTextWindow(_userData, e.rowData.stampData);
 					textWin.prevWin = postWin;
 					win.openTabWindow(textWin, {animated:true});
-				}
+//				}
 					
 			} else if (targetName == "date"){
 				datePicker.value = util.getDate(dateValue.text);
@@ -419,15 +420,20 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 			if (e.success) {
 				Ti.API.debug('Success:');
 				// ローカルに登録
-				model.addLocalStampList(e.stampDataList);
+//				model.addLocalStampList(e.stampDataList);
+				model.addLocalStampList(_stampDataList);
 				model.addLocalStampHistoryList(_stampDataList);
-				closePostWin();
+				refreshDiaryWin(_stampDataList);
+				actInd.hide();
+				actBackView.hide();
+				postButton.enabled = true;
+				postWin.close({animated:true});
 			} else {
+				actInd.hide();
+				actBackView.hide();
+				postButton.enabled = true;
 				util.errorDialog(e);
 			}
-			actInd.hide();
-			actBackView.hide();
-			postButton.enabled = true;
 		});
 	});
 

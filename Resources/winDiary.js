@@ -375,11 +375,12 @@ exports.createWindow = function(_userData){
 	diaryWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]diaryWin.refresh:');
 		// 今日の日付の取得
+		now = util.getDateElement(new Date());
 		var diaryData = null;
+
 		if (e.diaryData) {
 			diaryData = e.diaryData;
 		} else {
-			now = util.getDateElement(new Date());
 			var dayOfWeek = (new Date(now.year, now.month - 1, now.day, 0, 0, 0)).getDay();
 			diaryData = {
 				year: now.year,
@@ -391,22 +392,58 @@ exports.createWindow = function(_userData){
 				articleData: null,
 				timeIndex: now.hour,
 			};
-			
 		}
 
-		// 既存のtimeWinを後でクローズ
-		var oldWin = diaryWin.nextWin;
-		// timeWinを新規オープン
-		var timeWin = win.createTimeWindow(_userData, diaryData);
-		timeWin.prevWin = diaryWin;
-		diaryWin.nextWin = timeWin;
-		win.getTab("diaryTab").open(timeWin, {animated:false});
+		// timeWinの更新
+		if (e.timeWinUpdateFlag == true) {
+			if (diaryWin.nextWin == null) {
+				// timeWinを新規オープン
+				var timeWin = win.createTimeWindow(_userData, diaryData);
+				timeWin.prevWin = diaryWin;
+				diaryWin.nextWin = timeWin;
+				win.getTab("diaryTab").open(timeWin, {animated:false});
+	
+			} else {
+				var currentDate = {
+					year: diaryWin.nextWin.diaryData.year, 
+					month: diaryWin.nextWin.diaryData.month, 
+					day: diaryWin.nextWin.diaryData.day, 
+				};
+				var targetDate = null;
+				if (e.diaryData) {
+					targetDate = {
+						year: e.diaryData.year, 
+						month: e.diaryData.month, 
+						day: e.diaryData.day, 
+					};
+				} else {
+					targetDate = {
+						year: now.year, 
+						month: now.month, 
+						day: now.day, 
+					};
+				}
+								
+				if (currentDate.year != targetDate.year || currentDate.month != targetDate.month || currentDate.day != targetDate.day) {
+					var oldWin = diaryWin.nextWin;
+					// timeWinを新規オープン
+					var timeWin = win.createTimeWindow(_userData, diaryData);
+					timeWin.prevWin = diaryWin;
+					diaryWin.nextWin = timeWin;
+					win.getTab("diaryTab").open(timeWin, {animated:false});
+					oldWin.close({animated:false});
+	
+				} else {
+					if (e.diaryData) {
+						diaryWin.nextWin.fireEvent('refresh', {diaryData:diaryData});
+					}
+				}
+			}
+		}
 
-		// 今日のtimeWinを表示した後でdiaryWinの更新、既存のtimeWinをクローズ
+		// timeWinの更新後に、diaryWinを更新
 		updateCalView(diaryData.year, diaryData.month, diaryData.day);
-		if (oldWin != null) {
-			oldWin.close({animated:false});
-		}
+
 		// タブクリック時の更新の場合、タブの切り替えを行う
 		if (diaryWin.activeTab != null) {
 			tabGroup.activeTab = diaryWin.activeTab;

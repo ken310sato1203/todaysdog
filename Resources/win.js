@@ -18,6 +18,9 @@ var photoWin = require('winPhoto');
 var photoListWin = require('winPhotoList');
 var userListWin = require('winUserList');
 
+// 多重クリック防止
+var clickEnable = true;
+
 // ---------------------------------------------------------------------
 exports.win = {
 
@@ -160,20 +163,26 @@ exports.win = {
 			// tabImageをクリック
 			tabImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]tabImage.click:');
-				e.source.opacity = 0.5;
-				setTimeout(function(){
-					e.source.opacity = 1.0;
-		        }, 200);
-
-				if (e.source.tabIndex == 2) {
-					var diaryWin = win.getTab("diaryTab").window;
-					if (tabGroup.activeTab.window.objectName != 'diaryWin') {
-						diaryWin.activeTab = tabGroup.tabs[e.source.tabIndex];
+				// 多重クリック防止
+				if (clickEnable) {
+					clickEnable = false;
+					e.source.opacity = 0.5;
+					// diaryWinのrefresh後に入れると、diaryWinはクローズされないのでイベントが追加されてしまう。
+					setTimeout(function(){
+						e.source.opacity = 1.0;
+						clickEnable = true;
+			        }, 200);
+	
+					if (e.source.tabIndex == 2) {
+						var diaryWin = win.getTab("diaryTab").window;
+						if (tabGroup.activeTab.window.objectName != 'diaryWin') {
+							diaryWin.activeTab = tabGroup.tabs[e.source.tabIndex];
+						}
+						diaryWin.fireEvent('refresh', {timeWinUpdateFlag:true});
+						
+					} else {
+						tabGroup.activeTab = tabGroup.tabs[e.source.tabIndex];					
 					}
-					diaryWin.fireEvent('refresh');
-					
-				} else {
-					tabGroup.activeTab = tabGroup.tabs[e.source.tabIndex];					
 				}
 			});
 		}

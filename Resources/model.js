@@ -1233,7 +1233,7 @@ exports.model = {
 				for (var i=0; i<_stampDataList.length; i++) {
 					_stampDataList[i].event = e.events[0].id;
 				}
-				e.stampDataList = _stampDataList;
+//				e.stampDataList = _stampDataList;
 				callback(e);
 			});
 		} else {
@@ -1270,9 +1270,9 @@ exports.model = {
 		return photoTodayList;
 	},
 
-	// 今日のスタンプのリストを取得
-	getStampTodayList:function(){
-		Ti.API.debug('[func]getStampTodayList:');
+	// timeWinのスタンプのリストを取得
+	getTimeStampList:function(){
+		Ti.API.debug('[func]getTimeStampList:');
 		return stampHistoryList;
 	},
 

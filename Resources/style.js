@@ -602,7 +602,7 @@ exports.style = {
 		width: '100%',
 		height: Ti.UI.SIZE,
 //		backgroundColor: 'white',
-//		scrollable: false,
+		scrollable: false,
 		separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		data: [],
 	},
@@ -2230,7 +2230,7 @@ exports.style = {
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		data: [],
 		visible: false,
-		editable: true,
+//		editable: true,
 	},
 	timeTableRow:{ 
 		width: Ti.UI.SIZE,
@@ -3195,6 +3195,12 @@ exports.style = {
 		height: '35dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
+	},
+	stampPostListPostItemLabel:{
+		height: '35dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue', fontWeight:'bold'},
+		color: 'white',
+		text: '記録',
 	},
 	stampPostListValueLabel:{
 		right: '15dp',

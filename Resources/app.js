@@ -69,7 +69,10 @@ var openMainWindow = function(_userData) {
 	// カスタムタブを上から表示
 	customTab = win.getCustomTabWin();
 	customTab.open();
-
+	
+	// diaryWinの更新でtimeWinを表示させておく
+	win3.fireEvent('refresh');
+	
 /*
 	// 最新情報を表示
 	tab2.addEventListener('focus', function(e){

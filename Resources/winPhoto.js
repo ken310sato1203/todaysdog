@@ -235,6 +235,7 @@ exports.createWindow = function(_type, _articleData){
 					listSection.insertItemsAt(listSection.items.length - 1, getCommentItem(review));
 					listView.scrollToItem(listView.sections.length - 1, listSection.items.length - 1);
 
+					actInd.hide();
 					commentField.value = '';
 					commentField.blur();
 					if (photoWin.prevWin != null) {
@@ -242,9 +243,9 @@ exports.createWindow = function(_type, _articleData){
 					}
 
 				} else {
+					actInd.hide();
 					util.errorDialog(e);
 				}
-				actInd.hide();
 			});
 
 		} else {

@@ -303,14 +303,16 @@ exports.createWindow = function(_userData){
 				if (profileEditWin.prevWin != null) {
 					profileEditWin.prevWin.fireEvent('refresh');
 				}
+				actInd.hide();
 				// NavigationWindowを使用しているため、navWinを閉じる。
 				profileEditWin.nav.close({animated:true});
+				saveButton.enabled = true;
 
 			} else {
+				actInd.hide();
+				saveButton.enabled = true;
 				util.errorDialog(e);
 			}
-			actInd.hide();
-			saveButton.enabled = true;
 		});
 	});
 

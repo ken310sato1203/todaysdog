@@ -108,7 +108,6 @@ exports.createWindow = function(_type, _userData){
 			success:function(e) {
 				Ti.API.debug('success:');
 				openCameraPostWindow(editImage(e.media));
-				actInd.hide();
 			},
 			cancel: function(e) {
 				Ti.API.debug('cancel:');
@@ -192,8 +191,6 @@ exports.createWindow = function(_type, _userData){
 	var overlayView = Titanium.UI.createView(style.cameraOverlayView);
 	// フレーム
 	var frameView = Titanium.UI.createView(style.cameraFrameView);
-	// 投稿時のロード用画面
-	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
 
 	if (_type == 'photo_camera') {
 		titleLabel.text = '取り込み中';
@@ -201,8 +198,6 @@ exports.createWindow = function(_type, _userData){
 		frameView.width = style.commonSize.screenWidth + 'dp';
 		frameView.height = (style.commonSize.screenWidth * 3 / 4) + 'dp';
 		overlayView.add(frameView);
-		actInd.show();
-		tabGroup.add(actInd);
 
 	} else if (_type == 'icon_camera') {
 		titleLabel.text = '取り込み中';
@@ -210,8 +205,6 @@ exports.createWindow = function(_type, _userData){
 		frameView.width = style.commonSize.screenWidth + 'dp';
 		frameView.height = style.commonSize.screenWidth + 'dp';
 		overlayView.add(frameView);
-		actInd.show();
-		tabGroup.add(actInd);
 
 	} else if (_type == 'photo_select') {
 		titleLabel.text = 'わんこ写真';

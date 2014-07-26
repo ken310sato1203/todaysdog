@@ -374,11 +374,6 @@ exports.createWindow = function(_userData){
 
 	// ビューの更新
 	updateTableView();
-/*
-	// スタンプの表示
-	var stampList = model.getStampTodayList();
-	todayWin.add(getTodayStampRow(stampList));
-*/
 
 	// メニューの表示
 	todayWin.add(getTodayMenuRow());

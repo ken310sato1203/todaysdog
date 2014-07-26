@@ -47,7 +47,7 @@ exports.createWindow = function(_type, _userData, _stampData){
 		stampListView.add(stampView);
 	
 		var stampIndex = 0;
-		var countMax = 7;
+		var countMax = 8;
 		var alertFlag = false;
 		
 		for (var i=0; i<stampSelectList.length; i++) {
@@ -124,7 +124,7 @@ exports.createWindow = function(_type, _userData, _stampData){
 	
 					if (alertFlag) {
 						var alertDialog = Titanium.UI.createAlertDialog({
-							title: '一度に投稿できるスタンプ数は７個です',
+							title: '一度に投稿できるスタンプ数は８個です',
 							buttonNames: ['OK'],
 						});
 						alertDialog.show();

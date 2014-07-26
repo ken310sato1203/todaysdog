@@ -6,10 +6,10 @@ exports.createWindow = function(_userData, _diaryData){
 	// 今日の日付
 	var now = util.getDateElement(new Date());
 
-	var year = _diaryData.year;
-	var month = _diaryData.month;
-	var day = _diaryData.day;
-	var weekday = _diaryData.weekday.text;
+//	var year = _diaryData.year;
+//	var month = _diaryData.month;
+//	var day = _diaryData.day;
+//	var weekday = _diaryData.weekday.text;
 
 	var monthName = util.diary.monthName;
 	var timeRange = util.diary.timeRange;
@@ -36,47 +36,51 @@ exports.createWindow = function(_userData, _diaryData){
 	};
 
 	// Viewの取得
-	var getTimeTableView = function(_type) {
-		Ti.API.debug('[func]getTimeTableView:');
-		var targetView = Ti.UI.createTableView(style.timeTableView);
-		var rowList = [];
+	var getTimeTableRow = function(_stampData) {
+		Ti.API.debug('[func]getTimeTableRow:');
 		var prevHour = null;
-
-		for (var i=0; i<_diaryData.stampList.length; i++) {
-			var stampHour = _diaryData.stampList[i].hour;
-			var row = Ti.UI.createTableViewRow(style.timeTableRow);		
-			row.stampData = _diaryData.stampList[i];
-			var hourView = Ti.UI.createView(style.timeHourView);
-			row.add(hourView);
-
-			var timeLabel = Ti.UI.createLabel(style.timeHourLabel);
-			if (stampHour == -1) {
-				timeLabel.text = '終日';				
-			} else {
-				if (_diaryData.stampList[i].hour != prevHour) {
-					timeLabel.text = _diaryData.stampList[i].hour + ':00';
-					prevHour = _diaryData.stampList[i].hour;
-				}
+		var row = Ti.UI.createTableViewRow(style.timeTableRow);		
+		row.stampData = _stampData;
+		var hourView = Ti.UI.createView(style.timeHourView);
+		row.add(hourView);
+		var timeLabel = Ti.UI.createLabel(style.timeHourLabel);
+		if (_stampData.hour == -1) {
+			timeLabel.text = '終日';				
+		} else {
+			if (_stampData.hour != prevHour) {
+				timeLabel.text = _stampData.hour + ':00';
+				prevHour = _stampData.hour;
 			}
-			hourView.add(timeLabel);
-
+		}
+		hourView.add(timeLabel);
+/*
 			if (_diaryData.todayFlag) {
-				if (stampHour == now.hour) {
+				if (_stampData.hour == now.hour) {
 					var todayView = Ti.UI.createView(style.timeTodayView);
 					hourView.add(todayView);
 				}
 			}
+*/
+		var stampListView = Ti.UI.createView(style.timeStampListView);
+		hourView.add(stampListView);
+		var stampView = getStampView(_stampData);
+		stampListView.add(stampView);	
 
-			var stampListView = Ti.UI.createView(style.timeStampListView);
-			hourView.add(stampListView);
-			var stampView = getStampView(_diaryData.stampList[i]);
-			stampListView.add(stampView);	
+		var minusImage = Ti.UI.createImageView(style.timeMinusImage);
+		hourView.add(minusImage);
+		
+		return row;
+	};
 
-			var minusImage = Ti.UI.createImageView(style.timeMinusImage);
-			hourView.add(minusImage);
+	// Viewの取得
+	var getTimeTableView = function(_type) {
+		Ti.API.debug('[func]getTimeTableView:');
+		var targetView = Ti.UI.createTableView(style.timeTableView);
+		var rowList = [];
 
-			if (_type == "time" || (_type == "list" && _diaryData.stampList.length > 0)) {
-				rowList.push(row);
+		if (_type == "time" || (_type == "list" && _diaryData.stampList.length > 0)) {
+			for (var i=0; i<_diaryData.stampList.length; i++) {
+				rowList.push(getTimeTableRow(_diaryData.stampList[i]));
 			}
 		}
 
@@ -94,33 +98,50 @@ exports.createWindow = function(_userData, _diaryData){
 							clickEnable = true;
 				        }, 1000);
 				    });	
+
 					postWin.prevWin = timeWin;
 					win.openTabWindow(postWin, {animated:true});
 
 				} else if (e.source.objectName == 'timeMinusImage') {
-					clickEnable = false;
-					actInd.show();
-					tabGroup.add(actInd);
-					var stampData = e.row.stampData;
-					var deleteIndex = e.index;
-					
-					// 登録データを削除する場合
-					model.removeCloudStampList(stampData, function(e) {
-						Ti.API.debug('[func]removeCloudStampList.callback:');						
-						if (e.success) {
-							Ti.API.debug('Success:');
-							model.removeLocalStampList(stampData);
-							// diaryWinの更新
-							var targetTab = win.getTab("diaryTab");
-							var diaryWin = targetTab.window;
-							_diaryData.stampList.splice(deleteIndex, 1);
-							diaryWin.fireEvent('refresh', {diaryData:_diaryData});
-						} else {
-							util.errorDialog(e);
+
+					var alertDialog = Titanium.UI.createAlertDialog({
+						title: '削除しますか？',
+						buttonNames: ['キャンセル','OK'],
+						cancel: 1
+					});
+					alertDialog.show();
+			
+					alertDialog.addEventListener('click',function(alert){
+						// OKの場合
+						if(alert.index == 1){
+							clickEnable = false;
+							actInd.show();
+							tabGroup.add(actInd);
+							var stampData = e.row.stampData;
+							var deleteIndex = e.index;
+							
+							// 登録データを削除する場合
+							model.removeCloudStampList(stampData, function(e) {
+								Ti.API.debug('[func]removeCloudStampList.callback:');						
+								if (e.success) {
+									Ti.API.debug('Success:');
+									model.removeLocalStampList(stampData);
+									actInd.hide();
+									clickEnable = true;
+									// diaryWinの更新
+									var targetTab = win.getTab("diaryTab");
+									var diaryWin = targetTab.window;
+									_diaryData.stampList.splice(deleteIndex, 1);
+									timeTableView.deleteRow(deleteIndex, {animated:true});
+									diaryWin.fireEvent('refresh', {diaryData:_diaryData, timeWinUpdateFlag:false});
+								} else {
+									actInd.hide();
+									clickEnable = true;
+									util.errorDialog(e);
+								}
+							});					
 						}
-						actInd.hide();
-						clickEnable = true;
-					});					
+					});
 				}
 			}
 		});
@@ -138,36 +159,55 @@ exports.createWindow = function(_userData, _diaryData){
 	};
 
 	// ビューの更新
-	var updateTableView = function() {
+	var updateTableView = function(updateData) {
 		Ti.API.debug('[func]updateTableView:');
 		var type = "list";
-		// ビューの再作成
-		if(timeTableView) {
-			timeWin.remove(timeTableView);
+
+		// スタンプデータの取得 登録時は追加分も含む
+		var stampList = model.getLocalStampList({
+			userId: _userData.id,
+			year: _diaryData.year,
+			month: _diaryData.month,
+			day: _diaryData.day
+		});
+		_diaryData.stampList = stampList;
+
+		if(timeTableView == null) {
+			timeTableView = getTimeTableView(type);
+			timeTableView.visible = true;			
+			timeWin.add(timeTableView);
 		}
-		if (_diaryData.stampList == null) {
-			// スタンプデータの取得
-			var stampList = model.getLocalStampList({
-				userId: _userData.id,
-				year: year,
-				month: month,
-				day: day
-			});
-			_diaryData.stampList = stampList;
+
+		if (updateData != null) {	
+			var insertIndex = stampList.length - 1;
+			for (var i=0; i<stampList.length; i++) {
+				if (stampList[i].hour > updateData.stampList[0].hour){
+					insertIndex = i-1;
+					break;
+				}
+			}
+			if(timeTableView.data[0].rows.length == 1 && timeTableView.data[0].rows[0].stampData == null) {
+				timeTableView.deleteRow(0, {animated:true});
+				timeTableView.appendRow(getTimeTableRow(updateData.stampList[0]), {animated:true});				
+			} else {
+				timeTableView.insertRowBefore(insertIndex, getTimeTableRow(updateData.stampList[0]), {animated:true});				
+			}
+			
 		}
-		timeTableView = getTimeTableView(type);
-		timeTableView.visible = true;
-		var position = _diaryData.timeIndex-1 > 0 ? _diaryData.timeIndex-1 : 0;
-		timeTableView.scrollToIndex(position, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-		timeWin.add(timeTableView);
+
+//		timeTableView = getTimeTableView(type);
+//		timeTableView.visible = true;
+//		var position = _diaryData.timeIndex-1 > 0 ? _diaryData.timeIndex-1 : 0;
+//		timeTableView.scrollToIndex(position, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+//		timeWin.add(timeTableView);
 		// タイトルの表示
-		dayTitle.text =  month + '月' + day + '日(' + weekday + ')';
+		dayTitle.text =  _diaryData.month + '月' + _diaryData.day + '日(' + _diaryData.weekday.text + ')';
 
 	};
 
 	// StampViewの取得
-	var getTodayStampView = function(_stampList) {
-		Ti.API.debug('[func]getTodayStampView:');
+	var getTimeStampView = function(_stampList) {
+		Ti.API.debug('[func]getTimeStampView:');
 		// スタンプの表示
 		var stampScrollView = Ti.UI.createScrollView(style.timeStampSelectScrollView);
 		stampScrollView.top = 74 + (style.commonSize.screenWidth * 3 / 4) - style.commonSize.textBottom;
@@ -248,6 +288,7 @@ exports.createWindow = function(_userData, _diaryData){
 	
 // ---------------------------------------------------------------------
 	var timeWin = Ti.UI.createWindow(style.timeWin);
+	timeWin.diaryData = _diaryData;
 	// タイトルの表示
 //	var titleView = Ti.UI.createView(style.timeTitleView);	
 	var dayTitle = Ti.UI.createLabel(style.timeTitleLabel);
@@ -269,8 +310,8 @@ exports.createWindow = function(_userData, _diaryData){
 	updateTableView();
 
 	// スタンプの表示
-	var stampList = model.getStampTodayList();
-	timeWin.add(getTodayStampView(stampList));
+	var timeStampList = model.getTimeStampList();
+	timeWin.add(getTimeStampView(timeStampList));
 
 // ---------------------------------------------------------------------
 	// 戻るボタンをクリック
@@ -331,9 +372,10 @@ exports.createWindow = function(_userData, _diaryData){
 		// 今日の日付の取得
 		now = util.getDateElement(new Date());
 		// ビューの再作成
-		timeWin.remove(timeTableView);
-		_diaryData = e.diaryData;
-		updateTableView();
+//		timeWin.remove(timeTableView);
+//		_diaryData = e.diaryData;
+		updateTableView(e.diaryData);
+		
 	});
 
 /*

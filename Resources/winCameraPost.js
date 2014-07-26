@@ -165,12 +165,12 @@ exports.createWindow = function(_type, _userData, _photoImage){
 								if (cameraPostWin.prevWin != null) {
 									cameraPostWin.prevWin.close();
 								}
-								// todayWinの更新
-								todayWin.fireEvent('refresh', {articleData:articleData});
 								// 更新後に閉じる
 								todayWin.addEventListener('refresh', function(){
 									cameraPostWin.close({animated:false});
 							    });
+								// todayWinの更新
+								todayWin.fireEvent('refresh', {articleData:articleData});
 /*							    
 							    var friendsWin = win.getTab("friendsTab").window;
 								friendsWin.fireEvent('insert');
@@ -178,13 +178,16 @@ exports.createWindow = function(_type, _userData, _photoImage){
 */							    
 							    // 通知設定の更新
 								Ti.App.Properties.setString(_userData.id + '_' + 'today', util.getFormattedNowDate());
+								actInd.hide();
+								actBackView.hide();
+								postButton.enabled = true;
 	
 							} else {
+								actInd.hide();
+								actBackView.hide();
+								postButton.enabled = true;
 								util.errorDialog(e);
 							}
-							actInd.hide();
-							actBackView.hide();
-							postButton.enabled = true;
 						});
 						
 					} else if (_type == 'icon_camera') {
@@ -207,17 +210,19 @@ exports.createWindow = function(_type, _userData, _photoImage){
 								todayWin.fireEvent('refresh');
 								todayWin.addEventListener('refresh', function(){
 									cameraPostWin.close({animated:false});
+									actInd.hide();
+									postButton.enabled = true;
 							    });
 	
 							} else {
+								actInd.hide();
+								postButton.enabled = true;
 								util.errorDialog(e);
 							}
-							actInd.hide();
-							postButton.enabled = true;
 						});
 					}
 				}
-			});			
+			});
 		}
 	});
 

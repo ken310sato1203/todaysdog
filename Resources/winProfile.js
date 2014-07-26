@@ -278,7 +278,7 @@ exports.createWindow = function(_userData){
 
 		return rowList;
 	};
-
+/*
 	// 最上部から下スクロールで最新データを更新する用のヘッダを作成
 	var getTableHeader = function() {
 		Ti.API.debug('[func]getTableHeader:');
@@ -304,6 +304,7 @@ exports.createWindow = function(_userData){
 		
 		return tableHeader;
 	};
+*/
 
 // ---------------------------------------------------------------------
 
@@ -346,7 +347,7 @@ exports.createWindow = function(_userData){
 	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
 	
 	var profileTableView = Ti.UI.createTableView(style.profileTableView);
-	profileTableView.headerPullView = getTableHeader();
+//	profileTableView.headerPullView = getTableHeader();
 	profileTableView.setData(getProfileRowList());
 	profileWin.add(profileTableView);
 
@@ -406,11 +407,13 @@ exports.createWindow = function(_userData){
 						model.removeLocalFriendsList(loginUser.id, _userData.id);
 						profileWin.rightNavButton = followButton;
 //						countFollowerLabel.text = _userData.follower;
+						actInd.hide();
+						followButton.enabled = true;
 					} else {
+						actInd.hide();
+						followButton.enabled = true;
 						util.errorDialog(e);
 					}
-					actInd.hide();
-					followButton.enabled = true;
 				});		
 		    }
 			unfollowButton.enabled = true;
@@ -432,11 +435,13 @@ exports.createWindow = function(_userData){
 				unfollowButton.enabled = true;
 				profileWin.rightNavButton = unfollowButton;
 //				countFollowerLabel.text = _userData.follower;
+				actInd.hide();
+				followButton.enabled = true;
 			} else {
+				actInd.hide();
+				followButton.enabled = true;
 				util.errorDialog(e);
 			}
-			actInd.hide();
-			followButton.enabled = true;
 		});
 	});
 
@@ -468,6 +473,7 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]profileWin.open:');
 	});
 
+/*
 	// 下スクロールで上部ヘッダがすべて表示するまでひっぱったかどうかのフラグ
 	var pulling = false;
 	// スクロール終了時に更新をしてよいかどうかのフラグ
@@ -529,6 +535,6 @@ exports.createWindow = function(_userData){
 	        }, 2000);
 	    }
 	});
-
+*/
 	return profileWin;
 };

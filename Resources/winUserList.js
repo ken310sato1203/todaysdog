@@ -102,11 +102,13 @@ exports.createWindow = function(_type, _userData){
 										model.removeLocalFriendsList(loginUser.id, source.id);
 										source.backgroundColor = 'white';
 										source.getChildren()[0].text = 'フォローする';
+										actInd.hide();
+										source.clickFlag = false;
 									} else {
+										actInd.hide();
+										source.clickFlag = false;
 										util.errorDialog(e);
 									}
-									actInd.hide();
-									source.clickFlag = false;
 								});
 							}
 						});
@@ -124,11 +126,13 @@ exports.createWindow = function(_type, _userData){
 								model.addLocalFriendsList(loginUser.id, [source]);
 								source.backgroundColor = '#dedede';
 								source.getChildren()[0].text = 'フォロー中';
+								actInd.hide();
+								source.clickFlag = true;
 							} else {
+								actInd.hide();
+								source.clickFlag = true;
 								util.errorDialog(e);
 							}
-							actInd.hide();
-							source.clickFlag = true;
 						});
 					}
 
