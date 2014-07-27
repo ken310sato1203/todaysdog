@@ -61,7 +61,7 @@ exports.createWindow = function(_userData){
 	profileEditWin.titleControl = titleView;
 
 	// 戻るボタンの表示
-	var backButton = Titanium.UI.createButton(style.profileEditCloseButton);
+	var backButton = Titanium.UI.createButton(style.commonCloseButton);
 	profileEditWin.leftNavButton = backButton;
 
 	// 「保存」自分のプロフィールを編集するボタン

@@ -39,7 +39,7 @@ stampSelectList = [
 	{type:"one", title:"ごはん", stampList:["stamp_restaurant1","stamp_restaurant2","stamp_restaurant3"]},
 	{type:"one", title:"体調", stampList:["stamp_barking1","stamp_barking2","stamp_barking3"]},
 	{type:"all", title:"薬・病院", stampList:["stamp_medicine","stamp_injection","stamp_plus"]},
-	{type:"all", title:"シャンプー\nホテル", stampList:["stamp_wash","stamp_cut","stamp_home"]},
+	{type:"all", title:"シャンプ\nホテル", stampList:["stamp_wash","stamp_cut","stamp_home"]},
 	{type:"all", title:"おでかけ\nイベント", stampList:["stamp_alarm","stamp_trip","stamp_star"]},
 ];
 
@@ -62,7 +62,7 @@ stampHistoryList = [
 	{stamp:"stamp_medicine",textList:["フィラリア","のみだに"]},
 	{stamp:"stamp_injection",textList:["注射"]},
 	{stamp:"stamp_plus",textList:["病院"]},
-	{stamp:"stamp_wash",textList:["シャンプー"]},
+	{stamp:"stamp_wash",textList:["シャンプ"]},
 	{stamp:"stamp_cut",textList:["カット"]},
 	{stamp:"stamp_home",textList:["お泊まり"]},
 	{stamp:"stamp_alarm",textList:["イベント"]},

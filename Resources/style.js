@@ -81,6 +81,11 @@ exports.style = {
 		height: '28dp',
 		backgroundImage:'images/icon/w_plus.png',
 	},
+	commonCloseButton:{
+		width: '28dp',
+		height: '28dp',
+		backgroundImage:'images/icon/w_x.png',
+	},
 	
 // tab -------------------------------------------------------
 	tabGroupHidden:{
@@ -759,11 +764,6 @@ exports.style = {
 		title: 'プロフィール',
 		// カスタムプロパティ
 		objectName : 'profileEditWin',
-	},
-	profileEditCloseButton:{
-		width: '28dp',
-		height: '28dp',
-		backgroundImage:'images/icon/w_x.png',
 	},
 
 	profileEditTitleView:{
@@ -1707,6 +1707,83 @@ exports.style = {
 		color: '#000',
 	},
 
+// winStampList -------------------------------------------------------
+	stampListWin:{
+		backgroundColor : '#dedede',
+//		barColor: '#a9a9a9',
+		barImage: 'images/icon/titlebar.png',
+		tabBarHidden: true,
+		// カスタムプロパティ
+		objectName : 'calendarWin',
+	},
+	stampListTitleView:{
+		width: '180dp',
+		height: Ti.UI.SIZE,
+	},
+	stampListTitleLabel:{
+		width: Ti.UI.SIZE,
+		textAlign: 'center',
+		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+	},
+	stampListTableView:{
+		top: '0dp',
+		// 下のタブで表示されない余白分(74+44)
+//		bottom: '118dp',
+		left: '0dp',
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+		backgroundColor: '#dedede',
+		separatorColor: 'transparent',
+		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
+		data: [],
+		visible: false,
+//		editable: true,
+		scrollable: false,
+	},
+	stampListTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
+		// カスタムプロパティ
+		stampData: null,
+	},
+	stampListStampGroupView:{
+		top: '1dp',
+		bottom: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+		backgroundColor : 'white',
+	},
+	stampListStampGroupLabel:{
+		top: '0dp',
+		left: '14dp',
+		width: '64dp',
+		height: '44dp',
+		textAlign: 'left',
+		font : {fontSize:12, fontWeight:'bold'},
+		color: '#3a4756',
+	},
+	stampListStampListView:{
+		layout: 'horizontal',
+		top: '0dp',
+		bottom: '3dp',
+		left: '77dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	stampListStampView:{
+		top: '3dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		// カスタムプロパティ
+//		stampData : null,
+		objectName : 'stampListStampView',
+	},
+
 
 // winCalendar -------------------------------------------------------
 	calendarWin:{
@@ -1716,11 +1793,6 @@ exports.style = {
 		tabBarHidden: true,
 		// カスタムプロパティ
 		objectName : 'calendarWin',
-	},
-	calendarCloseButton:{
-		width: '28dp',
-		height: '28dp',
-		backgroundImage:'images/icon/w_x.png',
 	},
 	calendarTitleView:{
 		width: '180dp',
@@ -1764,6 +1836,7 @@ exports.style = {
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		data: [],
 //		visible: false,
+		scrollable: false,
 	},
 	calendarTableRow:{ 
 		width: Ti.UI.SIZE,
@@ -2206,21 +2279,11 @@ exports.style = {
 	timeListButton:{
 		width: '28dp',
 		height: '28dp',
-		backgroundImage: 'images/icon/titlebar.png',
-		backgroundSelectedImage: 'images/icon/titlebar.png',
-		// カスタムプロパティ
-		listFlag : true,
-	},
-	timeListImage:{
-		width: '28dp',
-		height: '28dp',
-		defaultImage: '',
-//		image: 'images/icon/w_arrow_listup.png',
-		image: 'images/icon/w_arrow_listdown.png',
+		backgroundImage: 'images/icon/w_stamp_check.png',
 	},
 
 	timeTableView:{
-		top: '1dp',
+		top: '0dp',
 		// 下のタブで表示されない余白分(74+44)
 		bottom: '118dp',
 		left: '0dp',
@@ -2242,8 +2305,8 @@ exports.style = {
 	},
 
 	timeHourView:{
-		top: '0dp',
-		bottom: '1dp',
+		top: '1dp',
+		bottom: '0dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
 		backgroundColor : 'white',
@@ -2257,7 +2320,7 @@ exports.style = {
 		font : {fontSize:12, fontWeight:'bold'},
 		color: '#3a4756',
 	},
-	timeTodayView:{
+	timeInsertView:{
 		top: '0dp',
 		left: '0dp',
 		width: '7dp',
@@ -2265,6 +2328,14 @@ exports.style = {
 		height: '44dp',
 		backgroundColor : '#87CEFA',
 	},
+	timeOverLineView:{
+		top: '0dp',
+		left: '0dp',
+		width: '47dp',
+		height: '1dp',
+		backgroundColor : 'white',
+	},
+
 	timeStampListView:{
 		layout: 'vertical',
 		top: '0dp',
@@ -2325,6 +2396,49 @@ exports.style = {
 		color: '#3a4756',
 		text: 'スタンプを選んでみよう', 
 	},
+
+	timeStampGroupTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
+		// カスタムプロパティ
+		stampData: null,
+	},
+	timeStampGroupView:{
+		top: '1dp',
+		bottom: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+		backgroundColor : 'white',
+	},
+	timeStampGroupLabel:{
+		top: '0dp',
+		left: '14dp',
+		width: '64dp',
+		height: '44dp',
+		textAlign: 'left',
+		font : {fontSize:12, fontWeight:'bold'},
+		color: '#3a4756',
+	},
+	timeStampGroupListView:{
+		layout: 'horizontal',
+		top: '0dp',
+		bottom: '3dp',
+		left: '77dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	timeGroupView:{
+		top: '3dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		// カスタムプロパティ
+//		stampData : null,
+		objectName : 'timeGroupView',
+	},
+
 	timeStampSelectScrollView:{
 		layout: 'horizontal',
 		// 下のタブで表示されない余白分

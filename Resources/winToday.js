@@ -129,23 +129,21 @@ exports.createWindow = function(_userData){
 		menuView.add(dayView);
 		todayWin.dayView = dayView;
 	
-		// スタンプボタンの表示
+		// カレンダーボタンの表示
 		var calendarView = Ti.UI.createView(style.todayCalendarView);
 		menuView.add(calendarView);
 		var calendarImage = Ti.UI.createImageView(style.todayCalendarImage);
 		calendarView.add(calendarImage);
 	
-		// スタンプボタンをクリック
+		// カレンダーボタンをクリック
 		calendarView.addEventListener('click',function(e){
 			Ti.API.debug('[event]calendarView.click:');
 			var target = e.source;
 			// 多重クリック防止
 			target.touchEnabled = false;
 			target.opacity = 0.5;
-			var type = "search";
 			var calendarWin = win.createCalendarWindow(_userData);
 			calendarWin.prevWin = todayWin;
-	//		win.openTabWindow(calendarWin, {animated:true});
 			// 下から表示させるため、modalでウィンドウを表示。
 			// titleControlが表示されなかったので、NavigationWindowを使用。
 			var navWin = Ti.UI.iOS.createNavigationWindow({
@@ -259,70 +257,6 @@ exports.createWindow = function(_userData){
 		return articleView;
 	};
 
-/*
-	// StampRowの取得
-	var getTodayStampRow = function(_stampList) {
-		Ti.API.debug('[func]getTodayStampRow:');
-		// スタンプの表示
-		var stampScrollView = Ti.UI.createScrollView(style.todayStampScrollView);
-		stampScrollView.top = 74 + (style.commonSize.screenWidth * 3 / 4) - textBottom;
-
-		for (var i=0; i<_stampList.length; i++) {
-			var stampView = Ti.UI.createView(style.todayStampView);
-			stampView.backgroundColor = '#eeeeee';
-			stampScrollView.add(stampView);
-			var stampImage = Ti.UI.createImageView(style.todayStampImage);
-			stampView.add(stampImage);
-			stampImage.image = 'images/icon/' + _stampList[i].stamp + '.png';
-			stampView.stamp = _stampList[i].stamp;
-
-			// スタンプボタンをクリック
-			stampView.addEventListener('click',function(e){
-				Ti.API.debug('[event]stampView.click:');
-				var target = e.source;
-				if (target.objectName == 'todayStampView') {					
-					// 多重クリック防止
-					target.touchEnabled = false;
-					target.opacity = 0.5;
-					// 日時の更新
-					var nowDate = new Date();
-					now = util.getDateElement(nowDate);
-					now.weekday = util.diary.weekday[nowDate.getDay()];
-					now.today = util.getFormattedDate(nowDate);					
-
-					var stampData = {
-						no: null,
-						event: null,
-						user: _userData.id,
-						stamp: target.stamp,
-						textList: [''],
-						year: now.year,
-						month: now.month,
-						day: now.day,
-						hour: now.hour,
-						all: null,
-						report: null,
-						date: null,
-					};
-
-					var type = "today";
-					var postWin = win.createStampPostWindow(type, _userData, [stampData]);
-					postWin.prevWin = todayWin;
-					win.openTabWindow(postWin, {animated:true});
-					target.touchEnabled = true;
-					target.opacity = 1.0;
-				}
-			});
-
-		}
-
-		// 余白分
-		var spaceView = Ti.UI.createView(style.todaySpaceView);
-		stampScrollView.add(spaceView);
-
-		return stampScrollView;
-	};
-*/
 	// ビューの更新
 	var updateTableView = function() {
 		Ti.API.debug('[func]updateTableView:');

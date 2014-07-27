@@ -413,6 +413,8 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 			} else {
 				_stampDataList[i].hour = util.getHour(hourValue.text);
 			}
+			// 追加マーク
+			_stampDataList[i].insertFlag = true;
 		}
 
 		model.addCloudStampList(_stampDataList, function(e) {

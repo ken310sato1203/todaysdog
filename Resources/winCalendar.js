@@ -300,7 +300,7 @@ exports.createWindow = function(_userData){
 	titleView.add(nextImage);
 
 	// 戻るボタンの表示
-	var backButton = Titanium.UI.createButton(style.calendarCloseButton);
+	var backButton = Titanium.UI.createButton(style.commonCloseButton);
 	calendarWin.leftNavButton = backButton;
 
 	var thisDiaryView = null;

@@ -6,6 +6,7 @@ var cameraWin = require('winCamera');
 var cameraPostWin = require('winCameraPost');
 var diaryWin = require('winDiary');
 var timeWin = require('winTime');
+var stampListWin = require('winStampList');
 var friendsWin = require('winFriends');
 var todayWin = require('winToday');
 var stampWin = require('winStamp');
@@ -64,6 +65,11 @@ exports.win = {
 	createTimeWindow:function(_userData, _diaryData){
 		Ti.API.debug('[func]createTimeWindow:');
 		var win = timeWin.createWindow(_userData, _diaryData);
+		return win;
+	},
+	createStampListWindow:function(_userData, _diaryData){
+		Ti.API.debug('[func]createStampListWindow:');
+		var win = stampListWin.createWindow(_userData, _diaryData);
 		return win;
 	},
 	createTodayWindow:function(_userData, _stampData){
