@@ -27,12 +27,14 @@ exports.createWindow = function(_type, _userData){
 			var resizedImage = _image.imageAsResized(_image.width, _image.height);
 			croppedImage = resizedImage.imageAsCropped({
 				width: resizedImage.width, 
-				height: resizedImage.width * 3 / 4,
+//				height: resizedImage.width * 3 / 4,
+				height: resizedImage.width,
 				x: 0, 
 				y: 100 * ( _image.width / style.commonSize.screenWidth )
 			});
 			if (_image.width > 640) {
-				return croppedImage.imageAsResized(640, 480);
+//				return croppedImage.imageAsResized(640, 480);
+				return croppedImage.imageAsResized(640, 640);
 			} else {
 				return croppedImage;
 			}
@@ -64,18 +66,27 @@ exports.createWindow = function(_type, _userData){
 		} else if (_type == 'photo_select') {
 			// 先にリサイズすると、切り取る座標が変わってしまい、
 			// 切取りを先にするとバグで反転してしまう、リサイズすると反転しないので、同じサイズでリサイズ
-			var resizedImage = _image.imageAsResized(_image.width, _image.height);
-			croppedImage = resizedImage.imageAsCropped({
-				width: resizedImage.width * currentScale, 
-				height: resizedImage.width * 3 / 4 * currentScale,
-				x: offsetX,
-				y: offsetY * ( _image.width / style.commonSize.screenWidth )
-			});
-			if (_image.width > 640) {
-				return croppedImage.imageAsResized(640, 480);
+			var resizedImage = null;
+			var cropSize = null;
+			if (_image.height > _image.width) {
+				resizedImage = _image.imageAsResized(style.commonSize.screenWidth, _image.height * (style.commonSize.screenWidth / _image.width));
+				cropSize = resizedImage.width;
 			} else {
-				return croppedImage;
+				resizedImage = _image.imageAsResized(_image.width * (style.commonSize.screenWidth / _image.height), style.commonSize.screenWidth);
+				cropSize = resizedImage.height;
 			}
+			croppedImage = resizedImage.imageAsCropped({
+				width: cropSize, 
+				height: cropSize,
+				x: offsetX,
+				y: offsetY
+			});
+//			if (_image.width > 640) {
+//				return croppedImage.imageAsResized(640, 480);
+//				return croppedImage.imageAsResized(640, 640);
+//			} else {
+				return croppedImage;
+//			}
 
 /*
 			// imageAsCroppedすると反転するバグがあり、同じサイズでimageAsResizedをしておく反転しない
@@ -134,11 +145,21 @@ exports.createWindow = function(_type, _userData){
 			success: function(e) {
 				Ti.API.debug('success:');
 				// 写真の真ん中に合わせる
-				var scale = style.commonSize.screenWidth / e.media.width;
-				if (_type == 'photo_select') {
-					offsetY = ( e.media.height * scale - style.commonSize.screenWidth * 3 / 4 ) / 2;
+				var scale = 1.0;
+				if (e.media.height > e.media.width) {
+					articleImage.width = style.commonSize.screenWidth + 'dp';
+					articleImage.height = Ti.UI.SIZE;
+					scale = style.commonSize.screenWidth / e.media.width;
+					offsetX = 0;
+					offsetY = ( e.media.height * scale - style.commonSize.screenWidth) / 2;
+				} else {
+					articleImage.width = Ti.UI.SIZE;
+					articleImage.height = style.commonSize.screenWidth + 'dp';
+					scale = style.commonSize.screenWidth / e.media.height;
+					offsetX = ( e.media.width * scale - style.commonSize.screenWidth) / 2;
+					offsetY = 0;
 				}
-				articleScrollView.setContentOffset({x:0, y:offsetY}, {animated:false});
+				articleScrollView.setContentOffset({x:offsetX, y:offsetY}, {animated:false});
 				articleImage.image = e.media;
 				cameraWin.backgroundColor = 'white';
 			},
@@ -171,11 +192,12 @@ exports.createWindow = function(_type, _userData){
 	var selectButton = Titanium.UI.createButton(style.cameraSelectButton);
 
 	var articleScrollView = Titanium.UI.createScrollView(style.cameraArticleScrollView);
-	articleScrollView.width = style.commonSize.screenWidth + 'dp';
 
+	// フレーム余白 ＝ ( 全体の高さーフレームの高さー（ステータスバー(20)＋タイトルバー(44)＋下のタブ(44)) ) / 2
+	var frameSpace = ( style.commonSize.screenHeight - style.commonSize.screenWidth - 108 ) / 2;
 	// フレームの上部余白部分
 	var frameHeadView = Titanium.UI.createView(style.cameraFrameSpaceView);
-	frameHeadView.height = '50dp';
+	frameHeadView.height = frameSpace + 'dp';
 	articleScrollView.add(frameHeadView);
 
 	// 写真の表示
@@ -185,35 +207,29 @@ exports.createWindow = function(_type, _userData){
 
 	// フレームの下部余白部分
 	var frameFooterView = Titanium.UI.createView(style.cameraFrameSpaceView);
+	// 下のタブ(44) + 上部余白
+	frameFooterView.height = (44 + frameSpace) + 'dp';
 	articleScrollView.add(frameFooterView);
 
 	// 撮影時のオーバーレイ
 	var overlayView = Titanium.UI.createView(style.cameraOverlayView);
 	// フレーム
 	var frameView = Titanium.UI.createView(style.cameraFrameView);
+	frameView.top = frameSpace + 'dp';
+	frameView.width = style.commonSize.screenWidth + 'dp';
+	frameView.height = style.commonSize.screenWidth + 'dp';
 
 	if (_type == 'photo_camera') {
 		titleLabel.text = '取り込み中';
-		frameView.top = '100dp';
-		frameView.width = style.commonSize.screenWidth + 'dp';
-		frameView.height = (style.commonSize.screenWidth * 3 / 4) + 'dp';
 		overlayView.add(frameView);
 
 	} else if (_type == 'icon_camera') {
 		titleLabel.text = '取り込み中';
-		frameView.top = '50dp';
-		frameView.width = style.commonSize.screenWidth + 'dp';
-		frameView.height = style.commonSize.screenWidth + 'dp';
 		overlayView.add(frameView);
 
 	} else if (_type == 'photo_select') {
 		titleLabel.text = 'わんこ写真';
 		cameraWin.rightNavButton = selectButton;
-		frameView.top = '50dp';
-		frameView.width = style.commonSize.screenWidth + 'dp';
-		frameView.height = (style.commonSize.screenWidth * 3 / 4) + 'dp';		
-		// 全体の高さーフレームの高さー（ステータスバー(20)＋タイトルバー(44)＋上部余白(50)）
-		frameFooterView.height = (style.commonSize.screenHeight - (style.commonSize.screenWidth * 3 / 4) - 114) + 'dp';
 		cameraWin.add(frameView);
 	}
 
@@ -246,8 +262,6 @@ exports.createWindow = function(_type, _userData){
 	// スクロールイベント
 	articleScrollView.addEventListener('scroll', function(e){
 		Ti.API.debug('[event]articleScrollView.scroll:');
-//		Ti.API.info('x=' + e.x + ' y=' + e.y);
-		Ti.API.info('top=' + articleScrollView.contentOffset.y);
 		offsetX = e.x;
 		offsetY = e.y;		
 	});

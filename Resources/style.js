@@ -1998,15 +1998,13 @@ exports.style = {
 	},
 	cameraFrameSpaceView:{
 		top: '0dp',
-//		backgroundColor: 'white',
 	},
 	cameraArticleScrollView:{
 		layout : 'vertical',
 		top: '0dp',
-//		width: Ti.Platform.displayCaps.platformWidth,
-//		height: Ti.Platform.displayCaps.platformWidth * 3 / 4,
-//		contentWidth:'auto',
-		contentWidth:Ti.Platform.displayCaps.platformWidth,
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		contentWidth:'auto',
 		contentHeight:'auto',
 		showVerticalScrollIndicator:true,
 		showHorizontalScrollIndicator:true,
@@ -2835,17 +2833,11 @@ exports.style = {
 		shadowColor: '#696969', 
 		text: '今日のわんこ', 
 	},
-	todayCalendarButton:{
-		width: '28dp',
-		height: '28dp',
-		backgroundImage:'images/icon/w_today_calendar.png',
-	},
-
 	todayTableView:{
 		top: '0dp',
 		// 下のタブで表示されない余白分
-//		bottom: '44dp',
-		height: Ti.UI.SIZE,
+		bottom: '44dp',
+		height: '100%',
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		scrollable: true,
@@ -3002,121 +2994,7 @@ exports.style = {
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#696969',
 	},
-/*
-	todayStampScrollView:{
-		layout: 'horizontal',
-		// 下のタブで表示されない余白分
-		top: '0dp',
-		contentWidth:'auto',
-		contentHeight:'auto',
-		showVerticalScrollIndicator:true,
-		showHorizontalScrollIndicator:true,
-		backgroundColor: 'white',
-	},
-	todayStampView:{
-		top: '10dp',
-		bottom: '10dp',
-		left: '20dp',
-		width: '54dp',
-		height: '54dp',
-		borderRadius: '27dp',
-		backgroundColor: 'white',
-		// カスタムプロパティ
-		objectName : 'todayStampView',
-	},
-	todayStampImage:{
-		width : '32dp',
-		height : '32dp',
-		defaultImage: '',
-		image : null,
-		touchEnabled: false,
-		// カスタムプロパティ
-		objectName : 'todayStampImage',
-	},
-*/
 
-/*
-	todayStampTableView:{
-		top: '10dp',
-		left: '10dp',
-		height: Ti.UI.SIZE,
-		backgroundColor: 'white',
-		separatorColor: 'transparent',
-		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
-		scrollable: false,
-		data: [],
-	},
-	todayStampTableRow:{ 
-		layout: 'horizontal',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		backgroundColor: 'white',
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		// カスタムプロパティ
-		timeData: null,
-	},
-
-	todayStampTextLabel:{
-		font: {fontSize:10, fontFamily:'Helvetica Neue'},
-		color: 'white',
-	},
-	todayStampView:{
-		top: '0dp',
-		bottom: '5dp',
-		left: '0dp',
-		right: '5dp',
-		width: '44dp',
-		height: '44dp',
-		borderRadius: '22dp',
-		backgroundColor: '#eeeeee',
-	},
-*/
-
-/*
-	todayTimeStampView:{
-		top: '0dp',
-		left: '0dp',
-		width: '100%',
-		height: Ti.UI.SIZE,
-		backgroundColor: 'white',
-		// カスタムプロパティ
-		stampData : null,
-		objectName : 'todayTimeStampView',
-	},
-	todayTimeHourLabel:{
-		top: '0dp',
-		left: '0dp',
-		width: '34dp',
-		height: '44dp',
-		textAlign: 'right',
-		font : {fontSize:12, fontWeight:'bold'},
-		color: '#3a4756',
-	},
-	todayTimeStampImage:{
-		top: '0dp',
-//		left: '36dp',
-		left: '0dp',
-		width : '32dp',
-		height : '32dp',
-		defaultImage: '',
-		image : null,
-		// カスタムプロパティ
-		objectName : 'todayTimeStampImage',
-	},
-	todayTimeStampLabel:{
-		top: '0dp',
-//		left: '47dp',
-		left: '36dp',
-		right: '10dp',
-//		width: '190dp',
-		width: Ti.UI.SIZE,
-		height: '40dp',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-		// カスタムプロパティ
-		objectName : 'todayTimeStampLabel',
-	},
-*/
 	
 // winStamp -------------------------------------------------------
 	stampWin:{
