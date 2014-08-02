@@ -14,14 +14,14 @@
         <target device="android">false</target>
         <target device="blackberry">false</target>
     </deployment-targets>
-    <sdk-version>3.2.0.GA</sdk-version>
+    <sdk-version>3.3.0.GA</sdk-version>
     <id>com.sakura.todaysdog</id>
     <name>todaysdog</name>
     <version>1.0</version>
     <publisher>ken</publisher>
     <url>http://com.sakura.todaysdog</url>
     <description>not specified</description>
-    <copyright>2012 by ken</copyright>
+    <copyright>2014 by ken</copyright>
     <icon>appicon.png</icon>
     <persistent-wifi>false</persistent-wifi>
     <prerendered-icon>false</prerendered-icon>
