@@ -39,7 +39,7 @@ exports.createWindow = function(_userData){
 	// menuRowの取得
 	var getTodayMenuRow = function() {
 		Ti.API.debug('[func]getTodayMenuRow:');
-		// スタンプの表示
+
 		var menuScrollView = Ti.UI.createScrollView(style.todayMenuScrollView);
 		menuScrollView.top = 74 + (style.commonSize.screenWidth * 3 / 4) - textBottom;
 
@@ -254,6 +254,10 @@ exports.createWindow = function(_userData){
 			}
 		});
 
+		// メニューの下部余白部分
+		var spaceView = Titanium.UI.createView(style.todayArticleSpaceView);
+		articleView.add(spaceView);
+
 		return articleView;
 	};
 
@@ -317,11 +321,18 @@ exports.createWindow = function(_userData){
 	todayWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]todayWin.refresh:');
 		// 日付の更新
+		// 子要素を先に削除すると、非同期のためか追加ができないので、非表示にして後で削除
+		todayWin.dayView.children[0].hide();
 		todayWin.dayView.add(getDayLabelView());
+		todayWin.dayView.remove(todayWin.dayView.children[0]);
+
 		// 記事の更新
 		if (e.articleData) {
 			// 投稿した写真を表示
+			// 子要素を先に削除すると、非同期のためか追加ができないので、非表示にして後で削除
+			todayWin.photoRow.children[0].hide();
 			todayWin.photoRow.add(getTodayPhotoView(e.articleData));			
+			todayWin.photoRow.remove(todayWin.photoRow.children[0]);
 		}
 	});
 
@@ -377,9 +388,15 @@ exports.createWindow = function(_userData){
 	        setTimeout(function(){
 	        	resetPullHeader(e.source);
 				// 日付の更新
+				// 子要素を先に削除すると、非同期のためか追加ができないので、非表示にして後で削除
+				todayWin.dayView.children[0].hide();
 				todayWin.dayView.add(getDayLabelView());
+				todayWin.dayView.remove(todayWin.dayView.children[0]);
 				// 記事の更新
+				// 子要素を先に削除すると、非同期のためか追加ができないので、非表示にして後で削除
+				todayWin.photoRow.children[0].hide();
 				todayWin.photoRow.add(getTodayPhotoView());
+				todayWin.photoRow.remove(todayWin.photoRow.children[0]);
 
 	        }, 2000);
 	    }

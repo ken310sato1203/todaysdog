@@ -242,8 +242,9 @@ exports.style = {
 	photoPhotoView:{
 		top: '0dp',
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
-		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
-		backgroundColor: 'white',
+//		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'blue',
 	},
 	photoPhotoImage:{
 		top: '0dp',
@@ -1881,7 +1882,8 @@ exports.style = {
 		bottom : '1dp',
 		right : '1dp',
 		width : '44dp',
-		height : '49dp',
+//		height : '49dp',
+		height : '60dp',
 //		backgroundColor : null,
 //		borderColor : '#FFDCDCDF',
 		// カスタムプロパティ
@@ -2560,7 +2562,7 @@ exports.style = {
 		borderRadius: '27dp',
 	},
 	friendsUserIconImage:{
-		width: '72dp',
+		width: '54dp',
 		height: '54dp',
 	},
 	friendsNameView:{
@@ -2947,7 +2949,8 @@ exports.style = {
 	todayPhotoView:{
 		top: '0dp',
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
-		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
+//		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
+		height: Ti.UI.SIZE,
 	},
 	todayPhotoImage:{
 		top: '0dp',
@@ -2993,6 +2996,11 @@ exports.style = {
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#696969',
+	},
+	todayArticleSpaceView:{
+		top: '0dp',
+		// タブ(44)＋メニュー(74)
+		height: '118dp',
 	},
 
 	
