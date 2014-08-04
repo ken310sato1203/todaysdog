@@ -206,6 +206,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	var postTableView = Ti.UI.createTableView(style.stampPostTableView);
 	postScrollView.add(postTableView);
 	setPostTableView();
+	postScrollView.visible = true;
 
 	// 日付選択
 	var datePickerView = Titanium.UI.createView(style.stampPostListPickerView);

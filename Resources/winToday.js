@@ -189,8 +189,8 @@ exports.createWindow = function(_userData){
 			} else {
 				_articleData = {
 					photo: 'images/photo/A0001.jpg',
-					text: '写真がない時に表示',
-					date: '20XX-XX-XX'
+					text: 'わんこの写真を投稿してみよう',
+					date: ''
 				};
 			}
 		}
@@ -229,11 +229,7 @@ exports.createWindow = function(_userData){
 		
 		var textView = Ti.UI.createView(style.todayPhotoTextView);
 		photoImage.textView = textView;
-/*
-		if ( textBottom > 0 ) {
-			textView.bottom = textBottom + 'dp';
-		}
-*/
+
 		articleView.add(textView);
 		var photoTextLabel = Ti.UI.createLabel(style.todayPhotoTextLabel);
 		photoTextLabel.text = _articleData.text;
@@ -241,18 +237,6 @@ exports.createWindow = function(_userData){
 		photoTimeLabel.text = _articleData.date;
 		textView.add(photoTextLabel);
 		textView.add(photoTimeLabel);
-
-		// 写真をクリックした時
-		photoImage.addEventListener('click', function(e) {
-			Ti.API.debug('[event]photoImage.click:');
-			// テキストの表示
-			var target = e.source.textView;
-			if (target.visible) {
-				target.visible = false;
-			} else {
-				target.visible = true;
-			}
-		});
 
 		// メニューの下部余白部分
 		var spaceView = Titanium.UI.createView(style.todayArticleSpaceView);

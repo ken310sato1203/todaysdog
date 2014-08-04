@@ -232,6 +232,7 @@ exports.createWindow = function(_userData, _diaryData){
 		// 余白分
 		var spaceView = Ti.UI.createView(style.timeSpaceView);
 		stampScrollView.add(spaceView);
+		stampScrollView.visible = true;
 
 		// スタンプボタンをクリック
 		stampScrollView.addEventListener('click',function(e){
@@ -323,7 +324,7 @@ exports.createWindow = function(_userData, _diaryData){
 		timeWin.prevWin.nextWin = null;
 	});
 
-	// カレンダーボタンをクリック
+	// リストボタンをクリック
 	listButton.addEventListener('click',function(e){
 		Ti.API.debug('[event]listButton.click:');
 		var target = e.source;

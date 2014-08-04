@@ -2067,6 +2067,8 @@ exports.style = {
 	cameraPostView:{
 		layout : 'vertical',
 		top : '10dp',
+		// 下のタブで表示されない余白分＋10dp
+		bottom: '54dp',
 //		width : '284dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -2384,7 +2386,7 @@ exports.style = {
 	timeNoDataView:{
 		top: '0dp',
 		width: '100%',
-		height: '100%',
+		height: '44dp',
 		backgroundColor : 'white',
 	},
 	timeNoDataLabel:{
@@ -2449,6 +2451,7 @@ exports.style = {
 		showVerticalScrollIndicator:true,
 		showHorizontalScrollIndicator:true,
 		backgroundColor: '#eeeeee',
+		visible: false,
 	},
 	timeStampSelectView:{
 		top: '10dp',
@@ -2564,6 +2567,7 @@ exports.style = {
 	friendsUserIconImage:{
 		width: '54dp',
 		height: '54dp',
+		defaultImage: '',
 	},
 	friendsNameView:{
 		layout: 'horizontal',
@@ -3036,14 +3040,15 @@ exports.style = {
 
 	stampScrollView:{
 		layout: 'vertical',
+		top:0,
 		// 下のタブで表示されない余白分
 		bottom: '44dp',
 		contentWidth:'auto',
 		contentHeight:'auto',
-		top:0,
 		showVerticalScrollIndicator:true,
 		showHorizontalScrollIndicator:true,
 		backgroundColor: '#dedede',
+		visible: false,
 	},
 	stampListView:{
 		layout: 'vertical',
@@ -3120,6 +3125,7 @@ exports.style = {
 		showVerticalScrollIndicator:true,
 		showHorizontalScrollIndicator:true,
 		backgroundColor: '#dedede',
+		visible: false,
 	},
 
 	stampPostTableView:{

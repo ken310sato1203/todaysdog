@@ -165,11 +165,13 @@ exports.createWindow = function(_type, _userData, _photoImage){
 								if (cameraPostWin.prevWin != null) {
 									cameraPostWin.prevWin.close();
 								}
-								// 更新後に閉じる
+								// todayWinの更新
 								todayWin.addEventListener('refresh', function(){
 									cameraPostWin.close({animated:true});
+									actInd.hide();
+									actBackView.hide();
+									postButton.enabled = true;
 							    });
-								// todayWinの更新
 								todayWin.fireEvent('refresh', {articleData:articleData});
 /*							    
 							    var friendsWin = win.getTab("friendsTab").window;
@@ -178,9 +180,6 @@ exports.createWindow = function(_type, _userData, _photoImage){
 */							    
 							    // 通知設定の更新
 								Ti.App.Properties.setString(_userData.id + '_' + 'today', util.getFormattedNowDate());
-								actInd.hide();
-								actBackView.hide();
-								postButton.enabled = true;
 	
 							} else {
 								actInd.hide();
@@ -207,15 +206,17 @@ exports.createWindow = function(_type, _userData, _photoImage){
 									cameraPostWin.prevWin.close();
 								}
 								// todayWinの更新
-								todayWin.fireEvent('refresh');
 								todayWin.addEventListener('refresh', function(){
-									cameraPostWin.close({animated:false});
+									cameraPostWin.close({animated:true});
 									actInd.hide();
+									actBackView.hide();
 									postButton.enabled = true;
 							    });
+								todayWin.fireEvent('refresh');
 	
 							} else {
 								actInd.hide();
+								actBackView.hide();
 								postButton.enabled = true;
 								util.errorDialog(e);
 							}

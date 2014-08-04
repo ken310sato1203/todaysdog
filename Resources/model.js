@@ -841,7 +841,7 @@ exports.model = {
 				.where("user","=",params.userId)
 				.order_by("date desc")
 				.limit(params.limit)
-//				.offset(params.offset)
+				.offset(params.offset)
 				.execute().getResult();
 			var result = [];
 			while (rows.isValidRow()){
