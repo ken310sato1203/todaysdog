@@ -36,6 +36,33 @@ exports.createWindow = function(_userData){
 	};
 
 
+	// 今日の時期を取得
+	var getTodayArticle = function() {
+		Ti.API.debug('[func]getTodayArticle:');
+		// 日時の更新
+		var nowDate = new Date();
+		now = util.getDateElement(nowDate);
+		now.weekday = util.diary.weekday[nowDate.getDay()];
+		now.today = util.getFormattedDate(nowDate);
+
+		// 今日の記事データ取得
+		var articleList = model.getLocalTodayArticle({
+			userId:_userData.id, 
+			user:_userData.user, 
+			name:_userData.name, 
+			icon:_userData.icon, 
+			year: now.year,
+			month: now.month,
+			day: now.day
+		});
+		
+		if (articleList.length > 0) {
+			return articleList[0];
+		} else {
+			return null;			
+		}
+	};
+
 	// menuViewの取得
 	var getTodayMenuView = function() {
 		Ti.API.debug('[func]getTodayMenuView:');
@@ -59,23 +86,7 @@ exports.createWindow = function(_userData){
 			target.touchEnabled = false;
 			target.opacity = 0.5;
 
-			// 日時の更新
-			var nowDate = new Date();
-			now = util.getDateElement(nowDate);
-			now.weekday = util.diary.weekday[nowDate.getDay()];
-			now.today = util.getFormattedDate(nowDate);
-	
-			// 今日の記事データ取得
-			var articleList = model.getLocalTodayArticle({
-				userId:_userData.id, 
-				user:_userData.user, 
-				name:_userData.name, 
-				icon:_userData.icon, 
-				year: now.year,
-				month: now.month,
-				day: now.day
-			});
-			if(articleList.length > 0) {
+			if ( getTodayArticle() ) {
 				var alertDialog = Titanium.UI.createAlertDialog({
 					title: '写真の投稿は１日１枚です。\nまた明日。',
 					buttonNames: ['OK'],
@@ -163,6 +174,7 @@ exports.createWindow = function(_userData){
 	// photoViewの取得
 	var getTodayPhotoView = function(_articleData) {
 		Ti.API.debug('[func]getTodayPhotoView:');
+/*
 		if (_articleData == null) {
 			// 記事の取得
 			var articleList = [];
@@ -183,12 +195,12 @@ exports.createWindow = function(_userData){
 			} else {
 				_articleData = {
 					photo: 'images/photo/A0001.jpg',
-					text: 'わんこの写真を投稿してみよう',
+					text: 'わんこの日記をつけよう',
 					date: ''
 				};
 			}
 		}
-
+*/
 		var articleView = Ti.UI.createView(style.todayArticleView);
 		var photoView = Ti.UI.createView(style.todayPhotoView);
 		articleView.add(photoView);
@@ -244,6 +256,19 @@ exports.createWindow = function(_userData){
 		var spaceView = Titanium.UI.createView(style.todayArticleSpaceView);
 		articleView.add(spaceView);
 
+		// 写真をクリック
+		photoImage.addEventListener('click',function(e){
+			Ti.API.debug('[event]photoImage.click:');
+			var target = e.source;
+			target.touchEnabled = false;
+			if (target.textView.visible) {
+				target.textView.visible = false;
+			} else {
+				target.textView.visible = true;
+			}
+			target.touchEnabled = true;
+		});
+
 		return articleView;
 	};
 
@@ -254,12 +279,23 @@ exports.createWindow = function(_userData){
 		// 今日のわんこ取得
 		var photoRow = Ti.UI.createTableViewRow(style.todayTableRow);
 		rowList.push(photoRow);
-		photoRow.add(getTodayPhotoView());
+		var todayArticle = getTodayArticle();
+		if (todayArticle) {
+			photoRow.add(getTodayPhotoView(todayArticle));
+		} else {
+			var noDataView = Ti.UI.createView(style.todayNoDataView);
+			var noDataLabel = Ti.UI.createLabel(style.todayNoDataLabel);
+			noDataView.add(noDataLabel);
+			// 全体の高さーステータスバー(20)ータイトルバー(44)ーメニュー(74)ー下のタブ(44)
+			photoRow.height = style.commonSize.screenHeight - 182;
+			photoRow.add(noDataView);
+		}
 		todayWin.photoRow = photoRow;
 
 		todayTableView.setData(rowList);
 	};
 
+/*
 	// 最上部から下スクロールで最新データを更新する用のヘッダを作成
 	var getTableHeader = function() {
 		Ti.API.debug('[func]getTableHeader:');
@@ -285,6 +321,7 @@ exports.createWindow = function(_userData){
 		
 		return tableHeader;
 	};
+*/
 
 // ---------------------------------------------------------------------
 	var todayWin = Ti.UI.createWindow(style.todayWin);
@@ -293,7 +330,7 @@ exports.createWindow = function(_userData){
 	todayWin.titleControl = todayTitle;
 
 	var todayTableView = Ti.UI.createTableView(style.todayTableView);
-	todayTableView.headerPullView = getTableHeader();
+//	todayTableView.headerPullView = getTableHeader();
 	todayWin.add(todayTableView);
 
 	// ビューの更新
@@ -314,7 +351,6 @@ exports.createWindow = function(_userData){
 
 		// 記事の更新
 		if (e.articleData) {
-			// 投稿した写真を表示
 			// 子要素を先に削除すると、非同期のためか追加ができないので、非表示にして後で削除
 			todayWin.photoRow.children[0].hide();
 			todayWin.photoRow.add(getTodayPhotoView(e.articleData));			
@@ -322,6 +358,7 @@ exports.createWindow = function(_userData){
 		}
 	});
 
+/*
 	// 下スクロールで上部ヘッダがすべて表示するまでひっぱったかどうかのフラグ
 	var pulling = false;
 	// スクロール終了時に更新をしてよいかどうかのフラグ
@@ -387,7 +424,7 @@ exports.createWindow = function(_userData){
 	        }, 2000);
 	    }
 	});
-
+*/
 	return todayWin;
 };
 

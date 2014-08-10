@@ -1828,29 +1828,22 @@ exports.style = {
 		image:'images/icon/w_arrow_right.png',
 	},
 
-	calendarCalView:{
-		layout : 'vertical',
-		top : '0dp',
-//		width : Ti.Platform.displayCaps.platformWidth + 'dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		backgroundColor : '#dedede',
-	},
 	calendarTableView:{
 		top: '0dp',
-		left: '0dp',
-		width: Ti.Platform.displayCaps.platformWidth + 'dp',
-		backgroundColor: 'white',
+//		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+		width: '100%',
+		height: '100%',
+		backgroundColor: '#eeeeee',
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		data: [],
 //		visible: false,
-		scrollable: false,
+//		scrollable: false,
 	},
 	calendarTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
+//		backgroundColor: '#dedede',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
 
@@ -1865,14 +1858,13 @@ exports.style = {
 		height: Ti.UI.SIZE,
 	},
 	calendarHeaderLabel:{
-		top : '0dp',
 		right : '1dp',
 		width : '44dp',
-		height : '20dp',
-		backgroundColor: 'white',
+		height : '30dp',
+//		backgroundColor: 'white',
 		text : null,
 		textAlign : 'center',
-		font : {fontSize:11, fontWeight:'bold'},
+		font : {fontSize:12, fontWeight:'bold'},
 		color : '#3a4756'
 	},
 
@@ -1886,14 +1878,14 @@ exports.style = {
 		height: Ti.UI.SIZE,
 	},
 	calendarDayView:{
-		top : '0dp',
-		bottom : '1dp',
+		top : '5dp',
+		bottom : '5dp',
 		right : '1dp',
 		width : '44dp',
-//		height : '49dp',
-		height : '60dp',
-//		backgroundColor : null,
-//		borderColor : '#FFDCDCDF',
+		height : '44dp',
+		borderRadius: '22dp',
+		backgroundColor: 'white',
+		borderColor : '#eeeeee',
 		// カスタムプロパティ
 		objectName : 'calendarDayView',
 		dayImage: null,
@@ -1905,7 +1897,7 @@ exports.style = {
 		articleData : null,
 	},
 	calendarDayImage:{
-		top : '0dp',
+//		top : '0dp',
 		width : '100%',
 		defaultImage: '',
 		backgroundColor: 'black',
@@ -1914,9 +1906,10 @@ exports.style = {
 		objectName : 'calendarDayImage',
 	},
 	calendarDayLabel:{
-		bottom : '1dp',
-		left : '4dp',
-		font : {fontSize:11, fontWeight:'bold'},
+//		bottom : '1dp',
+//		left : '4dp',
+		textAlign: 'center',
+		font: {fontSize:16, fontFamily:'Helvetica Neue'}, 
 		color : null,
 		text : null,
 		// カスタムプロパティ
@@ -2394,15 +2387,10 @@ exports.style = {
 	},
 
 	timeNoDataView:{
-		// 下のタブで表示されない余白分
-		bottom: '118dp',
-		height: '100%',
-//		backgroundColor : 'white',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
 	},
 	timeNoDataLabel:{
-//		top: '0dp',
-//		width: '100%',
-//		height: '100%',
 		textAlign: 'center',
 		font : {fontSize:12, fontWeight:'bold'},
 		color: '#3a4756',
@@ -2989,6 +2977,7 @@ exports.style = {
 		width: '100%',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
+		touchEnabled: false,
 	},
 	todayPhotoTextLabel:{
 		top: '10dp',
@@ -3016,7 +3005,16 @@ exports.style = {
 		// タブ(44)＋メニュー(74)
 		height: '118dp',
 	},
-
+	todayNoDataView:{
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	todayNoDataLabel:{
+		textAlign: 'center',
+		font : {fontSize:12, fontWeight:'bold'},
+		color: '#3a4756',
+		text: '１日１枚、写真を撮って\nわんこの日記をつけよう', 
+	},
 	
 // winStamp -------------------------------------------------------
 	stampWin:{

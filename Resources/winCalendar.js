@@ -22,36 +22,36 @@ exports.createWindow = function(_userData){
 		dayView.day = params.day;
 		dayView.currentFlag = params.currentFlag;
 
+		dayView.dayLabel = Ti.UI.createLabel(style.calendarDayLabel);
+		dayView.dayLabel.color = params.textColor;
+		dayView.dayLabel.text = params.day;
+		dayView.add(dayView.dayLabel);
+
 		dayView.dayImage = null;
 		dayView.articleData = null;
 		var articleImage = null;
 		if (params.articleData != null) {
-			dayView.dayImage = Ti.UI.createImageView(style.calendarDayImage);
 			var nowDate = util.getFormattedDate(new Date(params.year, params.month-1, params.day));
 			var fileName = _userData.id + "_" + nowDate;
 			// ローカルに投稿写真が保存されてる場合
 			if (model.checkLocalImage(util.local.photoPath, fileName)) {
 				params.articleData.photo = util.local.photoPath + fileName + '.png';
 			}
-			dayView.dayImage.image = params.articleData.photo;
-			dayView.add(dayView.dayImage);
-			dayView.articleData = params.articleData;
-			Ti.API.debug('[func]getDayView:' + dayView.dayImage.image);
-		}
 
-		dayView.dayLabel = Ti.UI.createLabel(style.calendarDayLabel);
-		dayView.dayLabel.color = params.textColor;
-		dayView.dayLabel.text = params.day;
-		dayView.add(dayView.dayLabel);
+			var dayImage = Ti.UI.createImageView(style.calendarDayImage);
+			dayView.add(dayImage);
+			dayImage.image = params.articleData.photo;
+
+			dayView.dayImage = dayImage;
+			dayView.articleData = params.articleData;
+		}
 
 		if ( params.currentFlag ) {
 			// 今日の日付表示
 			if ( params.day == now.day ) {
 				if (params.year == now.year && params.month == now.month) {
-//					dayView.backgroundColor = '#87CEFA';
-//					dayView.dayLabel.color = 'white';
-					var todayView = Ti.UI.createView(style.calendarTodayView);
-					dayView.add(todayView);
+					dayView.borderWidth = '2dp';
+					dayView.borderColor = '#87CEFA';
 				}
 			}
 		}
@@ -86,6 +86,7 @@ exports.createWindow = function(_userData){
 
 		// カレンダーヘッダ（曜日）
 		var headerRow = Ti.UI.createTableViewRow(style.calendarTableRow);
+		headerRow.backgroundColor = 'white';
 		rowList.push(headerRow);
 		var headerView = Ti.UI.createView(style.calendarHeaderView);
 		headerRow.add(headerView);
@@ -154,10 +155,8 @@ exports.createWindow = function(_userData){
 
 				var target = null;
 				if (e.source.objectName == "calendarDayView") {
-					target = e.source;						
+					target = e.source;
 				} else {
-					// view上にあるimage、labelの場合
-					Ti.API.debug('e.source.getParent():' + e.source.getParent());
 					target = e.source.getParent();
 				}
 

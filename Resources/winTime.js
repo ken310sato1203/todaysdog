@@ -12,9 +12,6 @@ exports.createWindow = function(_userData, _diaryData){
 	// 多重クリック防止
 	var clickEnable = true;
 	
-	// 登録がない場合
-	var noDataFlag = false;
-
 	// StampViewの取得
 	var getStampView = function(_rowStamp) {
 		Ti.API.debug('[func]getStampView:');
@@ -81,7 +78,14 @@ exports.createWindow = function(_userData, _diaryData){
 			}
 
 		} else {
-			noDataFlag = true;
+			var noDataRow = Ti.UI.createTableViewRow(style.timeTableRow);
+			var noDataView = Ti.UI.createView(style.timeNoDataView);
+			var noDataLabel = Ti.UI.createLabel(style.timeNoDataLabel);
+			noDataView.add(noDataLabel);
+			// 全体の高さーステータスバー(20)ータイトルバー(44)ーメニュー(74)ー下のタブ(44)
+			noDataRow.height = style.commonSize.screenHeight - 182;
+			noDataRow.add(noDataView);
+			rowList.push(noDataRow);
 		}
 
 		targetView.addEventListener('click',function(e){
@@ -311,12 +315,7 @@ exports.createWindow = function(_userData, _diaryData){
 	// スタンプの表示
 	var timeStampList = model.getTimeStampList();
 	timeWin.add(getTimeStampView(timeStampList));
-	if (noDataFlag) {
-		var noDataView = Ti.UI.createView(style.timeNoDataView);
-		timeWin.add(noDataView);
-		var noDataLabel = Ti.UI.createLabel(style.timeNoDataLabel);
-		noDataView.add(noDataLabel);
-	}
+
 // ---------------------------------------------------------------------
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
