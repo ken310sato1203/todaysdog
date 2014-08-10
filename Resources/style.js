@@ -235,9 +235,13 @@ exports.style = {
 */
 	photoArticleView:{
 		layout: 'vertical',
+		top: '10dp',
+		bottom: '10dp',
+		left: '20dp',
+		right: '20dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
+//		backgroundColor: '#dedede',
 	},
 	photoPhotoView:{
 		top: '0dp',
@@ -266,7 +270,7 @@ exports.style = {
 	},
 	photoTextView:{
 		layout: 'vertical',
-		top: '5dp',
+		top: '10dp',
 		bottom: '5dp',
 		left: '10dp',
 		right: '74dp',
@@ -318,20 +322,19 @@ exports.style = {
 		top: '0dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
-		backgroundColor: 'white',
+		backgroundColor: '#f5f5f5',
 	},
 	photoCommentActionView:{
 		layout: 'horizontal',
 		top: '0dp',
-//		right: '1dp',
-		width: '120dp',
+		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		backgroundColor: '#f5f5f5',
 	},
 	photoCommentActionImage:{
 		top: '5dp',
 		bottom: '5dp',
-		left: '5dp',
+		left: '10dp',
 		width: '28dp',
 		height: '28dp',
 		defaultImage: '',
@@ -340,7 +343,7 @@ exports.style = {
 	photoCommentActionLabel:{
 		top: '5dp',
 		bottom: '5dp',
-		left: '0dp',
+		left: '5dp',
 		width: Ti.UI.SIZE,
 		height: '28dp',
 		textAlign: 'left',
@@ -349,6 +352,7 @@ exports.style = {
 		text: 'コメントする',
 		enabled: false,
 	},
+/*
 	photoShareActionView:{
 		layout: 'horizontal',
 		top: '0dp',
@@ -378,7 +382,7 @@ exports.style = {
 		text: 'シェアする',
 		touchEnabled: false,
 	},
-
+*/
 	photoCommentTableRow:{ 
 		top: '0dp',
 		height: Ti.UI.SIZE,
@@ -459,19 +463,20 @@ exports.style = {
 	},
 
 	photoCommentField:{
-		top: '0dp',
-		width: '295dp',
+		top: '5dp',
+		bottom: '5dp',
+		left: '10dp',
+		right: '10dp',
 		height: '30dp',
-		backgroundColor: 'white',
-		borderColor:'#dedede',
-		borderRadius: '5',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		hintText: 'コメントを入力',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#000',
+		hintText: 'コメントを入力する',
 		keyboardToolbarColor: '#f5f5f5',
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
         returnKeyType:Ti.UI.RETURNKEY_SEND,
-        borderStyle:Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
-	},
+//        borderStyle:Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
+        borderStyle:Ti.UI.INPUT_BORDERSTYLE_NONE,
+ 	},
 	photoCommentPostButton:{
 		width: '32dp',
 		height: '28dp',
@@ -500,11 +505,12 @@ exports.style = {
 		top: '0dp',
 		left: '0dp',
 		bottom: '44dp',
+		backgroundColor: '#eeeeee',
 		separatorStyle: Titanium.UI.iPhone.ListViewSeparatorStyle.NONE,
 	},
 	photoArticleList:{
 		height: Ti.UI.SIZE,
-//		backgroundColor: '#eeeeee',
+		backgroundColor: '#eeeeee',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
 	},
 	photoActionList:{
@@ -519,7 +525,7 @@ exports.style = {
 	},
 	photoBottomList:{
 		height: Ti.UI.SIZE,
-		backgroundColor: 'white',
+		backgroundColor: '#eeeeee',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
 	},
 
@@ -607,8 +613,8 @@ exports.style = {
 		bottom: '44dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
-//		backgroundColor: 'white',
-		scrollable: false,
+		backgroundColor: '#eeeeee',
+//		scrollable: false,
 		separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		data: [],
 	},
@@ -618,7 +624,7 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		touchEnabled: false,
-		backgroundColor: '#dedede',
+//		backgroundColor: '#dedede',
 	},
 	profileIconView:{
 		top: '8dp',
@@ -744,16 +750,15 @@ exports.style = {
 	profilePhotoView:{
 		top: '0dp',
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
-		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
-		backgroundColor: 'white',
-		opacity: 0.3,
+		height: Ti.Platform.displayCaps.platformWidth + 'dp',
 	},
 	profilePhotoImage:{
 		top: '0dp',
 		left: '0dp',
-		width: Ti.UI.SIZE,
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
 		height: Ti.UI.SIZE,
 		defaultImage: '',
+		opacity: 0.3,
 	},
 
 // winProfileEdit -------------------------------------------------------
@@ -843,19 +848,19 @@ exports.style = {
 		color: '#000',
 	},
 	profileEditListValueLabel:{
+		left: '100dp',
 		right: '15dp',
-		textAlign:'right',
-		width: '166dp',
 		height: '35dp',
+		textAlign:'right',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
 	profileEditListValueField:{
 		top: '0dp',
+		left: '100dp',
 		right: '15dp',
-		textAlign:'right',
-		width: '166dp',
 		height: '40dp',
+		textAlign:'right',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
 		hintText: '入力してください',
@@ -867,8 +872,8 @@ exports.style = {
 	profileEditListTextArea:{
 		top : '30dp',
 		bottom : '10dp',
-		left: '7dp',
-		width: '306dp',
+		left: '10dp',
+		right: '10dp',
 		height : '90dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
@@ -1095,7 +1100,8 @@ exports.style = {
 	photoListTableView:{ 
 		// 下のタブで表示されない余白分
 		bottom: '44dp',
-		backgroundColor: 'white',
+//		backgroundColor: 'white',
+		backgroundColor: '#eeeeee',
 		separatorColor: 'transparent',
 		data: [],
 	},
@@ -1122,8 +1128,8 @@ exports.style = {
 	},
 	photoListArticleView:{
 		layout: 'vertical',
-		top: '5dp',
-		left: '5dp',
+		top: '3dp',
+		left: '3dp',
 //		width: '100dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -1136,8 +1142,10 @@ exports.style = {
 		top: '0dp',
 //		width: '90dp',
 //		height: '90dp',
-		width: '100dp',
-		height: (100 * 3 / 4) + 'dp',
+		// 余白(3*4)
+		width: ( (Ti.Platform.displayCaps.platformWidth - 12) / 3 ) + 'dp',
+//		height: (100 * 3 / 4) + 'dp',
+		height: Ti.UI.SIZE,
 		defaultImage: '',
 		backgroundColor: 'white',
 		// カスタムプロパティ
@@ -2065,14 +2073,45 @@ exports.style = {
 		backgroundColor: '#dedede',
 	},
 	cameraPostView:{
-		layout : 'vertical',
-		top : '10dp',
+		layout : 'horizontal',
+		top : '0dp',
 		// 下のタブで表示されない余白分＋10dp
 		bottom: '54dp',
 //		width : '284dp',
-		width: Ti.UI.SIZE,
+		width: '100%',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
+	},
+
+	cameraPostImage:{
+		top : '10dp',
+		bottom : '10dp',
+		left: '10dp',
+		width: '94dp',
+		height: Ti.UI.SIZE,
+		defaultImage: '',
+	},
+	cameraSaveImage:{
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+		height: Ti.UI.SIZE,
+		defaultImage: '',
+	},
+	cameraPostTextArea:{
+		top : '10dp',
+		bottom : '10dp',
+		left: '5dp',
+		right: '10dp',
+		width: Ti.UI.SIZE,
+		height : '90dp',
+		backgroundColor: 'white',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#000',
+		// hintTextはiOSで対応されていないので、focus/blur時に処理
+		hintText: 'コメントを入力する',
+		value: 'コメントを入力する',
+		suppressReturn: false,
+        keyboardType:Ti.UI.KEYBOARD_DEFAULT,
+        returnKeyType:Ti.UI.RETURNKEY_DONE,
 	},
 
 	cameraPostIconView:{
@@ -2089,37 +2128,6 @@ exports.style = {
 		defaultImage: '',
 	},
 
-	cameraPostImage:{
-		top : '10dp',
-		bottom : '5dp',
-		left: '10dp',
-		right: '10dp',
-		width: '264dp',
-		height: Ti.UI.SIZE,
-		defaultImage: '',
-		backgroundColor: 'black',
-	},
-	cameraSaveImage:{
-		width: Ti.Platform.displayCaps.platformWidth + 'dp',
-		height: Ti.UI.SIZE,
-		defaultImage: '',
-	},
-	cameraPostTextArea:{
-		top : '0dp',
-		bottom : '5dp',
-		left: '10dp',
-		width: '264dp',
-		height : '90dp',
-		backgroundColor: 'white',
-		font: {fontSize:14, fontFamily:'Helvetica Neue'},
-		color: '#000',
-		// hintTextはiOSで対応されていないので、focus/blur時に処理
-		hintText: 'コメントを入力してください',
-		value: 'コメントを入力してください',
-		suppressReturn: false,
-        keyboardType:Ti.UI.KEYBOARD_DEFAULT,
-        returnKeyType:Ti.UI.RETURNKEY_DONE,
-	},
 	
 // winDiary -------------------------------------------------------
 	diaryWin:{
@@ -2290,7 +2298,8 @@ exports.style = {
 		bottom: '118dp',
 		left: '0dp',
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
-		backgroundColor: '#dedede',
+//		backgroundColor: '#dedede',
+		backgroundColor: '#eeeeee',
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		data: [],
@@ -2300,12 +2309,12 @@ exports.style = {
 	timeTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
+//		backgroundColor: '#dedede',
+		backgroundColor: '#eeeeee',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
 		// カスタムプロパティ
 		stampData: null,
 	},
-
 	timeHourView:{
 		top: '1dp',
 		bottom: '0dp',
@@ -2383,20 +2392,21 @@ exports.style = {
 		// カスタムプロパティ
 		objectName : 'timeMinusImage',
 	},
+
 	timeNoDataView:{
-		top: '0dp',
-		width: '100%',
-		height: '44dp',
-		backgroundColor : 'white',
+		// 下のタブで表示されない余白分
+		bottom: '118dp',
+		height: '100%',
+//		backgroundColor : 'white',
 	},
 	timeNoDataLabel:{
-		top: '0dp',
-		width: '100%',
-		height: '100%',
+//		top: '0dp',
+//		width: '100%',
+//		height: '100%',
 		textAlign: 'center',
 		font : {fontSize:12, fontWeight:'bold'},
 		color: '#3a4756',
-		text: 'スタンプを選んでみよう', 
+		text: 'スタンプを選んで\nわんこの記録をつけよう', 
 	},
 
 	timeStampGroupTableRow:{ 
@@ -2441,17 +2451,17 @@ exports.style = {
 		objectName : 'timeGroupView',
 	},
 
-	timeStampSelectScrollView:{
+	timeStampMenuScrollView:{
 		layout: 'horizontal',
 		// 下のタブで表示されない余白分
-		top: '0dp',
+		bottom: '44dp',
 		height: '74dp',
 		contentWidth:'auto',
 		contentHeight:'auto',
 		showVerticalScrollIndicator:true,
 		showHorizontalScrollIndicator:true,
-		backgroundColor: '#eeeeee',
-		visible: false,
+//		backgroundColor: '#eeeeee',
+		backgroundColor: '#dedede',
 	},
 	timeStampSelectView:{
 		top: '10dp',
@@ -2848,25 +2858,23 @@ exports.style = {
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		scrollable: true,
 		data: [],
+		backgroundColor: '#eeeeee',
 	},
 	todayTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+//		backgroundColor: '#dedede',
 //		backgroundColor: '#eeeeee',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
-	todayMenuScrollView:{
-//		layout: 'horizontal',
-		// 下のタブで表示されない余白分
-		top: '0dp',
-		contentWidth:'auto',
-		contentHeight:'auto',
-		showVerticalScrollIndicator:true,
-		showHorizontalScrollIndicator:true,
-		backgroundColor: '#eeeeee',
-	},
-
 	todayMenuView:{
+		// 下のタブで表示されない余白分
+		bottom: '44dp',
+		height: '74dp',
+//		backgroundColor: '#eeeeee',
+		backgroundColor: '#dedede',
+	},
+	todayMenuListView:{
 		layout: 'horizontal',
 		top: '0dp',
 		width: Ti.UI.SIZE,
@@ -2946,13 +2954,17 @@ exports.style = {
 
 	todayArticleView:{
 		layout: 'vertical',
-		top: '0dp',
+		top: '10dp',
+		bottom: '10dp',
+		left: '20dp',
+		right: '20dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
 	todayPhotoView:{
 		top: '0dp',
-		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+//		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+		width: Ti.UI.SIZE,
 //		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
 		height: Ti.UI.SIZE,
 	},
@@ -2974,14 +2986,12 @@ exports.style = {
 	},
 	todayPhotoTextView:{
 		layout : 'vertical',
-		top: '0dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
-//		opacity: 0.8,
 	},
 	todayPhotoTextLabel:{
-		top: '5dp',
+		top: '10dp',
 		left: '10dp',
 		right: '10dp',
 		width: Ti.UI.SIZE,
@@ -2992,12 +3002,12 @@ exports.style = {
 		touchEnabled: false,
 	},
 	todayPhotoTimeLabel:{
-		top: '5dp',
+		top: '0dp',
 		bottom: '5dp',
-		left: '10dp',
+		right: '10dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		textAlign: 'left',
+		textAlign: 'right',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#696969',
 	},
@@ -3048,7 +3058,6 @@ exports.style = {
 		showVerticalScrollIndicator:true,
 		showHorizontalScrollIndicator:true,
 		backgroundColor: '#dedede',
-		visible: false,
 	},
 	stampListView:{
 		layout: 'vertical',
@@ -3167,7 +3176,7 @@ exports.style = {
 	},
 	stampPostTextLabel:{
 		left: '48dp',
-		width: '190dp',
+		rigth: '15dp',
 		height: Ti.UI.SIZE,
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
@@ -3344,8 +3353,8 @@ exports.style = {
 	},
 	stampTextArea:{
 		top : '5dp',
-		left: '8dp',
-		width: '268dp',
+		left: '10dp',
+		right: '10dp',
 		height : '130dp',
 		backgroundColor: 'white',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},

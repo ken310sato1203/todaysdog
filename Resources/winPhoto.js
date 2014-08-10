@@ -12,8 +12,22 @@ exports.createWindow = function(_type, _articleData){
 	var likeCount = 5;
 	// コメントリストの表示件数
 	var commentCount = 5;
-	//  ユーザデータ
+	// ユーザデータ
 	var userData = null;
+	// blur用
+	var commentField = null;
+
+	// テキストフィールドのblurの処理
+	var blurCommentField = function() {
+		Ti.API.debug('[func]blurCommentField:');
+		if (commentField && commentField.focusFlag) {
+			commentField.blur();
+			commentField.focusFlag = false;
+			return true;
+		} else {
+			return false;
+		}
+	};
 
 	// ライクボタンクリック時の処理
 	var clickLikeStampImage = function(e) {
@@ -89,6 +103,7 @@ exports.createWindow = function(_type, _articleData){
 		}
 	};
 
+/*
 	// コメントクリック時の処理
 	var clickCommentActionView = function(e) {
 		Ti.API.debug('[func]clickCommentActionView:');
@@ -101,6 +116,7 @@ exports.createWindow = function(_type, _articleData){
 		listSection.updateItemAt(e.itemIndex, item);
 		listView.touchEnabled = true;
 	};
+*/
 
 	// コメントデータの取得
 	var getCommentItem = function(review) {
@@ -181,11 +197,11 @@ exports.createWindow = function(_type, _articleData){
 					for (var i=0; i<e.reviews.length; i++) {
 						listSection.appendItems(getCommentItem(e.reviews[i]));					
 					}
-					var bottomItem = [{
-						template: 'bottom',
-					}];
-					listSection.appendItems(bottomItem);					
 				}
+				var bottomItem = [{
+					template: 'bottom',
+				}];
+				listSection.appendItems(bottomItem);					
 
 				// 初回のみコメントの読み込み中を削除
 				if (initFlag) {
@@ -204,53 +220,47 @@ exports.createWindow = function(_type, _articleData){
 	};
 
 	// コメントの追加
-	var addComment = function() {
-		if (commentField.value != '') {
+	var addComment = function(text) {
+		Ti.API.debug('[func]addComment:');
+		actInd.show();
+		tabGroup.add(actInd);
 
-			actInd.show();
-			tabGroup.add(actInd);
+		var date = util.getFormattedNowDateTime();
+		var commentData = {
+			no: _articleData.no, 
+			seq: null, 
+			user: loginUser.id, 
+			date: date, 
+			text: text
+		};
+		// コメントリストに追加
+		model.addCloudCommentList({
+			postId: _articleData.id,
+			comment: text,
+			date: date
+		}, function(e) {
+			Ti.API.debug('[func]addCloudCommentList.callback:');						
+			if (e.success) {
+				Ti.API.debug('Success:');
+				var review = {user:null, content:null};
+				review.user = model.getLoginUser();
+				review.content = text;
+				review.time = util.getFormattedNowDateTime();
+				// bottomの前に追加
+				listSection.insertItemsAt(listSection.items.length - 1, getCommentItem(review));
+				listView.scrollToItem(listView.sections.length - 1, listSection.items.length - 1);
 
-			var date = util.getFormattedNowDateTime();
-			var commentData = {
-				no: _articleData.no, 
-				seq: null, 
-				user: loginUser.id, 
-				date: date, 
-				text: commentField.value
-			};
-			// コメントリストに追加
-			model.addCloudCommentList({
-				postId: _articleData.id,
-				comment: commentField.value,
-				date: date
-			}, function(e) {
-				Ti.API.debug('[func]addCloudCommentList.callback:');						
-				if (e.success) {
-					Ti.API.debug('Success:');
-					var review = {user:null, content:null};
-					review.user = model.getLoginUser();
-					review.content = commentField.value;
-					review.time = util.getFormattedNowDateTime();
-					// bottomの前に追加
-					listSection.insertItemsAt(listSection.items.length - 1, getCommentItem(review));
-					listView.scrollToItem(listView.sections.length - 1, listSection.items.length - 1);
-
-					actInd.hide();
-					commentField.value = '';
-					commentField.blur();
-					if (photoWin.prevWin != null) {
-						photoWin.prevWin.fireEvent('refresh', {index:_articleData.index, like:0, comment:1});
-					}
-
-				} else {
-					actInd.hide();
-					util.errorDialog(e);
+				actInd.hide();
+				text = '';
+				if (photoWin.prevWin != null) {
+					photoWin.prevWin.fireEvent('refresh', {index:_articleData.index, like:0, comment:1});
 				}
-			});
 
-		} else {
-			commentField.blur();
-		}
+			} else {
+				actInd.hide();
+				util.errorDialog(e);
+			}
+		});
 	};
 
 // ---------------------------------------------------------------------
@@ -329,7 +339,7 @@ exports.createWindow = function(_type, _articleData){
 		});
 */
 	}
-
+/*
 	// コメントフィールドの表示
 	var commentField = Ti.UI.createTextField(style.photoCommentField);
 	var dummyField = Ti.UI.createTextField(style.photoCommentField);
@@ -347,7 +357,7 @@ exports.createWindow = function(_type, _articleData){
 		Ti.API.debug('[event]commentField.return:');
 		addComment();
 	});
-
+*/
 	var articleListTemplate = {
 		properties: style.photoArticleList,
 		childTemplates: [{
@@ -363,10 +373,7 @@ exports.createWindow = function(_type, _articleData){
 					bindId: 'photoPhotoImage',
 					properties: style.photoPhotoImage,
 					events: {
-						click: function(e) {
-							// 画像クリックでコメントフィールドのフォーカスを外す
-							commentField.blur();
-						}
+						click: blurCommentField
 					},
 				}]
 			},{
@@ -377,21 +384,29 @@ exports.createWindow = function(_type, _articleData){
 					type: 'Ti.UI.View',
 					bindId: 'photoTextView',
 					properties: style.photoTextView,
+					events: {
+						click: blurCommentField
+					},
 					childTemplates: [{
 						type: 'Ti.UI.Label',
 						bindId: 'photoTextLabel',
 						properties: style.photoTextLabel,
-					},{
-						type: 'Ti.UI.Label',
-						bindId: 'photoTimeLabel',
-						properties: style.photoTimeLabel,
+//					},{
+//						type: 'Ti.UI.Label',
+//						bindId: 'photoTimeLabel',
+//						properties: style.photoTimeLabel,
 					}]
 				},{
 					type: 'Ti.UI.ImageView',
 					bindId: 'photoLikeStampImage',
 					properties: style.photoLikeStampImage,
 					events: {
-						click: clickLikeStampImage
+						click: function(e) {
+							// テキストフィールド入力中でないかチェック
+							if ( blurCommentField() == false ) {
+								clickLikeStampImage(e);
+							}
+						},
 					},
 				}]
 			}]
@@ -407,19 +422,29 @@ exports.createWindow = function(_type, _articleData){
 				type: 'Ti.UI.View',
 				bindId: 'photoCommentActionView',
 				properties: style.photoCommentActionView,
-				events: {
-					click: clickCommentActionView
-				},
 				childTemplates: [{
 					type: 'Ti.UI.ImageView',
 					bindId: 'photoCommentActionImage',
 					properties: style.photoCommentActionImage,
 				},{
-					type: 'Ti.UI.Label',
-					bindId: 'photoCommentActionLabel',
-					properties: style.photoCommentActionLabel,
+					type: 'Ti.UI.TextField',
+					bindId: 'photoCommentField',
+					properties: style.photoCommentField,
+					events: {
+						focus: function(e) {
+							commentField = e.source;
+							commentField.focusFlag = true;
+						},
+						return: function(e) {
+							if (e.source.value != '') {
+								addComment(e.source.value);
+								e.source.value = '';
+								blurCommentField();
+							}
+						}
+					},
 				}]
-			},{
+/*			},{
 				type: 'Ti.UI.View',
 				bindId: 'photoShareActionView',
 				properties: style.photoShareActionView,
@@ -432,6 +457,7 @@ exports.createWindow = function(_type, _articleData){
 					bindId: 'photoShareActionLabel',
 					properties: style.photoShareActionLabel,
 				}]
+*/
 			}]
 		}]
 	};
@@ -508,9 +534,9 @@ exports.createWindow = function(_type, _articleData){
 		photoTextLabel: {
 			text: _articleData.text
 		},
-		photoTimeLabel: {
-			text: _articleData.date
-		},
+//		photoTimeLabel: {
+//			text: _articleData.date
+//		},
 		photoLikeStampImage: likeStampImage
 	}];
 
@@ -519,8 +545,8 @@ exports.createWindow = function(_type, _articleData){
 	var actionItem = [{
 		template: 'action',		
 		photoCommentActionView: {
-		},
-		photoShareActionView: {
+//		},
+//		photoShareActionView: {
 		}
 	}];
 

@@ -154,7 +154,7 @@ exports.createWindow = function(_userData){
 		photoView.add(photoImage);
 	
 		var infoView = Ti.UI.createView(style.profileInfoView);
-		infoRowView.add(infoView);
+ 		infoRowView.add(infoView);
 
 //		var nameView = Ti.UI.createView(style.profileInfoNameView);
 //		infoView.add(nameView);
@@ -216,6 +216,12 @@ exports.createWindow = function(_userData){
 								if (e.success) {
 									if (e.photos) {
 										photoImage.image = e.photos[0].urls.original;
+//										photoImage.width = style.commonSize.screenWidth + 'dp';
+//										photoView.height = ( photoImage.toBlob().height * (style.commonSize.screenWidth / photoImage.toBlob().width) ) + 'dp';
+
+										Ti.API.info('height:' + photoImage.height);
+										Ti.API.info('width:' + photoImage.width);
+										Ti.API.info('image:' + photoImage.image);
 									}
 								} else {
 									util.errorDialog(e);

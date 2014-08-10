@@ -36,23 +36,18 @@ exports.createWindow = function(_userData){
 	};
 
 
-	// menuRowの取得
-	var getTodayMenuRow = function() {
-		Ti.API.debug('[func]getTodayMenuRow:');
+	// menuViewの取得
+	var getTodayMenuView = function() {
+		Ti.API.debug('[func]getTodayMenuView:');
 
-		var menuScrollView = Ti.UI.createScrollView(style.todayMenuScrollView);
-		menuScrollView.top = 74 + (style.commonSize.screenWidth * 3 / 4) - textBottom;
-
-		// メニューの表示
-//		var menuRow = Titanium.UI.createTableViewRow(style.todayTableRow);
-//		menuRow.backgroundColor = '#eeeeee';
 		var menuView = Ti.UI.createView(style.todayMenuView);
-		menuScrollView.add(menuView);
+		var menuListView = Ti.UI.createView(style.todayMenuListView);
+		menuView.add(menuListView);
 
 		// カメラの表示
 		var cameraView = Ti.UI.createView(style.todayCameraView);
 		todayWin.cameraView = cameraView;
-		menuView.add(cameraView);
+		menuListView.add(cameraView);
 		var cameraImage = Ti.UI.createImageView(style.todayCameraImage);
 		cameraView.add(cameraImage);
 
@@ -126,12 +121,12 @@ exports.createWindow = function(_userData){
 		// 日付の表示
 		var dayView = Ti.UI.createView(style.todayDayView);
 		dayView.add(getDayLabelView());
-		menuView.add(dayView);
+		menuListView.add(dayView);
 		todayWin.dayView = dayView;
 	
 		// カレンダーボタンの表示
 		var calendarView = Ti.UI.createView(style.todayCalendarView);
-		menuView.add(calendarView);
+		menuListView.add(calendarView);
 		var calendarImage = Ti.UI.createImageView(style.todayCalendarImage);
 		calendarView.add(calendarImage);
 	
@@ -160,10 +155,9 @@ exports.createWindow = function(_userData){
 
 		// 余白分
 		var spaceView = Ti.UI.createView(style.todaySpaceView);		
-		menuView.add(spaceView);
+		menuListView.add(spaceView);
 		
-//		return menuRow;
-		return menuScrollView;
+		return menuView;
 	};
 
 	// photoViewの取得
@@ -200,7 +194,7 @@ exports.createWindow = function(_userData){
 		articleView.add(photoView);
 		var photoImage = Ti.UI.createImageView(style.todayPhotoImage);
 		photoView.add(photoImage);
-
+		
 		var fileName = _userData.id + "_" + _articleData.date.substring(0,10);
 		// ローカルに投稿写真が保存されてる場合
 		if (model.checkLocalImage(util.local.photoPath, fileName)) {
@@ -229,12 +223,20 @@ exports.createWindow = function(_userData){
 		
 		var textView = Ti.UI.createView(style.todayPhotoTextView);
 		photoImage.textView = textView;
-
+		// コメントが見えない場合、写真に重ねて表示　
+		// 写真の高さ　＞　画面の高さーステータスバー(20)ータイトルバー(44)ーメニュー(74)ーカスタムタブ(44)ーコメント高さ(36)ー余白(20)
+		var photoHeight = photoImage.toBlob().height * (style.commonSize.screenWidth / photoImage.toBlob().width);
+		if ( photoHeight > style.commonSize.screenHeight - 238 ) {
+			articleView.layout = 'absolute';
+			textView.bottom = '0dp';
+			textView.opacity = 0.6;
+		}
 		articleView.add(textView);
+
 		var photoTextLabel = Ti.UI.createLabel(style.todayPhotoTextLabel);
 		photoTextLabel.text = _articleData.text;
 		var photoTimeLabel = Ti.UI.createLabel(style.todayPhotoTimeLabel);
-		photoTimeLabel.text = _articleData.date;
+		photoTimeLabel.text = _articleData.date.substring(0,10);
 		textView.add(photoTextLabel);
 		textView.add(photoTimeLabel);
 
@@ -298,7 +300,7 @@ exports.createWindow = function(_userData){
 	updateTableView();
 
 	// メニューの表示
-	todayWin.add(getTodayMenuRow());
+	todayWin.add(getTodayMenuView());
 
 // ---------------------------------------------------------------------
 	// 更新用イベント

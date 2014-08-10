@@ -138,7 +138,6 @@ exports.createWindow = function(_type, _userData, _stampData){
 			}
 		}
 
-		targetView.visible = true;
 		return targetView;
 	};
 

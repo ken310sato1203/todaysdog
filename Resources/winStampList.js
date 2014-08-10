@@ -1,4 +1,4 @@
-// 時間スケジュール
+// 今日のスタンプ一覧
 
 exports.createWindow = function(_userData, _diaryData){
 	Ti.API.debug('[func]winTime.createWindow:');

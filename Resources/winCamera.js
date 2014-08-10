@@ -215,22 +215,20 @@ exports.createWindow = function(_type, _userData){
 	var overlayView = Titanium.UI.createView(style.cameraOverlayView);
 	// フレーム
 	var frameView = Titanium.UI.createView(style.cameraFrameView);
+	frameView.top = frameSpace + 'dp';
 	frameView.width = style.commonSize.screenWidth + 'dp';
 	frameView.height = style.commonSize.screenWidth + 'dp';
 
 	if (_type == 'photo_camera') {
 		titleLabel.text = '取り込み中';
-		frameView.top = (frameSpace + 64) + 'dp';
 		overlayView.add(frameView);
 
 	} else if (_type == 'icon_camera') {
 		titleLabel.text = '取り込み中';
-		frameView.top = (frameSpace + 64) + 'dp';
 		overlayView.add(frameView);
 
 	} else if (_type == 'photo_select') {
 		titleLabel.text = 'わんこ写真';
-		frameView.top = frameSpace + 'dp';
 		cameraWin.rightNavButton = selectButton;
 		cameraWin.add(frameView);
 	}

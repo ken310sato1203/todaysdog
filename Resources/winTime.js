@@ -11,6 +11,9 @@ exports.createWindow = function(_userData, _diaryData){
 
 	// 多重クリック防止
 	var clickEnable = true;
+	
+	// 登録がない場合
+	var noDataFlag = false;
 
 	// StampViewの取得
 	var getStampView = function(_rowStamp) {
@@ -78,12 +81,7 @@ exports.createWindow = function(_userData, _diaryData){
 			}
 
 		} else {
-			var noDataRow = Ti.UI.createTableViewRow(style.timeTableRow);		
-			rowList.push(noDataRow);
-			var noDataView = Ti.UI.createView(style.timeNoDataView);
-			noDataRow.add(noDataView);
-			var noDataLabel = Ti.UI.createLabel(style.timeNoDataLabel);
-			noDataView.add(noDataLabel);
+			noDataFlag = true;
 		}
 
 		targetView.addEventListener('click',function(e){
@@ -212,17 +210,16 @@ exports.createWindow = function(_userData, _diaryData){
 	var getTimeStampView = function(_stampList) {
 		Ti.API.debug('[func]getTimeStampView:');
 		// スタンプの表示
-		var stampScrollView = Ti.UI.createScrollView(style.timeStampSelectScrollView);
-		stampScrollView.top = 74 + (style.commonSize.screenWidth * 3 / 4) - style.commonSize.textBottom;
+		var stampMenuView = Ti.UI.createScrollView(style.timeStampMenuScrollView);
 		// 複数登録スタンプ
 		var editView = Ti.UI.createView(style.timeStampEditView);
-		stampScrollView.add(editView);
+		stampMenuView.add(editView);
 		var editImage = Ti.UI.createImageView(style.timeStampEditImage);
 		editView.add(editImage);
 
 		for (var i=0; i<_stampList.length; i++) {
 			var stampView = Ti.UI.createView(style.timeStampSelectView);
-			stampScrollView.add(stampView);
+			stampMenuView.add(stampView);
 			var stampImage = Ti.UI.createImageView(style.timeStampSelectImage);
 			stampView.add(stampImage);
 			stampImage.image = 'images/icon/' + _stampList[i].stamp + '.png';
@@ -231,11 +228,10 @@ exports.createWindow = function(_userData, _diaryData){
 
 		// 余白分
 		var spaceView = Ti.UI.createView(style.timeSpaceView);
-		stampScrollView.add(spaceView);
-		stampScrollView.visible = true;
+		stampMenuView.add(spaceView);
 
 		// スタンプボタンをクリック
-		stampScrollView.addEventListener('click',function(e){
+		stampMenuView.addEventListener('click',function(e){
 			Ti.API.debug('[event]stampView.click:');
 			var target = e.source;
 			// 日時の更新
@@ -287,7 +283,7 @@ exports.createWindow = function(_userData, _diaryData){
 			target.opacity = 1.0;
 		});
 
-		return stampScrollView;
+		return stampMenuView;
 	};
 	
 // ---------------------------------------------------------------------
@@ -315,7 +311,12 @@ exports.createWindow = function(_userData, _diaryData){
 	// スタンプの表示
 	var timeStampList = model.getTimeStampList();
 	timeWin.add(getTimeStampView(timeStampList));
-
+	if (noDataFlag) {
+		var noDataView = Ti.UI.createView(style.timeNoDataView);
+		timeWin.add(noDataView);
+		var noDataLabel = Ti.UI.createLabel(style.timeNoDataLabel);
+		noDataView.add(noDataLabel);
+	}
 // ---------------------------------------------------------------------
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
