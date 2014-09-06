@@ -12,96 +12,35 @@ exports.createWindow = function(_type, _userData){
 	var editImage = function(_image) {
 		Ti.API.debug('[func]editImage:');
 		var croppedImage = null;
+		var cropSize = 0;
+		var cropX = 0;
+		var cropY = 50;
 
-		if (_type == 'photo_camera') {
-/*
-			var resizedImage = _image.imageAsResized(640, _image.height * 640 / _image.width);
-			croppedImage = resizedImage.imageAsCropped({
-				width: resizedImage.width, 
-				height: resizedImage.width * 3 / 4,
-				x: 0, 
-				y: 200
-			});
-			return croppedImage;
-*/
-			var resizedImage = _image.imageAsResized(_image.width, _image.height);
-			croppedImage = resizedImage.imageAsCropped({
-				width: resizedImage.width, 
-//				height: resizedImage.width * 3 / 4,
-				height: resizedImage.width,
-				x: 0, 
-				y: 100 * ( _image.width / style.commonSize.screenWidth )
-			});
-			if (_image.width > 640) {
-//				return croppedImage.imageAsResized(640, 480);
-				return croppedImage.imageAsResized(640, 640);
-			} else {
-				return croppedImage;
-			}
-
-		} else if (_type == 'icon_camera') {
-/*
-			var resizedImage = _image.imageAsResized(640, _image.height * 640 / _image.width);
-			croppedImage = resizedImage.imageAsCropped({
-				width: resizedImage.width, 
-				height: resizedImage.width,
-				x: 0, 
-				y: 140
-			});
-			return croppedImage;
-*/
-			var resizedImage = _image.imageAsResized(_image.width, _image.height);
-			croppedImage = resizedImage.imageAsCropped({
-				width: resizedImage.width, 
-				height: resizedImage.width,
-				x: 0, 
-				y: 50 * ( _image.width / style.commonSize.screenWidth )
-			});
-			if (_image.width > 640) {
-				return croppedImage.imageAsResized(640, 640);
-			} else {
-				return croppedImage;
-			}
-
-		} else if (_type == 'photo_select') {
-			// 先にリサイズすると、切り取る座標が変わってしまい、
-			// 切取りを先にするとバグで反転してしまう、リサイズすると反転しないので、同じサイズでリサイズ
-			var resizedImage = null;
-			var cropSize = null;
-			if (_image.height > _image.width) {
-				resizedImage = _image.imageAsResized(style.commonSize.screenWidth, _image.height * (style.commonSize.screenWidth / _image.width));
-				cropSize = resizedImage.width;
-			} else {
-				resizedImage = _image.imageAsResized(_image.width * (style.commonSize.screenWidth / _image.height), style.commonSize.screenWidth);
-				cropSize = resizedImage.height;
-			}
-			croppedImage = resizedImage.imageAsCropped({
-				width: cropSize, 
-				height: cropSize,
-				x: offsetX,
-				y: offsetY
-			});
-//			if (_image.width > 640) {
-//				return croppedImage.imageAsResized(640, 480);
-//				return croppedImage.imageAsResized(640, 640);
-//			} else {
-				return croppedImage;
-//			}
-
-/*
-			// imageAsCroppedすると反転するバグがあり、同じサイズでimageAsResizedをしておく反転しない
-			croppedImage = _image.imageAsResized(_image.width, _image.height).imageAsCropped({
-				width: _image.width, 
-				height: _image.width * 3 / 4,
-				x: offsetX, y: offsetY * ( _image.width / style.commonSize.screenWidth )
-			});
-			if (_image.width > 640) {
-				return croppedImage.imageAsResized(640, 480);
-			} else {
-				return croppedImage;
-			}
-*/
+		if ( _image.height > _image.width ) {
+			cropSize = _image.width;
+		} else {
+			cropSize = _image.height;
 		}
+		if (_type == 'photo_select' || _type == 'icon_select') {
+			cropX = offsetX;
+			cropY = offsetY;
+		}
+
+		// imageAsCroppedすると反転するバグがあり、同じサイズでimageAsResizedをしておく反転しない
+		var resizedImage = _image.imageAsResized(_image.width, _image.height);
+		croppedImage = resizedImage.imageAsCropped({
+			width: cropSize, 
+			height: cropSize,
+			x: cropX * ( _image.height / style.commonSize.screenWidth ),
+			y: cropY * ( _image.width / style.commonSize.screenWidth )
+		});
+
+		if (cropSize > 640) {
+			return croppedImage.imageAsResized(640, 640);
+		} else {
+			return croppedImage;
+		}
+
 	};
 
 	// 写真投稿画面のオープン
@@ -215,28 +154,30 @@ exports.createWindow = function(_type, _userData){
 	var overlayView = Titanium.UI.createView(style.cameraOverlayView);
 	// フレーム
 	var frameView = Titanium.UI.createView(style.cameraFrameView);
-	frameView.top = frameSpace + 'dp';
 	frameView.width = style.commonSize.screenWidth + 'dp';
 	frameView.height = style.commonSize.screenWidth + 'dp';
 
 	if (_type == 'photo_camera') {
 		titleLabel.text = '取り込み中';
+		frameView.top = '50dp';
 		overlayView.add(frameView);
 
 	} else if (_type == 'icon_camera') {
 		titleLabel.text = '取り込み中';
+		frameView.top = '50dp';
 		overlayView.add(frameView);
 
-	} else if (_type == 'photo_select') {
+	} else if (_type == 'photo_select' || _type == 'icon_select') {
 		titleLabel.text = 'わんこ写真';
-		cameraWin.rightNavButton = selectButton;
+		frameView.top = frameSpace + 'dp';
 		cameraWin.add(frameView);
+		cameraWin.rightNavButton = selectButton;
 	}
 
 	if (_type == 'photo_camera' || _type == 'icon_camera') {
 		startCamera();
 		
-	} else if (_type == 'photo_select') {
+	} else if (_type == 'photo_select' || _type == 'icon_select') {
 		pickupPhoto();
 	}
 
@@ -245,7 +186,7 @@ exports.createWindow = function(_type, _userData){
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
-		if (_type == 'photo_select') {
+		if (_type == 'photo_select' || _type == 'icon_select') {
 			articleImage.image = null;
 			pickupPhoto();
 		}
@@ -254,7 +195,7 @@ exports.createWindow = function(_type, _userData){
 	// 選択ボタンをクリック
 	selectButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]selectButton.click:');
-		if (_type == 'photo_select') {
+		if (_type == 'photo_select' || _type == 'icon_select') {
 			openCameraPostWindow(editImage(articleImage.toBlob()));
 		}
 	});

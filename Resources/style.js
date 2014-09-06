@@ -2069,7 +2069,7 @@ exports.style = {
 		layout : 'horizontal',
 		top : '0dp',
 		// 下のタブで表示されない余白分＋10dp
-		bottom: '54dp',
+//		bottom: '54dp',
 //		width : '284dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
@@ -2108,17 +2108,27 @@ exports.style = {
 	},
 
 	cameraPostIconView:{
-		top: '20dp',
-		width: '108dp',
-		height: '108dp',
-		borderRadius: '54dp',
+		top : '10dp',
+		bottom : '10dp',
+		left: '10dp',
+		width: '94dp',
+		height: Ti.UI.SIZE,
+		borderRadius: '47dp',
 	},
 	cameraPostIconImage:{
-//		width: '54dp',
-//		height: '54dp',
-		width: '108dp',
-		height: '108dp',
+		width: '94dp',
+		height: Ti.UI.SIZE,
 		defaultImage: '',
+	},
+	cameraPostIconLabel:{
+		top : '10dp',
+		bottom : '10dp',
+		left: '20dp',
+		right: '15dp',
+		width: Ti.UI.SIZE,
+		height : '90dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#000',
 	},
 
 	
@@ -2387,6 +2397,7 @@ exports.style = {
 	},
 
 	timeNoDataView:{
+		layout: 'vertical',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
@@ -2395,6 +2406,12 @@ exports.style = {
 		font : {fontSize:12, fontWeight:'bold'},
 		color: '#3a4756',
 		text: 'スタンプを選んで\nわんこの記録をつけよう', 
+	},
+	timeNoDataImage:{
+		top: '10dp',
+		width : '64dp',
+		height : '64dp',
+		image : 'images/icon/i_circle.png',
 	},
 
 	timeStampGroupTableRow:{ 
@@ -3006,6 +3023,7 @@ exports.style = {
 		height: '118dp',
 	},
 	todayNoDataView:{
+		layout: 'vertical',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
@@ -3014,6 +3032,12 @@ exports.style = {
 		font : {fontSize:12, fontWeight:'bold'},
 		color: '#3a4756',
 		text: '１日１枚、写真を撮って\nわんこの日記をつけよう', 
+	},
+	todayNoDataImage:{
+		top: '10dp',
+		width : '64dp',
+		height : '64dp',
+		image : 'images/icon/i_circle.png',
 	},
 	
 // winStamp -------------------------------------------------------

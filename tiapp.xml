@@ -58,4 +58,14 @@
         <module platform="iphone">facebook</module>
     </modules>
     <property name="ti.facebook.appid">159833880868916</property>
+    <ios>
+      <plist>
+        <dict>
+          <key>UIBackgroundModes</key>
+          <array>
+            <string>fetch</string>
+          </array>
+        </dict>
+      </plist>
+    </ios>
 </ti:app>

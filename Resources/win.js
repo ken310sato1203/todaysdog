@@ -185,7 +185,7 @@ exports.win = {
 							diaryWin.activeTab = tabGroup.tabs[e.source.tabIndex];
 						}
 						diaryWin.fireEvent('refresh', {timeWinUpdateFlag:true});
-						
+
 					} else {
 						tabGroup.activeTab = tabGroup.tabs[e.source.tabIndex];					
 					}

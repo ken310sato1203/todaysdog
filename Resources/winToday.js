@@ -9,6 +9,9 @@ exports.createWindow = function(_userData){
 	// 写真の高さーステータスバー(20)＋タイトルバー(44)＋カスタムタブ(44)ーメニュー(74)ースタンプ(74)
 	var textBottom = (style.commonSize.screenWidth * 3 / 4) - (style.commonSize.screenHeight - 20 - 88 - 148);
 
+	// 多重クリック防止
+	var clickEnable = true;
+
 // ---------------------------------------------------------------------
 
 	// dayLabelViewの取得
@@ -36,7 +39,7 @@ exports.createWindow = function(_userData){
 	};
 
 
-	// 今日の時期を取得
+	// 今日の記事を取得
 	var getTodayArticle = function() {
 		Ti.API.debug('[func]getTodayArticle:');
 		// 日時の更新
@@ -83,49 +86,53 @@ exports.createWindow = function(_userData){
 			Ti.API.debug('[event]cameraView.click:');
 			var target = e.source;
 			// 多重クリック防止
-			target.touchEnabled = false;
-			target.opacity = 0.5;
-
-			if ( getTodayArticle() ) {
-				var alertDialog = Titanium.UI.createAlertDialog({
-					title: '写真の投稿は１日１枚です。\nまた明日。',
-					buttonNames: ['OK'],
-				});
-				alertDialog.show();
-				alertDialog.addEventListener('click',function(alert){
-					cameraView.touchEnabled = true;
-					cameraView.opacity = 1.0;
-				});
-
-			} else {
-				var dialog = Titanium.UI.createOptionDialog({
-					options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
-					cancel:2
-//						title:'写真を添付'
-				});
-				dialog.show();
+			if (clickEnable) {
+				clickEnable = false;
+				target.opacity = 0.5;
 	
-				dialog.addEventListener('click',function(e) {
-					Ti.API.debug('[event]dialog.click:');
-					cameraView.touchEnabled = true;
-					switch( e.index ) {
-						case 0:
-							var cameraWin = win.createCameraWindow('photo_camera', _userData);
-							cameraWin.prevWin = todayWin;
-							win.openTabWindow(cameraWin, {animated:true});
-							cameraView.opacity = 1.0;
-							break;
-						case 1:
-							var cameraWin = win.createCameraWindow('photo_select', _userData);
-							cameraWin.prevWin = todayWin;
-							win.openTabWindow(cameraWin, {animated:true});
-							cameraView.opacity = 1.0;
-							break;
-						case 2:
-							cameraView.opacity = 1.0;
-							break;
-					}
-				});
+				if ( getTodayArticle() ) {
+					var alertDialog = Titanium.UI.createAlertDialog({
+						title: '写真の投稿は１日１枚です。\nまた明日。',
+						buttonNames: ['OK'],
+					});
+					alertDialog.show();
+					alertDialog.addEventListener('click',function(alert){
+						clickEnable = true;
+						target.opacity = 1.0;
+					});
+	
+				} else {
+					var dialog = Titanium.UI.createOptionDialog({
+						options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
+						cancel:2
+	//						title:'写真を添付'
+					});
+					dialog.show();
+		
+					dialog.addEventListener('click',function(e) {
+						Ti.API.debug('[event]dialog.click:');
+						switch( e.index ) {
+							case 0:
+								var cameraWin = win.createCameraWindow('photo_camera', _userData);
+								cameraWin.prevWin = todayWin;
+								win.openTabWindow(cameraWin, {animated:true});
+								target.opacity = 1.0;
+								clickEnable = true;
+								break;
+							case 1:
+								var cameraWin = win.createCameraWindow('photo_select', _userData);
+								cameraWin.prevWin = todayWin;
+								win.openTabWindow(cameraWin, {animated:true});
+								target.opacity = 1.0;
+								clickEnable = true;
+								break;
+							case 2:
+								target.opacity = 1.0;
+								clickEnable = true;
+								break;
+						}
+					});
+				}
 			}
 		});		
 
@@ -146,22 +153,24 @@ exports.createWindow = function(_userData){
 			Ti.API.debug('[event]calendarView.click:');
 			var target = e.source;
 			// 多重クリック防止
-			target.touchEnabled = false;
-			target.opacity = 0.5;
-			var calendarWin = win.createCalendarWindow(_userData);
-			calendarWin.prevWin = todayWin;
-			// 下から表示させるため、modalでウィンドウを表示。
-			// titleControlが表示されなかったので、NavigationWindowを使用。
-			var navWin = Ti.UI.iOS.createNavigationWindow({
-				modal: true,
-			    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
-			    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_COVER_VERTICAL,
-				window: calendarWin
-			});
-			calendarWin.nav = navWin;
-			navWin.open();
-			target.touchEnabled = true;
-			target.opacity = 1.0;
+			if (clickEnable) {
+				clickEnable = false;
+				target.opacity = 0.5;
+				var calendarWin = win.createCalendarWindow(_userData);
+				calendarWin.prevWin = todayWin;
+				// 下から表示させるため、modalでウィンドウを表示。
+				// titleControlが表示されなかったので、NavigationWindowを使用。
+				var navWin = Ti.UI.iOS.createNavigationWindow({
+					modal: true,
+				    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
+				    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_COVER_VERTICAL,
+					window: calendarWin
+				});
+				calendarWin.nav = navWin;
+				navWin.open();
+				clickEnable = true;
+				target.opacity = 1.0;
+			}
 		});
 
 		// 余白分
@@ -260,13 +269,11 @@ exports.createWindow = function(_userData){
 		photoImage.addEventListener('click',function(e){
 			Ti.API.debug('[event]photoImage.click:');
 			var target = e.source;
-			target.touchEnabled = false;
 			if (target.textView.visible) {
 				target.textView.visible = false;
 			} else {
 				target.textView.visible = true;
 			}
-			target.touchEnabled = true;
 		});
 
 		return articleView;
@@ -286,6 +293,9 @@ exports.createWindow = function(_userData){
 			var noDataView = Ti.UI.createView(style.todayNoDataView);
 			var noDataLabel = Ti.UI.createLabel(style.todayNoDataLabel);
 			noDataView.add(noDataLabel);
+			var noDataImage = Ti.UI.createImageView(style.todayNoDataImage);
+			noDataView.add(noDataImage);
+
 			// 全体の高さーステータスバー(20)ータイトルバー(44)ーメニュー(74)ー下のタブ(44)
 			photoRow.height = style.commonSize.screenHeight - 182;
 			photoRow.add(noDataView);

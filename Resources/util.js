@@ -5,6 +5,7 @@ exports.util = {
 	local:{
 		photoPath:Ti.Filesystem.applicationDataDirectory + 'photo/',
 		iconPath:Ti.Filesystem.applicationDataDirectory + 'icon/',
+		dataPath:Ti.Filesystem.applicationDataDirectory + 'data/',
 	},
 	
 	diary:{
@@ -67,25 +68,37 @@ exports.util = {
 		    var day = _date.getDate();
 		    var hour = _date.getHours();
 		    var minute = _date.getMinutes();
-		    return String.format("%04.0f-%02.0f-%02.0f %02.0f:%02.0f", year, month, day, hour, minute);
+		    var second = _date.getSeconds();
+		    return String.format("%04.0f-%02.0f-%02.0f %02.0f:%02.0f:%02.0f", year, month, day, hour, minute, second);
 		} else {
 			var year = _date.substr(0,4);
 			var month = _date.substr(5,2);
 			var day = _date.substr(8,2);
 			var hour = _date.substr(11,2);
 			var minute = _date.substr(14,2);
-			return String.format("%s-%s-%s %s:%s", year, month, day, hour, minute);
+			var second = _date.substr(17,2);
+			return String.format("%s-%s-%s %s:%s:%s", year, month, day, hour, minute, second);
 		}
 	},
 	// Date型を日時フォーマットに変換
 	getCloudFormattedDateTime:function(_date){
-	    var year = _date.getFullYear();
-	    var month = _date.getMonth() + 1;
-	    var day = _date.getDate();
-	    var hour = _date.getHours();
-	    var minute = _date.getMinutes();
-	    var second = _date.getSeconds();
-	    return String.format("%04.0f-%02.0f-%02.0f %02.0f:%02.0f:%02.0f +0000", year, month, day, hour, minute, second);
+		if (_date instanceof Date) {
+		    var year = _date.getFullYear();
+		    var month = _date.getMonth() + 1;
+		    var day = _date.getDate();
+		    var hour = _date.getHours();
+		    var minute = _date.getMinutes();
+		    var second = _date.getSeconds();
+		    return String.format("%04.0f-%02.0f-%02.0f %02.0f:%02.0f:%02.0f +0000", year, month, day, hour, minute, second);
+		} else {
+			var year = _date.substr(0,4);
+			var month = _date.substr(5,2);
+			var day = _date.substr(8,2);
+			var hour = _date.substr(11,2);
+			var minute = _date.substr(14,2);
+			var second = _date.substr(17,2);
+		    return String.format("%s-%s-%s %s:%s:%s +0000", year, month, day, hour, minute, second);
+		}
 	},
 	// フォーマットされた日付をDate型に変換
 	getDate:function(_formatedDate){

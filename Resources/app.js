@@ -311,6 +311,45 @@ if ( Facebook.loggedIn ) {
 	loginFbButton.show();
 }
 
+// バックグラウンドで定期的に実行
+Ti.App.iOS.setMinimumBackgroundFetchInterval(
+    Ti.App.iOS.BACKGROUNDFETCHINTERVAL_MIN
+);
+Ti.App.iOS.addEventListener(
+    'backgroundfetch',
+    function (e) {
+		var articleId = Ti.App.Properties.getString(userId + '_' + 'articleId');
+		var articleDate = Ti.App.Properties.getString(userId + '_' + 'articleDate');
+		var idList = model.getLocalFriendsList(userId);
+		if (idList) {
+			Cloud.Posts.query({
+				where: {
+					user_id: { '$in': idList },
+					'id': { '$nin': [articleId] },
+					'postDate': {
+						'$gte': util.getCloudFormattedDateTime(articleDate)
+					}
+				},
+				order: '-created_at'
+			}, function (e) {
+				if (e.success) {
+					var badgeCount = e.posts.length;
+					if (badgeCount == 0) {
+						badgeCount = null;
+					}
+					Ti.UI.iPhone.setAppBadge(badgeCount);
+	
+				} else {
+					util.errorDialog(e);
+				}
+			});			
+		}
+
+        // イベントハンドラの最後で呼び出し必須
+        Ti.App.iOS.endBackgroundHandler(e.handlerId);
+    }
+);
+
 // アプリがバックグラウンドに変わった時に実行
 var service = Ti.App.iOS.registerBackgroundService({url:'background.js'});
 

@@ -4,6 +4,8 @@ exports.createWindow = function(_userData){
 	Ti.API.debug('[func]winProfile.createWindow:');
 
 	var loginUser = model.getLoginUser();
+	// 多重クリック防止
+	var clickEnable = true;
 
 	// Viewの取得
 	var getProfileRowList = function() {
@@ -29,23 +31,42 @@ exports.createWindow = function(_userData){
 		iconView.addEventListener('click',function(e){
 			Ti.API.debug('[event]iconView.click:');
 			if (_userData.id == loginUser.id) {
-				// アルバムから選ぶと横長写真の対応が難しいので撮影のみとする
-				var dialog = Titanium.UI.createOptionDialog({
-					options:['撮影する', 'キャンセル'],
-					cancel:1
-				});
-				dialog.show();
+				var target = e.source;
+				// 多重クリック防止
+				if (clickEnable) {
+					clickEnable = false;
+					target.opacity = 0.5;
 	
-				dialog.addEventListener('click',function(e) {
-					Ti.API.debug('[event]dialog.click:');
-					switch( e.index ) {
-						case 0:
-							var cameraWin = win.createCameraWindow('icon_camera', _userData);
-							cameraWin.prevWin = profileWin;
-							win.openTabWindow(cameraWin, {animated:true});
-							break;
-					}
-				});
+					var dialog = Titanium.UI.createOptionDialog({
+						options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
+						cancel:2
+					});
+					dialog.show();
+		
+					dialog.addEventListener('click',function(e) {
+						Ti.API.debug('[event]dialog.click:');
+						switch( e.index ) {
+							case 0:
+								var cameraWin = win.createCameraWindow('icon_camera', _userData);
+								cameraWin.prevWin = profileWin;
+								win.openTabWindow(cameraWin, {animated:true});
+								target.opacity = 1.0;
+								clickEnable = true;
+								break;
+							case 1:
+								var cameraWin = win.createCameraWindow('icon_select', _userData);
+								cameraWin.prevWin = profileWin;
+								win.openTabWindow(cameraWin, {animated:true});
+								target.opacity = 1.0;
+								clickEnable = true;
+								break;
+							case 2:
+								target.opacity = 1.0;
+								clickEnable = true;
+								break;
+						}
+					});
+				}
 			}
 		});			
 	

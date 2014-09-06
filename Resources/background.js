@@ -1,5 +1,7 @@
 //バックグラウンド実行
 
+// モジュール読み込み
+
 var userId = Ti.App.Properties.getString('userId');
 var today = Ti.App.Properties.getString(userId + '_' + 'today');
 var config = Ti.App.Properties.getString(userId + '_' + 'config');
@@ -26,8 +28,8 @@ if (today == nowDay || config == nowDay) {
 		alertBody: message,
 		alertAction: 'OK',
 		date: new Date(time),
-		repeat: 'daily'
-	//	badge: Ti.UI.iPhone.appBadge + 1
+		repeat: 'daily',
+//		badge: badgeCount
 	});	
 	
 	if (Ti.App.currentService) {

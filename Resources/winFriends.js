@@ -41,6 +41,13 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 		for (var i=0; i<_articleList.length; i++) {	
 
+			// 未読件数取得のため、最新の記事の日付を保存
+			if ( i == 0 ) {
+				Ti.UI.iPhone.setAppBadge(null);
+				Ti.App.Properties.setString(_userData.id + '_' + 'articleId', _articleList[i].id);
+				Ti.App.Properties.setString(_userData.id + '_' + 'articleDate', _articleList[i].date);
+			}
+
 			var date = util.getDateElement(_articleList[i].date);
 			if (checkDate == null || date.year != checkDate.year || date.month != checkDate.month || date.day != checkDate.day) {
 				checkDate = {year:date.year, month:date.month, day:date.day};					

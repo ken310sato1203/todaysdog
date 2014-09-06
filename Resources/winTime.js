@@ -82,6 +82,9 @@ exports.createWindow = function(_userData, _diaryData){
 			var noDataView = Ti.UI.createView(style.timeNoDataView);
 			var noDataLabel = Ti.UI.createLabel(style.timeNoDataLabel);
 			noDataView.add(noDataLabel);
+			var noDataImage = Ti.UI.createImageView(style.timeNoDataImage);
+			noDataView.add(noDataImage);
+
 			// 全体の高さーステータスバー(20)ータイトルバー(44)ーメニュー(74)ー下のタブ(44)
 			noDataRow.height = style.commonSize.screenHeight - 182;
 			noDataRow.add(noDataView);
@@ -238,53 +241,55 @@ exports.createWindow = function(_userData, _diaryData){
 		stampMenuView.addEventListener('click',function(e){
 			Ti.API.debug('[event]stampView.click:');
 			var target = e.source;
-			// 日時の更新
-			var nowDate = new Date();
-			now = util.getDateElement(nowDate);
-			now.weekday = util.diary.weekday[nowDate.getDay()];
-			now.today = util.getFormattedDate(nowDate);
-
-			var stampData = {
-				no: null,
-				event: null,
-				user: _userData.id,
-				stamp: target.stamp,
-				textList: [''],
-				year: _diaryData.year,
-				month: _diaryData.month,
-				day: _diaryData.day,
-				hour: now.hour,
-				all: null,
-				report: null,
-				date: null,
-			};
-
 			// 多重クリック防止
-			target.touchEnabled = false;
-			target.opacity = 0.5;
-			if (target.objectName == 'timeStampSelectView') {
-				var type = "time";
-				var postWin = win.createStampPostWindow(type, _userData, [stampData]);
-				postWin.prevWin = timeWin;
-				win.openTabWindow(postWin, {animated:true});
-			
-			} else if (target.objectName == 'timeStampEditView') {
-				var type = "time";
-				var stampWin = win.createStampWindow(type, _userData, stampData);
-/*
-				stampWin.addEventListener('open', function(){
-					// スライド前にopenイベントが発火するので1秒後にセット
-			        setTimeout(function(){
-						target.touchEnabled = true;
-						target.opacity = 1.0;
-			        }, 1000);
-			    });
-*/
-				stampWin.prevWin = timeWin;
-				win.openTabWindow(stampWin, {animated:true});
+			if (clickEnable) {
+				clickEnable = false;
+				target.opacity = 0.5;
+				// 日時の更新
+				var nowDate = new Date();
+				now = util.getDateElement(nowDate);
+				now.weekday = util.diary.weekday[nowDate.getDay()];
+				now.today = util.getFormattedDate(nowDate);
+	
+				var stampData = {
+					no: null,
+					event: null,
+					user: _userData.id,
+					stamp: target.stamp,
+					textList: [''],
+					year: _diaryData.year,
+					month: _diaryData.month,
+					day: _diaryData.day,
+					hour: now.hour,
+					all: null,
+					report: null,
+					date: null,
+				};
+	
+				if (target.objectName == 'timeStampSelectView') {
+					var type = "time";
+					var postWin = win.createStampPostWindow(type, _userData, [stampData]);
+					postWin.prevWin = timeWin;
+					win.openTabWindow(postWin, {animated:true});
+				
+				} else if (target.objectName == 'timeStampEditView') {
+					var type = "time";
+					var stampWin = win.createStampWindow(type, _userData, stampData);
+	/*
+					stampWin.addEventListener('open', function(){
+						// スライド前にopenイベントが発火するので1秒後にセット
+				        setTimeout(function(){
+							clickEnable = true;
+							target.opacity = 1.0;
+				        }, 1000);
+				    });
+	*/
+					stampWin.prevWin = timeWin;
+					win.openTabWindow(stampWin, {animated:true});
+				}
+				clickEnable = true;
+				target.opacity = 1.0;
 			}
-			target.touchEnabled = true;
-			target.opacity = 1.0;
 		});
 
 		return stampMenuView;
@@ -329,22 +334,24 @@ exports.createWindow = function(_userData, _diaryData){
 		Ti.API.debug('[event]listButton.click:');
 		var target = e.source;
 		// 多重クリック防止
-		target.touchEnabled = false;
-		target.opacity = 0.5;
-		var stampListWin = win.createStampListWindow(_userData, _diaryData);
-		stampListWin.prevWin = timeWin;
-		// 下から表示させるため、modalでウィンドウを表示。
-		// titleControlが表示されなかったので、NavigationWindowを使用。
-		var navWin = Ti.UI.iOS.createNavigationWindow({
-			modal: true,
-		    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
-		    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_COVER_VERTICAL,
-			window: stampListWin
-		});
-		stampListWin.nav = navWin;
-		navWin.open();
-		target.touchEnabled = true;
-		target.opacity = 1.0;
+		if (clickEnable) {
+			clickEnable = false;
+			target.opacity = 0.5;
+			var stampListWin = win.createStampListWindow(_userData, _diaryData);
+			stampListWin.prevWin = timeWin;
+			// 下から表示させるため、modalでウィンドウを表示。
+			// titleControlが表示されなかったので、NavigationWindowを使用。
+			var navWin = Ti.UI.iOS.createNavigationWindow({
+				modal: true,
+			    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
+			    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_COVER_VERTICAL,
+				window: stampListWin
+			});
+			stampListWin.nav = navWin;
+			navWin.open();
+			clickEnable = true;
+			target.opacity = 1.0;
+		}
 	});
 
 	// 右スワイプで前の画面に戻る

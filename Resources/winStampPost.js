@@ -4,6 +4,9 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	Ti.API.debug('[func]winStampPost.createWindow:');
 	Ti.API.debug('_type:' + _type);
 
+	// 多重クリック防止
+	var clickEnable = true;
+
 	// stampRowの取得
 	var getStampRow = function(_stampData) {
 		Ti.API.debug('[func]getStampRow:');
@@ -331,68 +334,71 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	postTableView.addEventListener('click', function(e){
 		Ti.API.debug('[event]postTableView.click:');
 		var target = e.source;
-		target.touchEnabled = false;
-
-		if (e.rowData.objectName != null){
-			var targetName = e.rowData.objectName;
-			if (targetName == "stamp"){
-/*
-				// マイナスボタンを押すと削除
-				if (target.objectName == "minus"){
-					if (_stampDataList.length == 1) {
-						if (_stampDataList[0].event == null) {
-							postWin.close({animated:true});
+		// 多重クリック防止
+		if (clickEnable) {
+			clickEnable = false;
+	
+			if (e.rowData.objectName != null){
+				var targetName = e.rowData.objectName;
+				if (targetName == "stamp"){
+	/*
+					// マイナスボタンを押すと削除
+					if (target.objectName == "minus"){
+						if (_stampDataList.length == 1) {
+							if (_stampDataList[0].event == null) {
+								postWin.close({animated:true});
+							} else {
+								// 登録済みのスタンプデータを削除する場合
+								removeStampData(_stampDataList[0]);
+							}
 						} else {
-							// 登録済みのスタンプデータを削除する場合
-							removeStampData(_stampDataList[0]);
+							postTableView.deleteRow(e.index);
+							_stampDataList.splice(e.index, 1);
 						}
+	
 					} else {
-						postTableView.deleteRow(e.index);
-						_stampDataList.splice(e.index, 1);
-					}
-
-				} else {
-*/
-					var textWin = win.createStampTextWindow(_userData, e.rowData.stampData);
-					textWin.prevWin = postWin;
-					win.openTabWindow(textWin, {animated:true});
-//				}
-					
-			} else if (targetName == "date"){
-				datePicker.value = util.getDate(dateValue.text);
-				datePickerView.animate(slideIn);
-
-			} else if (targetName == "hour"){
-//					if(allSwitch.value == false) {
-					hourPicker.setSelectedRow(0, util.getHour(hourValue.source));
-					// アニメーションがうまく動かないので時間遅らせて表示
-					setTimeout(function() {
-						hourPickerView.animate(slideIn);
-					}, 100);
-//					}
-
-			} else if (targetName == "all"){
-				if (allSwitch.value) {
-					allSwitch.value = false;
-				} else {
-					allSwitch.value = true;
-				}
-
-			} else if (targetName == "post"){
-				postButton.fireEvent('click');
-			}
-
-			if (selectedName != targetName){
-				if (selectedName == "date"){
-					datePickerView.animate(slideOut);
-
+	*/
+						var textWin = win.createStampTextWindow(_userData, e.rowData.stampData);
+						textWin.prevWin = postWin;
+						win.openTabWindow(textWin, {animated:true});
+	//				}
+						
+				} else if (targetName == "date"){
+					datePicker.value = util.getDate(dateValue.text);
+					datePickerView.animate(slideIn);
+	
 				} else if (targetName == "hour"){
-					hourPickerView.animate(slideOut);
+	//					if(allSwitch.value == false) {
+						hourPicker.setSelectedRow(0, util.getHour(hourValue.source));
+						// アニメーションがうまく動かないので時間遅らせて表示
+						setTimeout(function() {
+							hourPickerView.animate(slideIn);
+						}, 100);
+	//					}
+	
+				} else if (targetName == "all"){
+					if (allSwitch.value) {
+						allSwitch.value = false;
+					} else {
+						allSwitch.value = true;
+					}
+	
+				} else if (targetName == "post"){
+					postButton.fireEvent('click');
 				}
-			}				
-			selectedName = targetName;
+	
+				if (selectedName != targetName){
+					if (selectedName == "date"){
+						datePickerView.animate(slideOut);
+	
+					} else if (targetName == "hour"){
+						hourPickerView.animate(slideOut);
+					}
+				}				
+				selectedName = targetName;
+			}
 		}
-		target.touchEnabled = true;
+		clickEnable = true;
 	});
 
 	// 投稿ボタンをクリック

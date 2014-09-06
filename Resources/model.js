@@ -123,30 +123,30 @@ exports.model = {
 	// ローカルに画像を保存
 	saveLocalImage:function(_imageBlob, _dirPath, _fileName){
 		Ti.API.debug('[func]saveLocalImage:');
-		var photoDir  = Ti.Filesystem.getFile(_dirPath);
-		if (! photoDir.exists()) {
-			photoDir.createDirectory();
+		var imageDir  = Ti.Filesystem.getFile(_dirPath);
+		if (! imageDir.exists()) {
+			imageDir.createDirectory();
 		}
-		var photoFile  = Ti.Filesystem.getFile(photoDir.nativePath + _fileName + '.png');
-		photoFile.write(_imageBlob);
+		var imageFile  = Ti.Filesystem.getFile(imageDir.nativePath + _fileName + '.png');
+		imageFile.write(_imageBlob);
 	},
 
 	// ローカルの画像を削除
 	deleteLocalImage:function(_dirPath, _fileName){
 		Ti.API.debug('[func]deleteLocalImage:');
-		var photoDir  = Ti.Filesystem.getFile(_dirPath);
-		var photoFile  = Ti.Filesystem.getFile(photoDir.nativePath + _fileName + '.png');
-		if (photoFile.exists()) {
-			photoFile.deleteFile();
+		var imageDir  = Ti.Filesystem.getFile(_dirPath);
+		var imageFile  = Ti.Filesystem.getFile(imageDir.nativePath + _fileName + '.png');
+		if (imageFile.exists()) {
+			imageFile.deleteFile();
 		}
 	},
 
 	// ローカルに画像が保存されていることをチェック
 	checkLocalImage:function(_dirPath, _fileName){
 		Ti.API.debug('[func]checkLocalImage:');
-		var photoDir  = Ti.Filesystem.getFile(_dirPath);
-		var photoFile  = Ti.Filesystem.getFile(photoDir.nativePath + _fileName + '.png');
-		if (photoFile.exists()) {
+		var imageDir  = Ti.Filesystem.getFile(_dirPath);
+		var imageFile  = Ti.Filesystem.getFile(imageDir.nativePath + _fileName + '.png');
+		if (imageFile.exists()) {
 			return true;
 		} else {
 			return false;
@@ -154,8 +154,8 @@ exports.model = {
 	},
 
 	// クラウドの画像をロード
-	loadCloudImage:function(_imagePath, callback){
-		Ti.API.debug('[func]loadCloudImage:');
+	readCloudImage:function(_imagePath, callback){
+		Ti.API.debug('[func]readCloudImage:');
 
 		var xhr = Titanium.Network.createHTTPClient();
 		xhr.open('GET',_imagePath);

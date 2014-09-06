@@ -41,14 +41,20 @@ exports.createWindow = function(_type, _userData, _photoImage){
 		saveImage = Titanium.UI.createImageView(style.cameraSaveImage);
 		saveImage.image = _photoImage;
 
-	} else if (_type == 'icon_camera') {
+	} else if (_type == 'icon_camera' || _type == 'icon_select') {
 		titleLabel.text = 'プロフィール画像';
-		postScrollView.backgroundColor = 'white';
 		iconView = Titanium.UI.createView(style.cameraPostIconView);
-		postScrollView.add(iconView);
+		postView.add(iconView);
 		postImage = Titanium.UI.createImageView(style.cameraPostIconImage);
 		postImage.image = _photoImage;
 		iconView.add(postImage);
+
+		var iconLabel = Ti.UI.createLabel(style.cameraPostIconLabel);
+		if (_userData.name != '') {
+			iconLabel.text = _userData.name + '\n';
+		}
+		iconLabel.text += _userData.user;
+		postView.add(iconLabel);
 	}
 
 	// 投稿時のロード用画面
@@ -94,31 +100,33 @@ exports.createWindow = function(_type, _userData, _photoImage){
 	// 投稿ボタンをクリック
 	postButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]postButton.click:');
-		// コメントフィールドが表示されている場合下げる
-		textArea.blur();
-		if (textArea.value == textArea.hintText || textArea.value == "") {
-			var commentDialog = Titanium.UI.createAlertDialog({
-				title: 'コメントを入力してください',
-				buttonNames: ['OK'],
-			});
-			commentDialog.show();
-		} else {
-			var alertDialog = Titanium.UI.createAlertDialog({
-				title: '投稿しますか？',
-				buttonNames: ['キャンセル','OK'],
-				cancel: 1
-			});
-			alertDialog.show();
-	
-			alertDialog.addEventListener('click',function(alert){
-				// OKの場合
-				if(alert.index == 1){
-					postButton.enabled = false;
-					cameraPostWin.add(actBackView);
-					actInd.show();
-					tabGroup.add(actInd);
-	
-					if (_type == 'photo_camera' || _type == 'icon_camera') {
+
+		if (_type == 'photo_camera' || _type == 'photo_select') {
+
+			// コメントフィールドが表示されている場合下げる
+			textArea.blur();
+			if (textArea.value == textArea.hintText || textArea.value == "") {
+				var commentDialog = Titanium.UI.createAlertDialog({
+					title: 'コメントを入力してください',
+					buttonNames: ['OK'],
+				});
+				commentDialog.show();
+			} else {
+				var alertDialog = Titanium.UI.createAlertDialog({
+					title: '投稿しますか？',
+					buttonNames: ['キャンセル','OK'],
+					cancel: 1
+				});
+				alertDialog.show();
+		
+				alertDialog.addEventListener('click',function(alert){
+					// OKの場合
+					if(alert.index == 1){
+						postButton.enabled = false;
+						cameraPostWin.add(actBackView);
+						actInd.show();
+						tabGroup.add(actInd);
+		
 						// カメラロールに画像を保存する
 						Titanium.Media.saveToPhotoGallery(postImage.toBlob(), {
 							success : function(e) {
@@ -128,18 +136,16 @@ exports.createWindow = function(_type, _userData, _photoImage){
 								Ti.API.debug('error:');
 							}
 						});
-					}
-	
-					// todayWinの更新
-					var todayWin = win.getTab("todayTab").window;
-
-					if (_type == 'photo_camera' || _type == 'photo_select') {
+		
 						// ローカルに画像を保存
 						var now = new Date();
 						var nowDate = util.getFormattedDate(now);
 						var nowDateTime = util.getFormattedDateTime(now);
 						var fileName = _userData.id + "_" + nowDate;
 						model.saveLocalImage(saveImage.toBlob(), util.local.photoPath, fileName);
+	
+						// todayWinの更新
+						var todayWin = win.getTab("todayTab").window;
 	
 						var articleData = {
 							id: null, 
@@ -188,40 +194,61 @@ exports.createWindow = function(_type, _userData, _photoImage){
 								util.errorDialog(e);
 							}
 						});
-						
-					} else if (_type == 'icon_camera') {
-						// ローカルに画像を保存
-						var fileName = _userData.id;
-						model.saveLocalImage(postImage.toBlob(), util.local.iconPath, fileName);
-						model.updateCloudUserIcon({
-							user: _userData.user,
-							icon: postImage.toBlob()
-						}, function(e) {
-							Ti.API.debug('[func]updateCloudUserIcon.callback:');
-							if (e.success) {
-								_userData.icon = util.local.iconPath + fileName + '.png';
+					}
+				});
+			}
 
-								// 遷移前の画面を閉じる
-								if (cameraPostWin.prevWin != null) {
-									cameraPostWin.prevWin.close();
-								}
-								// todayWinの更新
-								todayWin.addEventListener('refresh', function(){
-									cameraPostWin.close({animated:true});
-									actInd.hide();
-									actBackView.hide();
-									postButton.enabled = true;
-							    });
-								todayWin.fireEvent('refresh');
+		} else if (_type == 'icon_camera' || _type == 'icon_select') {
+			var alertDialog = Titanium.UI.createAlertDialog({
+				title: '設定しますか？',
+				buttonNames: ['キャンセル','OK'],
+				cancel: 1
+			});
+			alertDialog.show();
 	
-							} else {
+			alertDialog.addEventListener('click',function(alert){
+				// OKの場合
+				if(alert.index == 1){
+					postButton.enabled = false;
+					cameraPostWin.add(actBackView);
+					actInd.show();
+					tabGroup.add(actInd);
+	
+					// ローカルに画像を保存
+					var fileName = _userData.id;
+					model.saveLocalImage(postImage.toBlob(), util.local.iconPath, fileName);
+
+					// profileWinの更新
+					var profileWin = win.getTab("profileTab").window;
+
+					model.updateCloudUserIcon({
+						user: _userData.user,
+						icon: postImage.toBlob()
+					}, function(e) {
+						Ti.API.debug('[func]updateCloudUserIcon.callback:');
+						if (e.success) {
+							_userData.icon = util.local.iconPath + fileName + '.png';
+
+							// 遷移前の画面を閉じる
+							if (cameraPostWin.prevWin != null) {
+								cameraPostWin.prevWin.close();
+							}
+							// todayWinの更新
+							profileWin.addEventListener('refresh', function(){
+								cameraPostWin.close({animated:true});
 								actInd.hide();
 								actBackView.hide();
 								postButton.enabled = true;
-								util.errorDialog(e);
-							}
-						});
-					}
+						    });
+							profileWin.fireEvent('refresh');
+
+						} else {
+							actInd.hide();
+							actBackView.hide();
+							postButton.enabled = true;
+							util.errorDialog(e);
+						}
+					});
 				}
 			});
 		}
