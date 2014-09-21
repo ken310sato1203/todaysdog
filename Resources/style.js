@@ -2834,7 +2834,9 @@ exports.style = {
 
 // winToay -------------------------------------------------------
 	todayWin:{
-		backgroundColor: 'white',
+//		backgroundColor: 'white',
+//		backgroundColor : '#dedede',
+		backgroundColor: '#eeeeee',
 //		barColor: '#a9a9a9',
 		barImage: 'images/icon/titlebar.png',
 //		backButtonTitleImage: 'images/icon/titlebar.png',
@@ -2855,40 +2857,83 @@ exports.style = {
 		text: '今日のわんこ', 
 	},
 	todayTableView:{
-		top: '0dp',
-		// 下のタブで表示されない余白分
+//		top: '0dp',
+		height: Ti.UI.SIZE,
+		// 下のタブで表示されない余白分(74+44)
+//		bottom: '118dp',
 		bottom: '44dp',
-		height: '100%',
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		scrollable: true,
 		data: [],
-		backgroundColor: '#eeeeee',
+		backgroundColor: 'transparent',
 	},
-	todayTableRow:{ 
+	todayPhotoTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-//		backgroundColor: '#dedede',
+		backgroundColor: '#dedede',
 //		backgroundColor: '#eeeeee',
+//		backgroundColor: 'white',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
-	todayMenuView:{
-		// 下のタブで表示されない余白分
-		bottom: '44dp',
-		height: '74dp',
-//		backgroundColor: '#eeeeee',
-		backgroundColor: '#dedede',
+	todayPhotoAddTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 	},
-	todayMenuListView:{
-		layout: 'horizontal',
+
+	todayDayPhotoView:{
+//		layout: 'horizontal',
 		top: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+	},
+	todayDayFrameView:{
+		bottom: '0dp',
+		right: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	todayDayView:{
+//		layout: 'absolute',
+		layout: 'horizontal',
+//		top: '10dp',
+		bottom: '0dp',
+		right: '0dp',
+//		width: '54dp',
+//		height: '54dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+//		borderRadius: '27dp',
+	},
+	todayDayLabel:{
+//		top: '13dp',
+		bottom: '2dp',
+		right: '5dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'center',
+		font : {fontSize:18, fontWeight:'bold'},
+//		color: '#3a4756',
+		color: 'white',
+	},
+	todayWeekdayLabel:{
+//		bottom: '7dp',
+		bottom: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'center',
+		font : {fontSize:14, fontWeight:'bold'},
+		color: 'white',
+	},
+	todayCameraFrameView:{
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
 	todayCameraView:{
-		top: '10dp',
-		bottom: '10dp',
-		left: '30dp',
+//		top: '10dp',
+//		bottom: '10dp',
+//		left: '30dp',
 		width: '54dp',
 		height: '54dp',
 		borderRadius: '27dp',
@@ -2904,37 +2949,22 @@ exports.style = {
 		articleData: null,
 	},
 
-	todayDayView:{
+
+/*
+	todayMenuView:{
+		// 下のタブで表示されない余白分
+		bottom: '44dp',
+		height: '74dp',
+//		backgroundColor: '#eeeeee',
+		backgroundColor: '#dedede',
+	},
+	todayMenuListView:{
+		layout: 'horizontal',
+		top: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
-	todayDayLabelView:{
-		layout: 'absolute',
-		top: '10dp',
-		bottom: '10dp',
-		left: '30dp',
-		width: '54dp',
-		height: '54dp',
-		borderRadius: '27dp',
-		backgroundColor: 'white',
-	},
-	todayDayLabel:{
-		top: '13dp',
-		width: '100%',
-		height: Ti.UI.SIZE,
-		textAlign: 'center',
-		font : {fontSize:16, fontWeight:'bold'},
-		color: '#3a4756',
-//		backgroundColor: 'yellow',
-	},
-	todayWeekdayLabel:{
-		bottom: '7dp',
-		width: '100%',
-		height: Ti.UI.SIZE,
-		textAlign: 'center',
-		font : {fontSize:14, fontWeight:'bold'},
-//		backgroundColor: 'blue',
-	},
+*/
 	todayCalendarView:{
 		top: '10dp',
 		bottom: '10dp',
@@ -3026,6 +3056,7 @@ exports.style = {
 		layout: 'vertical',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		backgroundColor: 'yellow',
 	},
 	todayNoDataLabel:{
 		textAlign: 'center',
@@ -3039,6 +3070,58 @@ exports.style = {
 		height : '64dp',
 		image : 'images/icon/i_circle.png',
 	},
+	todayStampListTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		backgroundColor: '#dedede',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
+		// カスタムプロパティ
+		stampData: null,
+	},
+	todayStampGroupView:{
+		top: '1dp',
+		bottom: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+		backgroundColor : 'white',
+	},
+	todayStampGroupLabel:{
+		top: '0dp',
+		left: '14dp',
+		width: '64dp',
+		height: '44dp',
+		textAlign: 'left',
+		font : {fontSize:12, fontWeight:'bold'},
+		color: '#3a4756',
+	},
+	todayStampListView:{
+		layout: 'horizontal',
+		top: '0dp',
+		bottom: '3dp',
+		left: '77dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	todayStampView:{
+		top: '3dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		// カスタムプロパティ
+//		stampData : null,
+		objectName : 'todayStampView',
+	},
+	todayStampImage:{
+		top: '3dp',
+		bottom: '3dp',
+		left: '0dp',
+		width : '32dp',
+		height : '32dp',
+		defaultImage: '',
+		image : null,
+		touchEnabled: false,
+	},
+
 	
 // winStamp -------------------------------------------------------
 	stampWin:{

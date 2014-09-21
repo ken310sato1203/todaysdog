@@ -136,11 +136,14 @@ exports.createWindow = function(_userData, _diaryData){
 									actInd.hide();
 									clickEnable = true;
 									// diaryWinの更新
-									var targetTab = win.getTab("diaryTab");
-									var diaryWin = targetTab.window;
+									var diaryWin = win.getTab("diaryTab").window;
 									_diaryData.stampList.splice(deleteIndex, 1);
 									timeTableView.deleteRow(deleteIndex, {animated:true});
 									diaryWin.fireEvent('refresh', {diaryData:_diaryData, timeWinUpdateFlag:false});
+									// todayWinの更新
+									var todayWin = win.getTab("todayTab").window;
+									todayWin.fireEvent('refresh');
+
 								} else {
 									actInd.hide();
 									clickEnable = true;

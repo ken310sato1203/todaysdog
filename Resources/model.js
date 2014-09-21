@@ -33,23 +33,23 @@ photoTodayList = [
 ];
 
 stampSelectList = [
-	{type:"one", title:"お天気", stampList:["stamp_sun","stamp_cloud","stamp_rain"]},
+//	{type:"one", title:"お天気", stampList:["stamp_sun","stamp_cloud","stamp_rain"]},
 	{type:"one", title:"さんぽ", stampList:["stamp_walking1","stamp_walking2","stamp_walking3"]},
 	{type:"one", title:"うんち", stampList:["stamp_favorite1","stamp_favorite2","stamp_favorite3"]},
 	{type:"one", title:"ごはん", stampList:["stamp_restaurant1","stamp_restaurant2","stamp_restaurant3"]},
-	{type:"one", title:"体調", stampList:["stamp_barking1","stamp_barking2","stamp_barking3"]},
+//	{type:"one", title:"体調", stampList:["stamp_barking1","stamp_barking2","stamp_barking3"]},
 	{type:"all", title:"薬・病院", stampList:["stamp_medicine","stamp_injection","stamp_plus"]},
 	{type:"all", title:"シャンプ\nホテル", stampList:["stamp_wash","stamp_cut","stamp_home"]},
 	{type:"all", title:"おでかけ\nイベント", stampList:["stamp_alarm","stamp_trip","stamp_star"]},
 ];
 
 stampHistoryList = [
-	{stamp:"stamp_sun",textList:["本日は晴れなり","いいお天気"]},
-	{stamp:"stamp_cloud",textList:["本日は曇りなり","過ごしやすい天気"]},
-	{stamp:"stamp_rain",textList:["本日は雨なり","雨で散歩いけないね"]},
-	{stamp:"stamp_barking1",textList:["テンション高！","元気です！"]},
-	{stamp:"stamp_barking2",textList:["いつもどおり","まぁまぁかな"]},
-	{stamp:"stamp_barking3",textList:["おつかれ","元気ないね"]},
+//	{stamp:"stamp_sun",textList:["本日は晴れなり","いいお天気"]},
+//	{stamp:"stamp_cloud",textList:["本日は曇りなり","過ごしやすい天気"]},
+//	{stamp:"stamp_rain",textList:["本日は雨なり","雨で散歩いけないね"]},
+//	{stamp:"stamp_barking1",textList:["テンション高！","元気です！"]},
+//	{stamp:"stamp_barking2",textList:["いつもどおり","まぁまぁかな"]},
+//	{stamp:"stamp_barking3",textList:["おつかれ","元気ないね"]},
 	{stamp:"stamp_restaurant1",textList:["朝ご飯完食！","昼ご飯完食！","夜ご飯完食！"]},
 	{stamp:"stamp_restaurant2",textList:["朝ご飯ちょい","昼ご飯ちょい","夜ご飯ちょい"]},
 	{stamp:"stamp_restaurant3",textList:["朝ご飯食べず","昼ご飯食べず","夜ご飯食べず"]},

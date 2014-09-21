@@ -3,9 +3,6 @@
 exports.createWindow = function(_userData, _diaryData){
 	Ti.API.debug('[func]winTime.createWindow:');
 
-	// 今日の日付
-	var now = util.getDateElement(new Date());
-
 	// 多重クリック防止
 	var clickEnable = true;
 
@@ -28,7 +25,6 @@ exports.createWindow = function(_userData, _diaryData){
 		Ti.API.debug('[func]getTimeTableView:');
 		var targetView = Ti.UI.createTableView(style.stampListTableView);
 		var rowList = [];
-		var prevHour = null;
 
 		if (_diaryData.stampList.length > 0) {
 			var stampSelectList = model.getStampSelectList();
