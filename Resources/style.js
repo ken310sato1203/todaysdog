@@ -2409,8 +2409,8 @@ exports.style = {
 	},
 	timeNoDataImage:{
 		top: '10dp',
-		width : '64dp',
-		height : '64dp',
+		width : '60dp',
+		height : '60dp',
 		image : 'images/icon/i_circle.png',
 	},
 
@@ -2860,8 +2860,8 @@ exports.style = {
 //		top: '0dp',
 		height: Ti.UI.SIZE,
 		// 下のタブで表示されない余白分(74+44)
-//		bottom: '118dp',
-		bottom: '44dp',
+		bottom: '118dp',
+//		bottom: '44dp',
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		scrollable: true,
@@ -2871,10 +2871,13 @@ exports.style = {
 	todayPhotoTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
+//		backgroundColor: '#dedede',
 //		backgroundColor: '#eeeeee',
 //		backgroundColor: 'white',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		touchEnabled: false,
+		// カスタムプロパティ
+		objectName : 'todayPhotoTableRow',
 	},
 	todayPhotoAddTableRow:{ 
 		width: Ti.UI.SIZE,
@@ -2887,26 +2890,39 @@ exports.style = {
 		top: '0dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
+		touchEnabled: false,
+		// カスタムプロパティ
+		objectName : 'todayDayPhotoView',
 	},
-	todayDayFrameView:{
-		bottom: '0dp',
-		right: '0dp',
+	todayNoDataView:{
+		layout: 'vertical',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
-	todayDayView:{
+	todayNoDataLabel:{
+		textAlign: 'center',
+		font : {fontSize:12, fontWeight:'bold'},
+		color: '#3a4756',
+		text: '１日１枚、写真を撮って\nわんこの日記をつけよう', 
+	},
+	todayNoDataImage:{
+		top: '10dp',
+		width : '60dp',
+		height : '60dp',
+		image : 'images/icon/i_circle.png',
+	},
+	todayDayWeekView:{
 //		layout: 'absolute',
-		layout: 'horizontal',
 //		top: '10dp',
 		bottom: '0dp',
 		right: '0dp',
 //		width: '54dp',
 //		height: '54dp',
-		width: Ti.UI.SIZE,
+		width: '100%',
 		height: Ti.UI.SIZE,
 //		borderRadius: '27dp',
 	},
-	todayDayLabel:{
+	todayDayWeekLabel:{
 //		top: '13dp',
 		bottom: '2dp',
 		right: '5dp',
@@ -2917,6 +2933,7 @@ exports.style = {
 //		color: '#3a4756',
 		color: 'white',
 	},
+/*
 	todayWeekdayLabel:{
 //		bottom: '7dp',
 		bottom: '0dp',
@@ -2930,10 +2947,24 @@ exports.style = {
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
+*/
+	todayMenuView:{
+		// 下のタブで表示されない余白分
+		bottom: '44dp',
+		height: '74dp',
+//		backgroundColor: '#eeeeee',
+		backgroundColor: '#dedede',
+	},
+	todayMenuListView:{
+		layout: 'horizontal',
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
 	todayCameraView:{
-//		top: '10dp',
-//		bottom: '10dp',
-//		left: '30dp',
+		top: '10dp',
+		bottom: '10dp',
+		left: '30dp',
 		width: '54dp',
 		height: '54dp',
 		borderRadius: '27dp',
@@ -2948,23 +2979,37 @@ exports.style = {
 		// カスタムプロパティ
 		articleData: null,
 	},
-
-
-/*
-	todayMenuView:{
-		// 下のタブで表示されない余白分
-		bottom: '44dp',
-		height: '74dp',
-//		backgroundColor: '#eeeeee',
-		backgroundColor: '#dedede',
-	},
-	todayMenuListView:{
-		layout: 'horizontal',
-		top: '0dp',
+	todayDayView:{
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
-*/
+	todayDayLabelView:{
+		layout: 'absolute',
+		top: '10dp',
+		bottom: '10dp',
+		left: '30dp',
+		width: '54dp',
+		height: '54dp',
+		borderRadius: '27dp',
+		backgroundColor: 'white',
+	},
+	todayDayLabel:{
+		top: '13dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+		textAlign: 'center',
+		font : {fontSize:16, fontWeight:'bold'},
+		color: '#3a4756',
+//		backgroundColor: 'yellow',
+	},
+	todayWeekdayLabel:{
+		bottom: '7dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+		textAlign: 'center',
+		font : {fontSize:14, fontWeight:'bold'},
+//		backgroundColor: 'blue',
+	},
 	todayCalendarView:{
 		top: '10dp',
 		bottom: '10dp',
@@ -3052,24 +3097,6 @@ exports.style = {
 		// タブ(44)＋メニュー(74)
 		height: '118dp',
 	},
-	todayNoDataView:{
-		layout: 'vertical',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		backgroundColor: 'yellow',
-	},
-	todayNoDataLabel:{
-		textAlign: 'center',
-		font : {fontSize:12, fontWeight:'bold'},
-		color: '#3a4756',
-		text: '１日１枚、写真を撮って\nわんこの日記をつけよう', 
-	},
-	todayNoDataImage:{
-		top: '10dp',
-		width : '64dp',
-		height : '64dp',
-		image : 'images/icon/i_circle.png',
-	},
 	todayStampListTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -3079,31 +3106,28 @@ exports.style = {
 		stampData: null,
 	},
 	todayStampGroupView:{
+		layout: 'horizontal',
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	todayStampListView:{
+		layout: 'horizontal',
 		top: '1dp',
 		bottom: '0dp',
-		width: '100%',
+		width: '50%',
 		height: Ti.UI.SIZE,
 		backgroundColor : 'white',
 	},
-	todayStampGroupLabel:{
-		top: '0dp',
-		left: '14dp',
-		width: '64dp',
+	todayStampLabel:{
+		left: '10dp',
+		width: '58dp',
 		height: '44dp',
 		textAlign: 'left',
 		font : {fontSize:12, fontWeight:'bold'},
 		color: '#3a4756',
 	},
-	todayStampListView:{
-		layout: 'horizontal',
-		top: '0dp',
-		bottom: '3dp',
-		left: '77dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-	},
 	todayStampView:{
-		top: '3dp',
 		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -3112,11 +3136,9 @@ exports.style = {
 		objectName : 'todayStampView',
 	},
 	todayStampImage:{
-		top: '3dp',
-		bottom: '3dp',
 		left: '0dp',
-		width : '32dp',
-		height : '32dp',
+		width : '28dp',
+		height : '28dp',
 		defaultImage: '',
 		image : null,
 		touchEnabled: false,
