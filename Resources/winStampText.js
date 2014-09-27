@@ -41,7 +41,8 @@ exports.createWindow = function(_userData, _stampData){
 	textScrollView.add(textView);
 
 	var textArea = Ti.UI.createTextArea(style.stampTextArea);
-	textArea.value = _stampData.textList[0];
+//	textArea.value = _stampData.textList[0];
+	textArea.value = '';
 	textView.add(textArea);
 
 	var historyTableView = Ti.UI.createTableView(style.stampHistoryTableView);
@@ -102,15 +103,12 @@ exports.createWindow = function(_userData, _stampData){
 		Ti.API.debug('[event]backButton.click:');
 		if (textWin.prevWin != null) {
 			var stampText = textArea.value.replace(/\n+/g,'').replace(/^\s+|\s+$/g,'');
-			if (stampText == '') {
-				historyList = [stampText];
-			} else {
+			if (stampText != '') {
 				historyList.unshift(stampText);
 				historyList = util.unique(historyList).slice(0,5);
+				_stampData.textList = historyList;
+				textWin.prevWin.fireEvent('refresh', {stampData:_stampData});
 			}
-			_stampData.textList = historyList;
-
-			textWin.prevWin.fireEvent('refresh', {stampData:_stampData});
 		}
 		textWin.close({animated:true});
 	});	

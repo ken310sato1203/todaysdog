@@ -227,7 +227,7 @@ exports.createWindow = function(_userData){
 							event: null,
 							user: _userData.id,
 							stamp: target.stamp,
-							textList: [''],
+							textList: null,
 							year: now.year,
 							month: now.month,
 							day: now.day,

@@ -8,9 +8,8 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	var clickEnable = true;
 
 	// historyListの取得
-	var getHistoryText = function(_stampData) {
+	var getHistoryList = function(_stampData) {
 		Ti.API.debug('[func]getHistoryList:');
-		var historyList = [];
 
 		// スタンプの履歴データ取得
 		var localHistoryList = model.getLocalStampHistoryList({
@@ -18,10 +17,10 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 			stamp: _stampData.stamp
 		});
 		if (localHistoryList && localHistoryList[0] != '') {
-			return localHistoryList[0];
+			return localHistoryList;
 		} else {
 			var defaultHistoryList = model.getStampHistoryList(_stampData.stamp);
-			return defaultHistoryList[0];
+			return defaultHistoryList;
 		}
 	};
 
@@ -31,26 +30,18 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 
 		var stampRow = Ti.UI.createTableViewRow(style.stampPostTableRow);
 		stampRow.objectName = "stamp";
-		stampRow.stampData = _stampData;
 		var stampView = Titanium.UI.createView(style.stampPostStampView);
 		stampRow.add(stampView);
 		var postImage = Titanium.UI.createImageView(style.stampPostImage);
 		postImage.image = 'images/icon/' + _stampData.stamp + '.png';
 		stampView.add(postImage);		
 		var postLabel = Ti.UI.createLabel(style.stampPostTextLabel);
-		if (_stampData.textList[0] == '') {
-			postLabel.text = getHistoryText(_stampData);
-		} else {
-			postLabel.text = _stampData.textList[0];
+		if (_stampData.textList == null) {
+			_stampData.textList　= getHistoryList(_stampData);
 		}
+		postLabel.text = _stampData.textList[0];
 		stampView.add(postLabel);
-
-/*
-		var minusView = Titanium.UI.createView(style.stampPostMinusView);
-		stampView.add(minusView);
-		var minusImage = Titanium.UI.createImageView(style.stampPostMinusImage);
-		minusView.add(minusImage);			
-*/
+		stampRow.stampData = _stampData;
 		return stampRow;
 	};
 

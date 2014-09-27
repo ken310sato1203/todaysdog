@@ -8,9 +8,9 @@
     <property name="acs-api-key-development" type="string">wnadlSr51PBVdxx6HOAgnjbkLpAY4QuQ</property>
     <deployment-targets>
         <target device="tizen">false</target>
-        <target device="mobileweb">true</target>
+        <target device="mobileweb">false</target>
         <target device="iphone">true</target>
-        <target device="ipad">true</target>
+        <target device="ipad">false</target>
         <target device="android">false</target>
         <target device="blackberry">false</target>
     </deployment-targets>
@@ -59,13 +59,13 @@
     </modules>
     <property name="ti.facebook.appid">159833880868916</property>
     <ios>
-      <plist>
-        <dict>
-          <key>UIBackgroundModes</key>
-          <array>
-            <string>fetch</string>
-          </array>
-        </dict>
-      </plist>
+        <plist>
+            <dict>
+                <key>UIBackgroundModes</key>
+                <array>
+                    <string>fetch</string>
+                </array>
+            </dict>
+        </plist>
     </ios>
 </ti:app>
