@@ -7,6 +7,24 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	// 多重クリック防止
 	var clickEnable = true;
 
+	// historyListの取得
+	var getHistoryText = function(_stampData) {
+		Ti.API.debug('[func]getHistoryList:');
+		var historyList = [];
+
+		// スタンプの履歴データ取得
+		var localHistoryList = model.getLocalStampHistoryList({
+			userId: _userData.id,
+			stamp: _stampData.stamp
+		});
+		if (localHistoryList && localHistoryList[0] != '') {
+			return localHistoryList[0];
+		} else {
+			var defaultHistoryList = model.getStampHistoryList(_stampData.stamp);
+			return defaultHistoryList[0];
+		}
+	};
+
 	// stampRowの取得
 	var getStampRow = function(_stampData) {
 		Ti.API.debug('[func]getStampRow:');
@@ -20,7 +38,11 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 		postImage.image = 'images/icon/' + _stampData.stamp + '.png';
 		stampView.add(postImage);		
 		var postLabel = Ti.UI.createLabel(style.stampPostTextLabel);
-		postLabel.text = _stampData.textList[0];
+		if (_stampData.textList[0] == '') {
+			postLabel.text = getHistoryText(_stampData);
+		} else {
+			postLabel.text = _stampData.textList[0];
+		}
 		stampView.add(postLabel);
 
 /*
@@ -166,7 +188,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 
 		// todayWinの更新
 		var todayWin = win.getTab("todayTab").window;
-		todayWin.fireEvent('refresh');
+		todayWin.fireEvent('refresh', {diaryData:diaryData});
 
 	};
 						

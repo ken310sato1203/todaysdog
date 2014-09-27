@@ -179,7 +179,14 @@ exports.win = {
 						clickEnable = true;
 			        }, 200);
 	
-					if (e.source.tabIndex == 2) {
+					if (e.source.tabIndex == 1) {
+						var todayWin = win.getTab("todayTab").window;
+						if (tabGroup.activeTab.window.objectName != 'todayWin') {
+							todayWin.activeTab = tabGroup.tabs[e.source.tabIndex];
+						}
+						todayWin.fireEvent('refresh');
+
+					} else if (e.source.tabIndex == 2) {
 						var diaryWin = win.getTab("diaryTab").window;
 						if (tabGroup.activeTab.window.objectName != 'diaryWin') {
 							diaryWin.activeTab = tabGroup.tabs[e.source.tabIndex];
@@ -187,7 +194,7 @@ exports.win = {
 						diaryWin.fireEvent('refresh', {timeWinUpdateFlag:true});
 
 					} else {
-						tabGroup.activeTab = tabGroup.tabs[e.source.tabIndex];					
+						tabGroup.activeTab = tabGroup.tabs[e.source.tabIndex];
 					}
 				}
 			});

@@ -2857,11 +2857,11 @@ exports.style = {
 		text: '今日のわんこ', 
 	},
 	todayTableView:{
-//		top: '0dp',
+		top: '0dp',
 		height: Ti.UI.SIZE,
 		// 下のタブで表示されない余白分(74+44)
-		bottom: '118dp',
-//		bottom: '44dp',
+//		bottom: '118dp',
+		bottom: '44dp',
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		scrollable: true,
@@ -2875,7 +2875,7 @@ exports.style = {
 //		backgroundColor: '#eeeeee',
 //		backgroundColor: 'white',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		touchEnabled: false,
+		backgroundColor: 'transparent',
 		// カスタムプロパティ
 		objectName : 'todayPhotoTableRow',
 	},
@@ -2890,7 +2890,6 @@ exports.style = {
 		top: '0dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
-		touchEnabled: false,
 		// カスタムプロパティ
 		objectName : 'todayDayPhotoView',
 	},
@@ -2898,6 +2897,7 @@ exports.style = {
 		layout: 'vertical',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		visible: false,
 	},
 	todayNoDataLabel:{
 		textAlign: 'center',
@@ -2948,23 +2948,39 @@ exports.style = {
 		height: Ti.UI.SIZE,
 	},
 */
-	todayMenuView:{
+	todayMenuScrollView:{
+		layout: 'horizontal',
 		// 下のタブで表示されない余白分
 		bottom: '44dp',
 		height: '74dp',
+		contentWidth:'auto',
+		contentHeight:'auto',
+		showVerticalScrollIndicator:true,
+		showHorizontalScrollIndicator:true,
+		scrollingEnabled: false,
 //		backgroundColor: '#eeeeee',
+//		backgroundColor: '#dedede',
+	},
+	todayMenuFrameView:{
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+		height: '100%',
 		backgroundColor: '#dedede',
+		// カスタムプロパティ
+		objectName : 'todayMenuFrameView',
 	},
 	todayMenuListView:{
 		layout: 'horizontal',
-		top: '0dp',
+//		top: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		// カスタムプロパティ
+		objectName : 'todayMenuListView',
 	},
 	todayCameraView:{
 		top: '10dp',
 		bottom: '10dp',
-		left: '30dp',
+		left: '15dp',
+		right: '15dp',
 		width: '54dp',
 		height: '54dp',
 		borderRadius: '27dp',
@@ -2987,7 +3003,8 @@ exports.style = {
 		layout: 'absolute',
 		top: '10dp',
 		bottom: '10dp',
-		left: '30dp',
+		left: '15dp',
+		right: '15dp',
 		width: '54dp',
 		height: '54dp',
 		borderRadius: '27dp',
@@ -3013,7 +3030,8 @@ exports.style = {
 	todayCalendarView:{
 		top: '10dp',
 		bottom: '10dp',
-		left: '30dp',
+		left: '15dp',
+		right: '15dp',
 		width: '54dp',
 		height: '54dp',
 		borderRadius: '27dp',
@@ -3026,12 +3044,27 @@ exports.style = {
 		image : 'images/icon/b_calendar.png',
 		touchEnabled: false,
 	},
-	todaySpaceView:{
-		top: '0dp',
-		width: '30dp',
-		height: Ti.UI.SIZE,
+	todayStampSelectView:{
+		top: '10dp',
+		bottom: '10dp',
+		left: '15dp',
+		right: '15dp',
+		width: '54dp',
+		height: '54dp',
+		borderRadius: '27dp',
+		backgroundColor: 'white',
+		// カスタムプロパティ
+		objectName : 'todayStampSelectView',
 	},
-
+	todayStampSelectImage:{
+		width : '32dp',
+		height : '32dp',
+		defaultImage: '',
+		image : null,
+		touchEnabled: false,
+		// カスタムプロパティ
+		objectName : 'todayStampSelectImage',
+	},
 	todayArticleView:{
 		layout: 'vertical',
 		top: '10dp',
@@ -3126,11 +3159,13 @@ exports.style = {
 		textAlign: 'left',
 		font : {fontSize:12, fontWeight:'bold'},
 		color: '#3a4756',
+		touchEnabled: false,
 	},
 	todayStampView:{
 		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		touchEnabled: false,
 		// カスタムプロパティ
 //		stampData : null,
 		objectName : 'todayStampView',

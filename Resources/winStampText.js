@@ -3,6 +3,28 @@
 exports.createWindow = function(_userData, _stampData){
 	Ti.API.debug('[func]winStampText.createWindow:');
 
+	// historyListの取得
+	var getHistoryList = function(_stampData) {
+		Ti.API.debug('[func]getHistoryList:');
+		var historyList = [];
+
+		// スタンプの履歴データ取得
+		var localHistoryList = model.getLocalStampHistoryList({
+			userId: _userData.id,
+			stamp: _stampData.stamp
+		});
+		var defaultHistoryList = model.getStampHistoryList(_stampData.stamp);
+		if (localHistoryList) {
+			historyList = localHistoryList.concat(defaultHistoryList);
+		} else {
+			historyList = defaultHistoryList;				
+		}
+
+		return util.unique(historyList).slice(0,5);
+	};
+						
+// ---------------------------------------------------------------------
+
 	var textWin = Ti.UI.createWindow(style.stampTextWin);
 	// タイトルの表示
 	var titleLabel = Ti.UI.createLabel(style.stampTextTitleLabel);	
@@ -23,20 +45,7 @@ exports.createWindow = function(_userData, _stampData){
 	textView.add(textArea);
 
 	var historyTableView = Ti.UI.createTableView(style.stampHistoryTableView);
-	var historyList = [];
-
-	// スタンプの履歴データ取得
-	var localHistoryList = model.getLocalStampHistoryList({
-		userId: _userData.id,
-		stamp: _stampData.stamp
-	});
-	var defaultHistoryList = model.getStampHistoryList(_stampData.stamp);
-	if (localHistoryList == null) {
-		historyList = defaultHistoryList;				
-	} else {
-		historyList = localHistoryList.concat(defaultHistoryList);
-	}
-	historyList = util.unique(historyList).slice(0,5);
+	var historyList = getHistoryList(_stampData);
 				
 	var historyRowList = [];
 	if (historyList != null) {
@@ -92,7 +101,7 @@ exports.createWindow = function(_userData, _stampData){
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
 		if (textWin.prevWin != null) {
-			var stampText = textArea.value.replace(/\n+$/g,'').replace(/\s+$/g,'');
+			var stampText = textArea.value.replace(/\n+/g,'').replace(/^\s+|\s+$/g,'');
 			if (stampText == '') {
 				historyList = [stampText];
 			} else {

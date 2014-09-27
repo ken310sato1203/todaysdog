@@ -142,7 +142,7 @@ exports.createWindow = function(_userData, _diaryData){
 									diaryWin.fireEvent('refresh', {diaryData:_diaryData, timeWinUpdateFlag:false});
 									// todayWinの更新
 									var todayWin = win.getTab("todayTab").window;
-									todayWin.fireEvent('refresh');
+									todayWin.fireEvent('refresh', {diaryData:_diaryData});
 
 								} else {
 									actInd.hide();
@@ -221,12 +221,13 @@ exports.createWindow = function(_userData, _diaryData){
 		Ti.API.debug('[func]getTimeStampView:');
 		// スタンプの表示
 		var stampMenuView = Ti.UI.createScrollView(style.timeStampMenuScrollView);
+/*
 		// 複数登録スタンプ
 		var editView = Ti.UI.createView(style.timeStampEditView);
 		stampMenuView.add(editView);
 		var editImage = Ti.UI.createImageView(style.timeStampEditImage);
 		editView.add(editImage);
-
+*/
 		for (var i=0; i<_stampList.length; i++) {
 			var stampView = Ti.UI.createView(style.timeStampSelectView);
 			stampMenuView.add(stampView);
@@ -242,56 +243,41 @@ exports.createWindow = function(_userData, _diaryData){
 
 		// スタンプボタンをクリック
 		stampMenuView.addEventListener('click',function(e){
-			Ti.API.debug('[event]stampView.click:');
+			Ti.API.debug('[event]stampMenuView.click:');
 			var target = e.source;
-			// 多重クリック防止
-			if (clickEnable) {
-				clickEnable = false;
-				target.opacity = 0.5;
-				// 日時の更新
-				var nowDate = new Date();
-				now = util.getDateElement(nowDate);
-				now.weekday = util.diary.weekday[nowDate.getDay()];
-				now.today = util.getFormattedDate(nowDate);
-	
-				var stampData = {
-					no: null,
-					event: null,
-					user: _userData.id,
-					stamp: target.stamp,
-					textList: [''],
-					year: _diaryData.year,
-					month: _diaryData.month,
-					day: _diaryData.day,
-					hour: now.hour,
-					all: null,
-					report: null,
-					date: null,
-				};
-	
-				if (target.objectName == 'timeStampSelectView') {
+			if (target.objectName == 'timeStampSelectView') {
+				// 多重クリック防止
+				if (clickEnable) {
+					clickEnable = false;
+					target.opacity = 0.5;
+					// 日時の更新
+					var nowDate = new Date();
+					now = util.getDateElement(nowDate);
+					now.weekday = util.diary.weekday[nowDate.getDay()];
+					now.today = util.getFormattedDate(nowDate);
+		
+					var stampData = {
+						no: null,
+						event: null,
+						user: _userData.id,
+						stamp: target.stamp,
+						textList: [''],
+						year: _diaryData.year,
+						month: _diaryData.month,
+						day: _diaryData.day,
+						hour: now.hour,
+						all: null,
+						report: null,
+						date: null,
+					};
 					var type = "time";
 					var postWin = win.createStampPostWindow(type, _userData, [stampData]);
 					postWin.prevWin = timeWin;
 					win.openTabWindow(postWin, {animated:true});
-				
-				} else if (target.objectName == 'timeStampEditView') {
-					var type = "time";
-					var stampWin = win.createStampWindow(type, _userData, stampData);
-	/*
-					stampWin.addEventListener('open', function(){
-						// スライド前にopenイベントが発火するので1秒後にセット
-				        setTimeout(function(){
-							clickEnable = true;
-							target.opacity = 1.0;
-				        }, 1000);
-				    });
-	*/
-					stampWin.prevWin = timeWin;
-					win.openTabWindow(stampWin, {animated:true});
+
+					clickEnable = true;
+					target.opacity = 1.0;
 				}
-				clickEnable = true;
-				target.opacity = 1.0;
 			}
 		});
 
@@ -314,12 +300,13 @@ exports.createWindow = function(_userData, _diaryData){
 	var timeTableView = null;
 	updateTableView();
 
+/*
 	// リストボタンの表示
 	var listButton = Titanium.UI.createButton(style.timeListButton);
 	if (_diaryData.stampList.length > 0) {
 		timeWin.rightNavButton = listButton;
 	}
-
+*/
 	// スタンプの表示
 	var timeStampList = model.getTimeStampList();
 	timeWin.add(getTimeStampView(timeStampList));
@@ -332,6 +319,7 @@ exports.createWindow = function(_userData, _diaryData){
 		timeWin.prevWin.nextWin = null;
 	});
 
+/*
 	// リストボタンをクリック
 	listButton.addEventListener('click',function(e){
 		Ti.API.debug('[event]listButton.click:');
@@ -356,6 +344,7 @@ exports.createWindow = function(_userData, _diaryData){
 			target.opacity = 1.0;
 		}
 	});
+*/
 
 	// 右スワイプで前の画面に戻る
 	timeWin.addEventListener('swipe',function(e){

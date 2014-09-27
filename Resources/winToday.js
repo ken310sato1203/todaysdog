@@ -9,6 +9,12 @@ exports.createWindow = function(_userData){
 	var clickEnable = true;
 	// フォト用追加フラグ
 	var addRowFlag = false;
+	// フォト用追加サイズ
+	// 全体の幅（写真のサイズ）ー全体の高さーステータスバー(20)ータイトルバー(44)ースタンプリスト(45*3)ーメニュー(74)ー下のタブ(44)
+	var spaceHeight = style.commonSize.screenHeight - 317;
+	var photoHeight = (style.commonSize.screenWidth - spaceHeight > 0) ? spaceHeight : style.commonSize.screenWidth;
+	var addHeight = style.commonSize.screenWidth - photoHeight;
+
 // ---------------------------------------------------------------------
 
 	// dayLabelViewの取得
@@ -74,9 +80,11 @@ exports.createWindow = function(_userData){
 	var getTodayMenuView = function() {
 		Ti.API.debug('[func]getTodayMenuView:');
 
-		var menuView = Ti.UI.createView(style.todayMenuView);
+		var menuScrollView = Ti.UI.createScrollView(style.todayMenuScrollView);
+		var menuFrameView = Ti.UI.createView(style.todayMenuFrameView);
+		menuScrollView.add(menuFrameView);
 		var menuListView = Ti.UI.createView(style.todayMenuListView);
-		menuView.add(menuListView);
+		menuFrameView.add(menuListView);
 
 		// カメラの表示
 		var cameraView = Ti.UI.createView(style.todayCameraView);
@@ -183,11 +191,67 @@ exports.createWindow = function(_userData){
 			}
 		});
 
-		// 余白分
-		var spaceView = Ti.UI.createView(style.todaySpaceView);		
-		menuListView.add(spaceView);
-		
-		return menuView;
+		var selectStampList = model.getStampSelectList();
+		for (var i=0; i<selectStampList.length; i++) {
+			var menuStampView = Ti.UI.createView(style.todayMenuFrameView);
+			menuScrollView.add(menuStampView);
+			var menuStampListView = Ti.UI.createView(style.todayMenuListView);
+			menuStampView.add(menuStampListView);
+			// 選択するスタンプ
+			for (var j=0; j<selectStampList[i].stampList.length; j++) {
+				var stampView = Ti.UI.createView(style.todayStampSelectView);
+				stampView.stamp = selectStampList[i].stampList[j];
+				menuStampListView.add(stampView);
+				var stampImage = Ti.UI.createImageView(style.todayStampSelectImage);
+				stampView.add(stampImage);
+				stampImage.image = 'images/icon/' + selectStampList[i].stampList[j] + '.png';
+			}
+
+			// スタンプボタンをクリック
+			menuStampListView.addEventListener('click',function(e){
+				Ti.API.debug('[event]menuStampListView.click:');
+				var target = e.source;
+				if (target.objectName == 'todayStampSelectView') {
+					// 多重クリック防止
+					if (clickEnable) {
+						clickEnable = false;
+						target.opacity = 0.5;
+						// 日時の更新
+						var nowDate = new Date();
+						now = util.getDateElement(nowDate);
+						now.weekday = util.diary.weekday[nowDate.getDay()];
+						now.today = util.getFormattedDate(nowDate);
+			
+						var stampData = {
+							no: null,
+							event: null,
+							user: _userData.id,
+							stamp: target.stamp,
+							textList: [''],
+							year: now.year,
+							month: now.month,
+							day: now.day,
+							hour: now.hour,
+							all: null,
+							report: null,
+							date: null,
+						};
+			
+						var type = "time";
+						var postWin = win.createStampPostWindow(type, _userData, [stampData]);
+						postWin.prevWin = todayWin;
+						win.openTabWindow(postWin, {animated:true});
+	
+						clickEnable = true;
+						target.opacity = 1.0;
+					}
+				}
+			});
+
+
+		}
+
+		return menuScrollView;
 	};
 
 	// カメラメニューの取得
@@ -195,8 +259,7 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[func]getDayPhotoView:');
 
 		var dayPhotoView = Ti.UI.createView(style.todayDayPhotoView);
-		// 全体の高さーステータスバー(20)ータイトルバー(44)ースタンプリスト(45*3)ーメニュー(74)ー下のタブ(44)
-		dayPhotoView.height = style.commonSize.screenHeight - 317;
+		dayPhotoView.height = photoHeight;
 
 		var noDataView = Ti.UI.createView(style.todayNoDataView);
 		dayPhotoView.add(noDataView);
@@ -278,29 +341,32 @@ exports.createWindow = function(_userData){
 		// 写真をクリック
 		photoRow.addEventListener('click',function(e){
 			Ti.API.debug('[event]photoRow.click:');
-			// 多重クリック防止
-			if (clickEnable) {
-				clickEnable = false;	
-				if (e.source.objectName == 'todayPhotoTableRow') {
+			// 写真が表示されている場合
+			if (todayWin.photoImage.visible) {
+				// 多重クリック防止
+				if (clickEnable) {
+					clickEnable = false;
 					if (addRowFlag) {
 						addRowFlag = false;
 						todayTableView.deleteRow(0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 	
 					} else {
-						addRowFlag = true;
-						var photoAddRow = Ti.UI.createTableViewRow(style.todayPhotoAddTableRow);
-						// 全体の幅（写真のサイズ）ー全体の高さーステータスバー(20)ータイトルバー(44)ースタンプリスト(45*3)ーメニュー(74)ー下のタブ(44)
-						photoAddRow.height = style.commonSize.screenWidth - (style.commonSize.screenHeight - 317);
-						todayTableView.insertRowBefore(0, photoAddRow, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-		
-						// 写真をクリック
-						photoAddRow.addEventListener('click',function(e){
-							Ti.API.debug('[event]photoAddRow.click:');
-							if (addRowFlag) {
-								addRowFlag = false;
-								todayTableView.deleteRow(0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-							}
-						});
+						if (addHeight > 0) {
+							addRowFlag = true;
+							var photoAddRow = Ti.UI.createTableViewRow(style.todayPhotoAddTableRow);
+							photoAddRow.height = addHeight;
+							todayTableView.insertRowBefore(0, photoAddRow, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+			
+							// 写真をクリック
+							photoAddRow.addEventListener('click',function(e){
+								Ti.API.debug('[event]photoAddRow.click:');
+								if (addRowFlag) {
+									addRowFlag = false;
+									todayTableView.deleteRow(0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+								}
+							});
+						}
+
 					}
 					clickEnable = true;
 				}
@@ -323,6 +389,7 @@ exports.createWindow = function(_userData){
 				var groupLabel = Ti.UI.createLabel(style.todayStampLabel);
 				groupLabel.text = stampSelectList[i].title;
 				groupListView.add(groupLabel);
+				groupListView.listNo = i+1;
 
 				var countStamp = 0;
 				for (var j=0; j<stampList.length; j++) {
@@ -331,6 +398,10 @@ exports.createWindow = function(_userData){
 						var groupView = getGroupView(stampList[j]);
 						groupListView.add(groupView);
 						countStamp++;
+						// 表示最大件数
+						if (countStamp == 3) {
+							break;
+						}
 					}
 				}
 				if (countStamp == 0) {
@@ -351,6 +422,18 @@ exports.createWindow = function(_userData){
 					stampRow.add(stampGroupView);
 					rowList.push(stampRow);
 				}
+
+				// スタンプをクリック
+				groupListView.addEventListener('click',function(e){
+					Ti.API.debug('[event]groupListView.click:');
+					var target = e.source;
+					// 多重クリック防止
+					if (clickEnable) {
+						clickEnable = false;
+						todayMenuView.scrollTo(style.commonSize.screenWidth * target.listNo, 0);
+						clickEnable = true;
+					}
+				});
 			}
 //		}
 
@@ -376,23 +459,27 @@ exports.createWindow = function(_userData){
 
 		// リストの表示
 		todayTableView.setData(getTodayRowList());
+		// フォトの更新
+		updateTodayPhoto();
 
-		// フォトの表示
+	};
+
+	var updateTodayPhoto = function() {
+		Ti.API.debug('[func]updateTodayPhoto:');
+		// フォトの取得
 		var todayArticle = getTodayArticle();
 //		todayArticle = 1;
 		if (todayArticle) {
 			todayWin.noDataView.visible = false;
 			todayWin.photoRow.backgroundColor = 'transparent';
-			todayWin.photoRow.touchEnabled = true;
+			todayWin.photoImage.visible = true;
 			todayWin.photoImage.image = getTodayPhotoImage(todayArticle);
-//			todayWin.photoImage.image = 'images/photo/sakura.jpg';
 
 		} else {
 			todayWin.noDataView.visible = true;
 			todayWin.photoRow.backgroundColor = '#eeeeee';
-			todayWin.photoRow.touchEnabled = false;
-			todayWin.photoImage.image = '';
-		}	
+			todayWin.photoImage.visible = false;
+		}
 	};
 
 /*
@@ -439,7 +526,8 @@ exports.createWindow = function(_userData){
 	updateTableView();
 
 	// メニューの表示
-	todayWin.add(getTodayMenuView());
+	var todayMenuView = getTodayMenuView();
+	todayWin.add(todayMenuView);
 
 // ---------------------------------------------------------------------
 	// 更新用イベント
@@ -453,16 +541,35 @@ exports.createWindow = function(_userData){
 		now.today = util.getFormattedDate(nowDate);
 		todayWin.dayLabel.text = now.month + '/' + now.day + '(' + now.weekday.text + ')';
 */
-		// 記事の更新
 		if (e.articleData) {
-			// フォトの表示
+			// フォトの差し替え
 			todayWin.noDataView.visible = false;
 			todayWin.photoRow.backgroundColor = 'transparent';
-			todayWin.photoRow.touchEnabled = true;
+			todayWin.photoImage.visible = true;
 			todayWin.photoImage.image = getTodayPhotoImage(e.articleData);
-		} else {
-			// ビューの更新
+
+		} else if (e.diaryData) {
+			// スタンプの更新
 			updateTableView();
+
+		} else {
+			// フォトの更新
+			updateTodayPhoto();
+			todayMenuView.scrollTo(0, 0);
+	
+			// タブクリック時の更新の場合、タブの切り替えを行う
+			if (todayWin.activeTab != null) {
+				tabGroup.activeTab = todayWin.activeTab;
+				todayWin.activeTab = null;
+			}
+		}
+	});
+
+	// 右スワイプでメニュートップに戻す
+	todayMenuView.addEventListener('swipe',function(e){
+		Ti.API.debug('[event]todayMenuView.swipe:');
+		if (e.direction == 'right') {
+			todayMenuView.scrollTo(0, 0);
 		}
 	});
 
