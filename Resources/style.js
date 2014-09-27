@@ -3135,6 +3135,7 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
+//		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
 		// カスタムプロパティ
 		stampData: null,
 	},

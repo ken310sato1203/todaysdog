@@ -171,6 +171,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 								if (cameraPostWin.prevWin != null) {
 									cameraPostWin.prevWin.close();
 								}
+								todayWin.fireEvent('refresh', {articleData:articleData});
 								// todayWinの更新
 								todayWin.addEventListener('refresh', function(){
 									cameraPostWin.close({animated:true});
@@ -178,7 +179,6 @@ exports.createWindow = function(_type, _userData, _photoImage){
 									actBackView.hide();
 									postButton.enabled = true;
 							    });
-								todayWin.fireEvent('refresh', {articleData:articleData});
 /*							    
 							    var friendsWin = win.getTab("friendsTab").window;
 								friendsWin.fireEvent('insert');

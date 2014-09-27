@@ -169,10 +169,6 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 			diaryData.todayFlag = true;
 		}
 
-		// stampWinを閉じる
-		if (postWin.prevWin.objectName == 'stampWin') {
-			postWin.prevWin.close({animated:false});
-		}
 		// diaryWinの更新
 		var diaryWin = win.getTab("diaryTab").window;
 		diaryWin.fireEvent('refresh', {diaryData:diaryData, timeWinUpdateFlag:true});
@@ -181,6 +177,14 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 		var todayWin = win.getTab("todayTab").window;
 		todayWin.fireEvent('refresh', {diaryData:diaryData});
 
+		// 前の画面を更新した後にクローズする
+		postWin.prevWin.addEventListener('refresh', function(e){
+			Ti.API.debug('[event]postWin.prevWin.refresh:');
+			actInd.hide();
+			actBackView.hide();
+			postButton.enabled = true;
+			postWin.close({animated:true});
+		});
 	};
 						
 // ---------------------------------------------------------------------
@@ -450,10 +454,6 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 				model.addLocalStampList(_stampDataList);
 				model.addLocalStampHistoryList(_stampDataList);
 				refreshDiaryWin(_stampDataList);
-				actInd.hide();
-				actBackView.hide();
-				postButton.enabled = true;
-				postWin.close({animated:true});
 			} else {
 				actInd.hide();
 				actBackView.hide();

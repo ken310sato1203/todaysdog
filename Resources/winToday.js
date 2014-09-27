@@ -430,8 +430,13 @@ exports.createWindow = function(_userData){
 					// 多重クリック防止
 					if (clickEnable) {
 						clickEnable = false;
+						target.opacity = 0.5;
 						todayMenuView.scrollTo(style.commonSize.screenWidth * target.listNo, 0);
-						clickEnable = true;
+						// opacityの表示を見せるため
+				        setTimeout(function(){
+							target.opacity = 1.0;
+							clickEnable = true;
+				        }, 200);
 					}
 				});
 			}
