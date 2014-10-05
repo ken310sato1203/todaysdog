@@ -472,6 +472,7 @@ exports.model = {
 		});
 	},
 
+/*
 	// フォローの取得
 	getCloudFollowCount:function(params, callback){
 		Ti.API.debug('[func]getCloudFollowCount:');
@@ -491,6 +492,7 @@ exports.model = {
 			callback(e);
 		});
 	},
+*/
 
 	// 記事の取得
 	getCloudArticlePost:function(params, callback){

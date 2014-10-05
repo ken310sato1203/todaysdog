@@ -16,6 +16,9 @@ exports.createWindow = function(_userData){
 	// スタンプの最大表示件数
 	var stampListMax = 7;
 
+	// スクロール位置
+	var offset = null;
+
 	// カレンダーデータの取得
 	var getCalendarRowData = function(_stampList, _year, _month) {
 		Ti.API.debug('[func]getDiaryRowData:');
@@ -293,7 +296,6 @@ exports.createWindow = function(_userData){
 	titleView.add(nextImage);
 
 	var thisDiaryView = null;
-	var offset = null;
 
 	updateCalView(now.year, now.month, now.day);
 

@@ -129,13 +129,16 @@ exports.createWindow = function(_userData){
 		// フォロワ数をクリックでユーザ一覧を表示
 		countFollowerView.addEventListener('click', function(e){
 			Ti.API.debug('[event]countFollowerView.click:');
-			if (_userData.follower > 0) {
-				countFollowerView.backgroundColor = '#dedede';
-				var type = "follower";
-				var userListWin = win.createUserListWindow(type, _userData);
-				userListWin.prevWin = profileWin;
-				win.openTabWindow(userListWin, {animated:true});
-				countFollowerView.backgroundColor = 'white';
+			// acsでfriends/searchを他ユーザで403エラーになるため一旦クリックできないようにする
+			if (_userData.user == loginUser.user) {
+				if (_userData.follower > 0) {
+					countFollowerView.backgroundColor = '#dedede';
+					var type = "follower";
+					var userListWin = win.createUserListWindow(type, _userData);
+					userListWin.prevWin = profileWin;
+					win.openTabWindow(userListWin, {animated:true});
+					countFollowerView.backgroundColor = 'white';
+				}
 			}
 		});
 	
@@ -152,13 +155,16 @@ exports.createWindow = function(_userData){
 		// フォロー数をクリックでユーザ一覧を表示
 		countFollowView.addEventListener('click', function(e){
 			Ti.API.debug('[event]countFollowView.click:');
-			if (_userData.follow > 0) {
-				countFollowView.backgroundColor = '#dedede';
-				var type = "follow";
-				var userListWin = win.createUserListWindow(type, _userData);
-				userListWin.prevWin = profileWin;
-				win.openTabWindow(userListWin, {animated:true});
-				countFollowView.backgroundColor = 'white';
+			// acsでfriends/searchを他ユーザで403エラーになるため一旦クリックできないようにする
+			if (_userData.user == loginUser.user) {
+				if (_userData.follow > 0) {
+					countFollowView.backgroundColor = '#dedede';
+					var type = "follow";
+					var userListWin = win.createUserListWindow(type, _userData);
+					userListWin.prevWin = profileWin;
+					win.openTabWindow(userListWin, {animated:true});
+					countFollowView.backgroundColor = 'white';
+				}
 			}
 		});
 	
@@ -272,6 +278,22 @@ exports.createWindow = function(_userData){
 			}
 		});
 */
+
+		// ユーザデータの取得
+		model.getCloudUser(_userData.id, function(e) {
+			Ti.API.debug('[func]getCloudUser.callback:');
+			if (e.success) {
+				var user = e.users[0];
+				_userData.follower = user.friend_counts.followers;
+				_userData.follow = user.friend_counts.following;
+				countFollowerLabel.text = _userData.follower;
+				countFollowLabel.text = _userData.follow;
+			} else {
+				util.errorDialog(e);
+			}
+		});
+
+/*
 		// フォロワー数の取得
 		model.getCloudFollowerCount({
 			userId: _userData.id
@@ -296,7 +318,7 @@ exports.createWindow = function(_userData){
 				util.errorDialog(e);
 			}
 		});
-
+*/
 		return rowList;
 	};
 

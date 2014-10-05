@@ -14,6 +14,10 @@ exports.createWindow = function(_userData){
 	var spaceHeight = style.commonSize.screenHeight - 317;
 	var photoHeight = (style.commonSize.screenWidth - spaceHeight > 0) ? spaceHeight : style.commonSize.screenWidth;
 	var addHeight = style.commonSize.screenWidth - photoHeight;
+	// メニューに表示するスタンプリスト
+	var stampSelectList = null;
+	// メニューに表示するページ
+	var currentMenu = 0;
 
 // ---------------------------------------------------------------------
 
@@ -383,7 +387,7 @@ exports.createWindow = function(_userData){
 
 //		if (stampList.length > 0) {
 			var stampGroupView = null;
-			var stampSelectList = model.getStampSelectList();
+			stampSelectList = model.getStampSelectList();
 			for (var i=0; i<stampSelectList.length; i++) {
 				var groupListView = Ti.UI.createView(style.todayStampListView);
 				var groupLabel = Ti.UI.createLabel(style.todayStampLabel);
@@ -432,6 +436,7 @@ exports.createWindow = function(_userData){
 						clickEnable = false;
 						target.opacity = 0.5;
 						todayMenuView.scrollTo(style.commonSize.screenWidth * target.listNo, 0);
+						currentMenu = target.listNo;
 						// opacityの表示を見せるため
 				        setTimeout(function(){
 							target.opacity = 1.0;
@@ -573,9 +578,12 @@ exports.createWindow = function(_userData){
 	// 右スワイプでメニュートップに戻す
 	todayMenuView.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]todayMenuView.swipe:');
-		if (e.direction == 'right') {
-			todayMenuView.scrollTo(0, 0);
+		if (e.direction == 'right' && currentMenu > 0) {
+			currentMenu--;
+		} else if (e.direction == 'left' && currentMenu < stampSelectList.length) {
+			currentMenu++;
 		}
+		todayMenuView.scrollTo(style.commonSize.screenWidth * currentMenu, 0);	
 	});
 
 /*
