@@ -23,12 +23,32 @@ exports.createWindow = function(_userData){
 
 	var profileConfigRowList = [];
 
-	// タイトルを表示
-	var titleRow = Titanium.UI.createTableViewRow(style.profileConfigListTableRow);
-	profileConfigRowList.push(titleRow);
-	titleRow.objectName = 'title';
+	// プロフィールを表示
+	var profileRow = Titanium.UI.createTableViewRow(style.profileConfigListTableRow);
+	profileConfigRowList.push(profileRow);
+	profileRow.objectName = 'profile';
+	var profileView = Ti.UI.createView(style.profileConfigListTitleView);
+	profileRow.add(profileView);
+	var profileLabel = Ti.UI.createLabel(style.profileConfigListTitleLabel);
+	profileLabel.text = 'プロフィール';
+	profileView.add(profileLabel);
+
+	// 編集フィールドを表示
+	var editRow = Titanium.UI.createTableViewRow(style.profileConfigListTableRow);
+	profileConfigRowList.push(editRow);
+	editRow.objectName = 'edit';
+	var editView = Ti.UI.createView(style.profileConfigListItemView);
+	editRow.add(editView);
+	var editLabel = Ti.UI.createLabel(style.profileConfigListItemLabel);
+	editLabel.text = 'プロフィールを編集する';
+	editView.add(editLabel);
+
+	// その他を表示
+	var etcRow = Titanium.UI.createTableViewRow(style.profileConfigListTableRow);
+	profileConfigRowList.push(etcRow);
+	etcRow.objectName = 'etc';
 	var titleView = Ti.UI.createView(style.profileConfigListTitleView);
-	titleRow.add(titleView);
+	etcRow.add(titleView);
 	var titleLabel = Ti.UI.createLabel(style.profileConfigListTitleLabel);
 	titleLabel.text = 'その他';
 	titleView.add(titleLabel);
@@ -142,7 +162,19 @@ exports.createWindow = function(_userData){
 	// フィールドをクリック
 	profileConfigTableView.addEventListener('click', function(e){
 		Ti.API.debug('[event]profileConfigTableView.click:');
-		if (e.rowData.objectName == "logout"){
+		if (e.rowData.objectName == "edit"){
+			var profileEditWin = win.createProfileEditWindow(_userData);
+			profileEditWin.prevWin = profileConfigWin;
+			win.openTabWindow(profileEditWin, {animated:true});
+			
+		} else if (e.rowData.objectName == "notice"){
+			hourPicker.setSelectedRow(0, util.getHour(hourField.value));
+			// アニメーションがうまく動かないので時間遅らせて表示
+			setTimeout(function() {
+				hourPickerView.animate(slideIn);
+			}, 100);			
+
+		} else if (e.rowData.objectName == "logout"){
 			var alertDialog = Titanium.UI.createAlertDialog({
 				title: 'ログアウトしますか？',
 				buttonNames: ['キャンセル','OK'],
@@ -157,12 +189,6 @@ exports.createWindow = function(_userData){
 					Facebook.logout();
 				}
 			});
-		} else if (e.rowData.objectName == "notice"){
-			hourPicker.setSelectedRow(0, util.getHour(hourField.value));
-			// アニメーションがうまく動かないので時間遅らせて表示
-			setTimeout(function() {
-				hourPickerView.animate(slideIn);
-			}, 100);			
 		}
 	});
 

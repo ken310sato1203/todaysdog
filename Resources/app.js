@@ -311,8 +311,8 @@ if ( Facebook.loggedIn ) {
 	loginFbButton.show();
 }
 
-var OS_MAJOR = parseInt(Ti.App.version.split('.')[0], 10);
-if (OS_MAJOR >= 7) {
+var OS_MAJOR = parseInt(Ti.Platform.version.split('.')[0], 10);
+if (Ti.Platform.name == 'iPhone OS' && OS_MAJOR >= 7) {
 	// iOS 7 以上
 	// バックグラウンドで定期的に実行
 	Ti.App.iOS.setMinimumBackgroundFetchInterval(

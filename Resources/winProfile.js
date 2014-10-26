@@ -345,8 +345,8 @@ exports.createWindow = function(_userData){
 	if (loginUser.id == _userData.id) {
 		profileWin.rightNavButton = configButton;
 		// tabGroupではleftNavButtonが使えない
-//		profileWin.leftNavButton = editButton;
-		titleView.add(editButton);
+		profileWin.leftNavButton = editButton;
+//		titleView.add(editButton);
 		titleView.add(titleLabel);
 
 	} else {
