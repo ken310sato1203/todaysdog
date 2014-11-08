@@ -284,6 +284,14 @@ exports.createWindow = function(_userData){
 		}
 	});
 
+	// 右スワイプで前の画面に戻る
+	profileEditWin.addEventListener('swipe',function(e){
+		Ti.API.debug('[event]profileEditWin.swipe:');
+		if (e.direction == 'right') {
+			backButton.fireEvent('click');
+		}
+	});
+
 	// 「保存」ボタン
 	saveButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]saveButton.click:');

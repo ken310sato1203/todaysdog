@@ -113,6 +113,14 @@ exports.createWindow = function(_userData, _stampData){
 		textWin.close({animated:true});
 	});	
 
+	// 右スワイプで前の画面に戻る
+	textWin.addEventListener('swipe',function(e){
+		Ti.API.debug('[event]textWin.swipe:');
+		if (e.direction == 'right') {
+			backButton.fireEvent('click');
+		}
+	});
+	
 	textArea.addEventListener('focus',function(e){
 		if (e.source.value == e.source.hintText) {
 			e.source.value = "";

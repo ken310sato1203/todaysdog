@@ -570,6 +570,8 @@ exports.style = {
 	},
 
 	profileFollowButton:{
+		bottom: '10dp',
+		right: '15dp',
 		width: '95dp',
 		height: '25dp',
 //		backgroundColor: '#dedede',
@@ -580,7 +582,10 @@ exports.style = {
 		color: '#e74c3c',
 		title: 'フォローする',
 	},
+/*
 	profileUnfollowButton:{
+		bottom: '10dp',
+		right: '15dp',
 		width: '95dp',
 		height: '25dp',
 //		backgroundColor: '#dedede',
@@ -590,6 +595,7 @@ exports.style = {
 		color: '#e74c3c',
 		title: 'フォロー中',
 	},
+*/
 	profileEditButton:{
 		left: '0dp',
 		width: '28dp',
@@ -678,62 +684,72 @@ exports.style = {
 	},
 	profileInfoView:{
 		layout: 'vertical',
-		top: '10dp',
+		bottom: '0dp',
+		width: '100%',
+		height: '50dp',
+		backgroundColor: '#c0c0c0',
+		opacity: 0.5,
+	},
+	profileInfoNameView:{
+		layout: 'vertical',
 		bottom: '10dp',
 		left: '15dp',
 		right: '15dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
-/*
-	profileInfoNameView:{
-		layout: 'horizontal',
-		top: '0dp',
-		bottom: '5dp',
-		left: '0dp',
-		height: Ti.UI.SIZE,
-	},
-*/
 	profileInfoNameLabel:{
 		top: '0dp',
 		left: '0dp',
-		right: '5dp',
 		width: Ti.UI.SIZE,
 		height: '18dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
-		color: '#000',
+		color: 'white',
 	},
 	profileInfoUserLabel:{
 		top: '0dp',
-		bottom: '5dp',
 		left: '0dp',
-		right: '5dp',
 		width: Ti.UI.SIZE,
 		height: '18dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
-		color: '#696969',
+		color: 'white',
+	},
+
+	profileEtcRowView:{
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	profileEtcView:{
+		layout: 'vertical',
+		top: '0dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
 	},
 	profileInfoBreedLabel:{
-		top: '0dp',
-		left: '0dp',
+		top: '10dp',
+		left: '15dp',
+		right: '15dp',
 		height: Ti.UI.SIZE,
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
-		color: '#000',
+		color: '#696969',
 	},
 	profileInfoBirthLabel:{
 		top: '0dp',
-		bottom: '5dp',
-		left: '0dp',
+		left: '15dp',
 		height: Ti.UI.SIZE,
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
-		color: '#000',
+		color: '#696969',
 	},
 	profileInfoMemoLabel:{
 		top: '0dp',
-		left: '0dp',
+		bottom: '10dp',
+		left: '15dp',
+		right: '15dp',
 		height: Ti.UI.SIZE,
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
-		color: '#000',
+		color: '#696969',
 	},
 
 	profilePhotoTableRow:{ 
@@ -753,7 +769,6 @@ exports.style = {
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
 		height: Ti.UI.SIZE,
 		defaultImage: '',
-		opacity: 0.3,
 	},
 
 // winProfileEdit -------------------------------------------------------

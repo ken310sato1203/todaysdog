@@ -7,16 +7,14 @@ exports.createWindow = function(_userData){
 	// 多重クリック防止
 	var clickEnable = true;
 
-	// Viewの取得
-	var getProfileRowList = function() {
-		Ti.API.debug('[func]getProfileRowList:');
-		var rowList = [];
-	
+	// countRowの取得
+	var getProfileCountRow = function() {
+		Ti.API.debug('[func]getProfileCountRow:');
+
 		// カウント数の表示
-		var profileCountRow = Titanium.UI.createTableViewRow(style.profileCountTableRow);
-		rowList.push(profileCountRow);
+		var countRow = Titanium.UI.createTableViewRow(style.profileCountTableRow);
 		var countView = Ti.UI.createView(style.profileCountView);
-		profileCountRow.add(countView);
+		countRow.add(countView);
 
 		// アイコンの表示
 		var iconView = Ti.UI.createView(style.profileIconView);
@@ -167,57 +165,8 @@ exports.createWindow = function(_userData){
 				}
 			}
 		});
-	
-		// プロフィール情報の表示
-		var profileInfoRow = Titanium.UI.createTableViewRow(style.profileInfoTableRow);
-		rowList.push(profileInfoRow);
 
-		var infoRowView = Ti.UI.createView(style.profileInfoRowView);
-		profileInfoRow.add(infoRowView);
-
-		var photoView = Ti.UI.createView(style.profilePhotoView);
-		infoRowView.add(photoView);
-		var photoImage = Ti.UI.createImageView(style.profilePhotoImage);
-		photoView.add(photoImage);
-	
-		var infoView = Ti.UI.createView(style.profileInfoView);
- 		infoRowView.add(infoView);
-
-//		var nameView = Ti.UI.createView(style.profileInfoNameView);
-//		infoView.add(nameView);
-		
-		if (_userData.name != '') {
-			var nameLabel = Ti.UI.createLabel(style.profileInfoNameLabel);
-			nameLabel.text = _userData.name;
-			infoView.add(nameLabel);
-		}
-		var userLabel = Ti.UI.createLabel(style.profileInfoUserLabel);
-		userLabel.text = _userData.user;
-		infoView.add(userLabel);
-	
-		if (_userData.breed != '') {
-			var breedLabel = Ti.UI.createLabel(style.profileInfoBreedLabel);
-			breedLabel.text = _userData.breed;
-			infoView.add(breedLabel);
-		}
-		if (_userData.birth != '' || _userData.sex != '') {
-			var birthLabel = Ti.UI.createLabel(style.profileInfoBirthLabel);
-			if (_userData.sex == '') {
-				birthLabel.text = _userData.birth;
-			} else if (_userData.birth == '') {
-				birthLabel.text = _userData.sex;
-			} else {
-				birthLabel.text = util.getFormattedDateJapan(_userData.birth) + '生まれの' + _userData.sex;
-			}
-			infoView.add(birthLabel);
-		}
-
-		if (_userData.memo != '') {
-			var memoLabel = Ti.UI.createLabel(style.profileInfoMemoLabel);
-			memoLabel.text = _userData.memo;
-			infoView.add(memoLabel);
-		}
-	
+/*	
 		// フォトコレクションの取得
 		model.getCloudPhotoCollection({
 			userId: _userData.id
@@ -249,19 +198,13 @@ exports.createWindow = function(_userData){
 								}
 							});
 						}
-/*
-					// LikeがAPIでサポートされてないのでPhotoCollectionsを使わずReviewsから取得
-					} else if (collection.name == 'like') {
-						_userData.like = collection.counts.total_photos;
-						countLikeLabel.text = _userData.like;
-*/
 					}
 				}
-
 			} else {
 				util.errorDialog(e);
 			}
 		});
+*/
 
 /*
 		// ライク数の取得
@@ -319,9 +262,89 @@ exports.createWindow = function(_userData){
 			}
 		});
 */
-		return rowList;
+
+		return countRow;
 	};
 
+	// infoRowの取得
+	var getProfileInfoRow = function() {
+		Ti.API.debug('[func]getProfileInfoRow:');
+
+		// プロフィール情報の表示
+		var infoRow = Titanium.UI.createTableViewRow(style.profileInfoTableRow);
+		var infoRowView = Ti.UI.createView(style.profileInfoRowView);
+		infoRow.add(infoRowView);
+
+		var photoView = Ti.UI.createView(style.profilePhotoView);
+		infoRowView.add(photoView);
+		var photoImage = Ti.UI.createImageView(style.profilePhotoImage);
+		photoView.add(photoImage);
+//		photoImage.image = _userData.icon;
+		photoImage.image = 'images/photo/sakura.jpg';
+	
+		var infoView = Ti.UI.createView(style.profileInfoView);
+ 		infoRowView.add(infoView);
+		var nameView = Ti.UI.createView(style.profileInfoNameView);
+ 		infoRowView.add(nameView);
+
+		if (loginUser.id != _userData.id) {
+			if (model.checkLocalFriendsList(loginUser.id, _userData.id)) {
+		 		followButton.title = 'フォロー中';
+			} else {
+		 		followButton.title = 'フォローする';
+			}
+		 	infoRowView.add(followButton);
+		 }
+
+		if (_userData.name != '') {
+			var nameLabel = Ti.UI.createLabel(style.profileInfoNameLabel);
+			nameLabel.text = _userData.name;
+			nameView.add(nameLabel);
+		}
+		var userLabel = Ti.UI.createLabel(style.profileInfoUserLabel);
+		userLabel.text = _userData.user;
+		nameView.add(userLabel);
+
+		return infoRow;
+	};
+	
+	// etcRowの取得
+	var getProfileEtcRow = function() {
+		Ti.API.debug('[func]getProfileEtcRow:');
+
+		// プロフィール情報の表示
+		var etcRow = Titanium.UI.createTableViewRow(style.profileInfoTableRow);
+		var etcRowView = Ti.UI.createView(style.profileEtcRowView);
+		etcRow.add(etcRowView);
+		var etcView = Ti.UI.createView(style.profileEtcView);
+ 		etcRowView.add(etcView);
+
+		if (_userData.breed != '') {
+			var breedLabel = Ti.UI.createLabel(style.profileInfoBreedLabel);
+			breedLabel.text = _userData.breed;
+			etcView.add(breedLabel);
+		}
+		if (_userData.birth != '' || _userData.sex != '') {
+			var birthLabel = Ti.UI.createLabel(style.profileInfoBirthLabel);
+			if (_userData.sex == '') {
+				birthLabel.text = _userData.birth;
+			} else if (_userData.birth == '') {
+				birthLabel.text = _userData.sex;
+			} else {
+				birthLabel.text = util.getFormattedDateJapan(_userData.birth) + '生まれの' + _userData.sex;
+			}
+			etcView.add(birthLabel);
+		}
+
+		if (_userData.memo != '') {
+			var memoLabel = Ti.UI.createLabel(style.profileInfoMemoLabel);
+			memoLabel.text = _userData.memo;
+			etcView.add(memoLabel);
+		}
+
+		return etcRow;
+	};	
+	
 // ---------------------------------------------------------------------
 
 	var profileWin = Ti.UI.createWindow(style.profileWin);
@@ -335,9 +358,7 @@ exports.createWindow = function(_userData){
 
 	// プロフィールを編集するボタン
 	var editButton = Titanium.UI.createButton(style.profileEditButton);
-	// フォローユーザを解除するボタン
-	var unfollowButton = Titanium.UI.createButton(style.profileUnfollowButton);
-	// 未フォローユーザをフォローするボタン
+	// フォローボタン
 	var followButton = Titanium.UI.createButton(style.profileFollowButton);
 	//  ログアウトボタン
 	var configButton = Titanium.UI.createButton(style.profileConfigButton);
@@ -352,18 +373,23 @@ exports.createWindow = function(_userData){
 	} else {
 		profileWin.leftNavButton = backButton;
 		titleView.add(titleLabel);
-		if (model.checkLocalFriendsList(loginUser.id, _userData.id)) {
-			profileWin.rightNavButton = unfollowButton;
-		} else {
-			profileWin.rightNavButton = followButton;
-		}
 	}
 
 	// ロード用画面
 	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
 	
 	var profileTableView = Ti.UI.createTableView(style.profileTableView);
-	profileTableView.setData(getProfileRowList());
+	var rowList = [];
+	// プロフィール情報の取得
+	if (loginUser.id == _userData.id) {
+		var profileCountRow = getProfileCountRow();
+		rowList.push(profileCountRow);
+	}
+	var profileInfoRow = getProfileInfoRow();
+	rowList.push(profileInfoRow);
+	var profileEtcRow = getProfileEtcRow();
+	rowList.push(profileEtcRow);
+	profileTableView.setData(rowList);
 	profileWin.add(profileTableView);
 
 // ---------------------------------------------------------------------
@@ -397,67 +423,64 @@ exports.createWindow = function(_userData){
 		win.openTabWindow(profileConfigWin, {animated:true});
 	});	
 
-	// 「フォロー中」ボタン
-	unfollowButton.addEventListener('click', function(e){
-		Ti.API.debug('[event]unfollowButton.click:');
-		unfollowButton.enabled = false;
-		var alertDialog = Titanium.UI.createAlertDialog({
-		    title: 'フォローを解除しますか？',
-//		    message: 'フォローを解除しますか？',
-			buttonNames: ['キャンセル','OK'],
-		    cancel: 1
-		});
-		unfollowButton.enabled = false;
-		alertDialog.show();
-
-		alertDialog.addEventListener('click',function(alert){
-		    // OKの場合
-		    if(alert.index == 1){
-				actInd.show();
-				tabGroup.add(actInd);
-				// 友人の削除
-				model.removeCloudFriends(_userData.id, function(e) {
-					Ti.API.debug('[func]removeCloudFriends.callback:');
-					if (e.success) {
-						model.removeLocalFriendsList(loginUser.id, _userData.id);
-						profileWin.rightNavButton = followButton;
-//						countFollowerLabel.text = _userData.follower;
-						actInd.hide();
-						followButton.enabled = true;
-					} else {
-						actInd.hide();
-						followButton.enabled = true;
-						util.errorDialog(e);
-					}
-				});		
-		    }
-			unfollowButton.enabled = true;
-		});
-	});
-
-	// 「フォローする」ボタン
+	// フォローボタン
 	followButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]followButton.click:');
 		followButton.enabled = false;
 		actInd.show();
 		tabGroup.add(actInd);
 
-		// 友人の追加
-		model.addCloudFriends(_userData.id, function(e) {
-			Ti.API.debug('[func]addCloudFriends.callback:');
-			if (e.success) {
-				model.addLocalFriendsList(loginUser.id, [_userData]);
-				unfollowButton.enabled = true;
-				profileWin.rightNavButton = unfollowButton;
-//				countFollowerLabel.text = _userData.follower;
-				actInd.hide();
-				followButton.enabled = true;
-			} else {
-				actInd.hide();
-				followButton.enabled = true;
-				util.errorDialog(e);
-			}
-		});
+		if (followButton.title == 'フォローする') {
+			// 友人の追加
+			model.addCloudFriends(_userData.id, function(e) {
+				Ti.API.debug('[func]addCloudFriends.callback:');
+				if (e.success) {
+					model.addLocalFriendsList(loginUser.id, [_userData]);
+					unfollowButton.enabled = true;
+			 		followButton.title = 'フォロー中';
+					actInd.hide();
+					followButton.enabled = true;
+				} else {
+					actInd.hide();
+					followButton.enabled = true;
+					util.errorDialog(e);
+				}
+			});
+		} else {
+			var alertDialog = Titanium.UI.createAlertDialog({
+			    title: 'フォローを解除しますか？',
+	//		    message: 'フォローを解除しますか？',
+				buttonNames: ['キャンセル','OK'],
+			    cancel: 1
+			});
+			alertDialog.show();
+	
+			alertDialog.addEventListener('click',function(alert){
+			    // OKの場合
+			    if(alert.index == 1){
+					actInd.show();
+					tabGroup.add(actInd);
+					// 友人の削除
+					model.removeCloudFriends(_userData.id, function(e) {
+						Ti.API.debug('[func]removeCloudFriends.callback:');
+						if (e.success) {
+							model.removeLocalFriendsList(loginUser.id, _userData.id);
+					 		followButton.title = 'フォローする';
+							actInd.hide();
+							followButton.enabled = true;
+						} else {
+							actInd.hide();
+							followButton.enabled = true;
+							util.errorDialog(e);
+						}
+					});
+				} else {
+					actInd.hide();
+					followButton.enabled = true;
+				}
+			});
+		}
+
 	});
 
 	// プロフィール編集を反映
