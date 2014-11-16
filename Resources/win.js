@@ -8,6 +8,7 @@ var diaryWin = require('winDiary');
 var timeWin = require('winTime');
 var stampListWin = require('winStampList');
 var friendsWin = require('winFriends');
+var friendsConfigWin = require('winFriendsConfig');
 var todayWin = require('winToday');
 var stampWin = require('winStamp');
 var stampPostWin = require('winStampPost');
@@ -28,6 +29,11 @@ exports.win = {
 	createFriendsWindow:function(_userData){
 		Ti.API.debug('[func]createFriendsWindow:');
 		var win = friendsWin.createWindow("follow", _userData, null, null);
+		return win;
+	},
+	createFriendsConfigWindow:function(_userData){
+		Ti.API.debug('[func]createFriendsConfigWindow:');
+		var win = friendsConfigWin.createWindow(_userData);
 		return win;
 	},
 	createMydogWindow:function(_userData){

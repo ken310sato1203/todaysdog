@@ -1,4 +1,4 @@
-// 犬とも一覧
+// わんとも
 
 exports.createWindow = function(_type, _userData, _year, _month) {
 	Ti.API.debug('[func]winFriends.createWindow:');
@@ -215,9 +215,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	friendsWin.titleControl = titleView;
 
 	// 友人を検索するボタン
-	var searchButton = Titanium.UI.createButton(style.friendsSearchButton);
-	friendsWin.rightNavButton = searchButton;
-
+	var configButton = Titanium.UI.createButton(style.friendsConfigButton);
+	friendsWin.rightNavButton = configButton;
 
 	var dateListTemplate = {
 		properties: style.friendsDataList,
@@ -380,13 +379,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 // ---------------------------------------------------------------------
 
-	// 検索ボタン
-	searchButton.addEventListener('click', function(e){
-		Ti.API.debug('[event]searchButton.click:');
-		var type = "search";
-		var userListWin = win.createUserListWindow(type, _userData);
-		userListWin.prevWin = friendsWin;
-		win.openTabWindow(userListWin, {animated:true});
+	// 設定ボタン
+	configButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]configButton.click:');
+		var friendsConfigWin = win.createFriendsConfigWindow(_userData);
+		friendsConfigWin.prevWin = friendsWin;
+		win.openTabWindow(friendsConfigWin, {animated:true});
 	});
 
 	// ライク・コメント編集を反映

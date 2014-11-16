@@ -55,6 +55,18 @@ exports.createWindow = function(_type, _userData, _photoImage){
 		}
 		iconLabel.text += _userData.user;
 		postView.add(iconLabel);
+
+		var nameView = Ti.UI.createView(style.cameraPostIconNameView);
+ 		postView.add(nameView);
+		if (_userData.name != '') {
+			var nameLabel = Ti.UI.createLabel(style.cameraPostIconNameLabel);
+			nameLabel.text = _userData.name;
+			nameView.add(nameLabel);
+		}
+		var userLabel = Ti.UI.createLabel(style.cameraPostIconUserLabel);
+		userLabel.text = _userData.user;
+		nameView.add(userLabel);
+
 	}
 
 	// 投稿時のロード用画面

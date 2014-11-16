@@ -16,58 +16,6 @@ exports.createWindow = function(_userData){
 		var countView = Ti.UI.createView(style.profileCountView);
 		countRow.add(countView);
 
-		// アイコンの表示
-		var iconView = Ti.UI.createView(style.profileIconView);
-//		iconView.backgroundImage = _userData.icon;
-		countView.add(iconView);
-
-		var iconImage = Ti.UI.createImageView(style.profileIconImage);
-		iconImage.image = _userData.icon;
-		iconView.add(iconImage);
-
-		// アイコンをクリック
-		iconView.addEventListener('click',function(e){
-			Ti.API.debug('[event]iconView.click:');
-			if (_userData.id == loginUser.id) {
-				var target = e.source;
-				// 多重クリック防止
-				if (clickEnable) {
-					clickEnable = false;
-					target.opacity = 0.5;
-	
-					var dialog = Titanium.UI.createOptionDialog({
-						options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
-						cancel:2
-					});
-					dialog.show();
-		
-					dialog.addEventListener('click',function(e) {
-						Ti.API.debug('[event]dialog.click:');
-						switch( e.index ) {
-							case 0:
-								var cameraWin = win.createCameraWindow('icon_camera', _userData);
-								cameraWin.prevWin = profileWin;
-								win.openTabWindow(cameraWin, {animated:true});
-								target.opacity = 1.0;
-								clickEnable = true;
-								break;
-							case 1:
-								var cameraWin = win.createCameraWindow('icon_select', _userData);
-								cameraWin.prevWin = profileWin;
-								win.openTabWindow(cameraWin, {animated:true});
-								target.opacity = 1.0;
-								clickEnable = true;
-								break;
-							case 2:
-								target.opacity = 1.0;
-								clickEnable = true;
-								break;
-						}
-					});
-				}
-			}
-		});			
-	
 		// フォト数の表示
 		var countPhotoView = Ti.UI.createView(style.profileCountDataView);
 		countView.add(countPhotoView);
@@ -166,7 +114,6 @@ exports.createWindow = function(_userData){
 			}
 		});
 
-/*	
 		// フォトコレクションの取得
 		model.getCloudPhotoCollection({
 			userId: _userData.id
@@ -180,6 +127,7 @@ exports.createWindow = function(_userData){
 						_userData.photo = collection.counts.total_photos;
 						countPhotoLabel.text = _userData.photo;
 
+/*	
 						// カバー写真の更新
 						if (_userData.photo > 0) {
 							var coverIndex = Math.floor(Math.random() * _userData.photo);
@@ -198,13 +146,13 @@ exports.createWindow = function(_userData){
 								}
 							});
 						}
+*/
 					}
 				}
 			} else {
 				util.errorDialog(e);
 			}
 		});
-*/
 
 /*
 		// ライク数の取得
@@ -274,27 +222,69 @@ exports.createWindow = function(_userData){
 		var infoRow = Titanium.UI.createTableViewRow(style.profileInfoTableRow);
 		var infoRowView = Ti.UI.createView(style.profileInfoRowView);
 		infoRow.add(infoRowView);
+		// アイコンの表示
+		var iconView = Ti.UI.createView(style.profileIconView);
+		infoRowView.add(iconView);
 
-		var photoView = Ti.UI.createView(style.profilePhotoView);
-		infoRowView.add(photoView);
-		var photoImage = Ti.UI.createImageView(style.profilePhotoImage);
-		photoView.add(photoImage);
-//		photoImage.image = _userData.icon;
-		photoImage.image = 'images/photo/sakura.jpg';
+		var iconImage = Ti.UI.createImageView(style.profileIconImage);
+		iconImage.image = _userData.icon;
+		iconView.add(iconImage);
+		profileWin.iconImage = iconImage;
+
+		// アイコンをクリック
+		iconView.addEventListener('click',function(e){
+			Ti.API.debug('[event]iconView.click:');
+			if (_userData.id == loginUser.id) {
+				var target = e.source;
+				// 多重クリック防止
+				if (clickEnable) {
+					clickEnable = false;
+					target.opacity = 0.5;
 	
-		var infoView = Ti.UI.createView(style.profileInfoView);
- 		infoRowView.add(infoView);
+					var dialog = Titanium.UI.createOptionDialog({
+						options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
+						cancel:2
+					});
+					dialog.show();
+		
+					dialog.addEventListener('click',function(e) {
+						Ti.API.debug('[event]dialog.click:');
+						switch( e.index ) {
+							case 0:
+								var cameraWin = win.createCameraWindow('icon_camera', _userData);
+								win.openTabWindow(cameraWin, {animated:true});
+								target.opacity = 1.0;
+								clickEnable = true;
+								break;
+							case 1:
+								var cameraWin = win.createCameraWindow('icon_select', _userData);
+								win.openTabWindow(cameraWin, {animated:true});
+								target.opacity = 1.0;
+								clickEnable = true;
+								break;
+							case 2:
+								target.opacity = 1.0;
+								clickEnable = true;
+								break;
+						}
+					});
+				}
+			}
+		});			
+	
 		var nameView = Ti.UI.createView(style.profileInfoNameView);
  		infoRowView.add(nameView);
 
-		if (loginUser.id != _userData.id) {
+		if (loginUser.id == _userData.id) {
+		 		followButton.title = '編集する';
+		} else {
 			if (model.checkLocalFriendsList(loginUser.id, _userData.id)) {
 		 		followButton.title = 'フォロー中';
 			} else {
 		 		followButton.title = 'フォローする';
 			}
-		 	infoRowView.add(followButton);
-		 }
+		}
+		infoRowView.add(followButton);
 
 		if (_userData.name != '') {
 			var nameLabel = Ti.UI.createLabel(style.profileInfoNameLabel);
@@ -331,7 +321,7 @@ exports.createWindow = function(_userData){
 			} else if (_userData.birth == '') {
 				birthLabel.text = _userData.sex;
 			} else {
-				birthLabel.text = util.getFormattedDateJapan(_userData.birth) + '生まれの' + _userData.sex;
+				birthLabel.text = util.getFormattedYMD(_userData.birth) + '生まれの' + _userData.sex;
 			}
 			etcView.add(birthLabel);
 		}
@@ -343,6 +333,109 @@ exports.createWindow = function(_userData){
 		}
 
 		return etcRow;
+	};
+
+	// 記事の取得
+	var getPhotoListArticleTableRow = function(_articleList) {
+		Ti.API.debug('[func]getPhotoListArticleTableRow:');
+		var articleRow = Ti.UI.createTableViewRow(style.profileInfoTableRow);
+		var articleListView = Ti.UI.createView(style.profileArticleListView);
+		articleRow.add(articleListView);
+		
+		for (var i=0; i<_articleList.length; i++) {	
+			var articleView = Ti.UI.createView(style.profileArticleView);
+			articleListView.add(articleView);
+			var photoImage = Ti.UI.createImageView(style.profilePhotoImage);
+			photoImage.image = _articleList[i].photo;
+
+			// カスタムプロパティに記事データを格納
+			photoImage.articleData = _articleList[i];
+			articleView.add(photoImage);
+
+			// 各記事のタップでフォト画面へ遷移
+			photoImage.addEventListener('click',function(e){
+				Ti.API.debug('[event]photoImage.click:');
+/*
+				var type = "photoList";
+				var photoWin = win.createPhotoWindow(type, e.source.articleData);
+				photoWin.prevWin = photoListWin;
+				win.openTabWindow(photoWin, {animated:true});
+*/
+				var target = e.source;
+				target.opacity = 0.5;
+				var photoWin = Ti.UI.createWindow(style.photoListFullPhotoWin);
+				var photoView = Ti.UI.createView(style.photoListFullPhotoView);
+				photoWin.add(photoView);
+				var photoImage = Ti.UI.createImageView(style.photoListFullPhotoImage);
+				photoImage.image = target.articleData.photo;
+				photoView.add(photoImage);
+				var photoTimeLabel = Ti.UI.createLabel(style.photoListFullPhotoTimeLabel);
+				photoTimeLabel.text = util.getFormattedMD(target.articleData.date);
+				photoView.add(photoTimeLabel);
+				var photoTextLabel = Ti.UI.createLabel(style.photoListFullPhotoTextLabel);
+				photoTextLabel.text = target.articleData.text;
+				photoView.add(photoTextLabel);
+				photoWin.open({
+					modal: true,
+				    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
+				    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_CROSS_DISSOLVE
+				});
+
+				// フォト拡大画面にタップで戻る
+				photoWin.addEventListener('click',function(e){
+					Ti.API.debug('[event]photoWin.click:');
+					photoWin.close();				
+				});
+
+				target.opacity = 1.0;
+			});
+		}
+		return articleRow;
+	};
+
+	// 記事の更新
+	var updatePhoto = function() {
+		Ti.API.debug('[func]updatePhoto:');
+		// 今日の記事データ取得
+		model.getCloudTodayArticle({
+			idList: [_userData.id],
+			year: 2013,
+			month: 1,
+			day: 1,
+			page: 1,
+			count: 12
+		}, function(e) {
+			Ti.API.debug('[func]getCloudTodayArticle.callback:');
+			if (e.success) {
+				if (e.articleList.length > 0) {
+					// 取得した記事をテーブルに追加
+					profileTableView.appendRow(getPhotoListArticleTableRow(e.articleList), {animated:true});
+					var bottomRow = Ti.UI.createTableViewRow(style.profileInfoTableRow);
+					bottomRow.height = '44dp';
+					profileTableView.appendRow(bottomRow, {animated:false});
+				}
+	
+			} else {
+				util.errorDialog(e);
+			}
+		});
+	};
+
+	// Viewの取得
+	var getProfileRowList = function() {
+		Ti.API.debug('[func]getProfileRowList:');
+		var rowList = [];
+		var profileInfoRow = getProfileInfoRow();
+		rowList.push(profileInfoRow);
+		var profileEtcRow = getProfileEtcRow();
+		rowList.push(profileEtcRow);
+/*		
+		if (loginUser.id == _userData.id) {
+			var profileCountRow = getProfileCountRow();
+			rowList.push(profileCountRow);
+		}
+*/
+		return rowList;
 	};	
 	
 // ---------------------------------------------------------------------
@@ -351,6 +444,7 @@ exports.createWindow = function(_userData){
 	// タイトルの表示
 	var titleView = Ti.UI.createView(style.profileTitleView);
 	var titleLabel = Ti.UI.createLabel(style.profileTitleLabel);	
+	titleView.add(titleLabel);
 	profileWin.titleControl = titleView;
 
 	// 戻るボタンの表示
@@ -360,37 +454,24 @@ exports.createWindow = function(_userData){
 	var editButton = Titanium.UI.createButton(style.profileEditButton);
 	// フォローボタン
 	var followButton = Titanium.UI.createButton(style.profileFollowButton);
-	//  ログアウトボタン
+	// 設定ボタン
 	var configButton = Titanium.UI.createButton(style.profileConfigButton);
-	var b1 = Titanium.UI.createButton({title:'Left Nav'});
 	if (loginUser.id == _userData.id) {
 		profileWin.rightNavButton = configButton;
-		// tabGroupではleftNavButtonが使えない
-		profileWin.leftNavButton = editButton;
-//		titleView.add(editButton);
-		titleView.add(titleLabel);
-
 	} else {
 		profileWin.leftNavButton = backButton;
-		titleView.add(titleLabel);
 	}
 
 	// ロード用画面
 	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
 	
+	// プロフィールの表示
 	var profileTableView = Ti.UI.createTableView(style.profileTableView);
-	var rowList = [];
-	// プロフィール情報の取得
-	if (loginUser.id == _userData.id) {
-		var profileCountRow = getProfileCountRow();
-		rowList.push(profileCountRow);
-	}
-	var profileInfoRow = getProfileInfoRow();
-	rowList.push(profileInfoRow);
-	var profileEtcRow = getProfileEtcRow();
-	rowList.push(profileEtcRow);
-	profileTableView.setData(rowList);
+	profileTableView.setData(getProfileRowList());
 	profileWin.add(profileTableView);
+
+	// 投稿写真の更新
+	updatePhoto();
 
 // ---------------------------------------------------------------------
 	// 戻るボタンをクリック
@@ -427,60 +508,66 @@ exports.createWindow = function(_userData){
 	followButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]followButton.click:');
 		followButton.enabled = false;
-		actInd.show();
-		tabGroup.add(actInd);
 
-		if (followButton.title == 'フォローする') {
-			// 友人の追加
-			model.addCloudFriends(_userData.id, function(e) {
-				Ti.API.debug('[func]addCloudFriends.callback:');
-				if (e.success) {
-					model.addLocalFriendsList(loginUser.id, [_userData]);
-					unfollowButton.enabled = true;
-			 		followButton.title = 'フォロー中';
-					actInd.hide();
-					followButton.enabled = true;
-				} else {
-					actInd.hide();
-					followButton.enabled = true;
-					util.errorDialog(e);
-				}
-			});
+		if (followButton.title == '編集する') {
+			var profileEditWin = win.createProfileEditWindow(_userData);
+			profileEditWin.prevWin = null;
+			win.openTabWindow(profileEditWin, {animated:true});
+			followButton.enabled = true;
+		
 		} else {
-			var alertDialog = Titanium.UI.createAlertDialog({
-			    title: 'フォローを解除しますか？',
-	//		    message: 'フォローを解除しますか？',
-				buttonNames: ['キャンセル','OK'],
-			    cancel: 1
-			});
-			alertDialog.show();
-	
-			alertDialog.addEventListener('click',function(alert){
-			    // OKの場合
-			    if(alert.index == 1){
-					actInd.show();
-					tabGroup.add(actInd);
-					// 友人の削除
-					model.removeCloudFriends(_userData.id, function(e) {
-						Ti.API.debug('[func]removeCloudFriends.callback:');
-						if (e.success) {
-							model.removeLocalFriendsList(loginUser.id, _userData.id);
-					 		followButton.title = 'フォローする';
-							actInd.hide();
-							followButton.enabled = true;
-						} else {
-							actInd.hide();
-							followButton.enabled = true;
-							util.errorDialog(e);
-						}
-					});
-				} else {
-					actInd.hide();
-					followButton.enabled = true;
-				}
-			});
+			actInd.show();
+			tabGroup.add(actInd);
+			if (followButton.title == 'フォローする') {
+				// 友人の追加
+				model.addCloudFriends(_userData.id, function(e) {
+					Ti.API.debug('[func]addCloudFriends.callback:');
+					if (e.success) {
+						model.addLocalFriendsList(loginUser.id, [_userData]);
+				 		followButton.title = 'フォロー中';
+						actInd.hide();
+						followButton.enabled = true;
+					} else {
+						actInd.hide();
+						followButton.enabled = true;
+						util.errorDialog(e);
+					}
+				});
+			} else {
+				var alertDialog = Titanium.UI.createAlertDialog({
+				    title: 'フォローを解除しますか？',
+		//		    message: 'フォローを解除しますか？',
+					buttonNames: ['キャンセル','OK'],
+				    cancel: 1
+				});
+				alertDialog.show();
+		
+				alertDialog.addEventListener('click',function(alert){
+				    // OKの場合
+				    if(alert.index == 1){
+						actInd.show();
+						tabGroup.add(actInd);
+						// 友人の削除
+						model.removeCloudFriends(_userData.id, function(e) {
+							Ti.API.debug('[func]removeCloudFriends.callback:');
+							if (e.success) {
+								model.removeLocalFriendsList(loginUser.id, _userData.id);
+						 		followButton.title = 'フォローする';
+								actInd.hide();
+								followButton.enabled = true;
+							} else {
+								actInd.hide();
+								followButton.enabled = true;
+								util.errorDialog(e);
+							}
+						});
+					} else {
+						actInd.hide();
+						followButton.enabled = true;
+					}
+				});
+			}
 		}
-
 	});
 
 	// プロフィール編集を反映
@@ -491,7 +578,11 @@ exports.createWindow = function(_userData){
 //		profileTableView = getProfileRowList();
 //		profileWin.add(profileTableView);
 
-		profileTableView.setData(getProfileRowList());
+		if (e.icon) {
+			profileWin.iconImage.image = e.icon;
+		} else {
+			profileTableView.setData(getProfileRowList());
+		}
 
 		if (profileWin.prevWin != null) {
 			profileWin.prevWin.fireEvent('refresh');

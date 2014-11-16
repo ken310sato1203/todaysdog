@@ -274,6 +274,7 @@ exports.createWindow = function(_type, _articleData){
 	var titleIconView = Ti.UI.createView(style.photoTitleIconView);
 //	titleIconView.backgroundImage = _articleData.icon;
 	titleView.add(titleIconView);
+	titleView.titleIconView = titleIconView;
 	var titleIconImage = Ti.UI.createImageView(style.photoTitleIconImage);
 	titleIconImage.image = _articleData.icon;
 	titleIconView.add(titleIconImage);
@@ -389,12 +390,12 @@ exports.createWindow = function(_type, _articleData){
 					},
 					childTemplates: [{
 						type: 'Ti.UI.Label',
+						bindId: 'photoTimeLabel',
+						properties: style.photoTimeLabel,
+					},{
+						type: 'Ti.UI.Label',
 						bindId: 'photoTextLabel',
 						properties: style.photoTextLabel,
-//					},{
-//						type: 'Ti.UI.Label',
-//						bindId: 'photoTimeLabel',
-//						properties: style.photoTimeLabel,
 					}]
 				},{
 					type: 'Ti.UI.ImageView',
@@ -531,12 +532,12 @@ exports.createWindow = function(_type, _articleData){
 		photoPhotoImage: {
 			image: _articleData.photo
 		},
+		photoTimeLabel: {
+			text: util.getFormattedMD(_articleData.date)
+		},
 		photoTextLabel: {
 			text: _articleData.text
 		},
-//		photoTimeLabel: {
-//			text: _articleData.date
-//		},
 		photoLikeStampImage: likeStampImage
 	}];
 
@@ -565,14 +566,16 @@ exports.createWindow = function(_type, _articleData){
 		photoWin.close({animated:true});
 	});
 
-	// タイトルアイコンのクリックでプロフィールを表示
-	titleIconView.addEventListener('click',function(e){
-		Ti.API.debug('[event]titleIconView.click:');
-		if (userData.id != loginUser.id) {
-			titleIconView.opacity = 0.5;
-			var profileWin = win.createProfileWindow(userData);
-			win.openTabWindow(profileWin, {animated:true});
-			titleIconView.opacity = 1.0;
+	// タイトルクリックでプロフィールを表示
+	titleView.addEventListener('click',function(e){
+		Ti.API.debug('[event]titleView.click:');
+		if (e.source.objectName == 'photoTitleIconView' || e.source.objectName == 'photoTitleNameView') {
+			if (userData.id != loginUser.id) {
+				titleView.titleIconView.opacity = 0.5;
+				var profileWin = win.createProfileWindow(userData);
+				win.openTabWindow(profileWin, {animated:true});
+				titleView.titleIconView.opacity = 1.0;
+			}
 		}
 	});
 

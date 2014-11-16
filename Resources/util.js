@@ -47,7 +47,7 @@ exports.util = {
 	    return String.format("%04.0f-%02.0f-%02.0f", year, month, day);
 	},
 	// Date型を日付フォーマットに変換
-	getFormattedDateJapan:function(_date){
+	getFormattedYMD:function(_date){
 		if (_date instanceof Date) {
 		    var year = _date.getFullYear();
 		    var month = _date.getMonth() + 1;
@@ -58,6 +58,20 @@ exports.util = {
 			var month = _date.substr(5,2);
 			var day = _date.substr(8,2);
 		    return year + '年' + month + '月' + day + '日';
+	   }
+	},
+	// Date型を日付フォーマットに変換
+	getFormattedMD:function(_date){
+		if (_date instanceof Date) {
+		    var year = _date.getFullYear();
+		    var month = _date.getMonth() + 1;
+		    var day = _date.getDate();
+		    return month + '月' + day + '日';
+		} else {
+			var year = _date.substr(0,4);
+			var month = _date.substr(5,2);
+			var day = _date.substr(8,2);
+		    return month + '月' + day + '日';
 	   }
 	},
 	// Date型を日時フォーマットに変換

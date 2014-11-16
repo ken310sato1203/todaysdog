@@ -321,7 +321,9 @@ exports.createWindow = function(_userData){
 				actInd.hide();
 				// NavigationWindowを使用しているため、navWinを閉じる。
 //				profileEditWin.nav.close({animated:true});
-				profileEditWin.prevWin.close({animated:false});
+				if (profileEditWin.prevWin != null) {
+					profileEditWin.prevWin.close({animated:false});
+				}
 				profileEditWin.close({animated:true});
 				saveButton.enabled = true;
 

@@ -177,6 +177,8 @@ exports.style = {
 		left: '0dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
+		// カスタムプロパティ
+		photoTitleIconView: null,
 	},
 	photoTitleIconView:{
 		left: '0dp',
@@ -184,7 +186,8 @@ exports.style = {
 		height: '28dp',
 		borderRadius: '14dp',
 		backgroundColor: 'white',
-		touchEnabled: false,
+		// カスタムプロパティ
+		objectName : 'photoTitleIconView',
 	},
 	photoTitleIconImage:{
 		width: '28dp',
@@ -198,6 +201,8 @@ exports.style = {
 		left: '33dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		// カスタムプロパティ
+		objectName : 'photoTitleNameView',
 	},
 	photoTitleNameLabel:{
 		top: '0dp',
@@ -207,6 +212,7 @@ exports.style = {
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
 		color: 'white',
+		touchEnabled: false,
 	},
 	photoTitleUserLabel:{
 		top: '0dp',
@@ -216,6 +222,7 @@ exports.style = {
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
 		color: 'white',
+		touchEnabled: false,
 	},
 /*
 	photoTableView:{ 
@@ -287,23 +294,23 @@ exports.style = {
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
-	photoTextLabel:{
+	photoTimeLabel:{
 		top: '0dp',
 		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
+		color: '#696969',
 	},
-	photoTimeLabel:{
+	photoTextLabel:{
 		top: '5dp',
 		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#696969',
+		color: '#000',
 	},
 	photoLikeStampImage:{
 		top: '5dp',
@@ -569,33 +576,6 @@ exports.style = {
 		text: 'プロフィール', 
 	},
 
-	profileFollowButton:{
-		bottom: '10dp',
-		right: '15dp',
-		width: '95dp',
-		height: '25dp',
-//		backgroundColor: '#dedede',
-		backgroundImage: 'images/icon/titlebar10.png',
-		textAlign: 'center',
-		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
-		// ヘッダのボタンのテキストの色が反映できない
-		color: '#e74c3c',
-		title: 'フォローする',
-	},
-/*
-	profileUnfollowButton:{
-		bottom: '10dp',
-		right: '15dp',
-		width: '95dp',
-		height: '25dp',
-//		backgroundColor: '#dedede',
-		backgroundImage: 'images/icon/titlebar10.png',
-		textAlign: 'center',
-		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
-		color: '#e74c3c',
-		title: 'フォロー中',
-	},
-*/
 	profileEditButton:{
 		left: '0dp',
 		width: '28dp',
@@ -611,66 +591,14 @@ exports.style = {
 	profileTableView:{ 
 		top: '0dp',
 		// 下のタブで表示されない余白分
-		bottom: '44dp',
+//		bottom: '44dp',
 		width: '100%',
-		height: Ti.UI.SIZE,
+		height: '100%',
 		backgroundColor: '#eeeeee',
 //		scrollable: false,
 		separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		data: [],
 	},
-
-	profileCountTableRow:{ 
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		touchEnabled: false,
-//		backgroundColor: '#dedede',
-	},
-	profileIconView:{
-		top: '8dp',
-		bottom: '8dp',
-		left: '13dp',
-		right: '10dp',
-		width: '54dp',
-		height: '54dp',
-		borderRadius: '27dp',
-	},
-	profileIconImage:{
-		width: '54dp',
-		height: '54dp',
-		defaultImage: '',
-		touchEnabled: false,
-	},
-	profileCountView:{
-		layout: 'horizontal',
-		top: '0dp',
-//		bottom: '1dp',
-		left: '0dp',
-		width: '100%',
-		height: Ti.UI.SIZE,
-		backgroundColor: 'white',
-	},
-	profileCountDataView:{
-		layout: 'vertical',
-		top: '10dp',
-		right: '1dp',
-		width: '79dp',
-		height: '46dp',
-	},
-	profileCountDataLabel:{
-		top: '5dp',
-		textAlign: 'center',
-		font: {fontSize:16, fontFamily:'Helvetica Neue'},
-		color: '#000',
-	},
-	profileCountDataUnitLabel:{
-		top: '1dp',
-		textAlign: 'center',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-	},
-
 	profileInfoTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -678,98 +606,157 @@ exports.style = {
 //		touchEnabled: false,
 	},
 	profileInfoRowView:{
+		layout: 'vertical',
 		top: '0dp',
-		width: Ti.UI.SIZE,
+		width: '100%',
 		height: Ti.UI.SIZE,
 	},
-	profileInfoView:{
-		layout: 'vertical',
-		bottom: '0dp',
-		width: '100%',
-		height: '50dp',
-		backgroundColor: '#c0c0c0',
-		opacity: 0.5,
+	profileIconView:{
+		top: '15dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		borderRadius: '45dp',
+	},
+	profileIconImage:{
+		width: '90dp',
+		height: '90dp',
+		defaultImage: '',
+		touchEnabled: false,
 	},
 	profileInfoNameView:{
 		layout: 'vertical',
+		top: '10dp',
 		bottom: '10dp',
-		left: '15dp',
-		right: '15dp',
+//		left: '15dp',
+//		right: '15dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
 	profileInfoNameLabel:{
 		top: '0dp',
-		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: '18dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
-		color: 'white',
 	},
 	profileInfoUserLabel:{
 		top: '0dp',
-		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: '18dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
-		color: 'white',
+		color: '#696969',
+	},
+	profileFollowButton:{
+		top: '0dp',
+		bottom: '15dp',
+		width: '95dp',
+		height: '25dp',
+		backgroundImage: 'images/icon/titlebar10.png',
+		textAlign: 'center',
+		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
+		// ヘッダのボタンのテキストの色が反映できない
+		color: '#e74c3c',
 	},
 
 	profileEtcRowView:{
 		top: '0dp',
+		bottom: '1dp',
 		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-	},
-	profileEtcView:{
-		layout: 'vertical',
-		top: '0dp',
-		width: '100%',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
 	},
-	profileInfoBreedLabel:{
+	profileEtcView:{
+		layout: 'vertical',
 		top: '10dp',
+		bottom: '10dp',
 		left: '15dp',
 		right: '15dp',
+//		width: '100%',
+		height: Ti.UI.SIZE,
+	},
+	profileInfoBreedLabel:{
+		top: '0dp',
+//		left: '15dp',
+//		right: '15dp',
 		height: Ti.UI.SIZE,
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#696969',
 	},
 	profileInfoBirthLabel:{
 		top: '0dp',
-		left: '15dp',
+//		left: '15dp',
 		height: Ti.UI.SIZE,
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#696969',
 	},
 	profileInfoMemoLabel:{
 		top: '0dp',
-		bottom: '10dp',
-		left: '15dp',
-		right: '15dp',
+//		left: '15dp',
+//		right: '15dp',
 		height: Ti.UI.SIZE,
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#696969',
 	},
-
-	profilePhotoTableRow:{ 
+	profileCountTableRow:{ 
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
 		touchEnabled: false,
+		backgroundColor: 'white',
 	},
-	profilePhotoView:{
+	profileCountView:{
+		layout: 'horizontal',
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	profileCountDataView:{
+		layout: 'vertical',
+		top: '10dp',
+		bottom: '10dp',
+		width: '80dp',
+		height: Ti.UI.SIZE,
+	},
+	profileCountDataLabel:{
+		top: '0dp',
+		height: '18dp',
+		textAlign: 'center',
+		font: {fontSize:16, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+	profileCountDataUnitLabel:{
+		top: '0dp',
+		height: '18dp',
+		textAlign: 'center',
+		font: {fontSize:11, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+
+	profileArticleListView:{
+		layout: 'horizontal',
 		top: '0dp',
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
-		height: Ti.Platform.displayCaps.platformWidth + 'dp',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+	},
+	profileArticleView:{
+		layout: 'vertical',
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
 	},
 	profilePhotoImage:{
 		top: '0dp',
 		left: '0dp',
-		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+		// 余白(1dp*5箇所)
+		width: ( (Ti.Platform.displayCaps.platformWidth) / 4 ) + 'dp',
 		height: Ti.UI.SIZE,
 		defaultImage: '',
+		backgroundColor: 'white',
+		// カスタムプロパティ
+		articleData: null,
 	},
+
+
 
 // winProfileEdit -------------------------------------------------------
 	profileEditWin:{
@@ -934,7 +921,7 @@ exports.style = {
 //		barImage: 'images/icon/titlebar.png',
 		barColor: '#e74c3c',
 		tabBarHidden: true,
-		title: '設定',
+		title: 'プロフィール設定',
 		// カスタムプロパティ
 		objectName : 'profileConfigWin',
 	},
@@ -949,7 +936,7 @@ exports.style = {
 		color: 'white', 
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
-		text: '設定', 
+		text: 'プロフィール設定', 
 	},
 
 	profileConfigTableView:{ 
@@ -1151,15 +1138,6 @@ exports.style = {
 		// カスタムプロパティ
 		articleData: null,
 	},
-	photoListTextLabel:{
-		top: '3dp',
-	    bottom: '3dp',
-		width: '90dp',
-		height: '15dp',
-		textAlign: 'left',
-		font: {fontSize:11, fontFamily:'Helvetica Neue'},
-		color: '#000',
-	},
 
 	photoListFriendsArticleListView:{
 		layout: 'horizontal',
@@ -1283,8 +1261,18 @@ exports.style = {
 		defaultImage: '',
 		touchEnabled: false,
 	},
+	photoListFullPhotoTimeLabel:{
+		top: '10dp',
+		left: '10dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
 	photoListFullPhotoTextLabel:{
 		top: '5dp',
+		bottom: '15dp',
 		left: '10dp',
 		right: '10dp',
 		width: Ti.UI.SIZE,
@@ -1293,16 +1281,6 @@ exports.style = {
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
 		touchEnabled: false,
-	},
-	photoListFullPhotoTimeLabel:{
-		top: '5dp',
-		bottom: '5dp',
-		left: '10dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		textAlign: 'left',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#696969',
 	},
 
 // winUserList -------------------------------------------------------
@@ -1446,7 +1424,6 @@ exports.style = {
 	},
 	userListSearchTableView:{ 
 		top: '0dp',
-		bottom: '1dp',
 		height: Ti.UI.SIZE,
 		separatorColor: 'transparent',
 		data: [],
@@ -1454,21 +1431,24 @@ exports.style = {
 	userListSearchTableRow:{
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		backgroundColor: 'white',
 		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		backgroundColor: '#dedede',
 		touchEnabled: false,
 	},
-	userListSearchView:{
+	userListSearchItemView:{
+		layout: 'absolute',
 		top: '0dp',
-		left: '10dp',
-		right: '10dp',
+//		bottom: '1dp',
 		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
 	},
 	userListSearchField:{
 		top: '0dp',
+		left: '15dp',
+		right: '15dp',
 		textAlign:'left',
-		width: '100%',
-		height: '35dp',
+		width: Ti.UI.SIZE,
+		height: '40dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		hintText: '入力してください',
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
@@ -1977,7 +1957,6 @@ exports.style = {
 		textAlign: 'center',
 		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
 		color: '#e74c3c',
-		title: '選択',
 	},
 
 	cameraOverlayView:{
@@ -1987,8 +1966,8 @@ exports.style = {
 	},
 	cameraFrameView:{
 //		top: '100dp',
-//		width: Ti.Platform.displayCaps.platformWidth + 'dp',
-//		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+		height: Ti.Platform.displayCaps.platformWidth + 'dp',
         borderColor: 'red',
         borderWidth: 1,
         touchEnabled: false,
@@ -2100,7 +2079,7 @@ exports.style = {
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
         returnKeyType:Ti.UI.RETURNKEY_DONE,
 	},
-
+/*
 	cameraPostIconView:{
 		top : '10dp',
 		bottom : '10dp',
@@ -2124,7 +2103,41 @@ exports.style = {
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
-
+*/
+	cameraPostIconView:{
+		top: '15dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		borderRadius: '45dp',
+	},
+	cameraPostIconImage:{
+		width: '90dp',
+		height: '90dp',
+		defaultImage: '',
+		touchEnabled: false,
+	},
+	cameraPostIconNameView:{
+		layout: 'vertical',
+		top: '10dp',
+		bottom: '10dp',
+//		left: '15dp',
+//		right: '15dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	cameraPostIconNameLabel:{
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: '18dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+	},
+	cameraPostIconUserLabel:{
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: '18dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
 	
 // winDiary -------------------------------------------------------
 	diaryWin:{
@@ -2530,6 +2543,11 @@ exports.style = {
 		height: '28dp',
 		backgroundImage:'images/icon/w_friends_search.png',
 	},
+	friendsConfigButton:{
+		width: '28dp',
+		height: '28dp',
+		backgroundImage:'images/icon/w_profile_gear.png',
+	},
 
 	friendsUpdateButton:{
 		width: Ti.UI.SIZE,
@@ -2826,6 +2844,114 @@ exports.style = {
 		height: '0dp',
 	},
 
+// winFriendsConfig -------------------------------------------------------
+	friendsConfigWin:{
+		backgroundColor: '#dedede',
+//		barImage: 'images/icon/titlebar.png',
+		barColor: '#e74c3c',
+		tabBarHidden: true,
+		title: 'わんとも設定',
+		// カスタムプロパティ
+		objectName : 'friendsConfigWin',
+	},
+
+	friendsConfigTitleView:{
+		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	friendsConfigTitleLabel:{
+		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+		text: 'わんとも設定', 
+	},
+
+	friendsConfigTableView:{ 
+		top: '0dp',
+		width: '100%',
+		height: '100%',
+		backgroundColor: '#dedede',
+		separatorColor: 'transparent',
+		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
+//		scrollable: false,
+		data: [],
+	},
+	friendsConfigListTableRow:{ 
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+//		selectedBackgroundColor: 'white',
+		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
+		backgroundColor: '#dedede',
+		// カスタムプロパティ
+		objectName: null,
+	},
+	friendsConfigListTitleView:{
+		layout: 'absolute',
+		top: '0dp',
+		height: '30dp',
+		backgroundColor: '#eeeeee',
+	},
+	friendsConfigListTitleLabel:{
+		left: '15dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+	friendsConfigListItemView:{
+		layout: 'absolute',
+		top: '0dp',
+		bottom: '1dp',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+	},
+	friendsConfigListValueField:{
+		top: '0dp',
+		left: '15dp',
+		right: '15dp',
+		textAlign:'left',
+		width: Ti.UI.SIZE,
+		height: '40dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		hintText: '入力してください',
+        keyboardType:Ti.UI.KEYBOARD_DEFAULT,
+        returnKeyType:Ti.UI.RETURNKEY_DONE,
+        borderStyle:Ti.UI.INPUT_BORDERSTYLE_NONE,
+//        touchEnabled: false,
+	},
+	friendsConfigListItemLabel:{
+		top: '0dp',
+		left: '15dp',
+		height: '40dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+	friendsConfigListPickerView:{
+		bottom: '-259dp',
+		height: '259dp',
+	},
+	friendsConfigListPickerToolbar:{
+		top: '0dp',
+		items: null,
+	},
+	friendsConfigListCancelButton:{
+		style: Ti.UI.iPhone.SystemButtonStyle.BORDERED,
+		title: 'Cancel',
+	},
+	friendsConfigListSpacerButton:{
+		systemButton:Ti.UI.iPhone.SystemButton.FLEXIBLE_SPACE,
+	},
+	friendsConfigListDoneButton:{
+		style:Ti.UI.iPhone.SystemButtonStyle.DONE,
+		title: 'Done',
+	},
+	friendsConfigListHourPicker:{
+		top: '43dp',
+		selectionIndicator: true,
+		type:Ti.UI.PICKER_TYPE_PLAIN,
+		value: null,
+	},
+	
 // winToay -------------------------------------------------------
 	todayWin:{
 		backgroundColor: '#eeeeee',

@@ -112,7 +112,7 @@ exports.model = {
 					if (user.custom_fields.like != null)  { userData.like = user.custom_fields.like; }
 				}
 				if (user.photo) {
-					userData.icon = user.photo.urls.square_75;
+					userData.icon = user.photo.urls.small_240;
 				}
 				e.userData = userData;
 			}
@@ -307,7 +307,8 @@ exports.model = {
 						if (user.custom_fields.like != null)  { userData.like = user.custom_fields.like; }
 					}
 					if (user.photo) {
-						userData.icon = user.photo.urls.square_75;
+						userData.icon = user.photo.urls.getCloudUser
+						;
 					}
 					userList.push(userData);
 				}				
@@ -362,7 +363,7 @@ exports.model = {
 						if (user.custom_fields.like != null)  { userData.like = user.custom_fields.like; }
 					}
 					if (user.photo) {
-						userData.icon = user.photo.urls.square_75;
+						userData.icon = user.photo.urls.small_240;
 					}
 					userList.push(userData);
 				}
@@ -1542,7 +1543,7 @@ exports.model = {
 						if (user.custom_fields.like != null)  { userData.like = user.custom_fields.like; }
 					}
 					if (user.photo) {
-						userData.icon = user.photo.urls.square_75;
+						userData.icon = user.photo.urls.small_240;
 					}
 					userList.push(userData);
 				}				

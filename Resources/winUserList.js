@@ -308,7 +308,7 @@ exports.createWindow = function(_type, _userData){
 	var userListSearchTableView = Ti.UI.createTableView(style.userListSearchTableView);
 	var searchRow = Ti.UI.createTableViewRow(style.userListSearchTableRow);
 	userListSearchTableView.appendRow(searchRow);	
-	var searchView = Ti.UI.createView(style.userListSearchView);
+	var searchView = Ti.UI.createView(style.userListSearchItemView);
 	searchRow.add(searchView);
 	var searchField = Ti.UI.createTextField(style.userListSearchField);
 	searchView.add(searchField);
@@ -326,6 +326,9 @@ exports.createWindow = function(_type, _userData){
 		titleLabel.text = 'わんとも検索';
 		// 検索入力欄を表示
 		userListWin.add(userListSearchTableView);
+		if (_userData.searchWord) {
+			searchField.value = _userData.searchWord;
+		}
 	}
 
 	// 戻るボタンの表示

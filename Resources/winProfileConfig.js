@@ -1,4 +1,4 @@
-// 設定
+// プロフィール設定
 
 exports.createWindow = function(_userData){
 	Ti.API.debug('[func]winProfileConfig.createWindow:');
@@ -33,7 +33,17 @@ exports.createWindow = function(_userData){
 	profileLabel.text = 'プロフィール';
 	profileView.add(profileLabel);
 
-	// 編集フィールドを表示
+	// 画像変更を表示
+	var iconRow = Titanium.UI.createTableViewRow(style.profileConfigListTableRow);
+	profileConfigRowList.push(iconRow);
+	iconRow.objectName = 'icon';
+	var iconView = Ti.UI.createView(style.profileConfigListItemView);
+	iconRow.add(iconView);
+	var iconLabel = Ti.UI.createLabel(style.profileConfigListItemLabel);
+	iconLabel.text = 'プロフィール画像を登録する';
+	iconView.add(iconLabel);
+
+	// 編集を表示
 	var editRow = Titanium.UI.createTableViewRow(style.profileConfigListTableRow);
 	profileConfigRowList.push(editRow);
 	editRow.objectName = 'edit';
@@ -53,7 +63,7 @@ exports.createWindow = function(_userData){
 	titleLabel.text = 'その他';
 	titleView.add(titleLabel);
 
-	// 通知フィールドを表示
+	// 通知を表示
 	var noticeRow = Titanium.UI.createTableViewRow(style.profileConfigListTableRow);
 	profileConfigRowList.push(noticeRow);
 	noticeRow.objectName = 'notice';
@@ -131,7 +141,7 @@ exports.createWindow = function(_userData){
 	    selectedIndex = e.rowIndex;
 	});
 
-	// ログアウトフィールドを表示
+	// ログアウトを表示
 	var logoutRow = Titanium.UI.createTableViewRow(style.profileConfigListTableRow);
 	profileConfigRowList.push(logoutRow);
 	logoutRow.objectName = 'logout';
@@ -162,7 +172,31 @@ exports.createWindow = function(_userData){
 	// フィールドをクリック
 	profileConfigTableView.addEventListener('click', function(e){
 		Ti.API.debug('[event]profileConfigTableView.click:');
-		if (e.rowData.objectName == "edit"){
+
+		if (e.rowData.objectName == "icon"){
+			var dialog = Titanium.UI.createOptionDialog({
+				options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
+				cancel:2
+			});
+			dialog.show();
+
+			dialog.addEventListener('click',function(e) {
+				Ti.API.debug('[event]dialog.click:');
+				switch( e.index ) {
+					case 0:
+						var cameraWin = win.createCameraWindow('icon_camera', _userData);
+						win.openTabWindow(cameraWin, {animated:true});
+						break;
+					case 1:
+						var cameraWin = win.createCameraWindow('icon_select', _userData);
+						win.openTabWindow(cameraWin, {animated:true});
+						break;
+					case 2:
+						break;
+				}
+			});
+
+		} else if (e.rowData.objectName == "edit"){
 			var profileEditWin = win.createProfileEditWindow(_userData);
 			profileEditWin.prevWin = profileConfigWin;
 			win.openTabWindow(profileEditWin, {animated:true});

@@ -129,14 +129,12 @@ exports.createWindow = function(_userData){
 						switch( e.index ) {
 							case 0:
 								var cameraWin = win.createCameraWindow('photo_camera', _userData);
-								cameraWin.prevWin = todayWin;
 								win.openTabWindow(cameraWin, {animated:true});
 								target.opacity = 1.0;
 								clickEnable = true;
 								break;
 							case 1:
 								var cameraWin = win.createCameraWindow('photo_select', _userData);
-								cameraWin.prevWin = todayWin;
 								win.openTabWindow(cameraWin, {animated:true});
 								target.opacity = 1.0;
 								clickEnable = true;
