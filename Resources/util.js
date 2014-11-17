@@ -159,7 +159,7 @@ exports.util = {
 		}
 	},
 
-	// エラー時のアラート表示
+	// エラー表示
 	errorDialog:function(e){
 		var dialog = Titanium.UI.createAlertDialog({
 			title: 'エラーが発生しました',
@@ -168,7 +168,15 @@ exports.util = {
 		});
 		dialog.show();
 	},
-
+	// アラート表示
+	alertDialog:function(message){
+		var dialog = Titanium.UI.createAlertDialog({
+			title: 'アラート',
+			message: message,
+			buttonNames: ['OK'],
+		});
+		dialog.show();
+	},
 	// 空と重複を取り除く
 	unique:function(array) {
 		var storage = {};

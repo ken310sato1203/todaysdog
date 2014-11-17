@@ -2607,7 +2607,6 @@ exports.style = {
 	friendsNameLabel:{
 		top: '0dp',
 		left: '0dp',
-		right: '5dp',
 		width: Ti.UI.SIZE,
 		height: '16dp',
 		textAlign: 'left',
@@ -2616,7 +2615,6 @@ exports.style = {
 	friendsUserLabel:{
 		top: '0dp',
 		left: '0dp',
-		right: '5dp',
 		width: Ti.UI.SIZE,
 		height: '16dp',
 		textAlign: 'left',

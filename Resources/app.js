@@ -321,14 +321,17 @@ if (Ti.Platform.name == 'iPhone OS' && OS_MAJOR >= 7) {
 	Ti.App.iOS.addEventListener(
 	    'backgroundfetch',
 	    function (e) {
+			var userId = Ti.App.Properties.getString('userId');
 			var articleId = Ti.App.Properties.getString(userId + '_' + 'articleId');
 			var articleDate = Ti.App.Properties.getString(userId + '_' + 'articleDate');
 			var idList = model.getLocalFriendsList(userId);
+//			articleId = '5468495540f2edfe18082b84';
+//			idList.push('52219f37c6b5460b09007ecf');
 			if (idList) {
 				Cloud.Posts.query({
 					where: {
 						user_id: { '$in': idList },
-						'id': { '$nin': [articleId] },
+						id: { '$nin': [articleId] },
 						'postDate': {
 							'$gte': util.getCloudFormattedDateTime(articleDate)
 						}
@@ -340,7 +343,7 @@ if (Ti.Platform.name == 'iPhone OS' && OS_MAJOR >= 7) {
 						if (badgeCount == 0) {
 							badgeCount = null;
 						}
-						Ti.UI.iPhone.setAppBadge(badgeCount);
+						Ti.UI.iPhone.appBadge = badgeCount;
 		
 					} else {
 						util.errorDialog(e);

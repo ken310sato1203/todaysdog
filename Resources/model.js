@@ -321,12 +321,13 @@ exports.model = {
 	// 友人の検索
 	searchCloudFriends:function(params, callback){
 		Ti.API.debug('[func]searchCloudFriends:');
-
+		// 文字列含む検索はできないため、先頭から検索
 		Cloud.Users.query({
 			where:{ '$or': [
 				{ username: {'$regex': '^' + params.name} }, 
 				{ first_name: {'$regex': '^' + params.name} }, 
-				{ last_name: {'$regex': '^' + params.name} }
+				{ last_name: {'$regex': '^' + params.name} },
+				{ 'name': {'$regex': '^' + params.name} } 
 			] },
 			page: params.page,
 			per_page: params.count

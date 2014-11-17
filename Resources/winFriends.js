@@ -46,6 +46,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				Ti.UI.iPhone.setAppBadge(null);
 				Ti.App.Properties.setString(_userData.id + '_' + 'articleId', _articleList[i].id);
 				Ti.App.Properties.setString(_userData.id + '_' + 'articleDate', _articleList[i].date);
+				Ti.UI.iPhone.appBadge = null;
 			}
 
 			var date = util.getDateElement(_articleList[i].date);
@@ -62,6 +63,10 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 			}
 
+			var nameValue = '';
+			if (_articleList[i].name != '') {
+				nameValue = _articleList[i].name + ' ';
+			}
 			var articleItem = [{
 				articleData: _articleList[i],
 				template: 'article',
@@ -72,7 +77,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 					image: _articleList[i].photo,
 				},
 				friendsNameLabel: {
-					text: _articleList[i].name,
+					text: nameValue,
 				},
 				friendsUserLabel: {
 					text: _articleList[i].user,
