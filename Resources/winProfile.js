@@ -390,6 +390,7 @@ exports.createWindow = function(_userData){
 				target.opacity = 1.0;
 			});
 		}
+
 		return articleRow;
 	};
 
@@ -403,7 +404,7 @@ exports.createWindow = function(_userData){
 			month: 1,
 			day: 1,
 			page: 1,
-			count: 12
+			count: 16
 		}, function(e) {
 			Ti.API.debug('[func]getCloudTodayArticle.callback:');
 			if (e.success) {
@@ -411,7 +412,9 @@ exports.createWindow = function(_userData){
 					// 取得した記事をテーブルに追加
 					profileTableView.appendRow(getPhotoListArticleTableRow(e.articleList), {animated:true});
 					var bottomRow = Ti.UI.createTableViewRow(style.profileInfoTableRow);
-					bottomRow.height = '44dp';
+					var bottomImage = Ti.UI.createImageView(style.profileBottomImage);
+					bottomRow.add(bottomImage);
+//					bottomRow.height = '44dp';
 					profileTableView.appendRow(bottomRow, {animated:false});
 				}
 	

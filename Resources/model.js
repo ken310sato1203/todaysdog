@@ -568,6 +568,44 @@ exports.model = {
 		});
 	},
 
+	// 最新記事件数の更新
+	updateCloudNewArticleCount:function(callback){
+		Ti.API.debug('[func]updateCloudNewArticleCount:');
+		var userId = Ti.App.Properties.getString('userId');
+		var articleId = Ti.App.Properties.getString(userId + '_' + 'articleId');
+		var articleDate = Ti.App.Properties.getString(userId + '_' + 'articleDate');
+		var idList = model.getLocalFriendsList(userId);
+//		articleDate = '2014-11-11 23:05:03';
+//		idList.push('52219f37c6b5460b09007ecf');
+		if (idList.length > 0) {
+			Cloud.Posts.query({
+				where: {
+					user_id: { '$in': idList },
+					id: { '$nin': [articleId] },
+					'postDate': {
+						'$gte': util.getCloudFormattedDateTime(articleDate)
+					}
+				},
+				order: '-created_at'
+			}, function (e) {
+				if (e.success) {
+					var badgeCount = e.posts.length;
+					if (badgeCount == 0) {
+						badgeCount = null;
+					}
+					Ti.UI.iPhone.appBadge = badgeCount;
+					// タブバーをカスタマイズしているのでタブにバッジをつけるのはやめる
+//					tabGroup.tabs[0].setBadge(badgeCount);
+	
+				}
+				callback(e);
+			});
+		} else {
+			Ti.UI.iPhone.appBadge = null;
+//			tabGroup.tabs[0].setBadge(null);
+		}
+	},
+
 	// ログインユーザの登録
 	setLoginUser:function(_user){
 		Ti.API.debug('[func]setLoginUser:');

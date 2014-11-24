@@ -51,7 +51,7 @@ var openMainWindow = function(_userData) {
 	var tab2 =  Ti.UI.createTab(style.tabHidden);
 	var tab3 =  Ti.UI.createTab(style.tabHidden);
 	var tab4 =  Ti.UI.createTab(style.tabHidden);
-	
+		
 	tab1.setWindow(win1);
 	tab2.setWindow(win2);
 	tab3.setWindow(win3);
@@ -72,6 +72,19 @@ var openMainWindow = function(_userData) {
 	
 	// diaryWinの更新でtimeWinを表示させておく
 	win3.fireEvent('refresh');
+
+	// アプリを一度閉じ、再度開いた時
+	Ti.App.addEventListener('resume',function(e){
+		Ti.API.debug('[event]App.resume:');
+		// 未読記事の更新
+		if (tabGroup.updateFlag) {
+			tabGroup.updateFlag = false;
+			Ti.UI.iPhone.appBadge = null;
+			var loginUser = model.getLoginUser();
+			Ti.App.Properties.setString(loginUser.id + '_' + 'articleId', tabGroup.lastArticle.id);
+			Ti.App.Properties.setString(loginUser.id + '_' + 'articleDate', tabGroup.lastArticle.date);
+		}
+	});
 	
 /*
 	// 最新情報を表示
@@ -318,43 +331,35 @@ if (Ti.Platform.name == 'iPhone OS' && OS_MAJOR >= 7) {
 	Ti.App.iOS.setMinimumBackgroundFetchInterval(
 	    Ti.App.iOS.BACKGROUNDFETCHINTERVAL_MIN
 	);
-	Ti.App.iOS.addEventListener(
-	    'backgroundfetch',
-	    function (e) {
-			var userId = Ti.App.Properties.getString('userId');
-			var articleId = Ti.App.Properties.getString(userId + '_' + 'articleId');
-			var articleDate = Ti.App.Properties.getString(userId + '_' + 'articleDate');
-			var idList = model.getLocalFriendsList(userId);
-//			articleId = '5468495540f2edfe18082b84';
-//			idList.push('52219f37c6b5460b09007ecf');
-			if (idList) {
-				Cloud.Posts.query({
-					where: {
-						user_id: { '$in': idList },
-						id: { '$nin': [articleId] },
-						'postDate': {
-							'$gte': util.getCloudFormattedDateTime(articleDate)
+	Ti.App.iOS.addEventListener('backgroundfetch', function (e) {
+		if ( Facebook.loggedIn ) {
+			model.loginCloudUser('facebook', Facebook.accessToken, function (e) {
+				if (e.success) {
+/*
+					// 最新記事件数の更新
+					model.updateCloudNewArticleCount(function(e) {
+						Ti.API.debug('[func]updateCloudNewArticleCount.callback:');
+						if (e.success == false) {
+							e.index = 1;
+							util.errorDialog(e);
 						}
-					},
-					order: '-created_at'
-				}, function (e) {
-					if (e.success) {
-						var badgeCount = e.posts.length;
-						if (badgeCount == 0) {
-							badgeCount = null;
-						}
-						Ti.UI.iPhone.appBadge = badgeCount;
-		
-					} else {
-						util.errorDialog(e);
-					}
-				});			
-			}
-	
-	        // イベントハンドラの最後で呼び出し必須
-	        Ti.App.iOS.endBackgroundHandler(e.handlerId);
-	    }
-	);
+					});
+*/
+				    var friendsWin = win.getTab("friendsTab").window;
+					friendsWin.fireEvent('insert');
+
+				} else {
+					e.index = 2;
+					util.errorDialog(e);
+				}
+			});
+		} else {
+			util.alertDialog('Facebook.loggedIn == false');
+		}
+
+        // イベントハンドラの最後で呼び出し必須
+        Ti.App.iOS.endBackgroundHandler(e.handlerId);
+	});
 }
 
 // アプリがバックグラウンドに変わった時に実行
@@ -386,4 +391,5 @@ Facebook.addEventListener('logout', function(e) {
 	loginFbButton.show();
 });
 
- 
+
+

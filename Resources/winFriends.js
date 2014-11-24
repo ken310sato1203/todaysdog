@@ -38,16 +38,21 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// 記事の追加
 	var appendArticleList = function(_articleList) {
 		Ti.API.debug('[func]appendArticleList:');
+		// 未読マークの表示
+		var unreadCount = 0;
+		var unreadFlag = true;
+		var articleId = Ti.App.Properties.getString(_userData.id + '_' + 'articleId');
+//		articleId = '5471918cf13f3ae6c60027e5';
+		//  プロパティの更新はタブを開いた時に行うためにデータを保管
+		if ( tabGroup.lastArticle == null || tabGroup.lastArticle.id != _articleList[0].id ) {
+			tabGroup.updateFlag = true;
+			tabGroup.lastArticle = _articleList[0];
+		}
 
 		for (var i=0; i<_articleList.length; i++) {	
-
-			// 未読件数取得のため、最新の記事の日付を保存
-			if ( i == 0 ) {
-				Ti.UI.iPhone.setAppBadge(null);
-				Ti.App.Properties.setString(_userData.id + '_' + 'articleId', _articleList[i].id);
-				Ti.App.Properties.setString(_userData.id + '_' + 'articleDate', _articleList[i].date);
-				Ti.UI.iPhone.appBadge = null;
-			}
+			// 未読マークの表示
+			if ( _articleList[i].id == articleId) { unreadFlag = false; }
+			if (unreadFlag) { unreadCount++; }
 
 			var date = util.getDateElement(_articleList[i].date);
 			if (checkDate == null || date.year != checkDate.year || date.month != checkDate.month || date.day != checkDate.day) {
@@ -56,7 +61,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				var dateItem = [{
 					template: 'date',
 					friendsDateLabel: {
-						text: date.year + '/' + date.month + '/' + date.day,
+//						text: date.year + '/' + date.month + '/' + date.day,
+						text: date.month + '月' + date.day + '日',
 					},
 				}];
 				listSection.appendItems(dateItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
@@ -70,6 +76,9 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			var articleItem = [{
 				articleData: _articleList[i],
 				template: 'article',
+				friendsUnreadView: {
+					visible: unreadFlag,
+				},
 				friendsUserIconView: {
 //					backgroundImage: _articleList[i].photo,
 				},
@@ -104,6 +113,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
             friendsWin.add(preloadImage);
 */
 		}
+		// 未読件数の表示
+		Ti.UI.iPhone.appBadge = unreadCount;
 	};
 
 	// 記事がない場合の追加
@@ -236,6 +247,10 @@ exports.createWindow = function(_type, _userData, _year, _month) {
             properties: style.friendsArticleList,
             childTemplates: [{
                     type: 'Ti.UI.View',
+                    bindId: 'friendsUnreadView',
+                    properties: style.friendsUnreadView
+            },{
+                    type: 'Ti.UI.View',
                     bindId: 'friendsUserIconView',
                     properties: style.friendsUserIconView,
 		            childTemplates: [{
@@ -349,6 +364,9 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				photoWin.prevWin = friendsWin;
 				win.openTabWindow(photoWin, {animated:true});			
 				updateEnable = true;
+				// 未読マークを外す
+				item.friendsUnreadView.visible = false;
+				listSection.updateItemAt(e.itemIndex, item);
 	
 			} else if (item.template == 'next') {
 				updateEnable = false;

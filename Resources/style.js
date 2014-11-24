@@ -135,7 +135,8 @@ exports.style = {
 //		width: '28dp',
 		height: '28dp',
 		defaultImage: '',
-		bubbleParent: true,
+//		bubbleParent: true,
+		touchEnabled: false,
 		// カスタムプロパティ
 		tabIndex: null,
 	},
@@ -755,7 +756,13 @@ exports.style = {
 		// カスタムプロパティ
 		articleData: null,
 	},
-
+	profileBottomImage:{
+		top: '10dp',
+		bottom: '54dp',
+		width : '60dp',
+		height : '60dp',
+		image : 'images/icon/i_circle.png',
+	},
 
 
 // winProfileEdit -------------------------------------------------------
@@ -2583,10 +2590,17 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
 	},
+	friendsUnreadView:{
+		top: '0dp',
+		left: '0dp',
+		width: '7dp',
+		height: '78dp',
+		backgroundColor : '#87CEFA',
+	},
 	friendsUserIconView:{
-		top: '5dp',
+		top: '6dp',
 		bottom: '5dp',
-		left: '10dp',
+		left: '12dp',
 		width: '54dp',
 		height: '54dp',
 		borderRadius: '27dp',
@@ -2599,7 +2613,7 @@ exports.style = {
 	friendsNameView:{
 		layout: 'horizontal',
 		top: '5dp',
-		left: '74dp',
+		left: '76dp',
 		right: '15dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -2624,16 +2638,17 @@ exports.style = {
 	friendsTextLabel:{
 		top: '22dp',
 		bottom: '22dp',
-		left: '74dp',
+		left: '76dp',
 		right: '15dp',
 		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
+		height: '34dp',
+		verticalAlign: Titanium.UI.TEXT_VERTICAL_ALIGNMENT_TOP,
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 	},
 	friendsTimeLabel:{
 		bottom: '5dp',
-		left: '74dp',
+		left: '76dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		textAlign: 'left',

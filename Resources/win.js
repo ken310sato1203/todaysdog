@@ -165,27 +165,42 @@ exports.win = {
 
 		for (var i=0; i<tabData.length; i++) {
 			var tabView = Ti.UI.createView(style.tabView);
+			tabView.tabIndex = i;
 			tabView.objectName = tabData[i].objectName;
 			tabGroupView.add(tabView);
 			var tabImage = Ti.UI.createImageView(style.tabImage);
-			tabView.add(tabImage);
 			tabImage.image = tabData[i].image;
-			tabImage.tabIndex = i;
+			tabView.add(tabImage);
+			tabView.tabImage = tabImage;
 
-			// tabImageをクリック
-			tabImage.addEventListener('click',function(e){
-				Ti.API.debug('[event]tabImage.click:');
+			// tabViewをクリック
+			tabView.addEventListener('click',function(e){
+				Ti.API.debug('[event]tabView.click:');
 				// 多重クリック防止
 				if (clickEnable) {
 					clickEnable = false;
-					e.source.opacity = 0.5;
+					e.source.tabImage.opacity = 0.5;
 					// diaryWinのrefresh後に入れると、diaryWinはクローズされないのでイベントが追加されてしまう。
 					setTimeout(function(){
-						e.source.opacity = 1.0;
+						e.source.tabImage.opacity = 1.0;
 						clickEnable = true;
 			        }, 200);
 	
-					if (e.source.tabIndex == 1) {
+					if (e.source.tabIndex == 0) {
+						var friendsWin = win.getTab("friendsTab").window;
+						if (tabGroup.activeTab.window.objectName != 'friendsWin') {
+							tabGroup.activeTab = tabGroup.tabs[e.source.tabIndex];
+							// 未読記事の更新
+							if (tabGroup.updateFlag) {
+								tabGroup.updateFlag = false;
+								Ti.UI.iPhone.appBadge = null;
+								var loginUser = model.getLoginUser();
+								Ti.App.Properties.setString(loginUser.id + '_' + 'articleId', tabGroup.lastArticle.id);
+								Ti.App.Properties.setString(loginUser.id + '_' + 'articleDate', tabGroup.lastArticle.date);
+							}
+						}
+						
+					} else if (e.source.tabIndex == 1) {
 						var todayWin = win.getTab("todayTab").window;
 						if (tabGroup.activeTab.window.objectName != 'todayWin') {
 							todayWin.activeTab = tabGroup.tabs[e.source.tabIndex];
