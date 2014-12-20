@@ -29,6 +29,15 @@ exports.util = {
 	    return String.format("%04.0f-%02.0f-%02.0f", year, month, day);
 	},
 	// 現在日時を日時フォーマットに変換
+	getFormattedNowDateHour:function(){
+	    var now = new Date();
+	    var year = now.getFullYear();
+	    var month = now.getMonth() + 1;
+	    var day = now.getDate();
+	    var hour = now.getHours();
+	    return String.format("%04.0f-%02.0f-%02.0f %02.0f", year, month, day, hour);
+	},
+	// 現在日時を日時フォーマットに変換
 	getFormattedNowDateTime:function(){
 	    var now = new Date();
 	    var year = now.getFullYear();

@@ -609,7 +609,8 @@ exports.style = {
 	profileInfoRowView:{
 		layout: 'vertical',
 		top: '0dp',
-		width: '100%',
+//		width: '100%',
+		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
 	profileIconView:{
@@ -628,8 +629,8 @@ exports.style = {
 		layout: 'vertical',
 		top: '10dp',
 		bottom: '10dp',
-//		left: '15dp',
-//		right: '15dp',
+		left: '15dp',
+		right: '15dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
@@ -658,24 +659,8 @@ exports.style = {
 		color: '#e74c3c',
 	},
 
-	profileEtcRowView:{
-		top: '0dp',
-		bottom: '1dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		backgroundColor: 'white',
-	},
-	profileEtcView:{
-		layout: 'vertical',
-		top: '10dp',
-		bottom: '10dp',
-		left: '15dp',
-		right: '15dp',
-//		width: '100%',
-		height: Ti.UI.SIZE,
-	},
 	profileInfoBreedLabel:{
-		top: '0dp',
+		top: '5dp',
 //		left: '15dp',
 //		right: '15dp',
 		height: Ti.UI.SIZE,
@@ -690,7 +675,7 @@ exports.style = {
 		color: '#696969',
 	},
 	profileInfoMemoLabel:{
-		top: '0dp',
+		top: '5dp',
 //		left: '15dp',
 //		right: '15dp',
 		height: Ti.UI.SIZE,
@@ -748,8 +733,7 @@ exports.style = {
 	profilePhotoImage:{
 		top: '0dp',
 		left: '0dp',
-		// 余白(1dp*5箇所)
-		width: ( (Ti.Platform.displayCaps.platformWidth) / 4 ) + 'dp',
+		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		defaultImage: '',
 		backgroundColor: 'white',

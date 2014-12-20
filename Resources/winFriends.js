@@ -19,6 +19,9 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	var nextArticleFlag = false;
 	var nextTarget = null;
 
+	// 未読フラグ
+	var unreadFlag = true;
+
 	// 多重更新防止
 	var updateEnable = true;
 
@@ -38,21 +41,26 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// 記事の追加
 	var appendArticleList = function(_articleList) {
 		Ti.API.debug('[func]appendArticleList:');
-		// 未読マークの表示
-		var unreadCount = 0;
-		var unreadFlag = true;
+		// 最後の既読記事
 		var articleId = Ti.App.Properties.getString(_userData.id + '_' + 'articleId');
-//		articleId = '5471918cf13f3ae6c60027e5';
+		// 最新記事である1ページ目を取得する時に最後の既読記事を更新
+		if ( articlePage == 1 ) {
+			Ti.App.Properties.setString(_userData.id + '_' + 'articleId', _articleList[0].id);
+		}
+/*
 		//  プロパティの更新はタブを開いた時に行うためにデータを保管
 		if ( tabGroup.lastArticle == null || tabGroup.lastArticle.id != _articleList[0].id ) {
-			tabGroup.updateFlag = true;
+			// 未読件数の表示
+			Ti.UI.iPhone.appBadge = null;
 			tabGroup.lastArticle = _articleList[0];
+			Ti.App.Properties.setString(_userData.id + '_' + 'articleId', tabGroup.lastArticle.id);
+			Ti.App.Properties.setString(_userData.id + '_' + 'articleDate', tabGroup.lastArticle.created_at);
 		}
-
+*/
 		for (var i=0; i<_articleList.length; i++) {	
 			// 未読マークの表示
 			if ( _articleList[i].id == articleId) { unreadFlag = false; }
-			if (unreadFlag) { unreadCount++; }
+//			if (unreadFlag) { unreadCount++; }
 
 			var date = util.getDateElement(_articleList[i].date);
 			if (checkDate == null || date.year != checkDate.year || date.month != checkDate.month || date.day != checkDate.day) {
@@ -113,8 +121,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
             friendsWin.add(preloadImage);
 */
 		}
-		// 未読件数の表示
-		Ti.UI.iPhone.appBadge = unreadCount;
 	};
 
 	// 記事がない場合の追加

@@ -295,24 +295,10 @@ exports.createWindow = function(_userData){
 		userLabel.text = _userData.user;
 		nameView.add(userLabel);
 
-		return infoRow;
-	};
-	
-	// etcRowの取得
-	var getProfileEtcRow = function() {
-		Ti.API.debug('[func]getProfileEtcRow:');
-
-		// プロフィール情報の表示
-		var etcRow = Titanium.UI.createTableViewRow(style.profileInfoTableRow);
-		var etcRowView = Ti.UI.createView(style.profileEtcRowView);
-		etcRow.add(etcRowView);
-		var etcView = Ti.UI.createView(style.profileEtcView);
- 		etcRowView.add(etcView);
-
 		if (_userData.breed != '') {
 			var breedLabel = Ti.UI.createLabel(style.profileInfoBreedLabel);
 			breedLabel.text = _userData.breed;
-			etcView.add(breedLabel);
+			nameView.add(breedLabel);
 		}
 		if (_userData.birth != '' || _userData.sex != '') {
 			var birthLabel = Ti.UI.createLabel(style.profileInfoBirthLabel);
@@ -323,18 +309,18 @@ exports.createWindow = function(_userData){
 			} else {
 				birthLabel.text = util.getFormattedYMD(_userData.birth) + '生まれの' + _userData.sex;
 			}
-			etcView.add(birthLabel);
+			nameView.add(birthLabel);
 		}
 
 		if (_userData.memo != '') {
 			var memoLabel = Ti.UI.createLabel(style.profileInfoMemoLabel);
 			memoLabel.text = _userData.memo;
-			etcView.add(memoLabel);
+			nameView.add(memoLabel);
 		}
 
-		return etcRow;
+		return infoRow;
 	};
-
+	
 	// 記事の取得
 	var getPhotoListArticleTableRow = function(_articleList) {
 		Ti.API.debug('[func]getPhotoListArticleTableRow:');
@@ -342,10 +328,12 @@ exports.createWindow = function(_userData){
 		var articleListView = Ti.UI.createView(style.profileArticleListView);
 		articleRow.add(articleListView);
 		
+		var rowNum = (_articleList.length < 4) ? _articleList.length : 4;
 		for (var i=0; i<_articleList.length; i++) {	
 			var articleView = Ti.UI.createView(style.profileArticleView);
 			articleListView.add(articleView);
 			var photoImage = Ti.UI.createImageView(style.profilePhotoImage);
+			photoImage.width = ( (Ti.Platform.displayCaps.platformWidth) / rowNum ) + 'dp',
 			photoImage.image = _articleList[i].photo;
 
 			// カスタムプロパティに記事データを格納
@@ -430,8 +418,6 @@ exports.createWindow = function(_userData){
 		var rowList = [];
 		var profileInfoRow = getProfileInfoRow();
 		rowList.push(profileInfoRow);
-		var profileEtcRow = getProfileEtcRow();
-		rowList.push(profileEtcRow);
 /*		
 		if (loginUser.id == _userData.id) {
 			var profileCountRow = getProfileCountRow();

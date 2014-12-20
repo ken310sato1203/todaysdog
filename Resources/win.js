@@ -190,14 +190,18 @@ exports.win = {
 						var friendsWin = win.getTab("friendsTab").window;
 						if (tabGroup.activeTab.window.objectName != 'friendsWin') {
 							tabGroup.activeTab = tabGroup.tabs[e.source.tabIndex];
+/*
 							// 未読記事の更新
 							if (tabGroup.updateFlag) {
 								tabGroup.updateFlag = false;
 								Ti.UI.iPhone.appBadge = null;
 								var loginUser = model.getLoginUser();
 								Ti.App.Properties.setString(loginUser.id + '_' + 'articleId', tabGroup.lastArticle.id);
-								Ti.App.Properties.setString(loginUser.id + '_' + 'articleDate', tabGroup.lastArticle.date);
+//								Ti.App.Properties.setString(loginUser.id + '_' + 'articleDate', tabGroup.lastArticle.date);
+								Ti.App.Properties.setString(loginUser.id + '_' + 'articleDate', tabGroup.lastArticle.created_at);
 							}
+*/
+							var loginUser = model.getLoginUser();
 						}
 						
 					} else if (e.source.tabIndex == 1) {

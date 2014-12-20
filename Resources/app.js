@@ -17,7 +17,7 @@ var customTab = null;
 
 // facebook側で登録したアプリID
 Facebook.appid = '159833880868916';
-Facebook.permissions = ['publish_stream'];
+Facebook.permissions = ['offline_access', 'publish_stream'];
 // iOS6以降、facebookのシングルサインオンに対応するためforceDialogAuthはfalseにすべきとあるが
 // authorizeがGET系のみとなり、reauthorizeで再度POST系の認証をする必要があるため、trueとしシングルサインオンには対応しない
 Facebook.forceDialogAuth = true;
@@ -29,6 +29,9 @@ var loginFlag = false;
 
 // 起動初回時のdiaryWinのスクロール、timeWinのオープンするためのフラグ
 var initDiaryFlag = true;
+
+// ロード用画面
+var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
 
 // ---------------------------------------------------------------------
 var openMainWindow = function(_userData) {
@@ -73,6 +76,7 @@ var openMainWindow = function(_userData) {
 	// diaryWinの更新でtimeWinを表示させておく
 	win3.fireEvent('refresh');
 
+/*
 	// アプリを一度閉じ、再度開いた時
 	Ti.App.addEventListener('resume',function(e){
 		Ti.API.debug('[event]App.resume:');
@@ -82,9 +86,11 @@ var openMainWindow = function(_userData) {
 			Ti.UI.iPhone.appBadge = null;
 			var loginUser = model.getLoginUser();
 			Ti.App.Properties.setString(loginUser.id + '_' + 'articleId', tabGroup.lastArticle.id);
-			Ti.App.Properties.setString(loginUser.id + '_' + 'articleDate', tabGroup.lastArticle.date);
+//			Ti.App.Properties.setString(loginUser.id + '_' + 'articleDate', tabGroup.lastArticle.date);
+			Ti.App.Properties.setString(loginUser.id + '_' + 'articleDate', tabGroup.lastArticle.created_at);
 		}
 	});
+*/
 	
 /*
 	// 最新情報を表示
@@ -224,7 +230,6 @@ var loginFacebook = function() {
 
 	actInd.show();
 	loginWin.add(actInd);
-	
 	model.loginCloudUser('facebook', Facebook.accessToken, function (e) {
 		if (e.success) {
 			var userData = e.userData;
@@ -302,7 +307,9 @@ var loginFacebook = function() {
 		}
 	});
 	
-//	actInd.hide();
+	setTimeout(function(){
+		actInd.hide();
+	}, 2000);
 };
 
 // ---------------------------------------------------------------------
@@ -314,9 +321,6 @@ loginFbButton.hide();
 loginWin.add(loginFbButton);
 loginWin.open();	
 
-// ロード用画面
-var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
-
 if ( Facebook.loggedIn ) {
 	loginFlag = true;
 	loginFacebook();
@@ -324,46 +328,37 @@ if ( Facebook.loggedIn ) {
 	loginFbButton.show();
 }
 
+/* バックグラウンド処理がうまくいかない場合があるのでやめる。
 var OS_MAJOR = parseInt(Ti.Platform.version.split('.')[0], 10);
 if (Ti.Platform.name == 'iPhone OS' && OS_MAJOR >= 7) {
 	// iOS 7 以上
 	// バックグラウンドで定期的に実行
-	Ti.App.iOS.setMinimumBackgroundFetchInterval(
-	    Ti.App.iOS.BACKGROUNDFETCHINTERVAL_MIN
-	);
+	var interval = Ti.App.iOS.BACKGROUNDFETCHINTERVAL_MIN;
+	interval = 60;
+	Ti.App.iOS.setMinimumBackgroundFetchInterval(interval);
 	Ti.App.iOS.addEventListener('backgroundfetch', function (e) {
-		if ( Facebook.loggedIn ) {
-			model.loginCloudUser('facebook', Facebook.accessToken, function (e) {
-				if (e.success) {
-/*
-					// 最新記事件数の更新
-					model.updateCloudNewArticleCount(function(e) {
-						Ti.API.debug('[func]updateCloudNewArticleCount.callback:');
-						if (e.success == false) {
-							e.index = 1;
-							util.errorDialog(e);
-						}
-					});
-*/
-				    var friendsWin = win.getTab("friendsTab").window;
-					friendsWin.fireEvent('insert');
-
-				} else {
-					e.index = 2;
-					util.errorDialog(e);
-				}
-			});
-		} else {
-			util.alertDialog('Facebook.loggedIn == false');
-		}
+		// バッジ（最新記事件数）の更新
+		model.updateCloudNewArticleCount(function(e) {
+			Ti.API.debug('[func]updateCloudNewArticleCount.callback:');
+			if (e.success) {
+				Ti.UI.iPhone.appBadge = (e.articleCount == 0) ? null : e.articleCount;
+				// タブバーをカスタマイズしているのでタブにバッジをつけるのは難しい
+	//			tabGroup.tabs[0].setBadge(badgeCount);
+	
+			} else {
+				util.errorDialog(e);
+			}
+		});
 
         // イベントハンドラの最後で呼び出し必須
         Ti.App.iOS.endBackgroundHandler(e.handlerId);
 	});
 }
+*/
 
 // アプリがバックグラウンドに変わった時に実行
 var service = Ti.App.iOS.registerBackgroundService({url:'background.js'});
+
 
 // ---------------------------------------------------------------------
 

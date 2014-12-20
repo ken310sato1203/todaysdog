@@ -76,6 +76,10 @@ exports.model = {
 	// ログイン
 	loginCloudUser:function(_type, _token, callback){
 		Ti.API.debug('[func]loginCloudUser:');
+		var accessToken = {
+			type: _type, 
+			token: _token
+		};
 
 		Cloud.SocialIntegrations.externalAccountLogin({
 			type: _type, 
@@ -115,8 +119,12 @@ exports.model = {
 					userData.icon = user.photo.urls.small_240;
 				}
 				e.userData = userData;
+				callback(e);
+
+			} else {
+				e.accessToken = accessToken;
+				callback(e);
 			}
-			callback(e);
 		});
 	},
 
@@ -548,6 +556,7 @@ exports.model = {
 						commentCount = commentCount - post.ratings_count;
 						likeCount = post.ratings_count;
 					}
+					// バッジ更新で、RESTAPIではcustom_fieldsが取得できなかったのでcreated_atを使用
 					var articleData = {
 						id: post.id,
 						userId: user.id,
@@ -555,6 +564,7 @@ exports.model = {
 						name: name,
 						text: post.content,
 						date: util.getFormattedDateTime(post.custom_fields.postDate),
+						created_at: util.getFormattedDateTime(post.created_at),
 						photo: post.photo.urls.original,
 						like: likeCount,
 						comment: commentCount,
@@ -575,9 +585,42 @@ exports.model = {
 		var articleId = Ti.App.Properties.getString(userId + '_' + 'articleId');
 		var articleDate = Ti.App.Properties.getString(userId + '_' + 'articleDate');
 		var idList = model.getLocalFriendsList(userId);
-//		articleDate = '2014-11-11 23:05:03';
-//		idList.push('52219f37c6b5460b09007ecf');
+
 		if (idList.length > 0) {
+			// ACSの「App Management」で確認
+			// 開発用：wnadlSr51PBVdxx6HOAgnjbkLpAY4QuQ
+			// 本番用：5NWjAalB43p8FqOj0Ue6aQYk5HXVncIZ
+			var acs_app_key = 'wnadlSr51PBVdxx6HOAgnjbkLpAY4QuQ';
+			// バッジ更新で、RESTAPIではcustom_fieldsが取得できなかったのでcreated_atを使用
+			var where_value = {
+				user_id: { '$in': idList },
+				id: { '$nin': [articleId] },
+//				'postDate': {
+//					'$gte': util.getCloudFormattedDateTime(articleDate)
+//				}
+				created_at: { '$gte': util.getCloudFormattedDateTime(articleDate) }
+			};
+			var url = 'https://api.cloud.appcelerator.com/v1/posts/query.json?';
+			url += 'key=' + acs_app_key;
+			url += '&where=' + JSON.stringify(where_value);
+			url += '&order=created_at';
+
+			var httpClient = Ti.Network.createHTTPClient({
+				onload: function(e) {
+					Ti.API.info("Received text: " + this.responseText);
+					e.responseMeta = JSON.parse(this.responseData).meta;
+					e.articleCount = e.responseMeta.total_results;
+					callback(e);
+				},
+				onerror: function(e) {
+					Ti.API.info("Receive Error: " + e.error);
+					callback(e);
+				}
+			});
+			httpClient.open('GET', url);
+			httpClient.send();
+
+/*
 			Cloud.Posts.query({
 				where: {
 					user_id: { '$in': idList },
@@ -589,20 +632,18 @@ exports.model = {
 				order: '-created_at'
 			}, function (e) {
 				if (e.success) {
-					var badgeCount = e.posts.length;
-					if (badgeCount == 0) {
-						badgeCount = null;
+					if (e.posts.length == 0) {
+						e.badgeCount = null;
+					} else {
+						e.badgeCount = e.posts.length;						
 					}
-					Ti.UI.iPhone.appBadge = badgeCount;
-					// タブバーをカスタマイズしているのでタブにバッジをつけるのはやめる
-//					tabGroup.tabs[0].setBadge(badgeCount);
-	
 				}
 				callback(e);
 			});
+*/
+
 		} else {
-			Ti.UI.iPhone.appBadge = null;
-//			tabGroup.tabs[0].setBadge(null);
+			e.articleCount = 0;
 		}
 	},
 
