@@ -20,6 +20,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	var nextTarget = null;
 
 	// 未読フラグ
+	var lastArticleId = null;
 	var unreadFlag = true;
 
 	// 多重更新防止
@@ -41,11 +42,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// 記事の追加
 	var appendArticleList = function(_articleList) {
 		Ti.API.debug('[func]appendArticleList:');
-		// 最後の既読記事
-		var articleId = Ti.App.Properties.getString(_userData.id + '_' + 'articleId');
 		// 最新記事である1ページ目を取得する時に最後の既読記事を更新
 		if ( articlePage == 1 ) {
+			unreadFlag = true;
+			lastArticleId = Ti.App.Properties.getString(_userData.id + '_' + 'articleId');
 			Ti.App.Properties.setString(_userData.id + '_' + 'articleId', _articleList[0].id);
+//			Ti.App.Properties.setString(_userData.id + '_' + 'articleId', '548d90944cabe908be02fab1');
 		}
 /*
 		//  プロパティの更新はタブを開いた時に行うためにデータを保管
@@ -59,7 +61,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 */
 		for (var i=0; i<_articleList.length; i++) {	
 			// 未読マークの表示
-			if ( _articleList[i].id == articleId) { unreadFlag = false; }
+			if ( _articleList[i].id == lastArticleId) { unreadFlag = false; }
 //			if (unreadFlag) { unreadCount++; }
 
 			var date = util.getDateElement(_articleList[i].date);
