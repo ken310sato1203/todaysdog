@@ -392,6 +392,7 @@ exports.style = {
 		touchEnabled: false,
 	},
 */
+/*
 	photoCommentTableRow:{ 
 		top: '0dp',
 		height: Ti.UI.SIZE,
@@ -406,6 +407,7 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		backgroundColor: '#dedede',
 	},
+*/
 	photoCommentView:{
 		layout: 'horizontal',
 		top: '0dp',
@@ -437,6 +439,13 @@ exports.style = {
 		width: (Ti.Platform.displayCaps.platformWidth - 66) + 'dp',
 		height: Ti.UI.SIZE,
 	},
+	photoCommentNameView:{
+		layout: 'horizontal',
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
 	photoCommentNameLabel:{
 		top: '0dp',
 		left: '0dp',
@@ -445,6 +454,15 @@ exports.style = {
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
+	},
+	photoCommentUserLabel:{
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#696969',
 	},
 	photoCommentTextLabel:{
 		top: '5dp',
@@ -2534,19 +2552,15 @@ exports.style = {
 		height: '28dp',
 		backgroundImage:'images/icon/w_friends_search.png',
 	},
+	friendsCommentButton:{
+		width: '28dp',
+		height: '28dp',
+		backgroundImage:'images/icon/w_profile_comment.png',
+	},
 	friendsConfigButton:{
 		width: '28dp',
 		height: '28dp',
 		backgroundImage:'images/icon/w_profile_gear.png',
-	},
-
-	friendsUpdateButton:{
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
-		textAlign: 'center',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		title: '更新する',
 	},
 
 	friendsTableListView:{
@@ -2683,131 +2697,6 @@ exports.style = {
 		backgroundColor: '#dedede',
 	},
 
-/*
-	friendsArticleList:{
-		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
-		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
-	},
-	friendsArticleView:{
-		layout: 'horizontal',
-		top: '0dp',
-	    bottom: '1dp',
-		width: '100%',
-		height: Ti.UI.SIZE,
-		backgroundColor: 'white',
-	},
-	friendsUserIconView:{
-		top: '5dp',
-		bottom: '5dp',
-		left: '10dp',
-		width: '54dp',
-		height: '54dp',
-		borderRadius: '27dp',
-	},
-	friendsTextView:{
-		layout: 'vertical',
-		top: '5dp',
-		bottom: '5dp',
-		left: '10dp',
-		// photoCommentUserIconImage(10+54)と余白（10+10）を除いたサイズ
-		width: (Ti.Platform.displayCaps.platformWidth - 84) + 'dp',
-		height: Ti.UI.SIZE,
-	},
-	friendsNameView:{
-		layout: 'horizontal',
-		top: '5dp',
-		left: '0dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-	},
-	friendsNameLabel:{
-		top: '0dp',
-		left: '0dp',
-		right: '5dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-//		height: '16dp',
-		textAlign: 'left',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-	},
-	friendsUserLabel:{
-		top: '0dp',
-		left: '0dp',
-//		right: '5dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-//		height: '16dp',
-		textAlign: 'left',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#696969',
-	},
-	friendsTextLabel:{
-		top: '5dp',
-//		bottom: '22dp',
-		left: '0dp',
-//		right: '15dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		textAlign: 'left',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-	},
-
-	friendsTimeView:{
-		top: '5dp',
-		left: '0dp',
-		right: '10dp',
-		width: '100%',
-		height: Ti.UI.SIZE,
-	},
-	friendsTimeLabel:{
-		bottom: '0dp',
-		left: '0dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		textAlign: 'left',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#696969',
-	},
-	friendsCountView:{
-		layout: 'horizontal',
-		bottom: '0dp',
-		right: '0dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-	},
-	friendsLikeIconImage:{
-		left: '0dp',
-		width: '18dp',
-		height: '18dp',
-		defaultImage: '',
-		image: 'images/icon/b_like.png',
-	},
-	friendsLikeLabel:{
-		left: '6dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		textAlign: 'left',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-	},
-	friendsCommentIconImage:{
-		left: '12dp',
-		width: '18dp',
-		height: '18dp',
-		defaultImage: '',
-		image: 'images/icon/b_comment_square.png',
-	},
-	friendsCommentLabel:{
-		left: '6dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		textAlign: 'left',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-	},
-*/
-
 	friendsNextList:{
 		height: Ti.UI.SIZE,
 		backgroundColor: '#eeeeee',
@@ -2841,6 +2730,167 @@ exports.style = {
 		height: '0dp',
 	},
 
+// winFriendsComment -------------------------------------------------------
+	friendsCommentWin:{
+		backgroundColor: '#dedede',
+//		barImage: 'images/icon/titlebar.png',
+		barColor: '#e74c3c',
+		tabBarHidden: true,
+		// カスタムプロパティ
+		objectName : 'friendsCommentWin',
+		prevWin : null,
+	},
+	friendsCommentTitleLabel:{
+		width: '200dp',
+		textAlign: 'center',
+		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+		text: 'コメント', 
+	},
+
+	friendsCommentTableListView:{
+		top: '0dp',
+		left: '0dp',
+		bottom: '44dp',
+		separatorStyle: Titanium.UI.iPhone.ListViewSeparatorStyle.NONE,
+	},
+
+	friendsCommentDataList:{
+		height: Ti.UI.SIZE,
+		backgroundColor: '#eeeeee',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
+	},
+	friendsCommentDateLabel:{
+		top: '0dp',
+		left: '10dp',
+		width: '100%',
+		height: '30dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+
+	friendsCommentArticleList:{
+		height: Ti.UI.SIZE,
+		backgroundColor: '#eeeeee',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
+	},
+	friendsCommentView:{
+		layout: 'horizontal',
+		top: '0dp',
+	    bottom: '1dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+	},
+	friendsCommentUnreadView:{
+		top: '0dp',
+		left: '0dp',
+		width: '7dp',
+		height: '78dp',
+		backgroundColor : '#87CEFA',
+	},
+	friendsCommentUserIconView:{
+		top: '5dp',
+		bottom: '5dp',
+		left: '10dp',
+		width: '36dp',
+		height: '36dp',
+		borderRadius: '18dp',
+	},
+	friendsCommentUserIconImage:{
+		width: '36dp',
+		height: '36dp',
+		defaultImage: '',
+	},
+	friendsCommentTextView:{
+		layout: 'vertical',
+		top: '5dp',
+		bottom: '5dp',
+		left: '10dp',
+		right: '10dp',
+		// unread(7)とphotoCommentUserIconImage(10+36)と余白（10+10）を除いたサイズ
+		width: (Ti.Platform.displayCaps.platformWidth - 73) + 'dp',
+		height: Ti.UI.SIZE,
+	},
+	friendsCommentNameView:{
+		layout: 'horizontal',
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	friendsCommentNameLabel:{
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+	friendsCommentUserLabel:{
+		top: '0dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+	friendsCommentTextLabel:{
+		top: '5dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#000',
+	},
+	friendsCommentTimeLabel:{
+		top: '5dp',
+		left: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+	
+	friendsCommentNextList:{
+		height: Ti.UI.SIZE,
+		backgroundColor: '#eeeeee',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
+	},
+	friendsCommentNextLabel:{
+		top: '0dp',
+		width: '100%',
+		height: '50dp',
+		textAlign: 'center',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+
+	friendsCommentNoDataList:{
+		height: '50dp',
+		backgroundColor: '#eeeeee',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
+	},
+	friendsCommentNoDataLabel:{
+		top: '0dp',
+		width: '100%',
+		height: '100%',
+		textAlign: 'center',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+
+	friendsCommentPreloadImage:{
+		width: '0dp',
+		height: '0dp',
+	},
+	
 // winFriendsConfig -------------------------------------------------------
 	friendsConfigWin:{
 		backgroundColor: '#dedede',

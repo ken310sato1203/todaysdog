@@ -76,23 +76,20 @@ var openMainWindow = function(_userData) {
 	// diaryWinの更新でtimeWinを表示させておく
 	win3.fireEvent('refresh');
 
-/*
+	// アプリを閉じた時
+	Ti.App.addEventListener('pause',function(e){
+		Ti.API.debug('[event]App.pause:');
+		var friendsWin = win.getTab("friendsTab").window;
+		friendsWin.fireEvent('refresh');
+	});
+
+
+/*	
 	// アプリを一度閉じ、再度開いた時
 	Ti.App.addEventListener('resume',function(e){
 		Ti.API.debug('[event]App.resume:');
-		// 未読記事の更新
-		if (tabGroup.updateFlag) {
-			tabGroup.updateFlag = false;
-			Ti.UI.iPhone.appBadge = null;
-			var loginUser = model.getLoginUser();
-			Ti.App.Properties.setString(loginUser.id + '_' + 'articleId', tabGroup.lastArticle.id);
-//			Ti.App.Properties.setString(loginUser.id + '_' + 'articleDate', tabGroup.lastArticle.date);
-			Ti.App.Properties.setString(loginUser.id + '_' + 'articleDate', tabGroup.lastArticle.created_at);
-		}
 	});
-*/
-	
-/*
+
 	// 最新情報を表示
 	tab2.addEventListener('focus', function(e){
 		Ti.API.debug('[event]tab2.focus:');

@@ -1,7 +1,7 @@
-// わんとも
+// コメント
 
 exports.createWindow = function(_type, _userData, _year, _month) {
-	Ti.API.debug('[func]winFriends.createWindow:');
+	Ti.API.debug('[func]winFriendsComment.createWindow:');
 	Ti.API.debug('_type:' + _type);
 
 	// 今日の日時
@@ -11,7 +11,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 	// 記事データの取得ページ
 	var articlePage = 1;
-	// 記事データの取得件数
+	// 記事データの取得件数ß
 	var articleCount = 10;
 	// 記事データの取得開始日（n日前）
 	var articleDay = 60;
@@ -34,11 +34,11 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		// 最新記事である1ページ目を取得する時に最後の既読記事を更新
 		if ( articlePage == 1 ) {
 			unreadFlag = true;
-			lastArticleId = Ti.App.Properties.getString(_userData.id + '_' + 'lastArticleId');
+			lastArticleId = Ti.App.Properties.getString(_userData.id + '_' + 'lastCommentId');
 			// アプリ起動時には、最後の既読記事の更新は行わず、タブをクリックした時に行うためにwin.jsで更新、pullで更新する時も
 			if (lastArticleId != _articleList[0].id) {
-				tabGroup.articleUpdateFlag = true;
-				tabGroup.lastArticle = _articleList[0];
+				tabGroup.lastComment = _articleList[0];
+				Ti.App.Properties.setString(_userData.id + '_' + 'lastCommentId', tabGroup.lastComment.id);
 			}
 		}
 
@@ -48,20 +48,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 //			if (unreadFlag) { unreadCount++; }
 
 			var date = util.getDateElement(_articleList[i].date);
-			if (checkDate == null || date.year != checkDate.year || date.month != checkDate.month || date.day != checkDate.day) {
-				checkDate = {year:date.year, month:date.month, day:date.day};					
-
-				var dateItem = [{
-					template: 'date',
-					friendsDateLabel: {
-//						text: date.year + '/' + date.month + '/' + date.day,
-						text: date.month + '月' + date.day + '日',
-					},
-				}];
-				listSection.appendItems(dateItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
-
-			}
-
 			var nameValue = '';
 			if (_articleList[i].name != '') {
 				nameValue = _articleList[i].name + ' ';
@@ -69,32 +55,26 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			var articleItem = [{
 				articleData: _articleList[i],
 				template: 'article',
-				friendsUnreadView: {
+				friendsCommentUnreadView: {
 					visible: unreadFlag,
 				},
-				friendsUserIconView: {
-//					backgroundImage: _articleList[i].photo,
+				friendsCommentUserIconView: {
+//					backgroundImage: _articleList[i].icon,
 				},
-				friendsUserIconImage: {
-					image: _articleList[i].photo,
+				friendsCommentUserIconImage: {
+					image: _articleList[i].icon,
 				},
-				friendsNameLabel: {
+				friendsCommentNameLabel: {
 					text: nameValue,
 				},
-				friendsUserLabel: {
+				friendsCommentUserLabel: {
 					text: _articleList[i].user,
 				},
-				friendsTextLabel: {
+				friendsCommentTextLabel: {
 					text: _articleList[i].text,
 				},
-				friendsTimeLabel: {
-					text: date.hour + ":" + date.minute,
-				},
-				friendsLikeLabel: {
-					text: _articleList[i].like,
-				},
-				friendsCommentLabel: {
-					text: _articleList[i].comment,
+				friendsCommentTimeLabel: {
+					text: date.year + '/' + date.month + '/' + date.day + ' ' + date.hour + ":" + date.minute,
 				},
 			}];
 			listSection.appendItems(articleItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
@@ -103,7 +83,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			// winPhotoで画像がすぐに表示されるよう、winFriendsでロードしておく（画面上には表示しない）
             var preloadImage = Ti.UI.createImageView(style.friendsPreloadImage);
             preloadImage.image = _articleList[i].photo;
-            friendsWin.add(preloadImage);
+            friendsCommentWin.add(preloadImage);
 */
 		}
 	};
@@ -114,8 +94,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 		var noDataItem = [{
 			template: 'nodata',
-			friendsNoDataLabel: {
-				text: '投稿された記事はありませんでした',
+			friendsCommentNoDataLabel: {
+				text: 'コメントはありませんでした',
 			},
 		}];
 
@@ -130,17 +110,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 		// 友人リスト
 		var idList = model.getLocalFriendsList(_userData.id);
-		var followList = [];
 
 		if (idList) {
-			for (var i=0; i<idList.length; i++) {
-				followList.push({userId: _userData.id, follow: idList[i]});
-			}
-			_userData.follow = followList.length;
-			// 自分を追加
-			idList.push(_userData.id);
-			// 記事データの取得
-			model.getCloudTodayArticle({
+
+			// コメントの取得
+			model.getAllCloudCommentList({
+				userId: _userData.id,
 				idList: idList,
 				year: now.year,
 				month: now.month,
@@ -148,7 +123,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				page: articlePage,
 				count: articleCount
 			}, function(e) {
-				Ti.API.debug('[func]getCloudTodayArticle.callback:');
+				Ti.API.debug('[func]getAllCloudCommentList.callback:');
 
 				if (e.success) {
 					if (e.articleList.length > 0) {
@@ -167,7 +142,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 							nextArticleFlag = true;
 							var nextItem = [{
 								template: 'next',
-								friendsNextLabel: {
+								friendsCommentNextLabel: {
 									text: '続きを読む',
 								},
 							}];
@@ -216,109 +191,90 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	};
 	
 // ---------------------------------------------------------------------
-	var friendsWin = Ti.UI.createWindow(style.friendsWin);
+	var friendsCommentWin = Ti.UI.createWindow(style.friendsCommentWin);
 	// タイトルの表示
-	var titleView = Ti.UI.createLabel(style.friendsTitleLabel);
-	friendsWin.titleControl = titleView;
+	var titleView = Ti.UI.createLabel(style.friendsCommentTitleLabel);
+	friendsCommentWin.titleControl = titleView;
 
-	// コメントを参照するボタン
-	var commentButton = Titanium.UI.createButton(style.friendsCommentButton);
-	friendsWin.leftNavButton = commentButton;
-
-	// 友人を検索するボタン
-	var configButton = Titanium.UI.createButton(style.friendsConfigButton);
-	friendsWin.rightNavButton = configButton;
+	// 戻るボタンの表示
+	var backButton = Titanium.UI.createButton(style.commonBackButton);
+	friendsCommentWin.leftNavButton = backButton;
 
 	var dateListTemplate = {
-		properties: style.friendsDataList,
+		properties: style.friendsCommentDataList,
 		childTemplates: [{
 			type: 'Ti.UI.Label',
-			bindId: 'friendsDateLabel',
-			properties: style.friendsDateLabel
+			bindId: 'friendsCommentDateLabel',
+			properties: style.friendsCommentDateLabel
 		}]
 	};
 
 	var articleListTemplate = {
-		properties: style.friendsArticleList,
+		properties: style.friendsCommentArticleList,
 		childTemplates: [{
 			type: 'Ti.UI.View',
-			bindId: 'friendsUnreadView',
-			properties: style.friendsUnreadView
-		},{
-			type: 'Ti.UI.View',
-			bindId: 'friendsUserIconView',
-			properties: style.friendsUserIconView,
+			bindId: 'friendsCommentView',
+			properties: style.friendsCommentView,
 			childTemplates: [{
-				type: 'Ti.UI.ImageView',
-				bindId: 'friendsUserIconImage',
-				properties: style.friendsUserIconImage
+				type: 'Ti.UI.View',
+				bindId: 'friendsCommentUnreadView',
+				properties: style.friendsCommentUnreadView
+			},{
+				type: 'Ti.UI.View',
+				bindId: 'friendsCommentUserIconView',
+				properties: style.friendsCommentUserIconView,
+				childTemplates: [{
+					type: 'Ti.UI.ImageView',
+					bindId: 'friendsCommentUserIconImage',
+					properties: style.friendsCommentUserIconImage,
+				}]
+            },{
+				type: 'Ti.UI.View',
+				bindId: 'friendsCommentTextView',
+				properties: style.friendsCommentTextView,
+				childTemplates: [{
+					type: 'Ti.UI.View',
+					bindId: 'friendsCommentNameView',
+					properties: style.friendsCommentNameView,
+					childTemplates: [{
+						type: 'Ti.UI.Label',
+						bindId: 'friendsCommentNameLabel',
+						properties: style.friendsCommentNameLabel,
+					},{
+						type: 'Ti.UI.Label',
+						bindId: 'friendsCommentUserLabel',
+						properties: style.friendsCommentUserLabel
+					}]
+				},{
+					type: 'Ti.UI.Label',
+					bindId: 'friendsCommentTextLabel',
+					properties: style.friendsCommentTextLabel,
+				},{
+					type: 'Ti.UI.Label',
+					bindId: 'friendsCommentTimeLabel',
+					properties: style.friendsCommentTimeLabel,
+				}]
 			}]
-		},{
-			type: 'Ti.UI.View',
-			bindId: 'friendsNameView',
-			properties: style.friendsNameView,
-			childTemplates: [{
-				type: 'Ti.UI.Label',
-				bindId: 'friendsNameLabel',
-				properties: style.friendsNameLabel,
-			},{
-				type: 'Ti.UI.Label',
-				bindId: 'friendsUserLabel',
-				properties: style.friendsUserLabel
-			}]
-		},{
-			type: 'Ti.UI.Label',
-			bindId: 'friendsTextLabel',
-			properties: style.friendsTextLabel
-		},{
-			type: 'Ti.UI.Label',
-			bindId: 'friendsTimeLabel',
-			properties: style.friendsTimeLabel
-		},{
-			type: 'Ti.UI.View',
-			bindId: 'friendsCountView',
-			properties: style.friendsCountView,
-			childTemplates: [{
-				type: 'Ti.UI.ImageView',
-				bindId: 'friendsLikeIconImage',
-				properties: style.friendsLikeIconImage
-			},{
-				type: 'Ti.UI.Label',
-				bindId: 'friendsLikeLabel',
-				properties: style.friendsLikeLabel
-			},{
-				type: 'Ti.UI.ImageView',
-				bindId: 'friendsCommentIconImage',
-				properties: style.friendsCommentIconImage
-			},{
-				type: 'Ti.UI.Label',
-				bindId: 'friendsCommentLabel',
-				properties: style.friendsCommentLabel
-			}]
-		},{
-			type: 'Ti.UI.View',
-			bindId: 'friendsSeparateView',
-			properties: style.friendsSeparateView,
 		}]
 	};
 
 	var nextListTemplate = {
-		properties: style.friendsNextList,
+		properties: style.friendsCommentNextList,
 		childTemplates: [{
 			type: 'Ti.UI.Label',
-			bindId: 'friendsNextLabel',
-			properties: style.friendsNextLabel,
+			bindId: 'friendsCommentNextLabel',
+			properties: style.friendsCommentNextLabel,
 		}]
 	};
 	var noDataListTemplate = {
-		properties: style.friendsNoDataList,
+		properties: style.friendsCommentNoDataList,
 		childTemplates: [{
 			type: 'Ti.UI.Label',
-			bindId: 'friendsNoDataLabel',
-			properties: style.friendsNoDataLabel,
+			bindId: 'friendsCommentNoDataLabel',
+			properties: style.friendsCommentNoDataLabel,
 		}]
 	};	
-	var listView = Ti.UI.createListView(style.friendsTableListView);
+	var listView = Ti.UI.createListView(style.friendsCommentTableListView);
 	listView.templates = {
 		'article': articleListTemplate,
 		'date': dateListTemplate,
@@ -328,12 +284,30 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	
 	var listSection = Ti.UI.createListSection();
 	listView.setSections([listSection]);
-	friendsWin.add(listView);
+	friendsCommentWin.add(listView);
 
 	// ビューの更新
 	updateArticle();
 	
 	listView.pullView = getTableHeader();
+
+
+	// 友人リスト
+	var idList = model.getLocalFriendsList(_userData.id);
+
+	model.getAllCloudCommentList({
+		userId: _userData.id,
+		idList: idList
+	}, function(e) {
+		Ti.API.debug('[func]getAllCloudCommentList.callback:');
+		if (e.success) {
+			Ti.API.debug('[func]getAllCloudCommentList.success:');
+
+		} else {
+			util.errorDialog(e);
+		}
+	});
+
 		
 // ---------------------------------------------------------------------
 	
@@ -353,21 +327,31 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			if (item.template == 'article') {
 				updateEnable = false;
 				var type = "friends";
-				// like、comment数の更新用indexを付加
-				item.articleData.index = e.itemIndex;
-				var photoWin = win.createPhotoWindow(type, item.articleData);
-				photoWin.prevWin = friendsWin;
-				win.openTabWindow(photoWin, {animated:true});			
-				updateEnable = true;
-				// 未読マークを外す
-				item.friendsUnreadView.visible = false;
-				listSection.updateItemAt(e.itemIndex, item);
+
+				// レビュー記事の取得
+				model.getCloudArticlePost({
+					postId: item.articleData.reviewedId
+				}, function(e) {
+					Ti.API.debug('[func]getCloudArticlePost.callback:');
+					if (e.success) {
+						var photoWin = win.createPhotoWindow(type, e.articleList[0]);
+						photoWin.prevWin = friendsCommentWin;
+						win.openTabWindow(photoWin, {animated:true});			
+						updateEnable = true;
+						// 未読マークを外す
+						item.friendsCommentUnreadView.visible = false;
+						listSection.updateItemAt(e.itemIndex, item);
+
+					} else {
+						util.errorDialog(e);
+					}
+				});
 	
 			} else if (item.template == 'next') {
 				updateEnable = false;
 				// 続きを読むの行をdeleteだとうまくいかないのでupdateで高さを0にし、追加後に反映
-				item.friendsNextLabel.text = '';
-				item.friendsNextLabel.height = '0dp';
+				item.friendsCommentNextLabel.text = '';
+				item.friendsCommentNextLabel.height = '0dp';
 				nextTarget = {index:e.itemIndex, item:item};
 				updateArticle();
 			}
@@ -390,71 +374,25 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			articlePage = 1;
 			nextArticleFlag = false;
 			listSection.setItems([], {animated:false});
-
-			// 未読記事の更新
-			if (tabGroup.articleUpdateFlag) {
-				tabGroup.articleUpdateFlag = false;
-				Ti.App.Properties.setString(_userData.id + '_' + 'lastArticleId', tabGroup.lastArticle.id);
-			}
 			updateArticle();
 			resetPullView();
 		}, 2000);
 	});
 
 // ---------------------------------------------------------------------
-
-	// コメントボタン
-	commentButton.addEventListener('click', function(e){
-		Ti.API.debug('[event]commentButton.click:');
-		var friendsCommentWin = win.createFriendsCommentWindow(_userData);
-		friendsCommentWin.prevWin = friendsWin;
-		win.openTabWindow(friendsCommentWin, {animated:true});
-	});
-
-	// 設定ボタン
-	configButton.addEventListener('click', function(e){
-		Ti.API.debug('[event]configButton.click:');
-		var friendsConfigWin = win.createFriendsConfigWindow(_userData);
-		friendsConfigWin.prevWin = friendsWin;
-		win.openTabWindow(friendsConfigWin, {animated:true});
-	});
-
-	// ライク・コメント編集を反映
-	friendsWin.addEventListener('refresh', function(e){
-		Ti.API.debug('[event]friendsWin.refresh:');
-		if(e.index != null) {
-			var item = listSection.getItemAt(e.index);
-			item.friendsLikeLabel.text += e.like;
-			item.friendsCommentLabel.text += e.comment;
-			listSection.updateItemAt(e.index, item);
-
-		} else {
-			articlePage = 1;
-			nextArticleFlag = false;
-			listSection.setItems([], {animated:false});
-
-			// 未読記事の更新
-			if (tabGroup.articleUpdateFlag) {
-				tabGroup.articleUpdateFlag = false;
-				Ti.App.Properties.setString(_userData.id + '_' + 'lastArticleId', tabGroup.lastArticle.id);
-			}
-			updateArticle();
-		}
+	// 戻るボタンをクリック
+	backButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]backButton.click:');
+		friendsCommentWin.close({animated:true});
 	});
 
 	// 右スワイプで前の画面に戻る
-	friendsWin.addEventListener('swipe',function(e){
-		Ti.API.debug('[event]friendsWin.swipe:');
+	friendsCommentWin.addEventListener('swipe',function(e){
+		Ti.API.debug('[event]friendsCommentWin.swipe:');
 		if (e.direction == 'right') {
-			friendsWin.close({animated:true});
+			friendsCommentWin.close({animated:true});
 		}
 	});
-	// 記事の追加
-	friendsWin.addEventListener('insert', function(e){
-		Ti.API.debug('[event]friendsWin.insert:');
-		listView.fireEvent('pullend');
-		
-	});
 
-	return friendsWin;
+	return friendsCommentWin;
 };

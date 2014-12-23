@@ -8,6 +8,7 @@ var diaryWin = require('winDiary');
 var timeWin = require('winTime');
 var stampListWin = require('winStampList');
 var friendsWin = require('winFriends');
+var friendsCommentWin = require('winFriendsComment');
 var friendsConfigWin = require('winFriendsConfig');
 var todayWin = require('winToday');
 var stampWin = require('winStamp');
@@ -29,6 +30,11 @@ exports.win = {
 	createFriendsWindow:function(_userData){
 		Ti.API.debug('[func]createFriendsWindow:');
 		var win = friendsWin.createWindow("follow", _userData, null, null);
+		return win;
+	},
+	createFriendsCommentWindow:function(_userData){
+		Ti.API.debug('[func]createFriendsCommentWindow:');
+		var win = friendsCommentWin.createWindow("follow", _userData, null, null);
 		return win;
 	},
 	createFriendsConfigWindow:function(_userData){
@@ -190,17 +196,18 @@ exports.win = {
 						var friendsWin = win.getTab("friendsTab").window;
 						if (tabGroup.activeTab.window.objectName != 'friendsWin') {
 							tabGroup.activeTab = tabGroup.tabs[e.source.tabIndex];
-/*
+
 							// 未読記事の更新
-							if (tabGroup.updateFlag) {
-								tabGroup.updateFlag = false;
-								Ti.UI.iPhone.appBadge = null;
+							if (tabGroup.articleUpdateFlag) {
+								tabGroup.articleUpdateFlag = false;
+//								Ti.UI.iPhone.appBadge = null;
 								var loginUser = model.getLoginUser();
-								Ti.App.Properties.setString(loginUser.id + '_' + 'articleId', tabGroup.lastArticle.id);
-//								Ti.App.Properties.setString(loginUser.id + '_' + 'articleDate', tabGroup.lastArticle.date);
-								Ti.App.Properties.setString(loginUser.id + '_' + 'articleDate', tabGroup.lastArticle.created_at);
+								Ti.App.Properties.setString(loginUser.id + '_' + 'lastArticleId', tabGroup.lastArticle.id);
+
+//								Ti.App.Properties.setString(loginUser.id + '_' + 'lastArticleDate', tabGroup.lastArticle.date);
+//								Ti.App.Properties.setString(loginUser.id + '_' + 'lastArticleDate', tabGroup.lastArticle.created_at);
 							}
-*/
+
 							var loginUser = model.getLoginUser();
 						}
 						
@@ -220,6 +227,10 @@ exports.win = {
 
 					} else {
 						tabGroup.activeTab = tabGroup.tabs[e.source.tabIndex];
+
+						Ti.UI.iPhone.appBadge = null;
+//						var loginUser = model.getLoginUser();
+//						Ti.App.Properties.setString(loginUser.id + '_' + 'lastArticleId', '548d90944cabe908be02fab1');
 					}
 				}
 			});

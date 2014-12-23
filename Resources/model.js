@@ -511,12 +511,46 @@ exports.model = {
 		Cloud.Posts.show({
 			post_id: params.postId
 		}, function (e) {
+			var articleList = [];
 			if (e.success) {
-				Ti.API.debug('success:');				
-				if (e.posts[0].photo.urls) {
-					e.photo = e.posts[0].photo.urls.original;					
+				Ti.API.debug('success:');
+				if (e.posts[0]) {
+					var post = e.posts[0];
+					var user = post.user;
+					var name = '';
+					if (user.custom_fields && user.custom_fields.name) {
+						name = user.custom_fields.name;
+					}
+					var likeCount = 0;
+					var commentCount = 0;
+					if (post.reviews_count && post.reviews_count > 0) {
+						commentCount = post.reviews_count;
+					}
+					if (post.ratings_count && post.ratings_count > 0) {
+						commentCount = commentCount - post.ratings_count;
+						likeCount = post.ratings_count;
+					}
+					var articleData = {
+						id: post.id,
+						userId: user.id,
+						user: user.first_name + ' ' + user.last_name,
+						name: name,
+						text: post.content,
+						date: util.getFormattedDateTime(post.custom_fields.postDate),
+						created_at: util.getFormattedDateTime(post.created_at),
+						photo: post.photo.urls.original,
+						like: likeCount,
+						comment: commentCount,
+						icon: user.photo.urls.square_75
+					};
+					articleList.push(articleData);	
+
+					if (e.posts[0].photo.urls) {
+						e.photo = e.posts[0].photo.urls.original;					
+					}
 				}
 			}
+			e.articleList = articleList; 
 			callback(e);
 		});
 	},
@@ -582,8 +616,8 @@ exports.model = {
 	updateCloudNewArticleCount:function(callback){
 		Ti.API.debug('[func]updateCloudNewArticleCount:');
 		var userId = Ti.App.Properties.getString('userId');
-		var articleId = Ti.App.Properties.getString(userId + '_' + 'articleId');
-		var articleDate = Ti.App.Properties.getString(userId + '_' + 'articleDate');
+		var articleId = Ti.App.Properties.getString(userId + '_' + 'lastArticleId');
+		var articleDate = Ti.App.Properties.getString(userId + '_' + 'lastArticleDate');
 		var idList = model.getLocalFriendsList(userId);
 
 		if (idList.length > 0) {
@@ -1445,7 +1479,7 @@ exports.model = {
 		});
 	},
 
-	// 指定ユーザのライクデータから全データを取得
+	// 指定ユーザの全ライクデータを取得
 	getAllCloudLikeList:function(params, callback){
 		Ti.API.debug('[func]getAllCloudLikeList:');
 		// 6ヶ月前以降のデータを取得
@@ -1564,7 +1598,8 @@ exports.model = {
     		content: params.comment,
     		allow_duplicate: true,
 			custom_fields: {
-				postDate: util.getCloudFormattedDateTime(commentDate)
+				postDate: util.getCloudFormattedDateTime(commentDate),
+				ownerId: params.ownerId
 			}
 		}, function (e) {
 			callback(e);
@@ -1584,7 +1619,51 @@ exports.model = {
 			callback(e);
 		});
 	},
+	// 指定ユーザの全コメントデータを取得
+	getAllCloudCommentList:function(params, callback){
+		Ti.API.debug('[func]getAllCloudCommentList:');
+		var startDate = new Date(params.year, params.month-1, params.day);
 
+		Cloud.Reviews.query({
+			where: {
+				user_id: {'$in': params.idList},
+				content: {'$exists': true},
+				'ownerId': params.userId,
+				'postDate': {
+					'$gte': util.getCloudFormattedDateTime(startDate)
+				}
+			},
+			order: '-created_at',
+			page : params.page,
+			per_page : params.count
+
+		}, function (e) {
+			var articleList = [];
+			if (e.success) {
+				for (var i = 0; i < e.reviews.length; i++) {
+					var review = e.reviews[i];
+					var user = review.user;
+					var name = '';
+					if (user.custom_fields && user.custom_fields.name) {
+						name = user.custom_fields.name;
+					}
+					var articleData = {
+						id: review.id,
+						userId: user.id,
+						user: user.first_name + ' ' + user.last_name,
+						name: name,
+						text: review.content,
+						date: util.getFormattedDateTime(review.custom_fields.postDate),
+						icon: user.photo.urls.square_75,
+						reviewedId: review.reviewed_object.id
+					};
+					articleList.push(articleData);
+				}				
+			}
+			e.articleList = articleList; 
+			callback(e);
+		});
+	},
 	// ユーザデータの取得
 	getCloudUser:function(_id, callback){
 		Ti.API.debug('[func]getCloudUser:');

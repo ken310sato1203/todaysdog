@@ -130,19 +130,17 @@ exports.createWindow = function(_type, _articleData){
 			icon = user.icon;
 		}		
 
-		var name = '';
+		var nameValue = '';
 		if (user.custom_fields && user.custom_fields.name != null) {
-			name = user.custom_fields.name; 
-		} else if (user.name != null) {
-			//コメント追加時
-			name = user.name; 
-		} else {
-			name = user.first_name + ' ' + user.last_name;
+			nameValue = user.custom_fields.name + ' ';
 		}
 
 		var time = '';
 		if (review.custom_fields && review.custom_fields.postDate != null) {
-			time = util.getFormattedDateTime(util.getDate(review.custom_fields.postDate));
+//			time = util.getFormattedDateTime(util.getDate(review.custom_fields.postDate));
+			var date = util.getDateElement(review.custom_fields.postDate);
+			time = date.year + '/' + date.month + '/' + date.day + ' ' + date.hour + ":" + date.minute;
+
 		} else if (review.time != null) {
 			//コメント追加時
 			time = review.time;
@@ -157,7 +155,10 @@ exports.createWindow = function(_type, _articleData){
 				image: icon,
 			},
 			photoCommentNameLabel: {
-				text: name,
+				text: nameValue,
+			},
+			photoCommentUserLabel: {
+				text: user.first_name + ' ' + user.last_name,
 			},
 			photoCommentTextLabel: {
 				text: review.content,
@@ -237,7 +238,8 @@ exports.createWindow = function(_type, _articleData){
 		model.addCloudCommentList({
 			postId: _articleData.id,
 			comment: text,
-			date: date
+			date: date,
+			ownerId: _articleData.userId
 		}, function(e) {
 			Ti.API.debug('[func]addCloudCommentList.callback:');						
 			if (e.success) {
@@ -485,14 +487,23 @@ exports.createWindow = function(_type, _articleData){
 					bindId: 'photoCommentUserIconImage',
 					properties: style.photoCommentUserIconImage,
 				}]
-			},{
+            },{
 				type: 'Ti.UI.View',
 				bindId: 'photoCommentTextView',
 				properties: style.photoCommentTextView,
 				childTemplates: [{
-					type: 'Ti.UI.Label',
-					bindId: 'photoCommentNameLabel',
-					properties: style.photoCommentNameLabel,
+					type: 'Ti.UI.View',
+					bindId: 'photoCommentNameView',
+					properties: style.photoCommentNameView,
+					childTemplates: [{
+						type: 'Ti.UI.Label',
+						bindId: 'photoCommentNameLabel',
+						properties: style.photoCommentNameLabel,
+					},{
+						type: 'Ti.UI.Label',
+						bindId: 'photoCommentUserLabel',
+						properties: style.photoCommentUserLabel
+					}]
 				},{
 					type: 'Ti.UI.Label',
 					bindId: 'photoCommentTextLabel',
