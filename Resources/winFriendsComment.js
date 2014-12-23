@@ -20,11 +20,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	var nextTarget = null;
 
 	// 未読フラグ
-	var lastArticleId = null;
+	var lastArticleDate = null;
 	var unreadFlag = true;
-
-	// 多重更新防止
-	var updateEnable = true;
 
 // ---------------------------------------------------------------------
 
@@ -34,17 +31,18 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		// 最新記事である1ページ目を取得する時に最後の既読記事を更新
 		if ( articlePage == 1 ) {
 			unreadFlag = true;
-			lastArticleId = Ti.App.Properties.getString(_userData.id + '_' + 'lastCommentId');
+			lastArticleDate = Ti.App.Properties.getString(_userData.id + '_' + 'lastCommentDate');
 			// アプリ起動時には、最後の既読記事の更新は行わず、タブをクリックした時に行うためにwin.jsで更新、pullで更新する時も
-			if (lastArticleId != _articleList[0].id) {
+			if (_articleList[0].date != lastArticleDate) {
 				tabGroup.lastComment = _articleList[0];
-				Ti.App.Properties.setString(_userData.id + '_' + 'lastCommentId', tabGroup.lastComment.id);
+//				Ti.App.Properties.setString(_userData.id + '_' + 'lastCommentId', tabGroup.lastComment.id);
+				Ti.App.Properties.setString(_userData.id + '_' + 'lastCommentDate', tabGroup.lastComment.date);
 			}
 		}
 
 		for (var i=0; i<_articleList.length; i++) {	
 			// 未読マークの表示
-			if ( _articleList[i].id == lastArticleId) { unreadFlag = false; }
+			if (_articleList[i].date == lastArticleDate) { unreadFlag = false; }
 //			if (unreadFlag) { unreadCount++; }
 
 			var date = util.getDateElement(_articleList[i].date);
@@ -53,8 +51,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				nameValue = _articleList[i].name + ' ';
 			}
 			var articleItem = [{
-				articleData: _articleList[i],
 				template: 'article',
+				articleData: _articleList[i],
 				friendsCommentUnreadView: {
 					visible: unreadFlag,
 				},
@@ -76,6 +74,11 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				friendsCommentTimeLabel: {
 					text: date.year + '/' + date.month + '/' + date.day + ' ' + date.hour + ":" + date.minute,
 				},
+				friendsCommentArticleView: {
+				},
+				friendsCommentArticleImage: {
+					image: _articleList[i].photo,
+				}
 			}];
 			listSection.appendItems(articleItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
 
@@ -108,59 +111,51 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		// 日時の更新
 		now = util.getDateElement(new Date());
 
-		// 友人リスト
-		var idList = model.getLocalFriendsList(_userData.id);
+		// コメントの取得
+		model.getCloudAllCommentList({
+			userId: _userData.id,
+			year: now.year,
+			month: now.month,
+			day: now.day - articleDay,
+			page: articlePage,
+			count: articleCount
+		}, function(e) {
+			Ti.API.debug('[func]getCloudAllCommentList.callback:');
 
-		if (idList) {
+			if (e.success) {
+				if (e.articleList.length > 0) {
+					// 記事を追加
+					appendArticleList(e.articleList);
+					if (nextTarget != null) {
+						// 続きを読むの行をdeleteだとうまくいかないのでupdateで高さを0にし、追加後に反映
+						listSection.updateItemAt(nextTarget.index, nextTarget.item);
+						nextTarget = null;
+					};
 
-			// コメントの取得
-			model.getAllCloudCommentList({
-				userId: _userData.id,
-				idList: idList,
-				year: now.year,
-				month: now.month,
-				day: now.day - articleDay,
-				page: articlePage,
-				count: articleCount
-			}, function(e) {
-				Ti.API.debug('[func]getAllCloudCommentList.callback:');
+					if (e.meta.total_pages == articlePage) {
+						nextArticleFlag = false;
+					} else if (e.meta.total_pages > articlePage) {
+						articlePage++;
+						nextArticleFlag = true;
+						var nextItem = [{
+							template: 'next',
+							friendsCommentNextLabel: {
+								text: '続きを読む',
+							},
+						}];
+						listSection.appendItems(nextItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
 
-				if (e.success) {
-					if (e.articleList.length > 0) {
-						// 記事を追加
-						appendArticleList(e.articleList);
-						if (nextTarget != null) {
-							// 続きを読むの行をdeleteだとうまくいかないのでupdateで高さを0にし、追加後に反映
-							listSection.updateItemAt(nextTarget.index, nextTarget.item);
-							nextTarget = null;
-						};
-
-						if (e.meta.total_pages == articlePage) {
-							nextArticleFlag = false;
-						} else if (e.meta.total_pages > articlePage) {
-							articlePage++;
-							nextArticleFlag = true;
-							var nextItem = [{
-								template: 'next',
-								friendsCommentNextLabel: {
-									text: '続きを読む',
-								},
-							}];
-							listSection.appendItems(nextItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
-
-						}
-					} else {
-						if (articlePage == 1) {
-							appendNoDataLabel();
-						}
 					}
-		
 				} else {
-					util.errorDialog(e);
+					if (articlePage == 1) {
+						appendNoDataLabel();
+					}
 				}
-				updateEnable = true;
-			});			
-		}
+	
+			} else {
+				util.errorDialog(e);
+			}
+		});			
 
 	};
 
@@ -254,6 +249,15 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 					bindId: 'friendsCommentTimeLabel',
 					properties: style.friendsCommentTimeLabel,
 				}]
+			},{
+				type: 'Ti.UI.View',
+				bindId: 'friendsCommentArticleView',
+				properties: style.friendsCommentArticleView,
+				childTemplates: [{
+					type: 'Ti.UI.ImageView',
+					bindId: 'friendsCommentArticleImage',
+					properties: style.friendsCommentArticleImage
+				}]
 			}]
 		}]
 	};
@@ -288,26 +292,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 	// ビューの更新
 	updateArticle();
-	
 	listView.pullView = getTableHeader();
-
-
-	// 友人リスト
-	var idList = model.getLocalFriendsList(_userData.id);
-
-	model.getAllCloudCommentList({
-		userId: _userData.id,
-		idList: idList
-	}, function(e) {
-		Ti.API.debug('[func]getAllCloudCommentList.callback:');
-		if (e.success) {
-			Ti.API.debug('[func]getAllCloudCommentList.success:');
-
-		} else {
-			util.errorDialog(e);
-		}
-	});
-
 		
 // ---------------------------------------------------------------------
 	
@@ -321,43 +306,62 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 	listView.addEventListener('itemclick', function(e){
 		Ti.API.debug('[event]listView.itemclick:');
-		if (updateEnable) {
-			var item = e.section.getItemAt(e.itemIndex);
+		listView.touchEnabled = false;
+		var item = e.section.getItemAt(e.itemIndex);
+		if (item.template == 'article') {
+			if (e.bindId == 'friendsCommentUserIconImage') {
+				// ユーザデータの取得
+				model.getCloudUser(item.articleData.userId, function(e) {
+					Ti.API.debug('[func]getCloudUser.callback:');
+					if (e.success) {
+						if (e.userList[0]) {
+							item.friendsCommentUserIconView.opacity = 0.5;
+							var profileWin = win.createProfileWindow(e.userList[0]);
+							win.openTabWindow(profileWin, {animated:true});
+							item.friendsCommentUserIconView.opacity = 1.0;
+							listView.touchEnabled = true;
+						}
 	
-			if (item.template == 'article') {
-				updateEnable = false;
-				var type = "friends";
+					} else {
+						util.errorDialog(e);
+						listView.touchEnabled = true;
+					}
+				});
 
+			} else {
 				// レビュー記事の取得
 				model.getCloudArticlePost({
 					postId: item.articleData.reviewedId
 				}, function(e) {
 					Ti.API.debug('[func]getCloudArticlePost.callback:');
 					if (e.success) {
-						var photoWin = win.createPhotoWindow(type, e.articleList[0]);
+						var photoWin = win.createPhotoWindow('friends', e.articleList[0]);
 						photoWin.prevWin = friendsCommentWin;
 						win.openTabWindow(photoWin, {animated:true});			
-						updateEnable = true;
 						// 未読マークを外す
 						item.friendsCommentUnreadView.visible = false;
 						listSection.updateItemAt(e.itemIndex, item);
-
+						listView.touchEnabled = true;
 					} else {
 						util.errorDialog(e);
+						listView.touchEnabled = true;
 					}
 				});
-	
-			} else if (item.template == 'next') {
-				updateEnable = false;
-				// 続きを読むの行をdeleteだとうまくいかないのでupdateで高さを0にし、追加後に反映
-				item.friendsCommentNextLabel.text = '';
-				item.friendsCommentNextLabel.height = '0dp';
-				nextTarget = {index:e.itemIndex, item:item};
-				updateArticle();
 			}
+
+		} else if (item.template == 'next') {
+			// 続きを読むの行をdeleteだとうまくいかないのでupdateで高さを0にし、追加後に反映
+			item.friendsCommentNextLabel.text = '';
+			item.friendsCommentNextLabel.height = '0dp';
+			nextTarget = {index:e.itemIndex, item:item};
+			updateArticle();
+			listView.touchEnabled = true;
+
+		} else {
+			listView.touchEnabled = true;
 		}
 	});
-	
+
 	listView.addEventListener('pull', function(e){
 		if (e.active == false) {
 			listView.pullView.pullLabel.text = 'Pull down to refresh...';
@@ -393,6 +397,14 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			friendsCommentWin.close({animated:true});
 		}
 	});
+
+	// クローズ時に前の画面を更新
+	friendsCommentWin.addEventListener('close',function(e){
+		Ti.API.debug('[event]friendsCommentWin.close:');
+		if (friendsCommentWin.prevWin != null) {
+			friendsCommentWin.prevWin.fireEvent('refresh', {commentUpdate:true});
+		}
+	});	
 
 	return friendsCommentWin;
 };

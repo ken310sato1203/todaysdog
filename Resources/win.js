@@ -202,9 +202,9 @@ exports.win = {
 								tabGroup.articleUpdateFlag = false;
 //								Ti.UI.iPhone.appBadge = null;
 								var loginUser = model.getLoginUser();
-								Ti.App.Properties.setString(loginUser.id + '_' + 'lastArticleId', tabGroup.lastArticle.id);
+								Ti.App.Properties.setString(loginUser.id + '_' + 'lastArticleDate', tabGroup.lastArticle.date);
 
-//								Ti.App.Properties.setString(loginUser.id + '_' + 'lastArticleDate', tabGroup.lastArticle.date);
+//								Ti.App.Properties.setString(loginUser.id + '_' + 'lastArticleId', tabGroup.lastArticle.id);
 //								Ti.App.Properties.setString(loginUser.id + '_' + 'lastArticleDate', tabGroup.lastArticle.created_at);
 							}
 

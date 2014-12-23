@@ -616,7 +616,7 @@ exports.model = {
 	updateCloudNewArticleCount:function(callback){
 		Ti.API.debug('[func]updateCloudNewArticleCount:');
 		var userId = Ti.App.Properties.getString('userId');
-		var articleId = Ti.App.Properties.getString(userId + '_' + 'lastArticleId');
+//		var articleId = Ti.App.Properties.getString(userId + '_' + 'lastArticleId');
 		var articleDate = Ti.App.Properties.getString(userId + '_' + 'lastArticleDate');
 		var idList = model.getLocalFriendsList(userId);
 
@@ -813,8 +813,8 @@ exports.model = {
 	},
 
 	// 記事データの取得
-	getAllCloudArticleList:function(params, callback){
-		Ti.API.debug('[func]getAllCloudArticleList:');
+	getCloudAllArticleList:function(params, callback){
+		Ti.API.debug('[func]getCloudAllArticleList:');
 		// 6ヶ月前以降のデータを取得
 		var now = util.getDateElement(new Date());
 		var startDate = new Date(now.year, now.month - 6, now.day);
@@ -910,8 +910,8 @@ exports.model = {
 	},
 	
 	// 記事データテーブルの件数取得
-	getCountLocalArticleList:function(_user){
-		Ti.API.debug('[func]getCountLocalArticleList:');
+	getLocalArticleListCount:function(_user){
+		Ti.API.debug('[func]getLocalArticleListCount:');
 		return sqlite.open(function(db){
 			var rows = db.select("count(user)").from("DogArticleTB")
 				.where("user","=",_user)
@@ -1002,11 +1002,11 @@ exports.model = {
 	},
 
 	// 指定ユーザのスタンプリストから全データを取得
-	getAllCloudStampList:function(params, callback){
-		Ti.API.debug('[func]getAllCloudStampList:');
+	getCloudAllStampList:function(params, callback){
+		Ti.API.debug('[func]getCloudAllStampList:');
 		// 6ヶ月前以降のデータを取得
 		var now = util.getDateElement(new Date());
-		var startDate = new Date(now.year, now.month - 6, now.day);
+		var startDate = new Date(now.year, now.month-1 - 6, now.day);
 
 		Cloud.Events.query({
 			where: {
@@ -1225,8 +1225,8 @@ exports.model = {
 	},
 
 	// スタンプデータテーブルの件数取得
-	getCountLocalStampList:function(_user){
-		Ti.API.debug('[func]getCountLocalStampList:');
+	getLocalStampListCount:function(_user){
+		Ti.API.debug('[func]getLocalStampListCount:');
 		return sqlite.open(function(db){
 			var rows = db.select("count(user)").from("DiaryStampTB")
 				.where("user","=",_user)
@@ -1301,8 +1301,8 @@ exports.model = {
 	},
 
 	// スタンプデータテーブルの件数取得
-	getCountLocalStampHistoryList:function(_user){
-		Ti.API.debug('[func]getCountLocalStampHistoryList:');
+	getLocalStampHistoryListCount:function(_user){
+		Ti.API.debug('[func]getLocalStampHistoryListCount:');
 		return sqlite.open(function(db){
 			var rows = db.select("count(user)").from("StampHistoryTB")
 				.where("user","=",_user)
@@ -1469,8 +1469,8 @@ exports.model = {
 	},
 
 	// ライクデータテーブルの件数取得
-	getCountLocalLikeList:function(_user){
-		Ti.API.debug('[func]getCountLocalLikeList:');
+	getLocalLikeListCount:function(_user){
+		Ti.API.debug('[func]getLocalLikeListCount:');
 		return sqlite.open(function(db){
 			var rows = db.select("count(user)").from("LikeArticleTB")
 				.where("user","=",_user)
@@ -1480,8 +1480,8 @@ exports.model = {
 	},
 
 	// 指定ユーザの全ライクデータを取得
-	getAllCloudLikeList:function(params, callback){
-		Ti.API.debug('[func]getAllCloudLikeList:');
+	getCloudAllLikeList:function(params, callback){
+		Ti.API.debug('[func]getCloudAllLikeList:');
 		// 6ヶ月前以降のデータを取得
 		var now = util.getDateElement(new Date());
 		var startDate = new Date(now.year, now.month - 6, now.day);
@@ -1599,7 +1599,8 @@ exports.model = {
     		allow_duplicate: true,
 			custom_fields: {
 				postDate: util.getCloudFormattedDateTime(commentDate),
-				ownerId: params.ownerId
+				ownerId: params.ownerId,
+				reviewedPhoto: params.reviewedPhoto
 			}
 		}, function (e) {
 			callback(e);
@@ -1620,13 +1621,13 @@ exports.model = {
 		});
 	},
 	// 指定ユーザの全コメントデータを取得
-	getAllCloudCommentList:function(params, callback){
-		Ti.API.debug('[func]getAllCloudCommentList:');
+	getCloudAllCommentList:function(params, callback){
+		Ti.API.debug('[func]getCloudAllCommentList:');
 		var startDate = new Date(params.year, params.month-1, params.day);
 
 		Cloud.Reviews.query({
 			where: {
-				user_id: {'$in': params.idList},
+				user_id: {'$nin': [params.userId]},
 				content: {'$exists': true},
 				'ownerId': params.userId,
 				'postDate': {
@@ -1655,7 +1656,8 @@ exports.model = {
 						text: review.content,
 						date: util.getFormattedDateTime(review.custom_fields.postDate),
 						icon: user.photo.urls.square_75,
-						reviewedId: review.reviewed_object.id
+						reviewedId: review.reviewed_object.id,
+						reviewedPhoto: review.custom_fields.reviewedPhoto
 					};
 					articleList.push(articleData);
 				}				
@@ -1664,6 +1666,26 @@ exports.model = {
 			callback(e);
 		});
 	},
+	// 指定日以降の全コメントデータの件数を取得
+	getCloudAllCommentListCount:function(params, callback){
+		Ti.API.debug('[func]getCloudAllCommentListCount:');
+
+		Cloud.Reviews.query({
+			where: {
+				user_id: {'$nin': [params.userId]},
+				content: {'$exists': true},
+				'ownerId': params.userId,
+				'postDate': {
+					'$gt': util.getCloudFormattedDateTime(params.date)
+				}
+			},
+			order: '-created_at'
+
+		}, function (e) {
+			callback(e);
+		});
+	},
+
 	// ユーザデータの取得
 	getCloudUser:function(_id, callback){
 		Ti.API.debug('[func]getCloudUser:');
@@ -1828,8 +1850,8 @@ exports.model = {
 	},
 
 	// 友人データテーブルの件数取得
-	getCountLocalFriendsList:function(_user){
-		Ti.API.debug('[func]getCountLocalFriendsList:');
+	getLocalFriendsListCount:function(_user){
+		Ti.API.debug('[func]getLocalFriendsListCount:');
 		return sqlite.open(function(db){
 			var rows = db.select("count(user)").from("DogFriendsTB")
 				.where("user","=",_user)

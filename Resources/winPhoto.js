@@ -12,8 +12,6 @@ exports.createWindow = function(_type, _articleData){
 	var likeCount = 5;
 	// コメントリストの表示件数
 	var commentCount = 5;
-	// ユーザデータ
-	var userData = null;
 	// blur用
 	var commentField = null;
 
@@ -121,33 +119,42 @@ exports.createWindow = function(_type, _articleData){
 	// コメントデータの取得
 	var getCommentItem = function(review) {
 		Ti.API.debug('[func]getCommentItem:');
-		var user = review.user;
-
+		
 		var icon = '';
-		if (user.photo != null && user.photo.urls != null) {
-			icon = user.photo.urls.square_75; 
-		} else {
-			icon = user.icon;
-		}		
-
 		var nameValue = '';
-		if (user.custom_fields && user.custom_fields.name != null) {
-			nameValue = user.custom_fields.name + ' ';
-		}
-
+		var userValue = '';
 		var time = '';
-		if (review.custom_fields && review.custom_fields.postDate != null) {
-//			time = util.getFormattedDateTime(util.getDate(review.custom_fields.postDate));
-			var date = util.getDateElement(review.custom_fields.postDate);
-			time = date.year + '/' + date.month + '/' + date.day + ' ' + date.hour + ":" + date.minute;
+		var commentUserId = null;
+		if (review.user) {
+			var user = review.user;
+			if (user.photo != null && user.photo.urls != null) {
+				icon = user.photo.urls.square_75; 
+			}	
+			if (user.custom_fields && user.custom_fields.name != null) {
+				nameValue = user.custom_fields.name + ' ';
+			}
+			userValue = user.first_name + ' ' + user.last_name;
+			if (review.custom_fields && review.custom_fields.postDate != null) {
+//				time = util.getFormattedDateTime(util.getDate(review.custom_fields.postDate));
+				var date = util.getDateElement(review.custom_fields.postDate);
+				time = date.year + '/' + date.month + '/' + date.day + ' ' + date.hour + ":" + date.minute;
+			}
+			commentUserId = user.id;
 
-		} else if (review.time != null) {
-			//コメント追加時
+		} else {
+			// コメント追加時
+			icon = loginUser.icon;
+			if (loginUser.name != '') {
+				nameValue = loginUser.name + ' ';
+			}
+			userValue = loginUser.user;
 			time = review.time;
+			commentUserId = loginUser.id;
 		}
 
 		var commentItem = [{
-			template: 'comment',		
+			template: 'comment',
+			commentUserId: commentUserId,
 			photoCommentUserIconView: {
 //				backgroundImage: icon,
 			},
@@ -158,7 +165,7 @@ exports.createWindow = function(_type, _articleData){
 				text: nameValue,
 			},
 			photoCommentUserLabel: {
-				text: user.first_name + ' ' + user.last_name,
+				text: userValue,
 			},
 			photoCommentTextLabel: {
 				text: review.content,
@@ -239,13 +246,13 @@ exports.createWindow = function(_type, _articleData){
 			postId: _articleData.id,
 			comment: text,
 			date: date,
-			ownerId: _articleData.userId
+			ownerId: _articleData.userId,
+			reviewedPhoto: _articleData.photo
 		}, function(e) {
 			Ti.API.debug('[func]addCloudCommentList.callback:');						
 			if (e.success) {
 				Ti.API.debug('Success:');
 				var review = {user:null, content:null};
-				review.user = model.getLoginUser();
 				review.content = text;
 				review.time = util.getFormattedNowDateTime();
 				// bottomの前に追加
@@ -280,17 +287,6 @@ exports.createWindow = function(_type, _articleData){
 	var titleIconImage = Ti.UI.createImageView(style.photoTitleIconImage);
 	titleIconImage.image = _articleData.icon;
 	titleIconView.add(titleIconImage);
-
-	// ユーザデータの取得
-	model.getCloudUser(_articleData.userId, function(e) {
-		Ti.API.debug('[func]getCloudUser.callback:');
-		if (e.success) {
-			userData = e.userList[0];
-			titleIconView.touchEnabled = true;
-		} else {
-			util.errorDialog(e);
-		}
-	});
 
 	var nameView = Ti.UI.createView(style.photoTitleNameView);
 	titleView.add(nameView);
@@ -581,11 +577,25 @@ exports.createWindow = function(_type, _articleData){
 	titleView.addEventListener('click',function(e){
 		Ti.API.debug('[event]titleView.click:');
 		if (e.source.objectName == 'photoTitleIconView' || e.source.objectName == 'photoTitleNameView') {
-			if (userData.id != loginUser.id) {
-				titleView.titleIconView.opacity = 0.5;
-				var profileWin = win.createProfileWindow(userData);
-				win.openTabWindow(profileWin, {animated:true});
-				titleView.titleIconView.opacity = 1.0;
+			if (_articleData.userId != loginUser.id) {
+				titleIconView.touchEnabled = false;
+				// ユーザデータの取得
+				model.getCloudUser(_articleData.userId, function(e) {
+					Ti.API.debug('[func]getCloudUser.callback:');
+					if (e.success) {
+						if (e.userList[0]) {
+							titleView.titleIconView.opacity = 0.5;
+							var profileWin = win.createProfileWindow(e.userList[0]);
+							win.openTabWindow(profileWin, {animated:true});
+							titleView.titleIconView.opacity = 1.0;
+							titleIconView.touchEnabled = true;
+						}
+
+					} else {
+						util.errorDialog(e);
+						titleIconView.touchEnabled = true;
+					}
+				});
 			}
 		}
 	});
@@ -595,6 +605,33 @@ exports.createWindow = function(_type, _articleData){
 		Ti.API.debug('[event]photoWin.swipe:');
 		if (e.direction == 'right') {
 			photoWin.close({animated:true});
+		}
+	});
+
+	listView.addEventListener('itemclick', function(e){
+		Ti.API.debug('[event]listView.itemclick:');
+		var item = e.section.getItemAt(e.itemIndex);
+		if (item.template == 'comment' && e.bindId == 'photoCommentUserIconImage') {
+			if (item.commentUserId != loginUser.id) {
+				listView.touchEnabled = false;
+				// ユーザデータの取得
+				model.getCloudUser(item.commentUserId, function(e) {
+					Ti.API.debug('[func]getCloudUser.callback:');
+					if (e.success) {
+						if (e.userList[0]) {
+							item.photoCommentUserIconView.opacity = 0.5;
+							var profileWin = win.createProfileWindow(e.userList[0]);
+							win.openTabWindow(profileWin, {animated:true});
+							item.photoCommentUserIconView.opacity = 1.0;
+							listView.touchEnabled = true;
+						}
+	
+					} else {
+						util.errorDialog(e);
+						listView.touchEnabled = true;
+					}
+				});
+			}
 		}
 	});
 

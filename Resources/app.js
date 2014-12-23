@@ -112,7 +112,7 @@ var initFollowList = function(_userData) {
 //	model.dropLocalFriendsList();
 	model.createLocalFriendsList();
 
-	var countLocalFriendsList = model.getCountLocalFriendsList(_userData.id);
+	var countLocalFriendsList = model.getLocalFriendsListCount(_userData.id);
 	if (countLocalFriendsList == 0) {
 		model.getCloudFollow({
 			userId: _userData.id,
@@ -136,12 +136,12 @@ var initArticle = function(_userData) {
 //	model.dropLocalArticleList();
 	model.createLocalArticleList();
 
-	var countLocalArticleList = model.getCountLocalArticleList(_userData.id);
+	var countLocalArticleList = model.getLocalArticleListCount(_userData.id);
 	if (countLocalArticleList == 0) {
-		model.getAllCloudArticleList({
+		model.getCloudAllArticleList({
 			userId: _userData.id
 		}, function(e) {
-			Ti.API.debug('[func]getAllCloudArticleList.callback:');
+			Ti.API.debug('[func]getCloudAllArticleList.callback:');
 			if (e.success) {
 				// ローカルDBに登録
 				model.addLocalArticleList(e.articleList);
@@ -159,12 +159,12 @@ var initLikeArticle = function(_userData) {
 //	model.dropLocalLikeList();
 	model.createLocalLikeList();
 
-	var countLocalLikeList = model.getCountLocalLikeList(_userData.id);
+	var countLocalLikeList = model.getLocalLikeListCount(_userData.id);
 	if (countLocalLikeList == 0) {
-		model.getAllCloudLikeList({
+		model.getCloudAllLikeList({
 			userId: _userData.id
 		}, function(e) {
-			Ti.API.debug('[func]getAllCloudLikeList.callback:');
+			Ti.API.debug('[func]getCloudAllLikeList.callback:');
 			if (e.success) {
 				// ローカルDBに登録
 				model.addLocalLikeList(e.likeList);
@@ -185,14 +185,14 @@ var initStamp = function(_userData) {
 //	model.dropLocalStampHistoryList();
 	model.createLocalStampHistoryList();
 
-	var countStamp = model.getCountLocalStampList(_userData.id);
-	var countHistory = model.getCountLocalStampHistoryList(_userData.id);
+	var countStamp = model.getLocalStampListCount(_userData.id);
+	var countHistory = model.getLocalStampHistoryListCount(_userData.id);
 
 	if (countStamp == 0 || countHistory == 0) {
-		model.getAllCloudStampList({
+		model.getCloudAllStampList({
 			userId: _userData.id
 		}, function(e) {
-			Ti.API.debug('[func]getAllCloudStampList.callback:');
+			Ti.API.debug('[func]getCloudAllStampList.callback:');
 			if (e.success) {
 
 				if (countStamp == 0) {

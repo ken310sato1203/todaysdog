@@ -185,7 +185,8 @@ exports.style = {
 		left: '0dp',
 		width: '28dp',
 		height: '28dp',
-		borderRadius: '14dp',
+//		borderRadius: '14dp',
+		borderRadius: '5dp',
 		backgroundColor: 'white',
 		// カスタムプロパティ
 		objectName : 'photoTitleIconView',
@@ -198,7 +199,7 @@ exports.style = {
 	},
 	photoTitleNameView:{
 		layout: 'vertical',
-		top: '3dp',
+		top: '1dp',
 		left: '33dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -221,7 +222,7 @@ exports.style = {
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
-		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: 'white',
 		touchEnabled: false,
 	},
@@ -280,7 +281,7 @@ exports.style = {
 	photoTextView:{
 		layout: 'vertical',
 		top: '10dp',
-		bottom: '5dp',
+		bottom: '10dp',
 		left: '10dp',
 		right: '74dp',
 		width: Ti.UI.SIZE,
@@ -336,9 +337,11 @@ exports.style = {
 	photoCommentActionView:{
 		layout: 'horizontal',
 		top: '0dp',
+		bottom: '1dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		backgroundColor: '#f5f5f5',
+//		backgroundColor: '#f5f5f5',
+		backgroundColor: 'white',
 	},
 	photoCommentActionImage:{
 		top: '5dp',
@@ -422,7 +425,8 @@ exports.style = {
 		left: '10dp',
 		width: '36dp',
 		height: '36dp',
-		borderRadius: '18dp',
+//		borderRadius: '18dp',
+		borderRadius: '5dp',
 	},
 	photoCommentUserIconImage:{
 		width: '36dp',
@@ -633,9 +637,10 @@ exports.style = {
 	},
 	profileIconView:{
 		top: '15dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		borderRadius: '45dp',
+		width: '90dp',
+		height: '90dp',
+//		borderRadius: '45dp',
+		borderRadius: '8dp',
 	},
 	profileIconImage:{
 		width: '90dp',
@@ -759,10 +764,10 @@ exports.style = {
 		articleData: null,
 	},
 	profileBottomImage:{
-		top: '10dp',
-		bottom: '54dp',
-		width : '60dp',
-		height : '60dp',
+		top: '20dp',
+		bottom: '64dp',
+		width : '54dp',
+		height : '54dp',
 		image : 'images/icon/i_circle.png',
 	},
 
@@ -1487,8 +1492,6 @@ exports.style = {
 
 	commentListTitleLabel:{
 		left: '0dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
 		textAlign: 'left',
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 
@@ -1713,7 +1716,6 @@ exports.style = {
 		height: Ti.UI.SIZE,
 	},
 	stampListTitleLabel:{
-		width: Ti.UI.SIZE,
 		textAlign: 'center',
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 
@@ -1791,7 +1793,6 @@ exports.style = {
 		height: Ti.UI.SIZE,
 	},
 	calendarTitleLabel:{
-		width: Ti.UI.SIZE,
 		textAlign: 'center',
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 
@@ -2164,7 +2165,6 @@ exports.style = {
 		height: Ti.UI.SIZE,
 	},
 	diaryTitleLabel:{
-		width: Ti.UI.SIZE,
 		textAlign: 'center',
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 
@@ -2284,7 +2284,6 @@ exports.style = {
 	},
 
 	timeTitleLabel:{
-		width: Ti.UI.SIZE,
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 
 		shadowOffset: {x:0,y:-1},
@@ -2425,8 +2424,8 @@ exports.style = {
 	},
 	timeNoDataImage:{
 		top: '10dp',
-		width : '60dp',
-		height : '60dp',
+		width : '54dp',
+		height : '54dp',
 		image : 'images/icon/i_circle.png',
 	},
 
@@ -2539,7 +2538,6 @@ exports.style = {
 		prevWin : null,
 	},
 	friendsTitleLabel:{
-		width: '200dp',
 		textAlign: 'center',
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 
@@ -2552,10 +2550,22 @@ exports.style = {
 		height: '28dp',
 		backgroundImage:'images/icon/w_friends_search.png',
 	},
+	friendsCommentButtonView:{
+		layout: 'horizontal',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
 	friendsCommentButton:{
 		width: '28dp',
 		height: '28dp',
 		backgroundImage:'images/icon/w_profile_comment.png',
+	},
+	friendsCommentCountLabel:{
+		bottom: '0dp',
+		left: '5dp',
+		textAlign: 'left',
+		font: {fontSize:16, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
+		color: 'white', 
 	},
 	friendsConfigButton:{
 		width: '28dp',
@@ -2741,7 +2751,6 @@ exports.style = {
 		prevWin : null,
 	},
 	friendsCommentTitleLabel:{
-		width: '200dp',
 		textAlign: 'center',
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 
@@ -2788,20 +2797,20 @@ exports.style = {
 		top: '0dp',
 		left: '0dp',
 		width: '7dp',
-		height: '78dp',
+		height: '70dp',
 		backgroundColor : '#87CEFA',
 	},
 	friendsCommentUserIconView:{
 		top: '5dp',
-		bottom: '5dp',
 		left: '10dp',
-		width: '36dp',
-		height: '36dp',
-		borderRadius: '18dp',
+		width: '40dp',
+		height: '40dp',
+//		borderRadius: '20dp',
+		borderRadius: '5dp',
 	},
 	friendsCommentUserIconImage:{
-		width: '36dp',
-		height: '36dp',
+		width: '40dp',
+		height: '40dp',
 		defaultImage: '',
 	},
 	friendsCommentTextView:{
@@ -2809,9 +2818,8 @@ exports.style = {
 		top: '5dp',
 		bottom: '5dp',
 		left: '10dp',
-		right: '10dp',
-		// unread(7)とphotoCommentUserIconImage(10+36)と余白（10+10）を除いたサイズ
-		width: (Ti.Platform.displayCaps.platformWidth - 73) + 'dp',
+		// unread(7)＋icon(10+40)＋text(10+x)＋photo(10+50+10)を除いたサイズ
+		width: (Ti.Platform.displayCaps.platformWidth - 137) + 'dp',
 		height: Ti.UI.SIZE,
 	},
 	friendsCommentNameView:{
@@ -2843,7 +2851,8 @@ exports.style = {
 		top: '5dp',
 		left: '0dp',
 		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
+		height: '15dp',
+		verticalAlign: Titanium.UI.TEXT_VERTICAL_ALIGNMENT_TOP,
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
@@ -2857,7 +2866,18 @@ exports.style = {
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#696969',
 	},
-	
+	friendsCommentArticleView:{
+		top: '10dp',
+		left: '10dp',
+		width: '50dp',
+		height: '50dp',
+//		borderRadius: '5dp',
+	},
+	friendsCommentArticleImage:{
+		width: '50dp',
+		height: '50dp',
+		defaultImage: '',
+	},	
 	friendsCommentNextList:{
 		height: Ti.UI.SIZE,
 		backgroundColor: '#eeeeee',
@@ -3013,7 +3033,6 @@ exports.style = {
 		prevWin : null,
 	},
 	todayTitleLabel:{
-		width: '200dp',
 		textAlign: 'center',
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 
@@ -3072,8 +3091,8 @@ exports.style = {
 	},
 	todayNoDataImage:{
 		top: '10dp',
-		width : '60dp',
-		height : '60dp',
+		width : '54dp',
+		height : '54dp',
 		image : 'images/icon/i_circle.png',
 	},
 	todayDayWeekView:{
@@ -3358,7 +3377,6 @@ exports.style = {
 		prevWin : null,
 	},
 	stampTitleLabel:{
-		width: '200dp',
 		textAlign: 'center',
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 
@@ -3436,7 +3454,6 @@ exports.style = {
 		prevWin : null,
 	},
 	stampPostTitleLabel:{
-		width: '200dp',
 		textAlign: 'center',
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 
@@ -3645,7 +3662,6 @@ exports.style = {
 		prevWin : null,
 	},
 	stampTextTitleLabel:{
-		width: '200dp',
 		textAlign: 'center',
 		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
 		color: 'white', 

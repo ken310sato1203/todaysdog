@@ -20,11 +20,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	var nextTarget = null;
 
 	// 未読フラグ
-	var lastArticleId = null;
+	var lastArticleDate = null;
 	var unreadFlag = true;
-
-	// 多重更新防止
-	var updateEnable = true;
 
 // ---------------------------------------------------------------------
 
@@ -34,9 +31,9 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		// 最新記事である1ページ目を取得する時に最後の既読記事を更新
 		if ( articlePage == 1 ) {
 			unreadFlag = true;
-			lastArticleId = Ti.App.Properties.getString(_userData.id + '_' + 'lastArticleId');
+			lastArticleDate = Ti.App.Properties.getString(_userData.id + '_' + 'lastArticleDate');
 			// アプリ起動時には、最後の既読記事の更新は行わず、タブをクリックした時に行うためにwin.jsで更新、pullで更新する時も
-			if (lastArticleId != _articleList[0].id) {
+			if (_articleList[0].date != lastArticleDate) {
 				tabGroup.articleUpdateFlag = true;
 				tabGroup.lastArticle = _articleList[0];
 			}
@@ -44,7 +41,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 		for (var i=0; i<_articleList.length; i++) {	
 			// 未読マークの表示
-			if ( _articleList[i].id == lastArticleId) { unreadFlag = false; }
+			if (_articleList[i].date == lastArticleDate) { unreadFlag = false; }
 //			if (unreadFlag) { unreadCount++; }
 
 			var date = util.getDateElement(_articleList[i].date);
@@ -67,8 +64,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				nameValue = _articleList[i].name + ' ';
 			}
 			var articleItem = [{
-				articleData: _articleList[i],
 				template: 'article',
+				articleData: _articleList[i],
 				friendsUnreadView: {
 					visible: unreadFlag,
 				},
@@ -183,8 +180,34 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				} else {
 					util.errorDialog(e);
 				}
-				updateEnable = true;
 			});			
+
+			// コメント数の取得
+			var lastCommentDate = Ti.App.Properties.getString(_userData.id + '_' + 'lastCommentDate');
+			if (lastCommentDate != null) {
+
+				// 1ヶ月前以降のデータを取得
+				var now = util.getDateElement(new Date());
+				var limitDate = new Date(now.year, now.month-1 - 1, now.day);
+				var startDate = (util.getDate(lastCommentDate) > limitDate) ? lastCommentDate : limitDate;
+
+				model.getCloudAllCommentListCount({
+					userId: _userData.id,
+					date: startDate
+				}, function(e) {
+					Ti.API.debug('[func]getCloudAllCommentListCount.callback:');
+					if (e.success) {
+						if (e.reviews.length > 0) {
+							commentCountLabel.text = '×' + e.reviews.length;
+						} else {
+							commentCountLabel.text = '';							
+						}
+		
+					} else {
+						util.errorDialog(e);
+					}
+				});
+			}
 		}
 
 	};
@@ -222,8 +245,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	friendsWin.titleControl = titleView;
 
 	// コメントを参照するボタン
+	var commentButtonView = Titanium.UI.createView(style.friendsCommentButtonView);
+	friendsWin.leftNavButton = commentButtonView;
 	var commentButton = Titanium.UI.createButton(style.friendsCommentButton);
-	friendsWin.leftNavButton = commentButton;
+	commentButtonView.add(commentButton);
+	var commentCountLabel = Ti.UI.createLabel(style.friendsCommentCountLabel);
+	commentButtonView.add(commentCountLabel);
 
 	// 友人を検索するボタン
 	var configButton = Titanium.UI.createButton(style.friendsConfigButton);
@@ -347,30 +374,29 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 	listView.addEventListener('itemclick', function(e){
 		Ti.API.debug('[event]listView.itemclick:');
-		if (updateEnable) {
-			var item = e.section.getItemAt(e.itemIndex);
-	
-			if (item.template == 'article') {
-				updateEnable = false;
-				var type = "friends";
-				// like、comment数の更新用indexを付加
-				item.articleData.index = e.itemIndex;
-				var photoWin = win.createPhotoWindow(type, item.articleData);
-				photoWin.prevWin = friendsWin;
-				win.openTabWindow(photoWin, {animated:true});			
-				updateEnable = true;
-				// 未読マークを外す
-				item.friendsUnreadView.visible = false;
-				listSection.updateItemAt(e.itemIndex, item);
-	
-			} else if (item.template == 'next') {
-				updateEnable = false;
-				// 続きを読むの行をdeleteだとうまくいかないのでupdateで高さを0にし、追加後に反映
-				item.friendsNextLabel.text = '';
-				item.friendsNextLabel.height = '0dp';
-				nextTarget = {index:e.itemIndex, item:item};
-				updateArticle();
-			}
+		listView.touchEnabled = false;
+		var item = e.section.getItemAt(e.itemIndex);
+
+		if (item.template == 'article') {
+			// like、comment数の更新用indexを付加
+			item.articleData.index = e.itemIndex;
+			var photoWin = win.createPhotoWindow('friends', item.articleData);
+			photoWin.prevWin = friendsWin;
+			win.openTabWindow(photoWin, {animated:true});			
+			// 未読マークを外す
+			item.friendsUnreadView.visible = false;
+			listSection.updateItemAt(e.itemIndex, item);
+			listView.touchEnabled = true;
+
+		} else if (item.template == 'next') {
+			// 続きを読むの行をdeleteだとうまくいかないのでupdateで高さを0にし、追加後に反映
+			item.friendsNextLabel.text = '';
+			item.friendsNextLabel.height = '0dp';
+			nextTarget = {index:e.itemIndex, item:item};
+			updateArticle();
+			listView.touchEnabled = true;
+		} else {
+			listView.touchEnabled = true;
 		}
 	});
 	
@@ -394,7 +420,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			// 未読記事の更新
 			if (tabGroup.articleUpdateFlag) {
 				tabGroup.articleUpdateFlag = false;
-				Ti.App.Properties.setString(_userData.id + '_' + 'lastArticleId', tabGroup.lastArticle.id);
+				Ti.App.Properties.setString(_userData.id + '_' + 'lastArticleDate', tabGroup.lastArticle.date);
 			}
 			updateArticle();
 			resetPullView();
@@ -422,11 +448,14 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// ライク・コメント編集を反映
 	friendsWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]friendsWin.refresh:');
-		if(e.index != null) {
+		if (e.index != null) {
 			var item = listSection.getItemAt(e.index);
 			item.friendsLikeLabel.text += e.like;
 			item.friendsCommentLabel.text += e.comment;
 			listSection.updateItemAt(e.index, item);
+
+		} else if (e.commentUpdate != null) {
+			commentCountLabel.text = '';
 
 		} else {
 			articlePage = 1;
@@ -436,7 +465,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			// 未読記事の更新
 			if (tabGroup.articleUpdateFlag) {
 				tabGroup.articleUpdateFlag = false;
-				Ti.App.Properties.setString(_userData.id + '_' + 'lastArticleId', tabGroup.lastArticle.id);
+				Ti.App.Properties.setString(_userData.id + '_' + 'lastArticleDate', tabGroup.lastArticle.date);
 			}
 			updateArticle();
 		}
