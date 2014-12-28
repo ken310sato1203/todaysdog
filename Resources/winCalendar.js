@@ -70,7 +70,7 @@ exports.createWindow = function(_userData){
 		// 当月1日の曜日
 		var dayOfWeek = new Date(_year, _month-1, 1).getDay();
 		// 前月の日数
-		var daysInLastMonth = 32 - new Date(_year, _month-2, 32).getDate();
+		var daysInLastMonth = 32 - new Date(_year, _month-1 - 1, 32).getDate();
 		// 最終週の翌月の日付数
 		var daysInNextMonth = 6 - (new Date(_year, _month-1, daysInMonth).getDay());
 

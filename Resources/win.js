@@ -193,44 +193,32 @@ exports.win = {
 			        }, 200);
 	
 					if (e.source.tabIndex == 0) {
-						var friendsWin = win.getTab("friendsTab").window;
 						if (tabGroup.activeTab.window.objectName != 'friendsWin') {
 							tabGroup.activeTab = tabGroup.tabs[e.source.tabIndex];
-
 							// 未読記事の更新
 							if (tabGroup.articleUpdateFlag) {
 								tabGroup.articleUpdateFlag = false;
-//								Ti.UI.iPhone.appBadge = null;
 								var loginUser = model.getLoginUser();
 								Ti.App.Properties.setString(loginUser.id + '_' + 'lastArticleDate', tabGroup.lastArticle.date);
-
-//								Ti.App.Properties.setString(loginUser.id + '_' + 'lastArticleId', tabGroup.lastArticle.id);
-//								Ti.App.Properties.setString(loginUser.id + '_' + 'lastArticleDate', tabGroup.lastArticle.created_at);
 							}
-
-							var loginUser = model.getLoginUser();
 						}
 						
 					} else if (e.source.tabIndex == 1) {
 						var todayWin = win.getTab("todayTab").window;
 						if (tabGroup.activeTab.window.objectName != 'todayWin') {
-							todayWin.activeTab = tabGroup.tabs[e.source.tabIndex];
+							todayWin.fireEvent('refresh', {activeTab:tabGroup.tabs[e.source.tabIndex]});
 						}
-						todayWin.fireEvent('refresh');
 
 					} else if (e.source.tabIndex == 2) {
 						var diaryWin = win.getTab("diaryTab").window;
 						if (tabGroup.activeTab.window.objectName != 'diaryWin') {
-							diaryWin.activeTab = tabGroup.tabs[e.source.tabIndex];
+							diaryWin.fireEvent('refresh', {timeWinUpdateFlag:true, activeTab:tabGroup.tabs[e.source.tabIndex]});
+						} else {
+							diaryWin.fireEvent('refresh', {timeWinUpdateFlag:true});
 						}
-						diaryWin.fireEvent('refresh', {timeWinUpdateFlag:true});
 
 					} else {
 						tabGroup.activeTab = tabGroup.tabs[e.source.tabIndex];
-
-						Ti.UI.iPhone.appBadge = null;
-//						var loginUser = model.getLoginUser();
-//						Ti.App.Properties.setString(loginUser.id + '_' + 'lastArticleId', '548d90944cabe908be02fab1');
 					}
 				}
 			});

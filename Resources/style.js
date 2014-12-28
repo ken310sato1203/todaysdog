@@ -2552,6 +2552,8 @@ exports.style = {
 	},
 	friendsCommentButtonView:{
 		layout: 'horizontal',
+		// コメント数の更新で位置がずれるので左から固定
+		left: '16dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},

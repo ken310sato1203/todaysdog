@@ -385,12 +385,11 @@ exports.createWindow = function(_userData){
 	// 記事の更新
 	var updatePhoto = function() {
 		Ti.API.debug('[func]updatePhoto:');
+		var startDate = new Date(2014, 1-1, 1);
 		// 今日の記事データ取得
 		model.getCloudTodayArticle({
 			idList: [_userData.id],
-			year: 2013,
-			month: 1,
-			day: 1,
+			date: startDate,
 			page: 1,
 			count: 16
 		}, function(e) {

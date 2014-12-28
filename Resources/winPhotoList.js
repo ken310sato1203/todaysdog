@@ -95,12 +95,11 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// 記事の更新
 	var updateArticle = function() {
 		Ti.API.debug('[func]updateArticle:');
+		var startDate = new Date(2014, 1-1, 1);
 		// 今日の記事データ取得
 		model.getCloudTodayArticle({
 			idList: [_userData.id],
-			year: 2013,
-			month: 1,
-			day: 1,
+			date: startDate,
 			page: articlePage,
 			count: articleCount
 		}, function(e) {

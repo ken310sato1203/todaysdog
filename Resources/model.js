@@ -558,13 +558,12 @@ exports.model = {
 	// 記事の取得
 	getCloudTodayArticle:function(params, callback){
 		Ti.API.debug('[func]getCloudTodayArticle:');
-		var startDate = new Date(params.year, params.month-1, params.day);
 
 		Cloud.Posts.query({
 			where: {
 				user_id: { '$in': params.idList },
 				'postDate': {
-					'$gte': util.getCloudFormattedDateTime(startDate)
+					'$gte': util.getCloudFormattedDateTime(params.date)
 				}
 			},
 			order: '-created_at',
@@ -616,7 +615,6 @@ exports.model = {
 	updateCloudNewArticleCount:function(callback){
 		Ti.API.debug('[func]updateCloudNewArticleCount:');
 		var userId = Ti.App.Properties.getString('userId');
-//		var articleId = Ti.App.Properties.getString(userId + '_' + 'lastArticleId');
 		var articleDate = Ti.App.Properties.getString(userId + '_' + 'lastArticleDate');
 		var idList = model.getLocalFriendsList(userId);
 
@@ -817,7 +815,7 @@ exports.model = {
 		Ti.API.debug('[func]getCloudAllArticleList:');
 		// 6ヶ月前以降のデータを取得
 		var now = util.getDateElement(new Date());
-		var startDate = new Date(now.year, now.month - 6, now.day);
+		var startDate = new Date(now.year, now.month-1 - 6, now.day);
 
 		Cloud.Posts.query({
 			where: {
@@ -1484,7 +1482,7 @@ exports.model = {
 		Ti.API.debug('[func]getCloudAllLikeList:');
 		// 6ヶ月前以降のデータを取得
 		var now = util.getDateElement(new Date());
-		var startDate = new Date(now.year, now.month - 6, now.day);
+		var startDate = new Date(now.year, now.month-1 - 6, now.day);
 
 		Cloud.Reviews.query({
 			where: {
@@ -1623,7 +1621,6 @@ exports.model = {
 	// 指定ユーザの全コメントデータを取得
 	getCloudAllCommentList:function(params, callback){
 		Ti.API.debug('[func]getCloudAllCommentList:');
-		var startDate = new Date(params.year, params.month-1, params.day);
 
 		Cloud.Reviews.query({
 			where: {
@@ -1631,7 +1628,7 @@ exports.model = {
 				content: {'$exists': true},
 				'ownerId': params.userId,
 				'postDate': {
-					'$gte': util.getCloudFormattedDateTime(startDate)
+					'$gte': util.getCloudFormattedDateTime(params.date)
 				}
 			},
 			order: '-created_at',

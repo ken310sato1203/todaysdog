@@ -31,18 +31,17 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		// 最新記事である1ページ目を取得する時に最後の既読記事を更新
 		if ( articlePage == 1 ) {
 			unreadFlag = true;
-			lastArticleDate = Ti.App.Properties.getString(_userData.id + '_' + 'lastCommentDate');
+			lastArticleDate = util.getDate(Ti.App.Properties.getString(_userData.id + '_' + 'lastCommentDate'));
 			// アプリ起動時には、最後の既読記事の更新は行わず、タブをクリックした時に行うためにwin.jsで更新、pullで更新する時も
-			if (_articleList[0].date != lastArticleDate) {
+			if (util.getDate(_articleList[0].date) > lastArticleDate) {
 				tabGroup.lastComment = _articleList[0];
-//				Ti.App.Properties.setString(_userData.id + '_' + 'lastCommentId', tabGroup.lastComment.id);
 				Ti.App.Properties.setString(_userData.id + '_' + 'lastCommentDate', tabGroup.lastComment.date);
 			}
 		}
 
 		for (var i=0; i<_articleList.length; i++) {	
 			// 未読マークの表示
-			if (_articleList[i].date == lastArticleDate) { unreadFlag = false; }
+			if (util.getDate(_articleList[i].date) <= lastArticleDate) { unreadFlag = false; }
 //			if (unreadFlag) { unreadCount++; }
 
 			var date = util.getDateElement(_articleList[i].date);
@@ -77,7 +76,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				friendsCommentArticleView: {
 				},
 				friendsCommentArticleImage: {
-					image: _articleList[i].photo,
+					image: _articleList[i].reviewedPhoto,
 				}
 			}];
 			listSection.appendItems(articleItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
@@ -110,13 +109,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		Ti.API.debug('[func]updateArticle:');
 		// 日時の更新
 		now = util.getDateElement(new Date());
+		var startDate = new Date(now.year, now.month-1, now.day - articleDay);
 
 		// コメントの取得
 		model.getCloudAllCommentList({
 			userId: _userData.id,
-			year: now.year,
-			month: now.month,
-			day: now.day - articleDay,
+			date: startDate,
 			page: articlePage,
 			count: articleCount
 		}, function(e) {
@@ -307,7 +305,9 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	listView.addEventListener('itemclick', function(e){
 		Ti.API.debug('[event]listView.itemclick:');
 		listView.touchEnabled = false;
-		var item = e.section.getItemAt(e.itemIndex);
+		//  itemIndex: callbackで使用
+		var itemIndex = e.itemIndex;
+		var item = e.section.getItemAt(itemIndex);
 		if (item.template == 'article') {
 			if (e.bindId == 'friendsCommentUserIconImage') {
 				// ユーザデータの取得
@@ -340,7 +340,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 						win.openTabWindow(photoWin, {animated:true});			
 						// 未読マークを外す
 						item.friendsCommentUnreadView.visible = false;
-						listSection.updateItemAt(e.itemIndex, item);
+						listSection.updateItemAt(itemIndex, item);
 						listView.touchEnabled = true;
 					} else {
 						util.errorDialog(e);
@@ -397,14 +397,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			friendsCommentWin.close({animated:true});
 		}
 	});
-
-	// クローズ時に前の画面を更新
-	friendsCommentWin.addEventListener('close',function(e){
-		Ti.API.debug('[event]friendsCommentWin.close:');
-		if (friendsCommentWin.prevWin != null) {
-			friendsCommentWin.prevWin.fireEvent('refresh', {commentUpdate:true});
-		}
-	});	
 
 	return friendsCommentWin;
 };

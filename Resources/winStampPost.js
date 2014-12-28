@@ -150,7 +150,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	var refreshDiaryWin = function(_stampDataList) {
 		Ti.API.debug('[func]refreshDiaryWin:');
 		
-		var weekday = util.diary.weekday[new Date(_stampDataList[0].year, _stampDataList[0].month, _stampDataList[0].day).getDay()];
+		var weekday = util.diary.weekday[new Date(_stampDataList[0].year, _stampDataList[0].month-1, _stampDataList[0].day).getDay()];
 		var diaryData = {
 			year: _stampDataList[0].year,
 			month: _stampDataList[0].month,

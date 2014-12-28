@@ -76,6 +76,7 @@ var openMainWindow = function(_userData) {
 	// diaryWinの更新でtimeWinを表示させておく
 	win3.fireEvent('refresh');
 
+/*	
 	// アプリを閉じた時
 	Ti.App.addEventListener('pause',function(e){
 		Ti.API.debug('[event]App.pause:');
@@ -84,7 +85,6 @@ var openMainWindow = function(_userData) {
 	});
 
 
-/*	
 	// アプリを一度閉じ、再度開いた時
 	Ti.App.addEventListener('resume',function(e){
 		Ti.API.debug('[event]App.resume:');
@@ -294,6 +294,10 @@ var loginFacebook = function() {
 			// 通知設定の初期化
 			if(! Ti.App.Properties.getString(userData.id + '_' + 'notice')) {
 				Ti.App.Properties.setString(userData.id + '_' + 'notice', '18:00');
+			}
+			// 未読設定の初期化
+			if(! Ti.App.Properties.getString(userData.id + '_' + 'lastCommentDate')) {
+				Ti.App.Properties.setString(userData.id + '_' + 'lastCommentDate', '2014/01/01 00:00');
 			}
 	
 			// メインウィンドウの表示

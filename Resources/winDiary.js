@@ -446,12 +446,10 @@ exports.createWindow = function(_userData){
 		// timeWinの更新後に、diaryWinを更新
 		updateCalView(diaryData.year, diaryData.month, diaryData.day);
 
-		// タブクリック時の更新の場合、タブの切り替えを行う
-		if (diaryWin.activeTab != null) {
-			tabGroup.activeTab = diaryWin.activeTab;
-			diaryWin.activeTab = null;
+		// 更新処理の後でタブの切り替え
+		if (e.activeTab) {
+			tabGroup.activeTab = e.activeTab;
 		}
-
 	});
 
 	return diaryWin;

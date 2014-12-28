@@ -31,9 +31,9 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		// 最新記事である1ページ目を取得する時に最後の既読記事を更新
 		if ( articlePage == 1 ) {
 			unreadFlag = true;
-			lastArticleDate = Ti.App.Properties.getString(_userData.id + '_' + 'lastArticleDate');
+			lastArticleDate = util.getDate(Ti.App.Properties.getString(_userData.id + '_' + 'lastArticleDate'));
 			// アプリ起動時には、最後の既読記事の更新は行わず、タブをクリックした時に行うためにwin.jsで更新、pullで更新する時も
-			if (_articleList[0].date != lastArticleDate) {
+			if (util.getDate(_articleList[0].date) > lastArticleDate) {
 				tabGroup.articleUpdateFlag = true;
 				tabGroup.lastArticle = _articleList[0];
 			}
@@ -41,8 +41,10 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 		for (var i=0; i<_articleList.length; i++) {	
 			// 未読マークの表示
-			if (_articleList[i].date == lastArticleDate) { unreadFlag = false; }
-//			if (unreadFlag) { unreadCount++; }
+			if (unreadFlag) {
+				if (util.getDate(_articleList[i].date) <= lastArticleDate) { unreadFlag = false; }
+	//			if (unreadFlag) { unreadCount++; }
+			}
 
 			var date = util.getDateElement(_articleList[i].date);
 			if (checkDate == null || date.year != checkDate.year || date.month != checkDate.month || date.day != checkDate.day) {
@@ -136,12 +138,11 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			_userData.follow = followList.length;
 			// 自分を追加
 			idList.push(_userData.id);
+			var startDate = new Date(now.year, now.month-1, now.day - articleDay);
 			// 記事データの取得
 			model.getCloudTodayArticle({
 				idList: idList,
-				year: now.year,
-				month: now.month,
-				day: now.day - articleDay,
+				date: startDate,
 				page: articlePage,
 				count: articleCount
 			}, function(e) {
@@ -430,11 +431,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 // ---------------------------------------------------------------------
 
 	// コメントボタン
-	commentButton.addEventListener('click', function(e){
-		Ti.API.debug('[event]commentButton.click:');
+	commentButtonView.addEventListener('click', function(e){
+		Ti.API.debug('[event]commentButtonView.click:');
 		var friendsCommentWin = win.createFriendsCommentWindow(_userData);
 		friendsCommentWin.prevWin = friendsWin;
 		win.openTabWindow(friendsCommentWin, {animated:true});
+		commentCountLabel.text = '';
 	});
 
 	// 設定ボタン
@@ -453,9 +455,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			item.friendsLikeLabel.text += e.like;
 			item.friendsCommentLabel.text += e.comment;
 			listSection.updateItemAt(e.index, item);
-
-		} else if (e.commentUpdate != null) {
-			commentCountLabel.text = '';
 
 		} else {
 			articlePage = 1;
