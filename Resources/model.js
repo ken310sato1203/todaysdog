@@ -35,11 +35,11 @@ photoTodayList = [
 stampSelectList = [
 //	{type:"one", title:"お天気", stampList:["stamp_sun","stamp_cloud","stamp_rain"]},
 	{type:"one", title:"さんぽ", stampList:["stamp_walking1","stamp_walking2","stamp_walking3"]},
+	{type:"all", title:"くすり\n病院", stampList:["stamp_medicine","stamp_injection","stamp_clinic"]},
 	{type:"one", title:"うんち", stampList:["stamp_favorite1","stamp_favorite2","stamp_favorite3"]},
+	{type:"all", title:"シャンプ\nホテル", stampList:["stamp_wash","stamp_cut","stamp_cottage"]},
 	{type:"one", title:"ごはん", stampList:["stamp_restaurant1","stamp_restaurant2","stamp_restaurant3"]},
 //	{type:"one", title:"体調", stampList:["stamp_barking1","stamp_barking2","stamp_barking3"]},
-	{type:"all", title:"くすり\n病院", stampList:["stamp_medicine","stamp_injection","stamp_clinic"]},
-	{type:"all", title:"シャンプ\nホテル", stampList:["stamp_wash","stamp_cut","stamp_cottage"]},
 	{type:"all", title:"おでかけ\nイベント", stampList:["stamp_car","stamp_flag","stamp_birthday"]},
 ];
 

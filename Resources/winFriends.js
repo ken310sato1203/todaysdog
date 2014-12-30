@@ -61,6 +61,13 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 			}
 
+			// ローカル画像があれば差し替える			
+			if (_articleList[i].userId == _userData.id) {
+				var fileName = _userData.id + "_" + _articleList[i].date.substring(0,10);
+				if (model.checkLocalImage(util.local.photoPath, fileName)) {
+					 _articleList[i].photo = util.local.photoPath + fileName + '.png';
+				}
+			}
 			var nameValue = '';
 			if (_articleList[i].name != '') {
 				nameValue = _articleList[i].name + ' ';

@@ -207,6 +207,8 @@ exports.win = {
 						var todayWin = win.getTab("todayTab").window;
 						if (tabGroup.activeTab.window.objectName != 'todayWin') {
 							todayWin.fireEvent('refresh', {activeTab:tabGroup.tabs[e.source.tabIndex]});
+						} else {
+							todayWin.fireEvent('refresh');
 						}
 
 					} else if (e.source.tabIndex == 2) {

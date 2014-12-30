@@ -526,7 +526,7 @@ exports.createWindow = function(_userData){
 	todayWin.photoImage = photoImage;
 	// 写真・スタンプの表示
 	var todayTableView = Ti.UI.createTableView(style.todayTableView);
-	todayTableView.headerPullView = getTableHeader();
+//	todayTableView.headerPullView = getTableHeader();
 	todayWin.add(todayTableView);
 	updateTodayTable();
 	// メニューの表示
@@ -539,7 +539,7 @@ exports.createWindow = function(_userData){
 		Ti.API.debug('[event]todayWin.refresh:');
 		// 日が変わった場合
 		var nowDate = new Date();
-		if (nowDate.getYear() != now.year || nowDate.getMonth() != now.month || nowDate.getDay() != now.day) {
+		if (nowDate.getFullYear() != now.year || nowDate.getMonth() != now.month-1 || nowDate.getDate() != now.day) {
 			todayTableView.data = [];
 			updateTodayTable();
 			todayWin.remove(todayMenuView);
@@ -547,6 +547,8 @@ exports.createWindow = function(_userData){
 			todayWin.add(todayMenuView);
 
 		} else {
+			// メニューをトップに戻す
+			todayMenuView.scrollTo(0, 0);
 			if (e.articleData) {
 				// フォトの差し替え
 				todayWin.noDataView.visible = false;
@@ -578,7 +580,7 @@ exports.createWindow = function(_userData){
 		todayMenuView.scrollTo(style.commonSize.screenWidth * currentMenu, 0);	
 	});
 
-
+/*
 	// 下スクロールで上部ヘッダがすべて表示するまでひっぱったかどうかのフラグ
 	var pulling = false;
 	// スクロール終了時に更新をしてよいかどうかのフラグ
@@ -631,22 +633,10 @@ exports.createWindow = function(_userData){
 	        setTimeout(function(){
 	        	resetPullHeader(e.source);
 	        	todayWin.fireEvent('refresh');
-/*
-				// 日付の更新
-				// 子要素を先に削除すると、非同期のためか追加ができないので、非表示にして後で削除
-				todayWin.dayView.children[0].hide();
-				todayWin.dayView.add(getDayLabelView());
-				todayWin.dayView.remove(todayWin.dayView.children[0]);
-				// 記事の更新
-				// 子要素を先に削除すると、非同期のためか追加ができないので、非表示にして後で削除
-				todayWin.photoRow.children[0].hide();
-				todayWin.photoRow.add(getTodayPhotoView());
-				todayWin.photoRow.remove(todayWin.photoRow.children[0]);
-*/
 	        }, 2000);
 	    }
 	});
-
+*/
 
 	return todayWin;
 };
