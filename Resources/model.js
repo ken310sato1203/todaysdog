@@ -73,6 +73,32 @@ stampHistoryList = [
 // ---------------------------------------------------------------------
 exports.model = {
 
+	// ユーザー登録
+	registCloudUser:function(params, callback){
+		Ti.API.debug('[func]registCloudUser:');
+		Cloud.Users.create({
+		    email: params.email,
+		    username: params.username,
+		    password: params.pass,
+		    password_confirmation: params.pass,
+//		    template: 'regist_complete',
+		    confirmation_template: 'regist_confirm'
+		}, function (e) {
+	        callback(e);
+		});
+	},
+
+	// ユーザー登録確認
+	confirmCloudUser:function(params, callback){
+		Ti.API.debug('[func]confirmCloudUser:');
+		Cloud.Users.resendConfirmation({
+		    email: params.email,
+		    confirmation_template: 'email_confirm'
+		}, function (e) {
+	        callback(e);
+		});
+	},
+
 	// ログイン
 	loginCloudUser:function(_type, _token, callback){
 		Ti.API.debug('[func]loginCloudUser:');
@@ -291,7 +317,8 @@ exports.model = {
 					var user = e.users[i];
 					var userData = {
 						id: user.id,
-						user: user.first_name + ' ' + user.last_name,
+//						user: user.first_name + ' ' + user.last_name,
+						user: user.username,
 						photo: 0,
 						like: 0,
 						follow: 0,
@@ -347,7 +374,8 @@ exports.model = {
 					var user = e.users[i];
 					var userData = {
 						id: user.id,
-						user: user.first_name + ' ' + user.last_name,
+//						user: user.first_name + ' ' + user.last_name,
+						user: user.username,
 						photo: 0,
 						like: 0,
 						follow: 0,
@@ -397,7 +425,8 @@ exports.model = {
 					var user = e.users[i];
 					var userData = {
 						id: user.id,
-						user: user.first_name + ' ' + user.last_name,
+//						user: user.first_name + ' ' + user.last_name,
+						user: user.username,
 						photo: 0,
 						like: 0,
 						follow: 0,
@@ -447,7 +476,8 @@ exports.model = {
 					var user = e.users[i];
 					var userData = {
 						id: user.id,
-						user: user.first_name + ' ' + user.last_name,
+//						user: user.first_name + ' ' + user.last_name,
+						user: user.username,
 						photo: 0,
 						like: 0,
 						follow: 0,
@@ -533,7 +563,8 @@ exports.model = {
 					var articleData = {
 						id: post.id,
 						userId: user.id,
-						user: user.first_name + ' ' + user.last_name,
+//						user: user.first_name + ' ' + user.last_name,
+						user: user.username,
 						name: name,
 						text: post.content,
 						date: util.getFormattedDateTime(post.custom_fields.postDate),
@@ -575,35 +606,38 @@ exports.model = {
 				Ti.API.debug('success:');
 				for (var i = 0; i < e.posts.length; i++) {
 					var post = e.posts[i];
-					var user = post.user;
-					var name = '';
-					if (user.custom_fields && user.custom_fields.name) {
-						name = user.custom_fields.name;
+					if (post.user && post.photo.urls) {
+						var user = post.user;
+						var name = '';
+						if (user.custom_fields && user.custom_fields.name) {
+							name = user.custom_fields.name;
+						}
+						var likeCount = 0;
+						var commentCount = 0;
+						if (post.reviews_count && post.reviews_count > 0) {
+							commentCount = post.reviews_count;
+						}
+						if (post.ratings_count && post.ratings_count > 0) {
+							commentCount = commentCount - post.ratings_count;
+							likeCount = post.ratings_count;
+						}
+						// バッジ更新で、RESTAPIではcustom_fieldsが取得できなかったのでcreated_atを使用
+						var articleData = {
+							id: post.id,
+							userId: user.id,
+//							user: user.first_name + ' ' + user.last_name,
+							user: user.username,
+							name: name,
+							text: post.content,
+							date: util.getFormattedDateTime(post.custom_fields.postDate),
+							created_at: util.getFormattedDateTime(post.created_at),
+							photo: post.photo.urls.original,
+							like: likeCount,
+							comment: commentCount,
+							icon: user.photo.urls.square_75
+						};
+						articleList.push(articleData);
 					}
-					var likeCount = 0;
-					var commentCount = 0;
-					if (post.reviews_count && post.reviews_count > 0) {
-						commentCount = post.reviews_count;
-					}
-					if (post.ratings_count && post.ratings_count > 0) {
-						commentCount = commentCount - post.ratings_count;
-						likeCount = post.ratings_count;
-					}
-					// バッジ更新で、RESTAPIではcustom_fieldsが取得できなかったのでcreated_atを使用
-					var articleData = {
-						id: post.id,
-						userId: user.id,
-						user: user.first_name + ' ' + user.last_name,
-						name: name,
-						text: post.content,
-						date: util.getFormattedDateTime(post.custom_fields.postDate),
-						created_at: util.getFormattedDateTime(post.created_at),
-						photo: post.photo.urls.original,
-						like: likeCount,
-						comment: commentCount,
-						icon: user.photo.urls.square_75
-					};
-					articleList.push(articleData);
 				}				
 			}
 			e.articleList = articleList; 
@@ -720,33 +754,36 @@ exports.model = {
 				Ti.API.debug('success:');
 				for (var i = 0; i < e.posts.length; i++) {
 					var post = e.posts[i];
-					var user = post.user;
-					var name = '';
-					if (user.custom_fields && user.custom_fields.name) {
-						name = user.custom_fields.name;
+					if (post.photo.urls) {
+						var user = post.user;
+						var name = '';
+						if (user.custom_fields && user.custom_fields.name) {
+							name = user.custom_fields.name;
+						}
+						var likeCount = 0;
+						var commentCount = 0;
+						if (post.reviews_count && post.reviews_count > 0) {
+							commentCount = post.reviews_count;
+						}
+						if (post.ratings_count && post.ratings_count > 0) {
+							commentCount = commentCount - post.ratings_count;
+							likeCount = post.ratings_count;
+						}
+						var articleData = {
+							id: post.id,
+							userId: user.id,
+//							user: user.first_name + ' ' + user.last_name,
+							user: user.username,
+							name: name,
+							text: post.content,
+							date: util.getFormattedDateTime(post.custom_fields.postDate),
+							photo: post.photo.urls.original,
+							like: likeCount,
+							comment: commentCount,
+							icon: user.photo.urls.square_75
+						};
+						articleList.push(articleData);
 					}
-					var likeCount = 0;
-					var commentCount = 0;
-					if (post.reviews_count && post.reviews_count > 0) {
-						commentCount = post.reviews_count;
-					}
-					if (post.ratings_count && post.ratings_count > 0) {
-						commentCount = commentCount - post.ratings_count;
-						likeCount = post.ratings_count;
-					}
-					var articleData = {
-						id: post.id,
-						userId: user.id,
-						user: user.first_name + ' ' + user.last_name,
-						name: name,
-						text: post.content,
-						date: util.getFormattedDateTime(post.custom_fields.postDate),
-						photo: post.photo.urls.original,
-						like: likeCount,
-						comment: commentCount,
-						icon: user.photo.urls.square_75
-					};
-					articleList.push(articleData);
 				}				
 			}
 			e.articleList = articleList; 
@@ -833,33 +870,37 @@ exports.model = {
 				Ti.API.debug('success:');
 				for (var i = 0; i < e.posts.length; i++) {
 					var post = e.posts[i];
-					var user = post.user;
-					var name = '';
-					if (user.custom_fields && user.custom_fields.name) {
-						name = user.custom_fields.name;
+					// 写真がアップされたもの
+					if (post.photo.urls) {
+						var user = post.user;
+						var name = '';
+						if (user.custom_fields && user.custom_fields.name) {
+							name = user.custom_fields.name;
+						}
+						var likeCount = 0;
+						var commentCount = 0;
+						if (post.reviews_count && post.reviews_count > 0) {
+							commentCount = post.reviews_count;
+						}
+						if (post.ratings_count && post.ratings_count > 0) {
+							commentCount = commentCount - post.ratings_count;
+							likeCount = post.ratings_count;
+						}
+						var articleData = {
+							id: post.id,
+							userId: user.id,
+//							user: user.first_name + ' ' + user.last_name,
+							user: user.username,
+							name: name,
+							text: post.content,
+							date: util.getFormattedDateTime(post.custom_fields.postDate),
+							photo: post.photo.urls.original,
+							like: likeCount,
+							comment: commentCount,
+							icon: user.photo.urls.square_75
+						};
+						articleList.push(articleData);
 					}
-					var likeCount = 0;
-					var commentCount = 0;
-					if (post.reviews_count && post.reviews_count > 0) {
-						commentCount = post.reviews_count;
-					}
-					if (post.ratings_count && post.ratings_count > 0) {
-						commentCount = commentCount - post.ratings_count;
-						likeCount = post.ratings_count;
-					}
-					var articleData = {
-						id: post.id,
-						userId: user.id,
-						user: user.first_name + ' ' + user.last_name,
-						name: name,
-						text: post.content,
-						date: util.getFormattedDateTime(post.custom_fields.postDate),
-						photo: post.photo.urls.original,
-						like: likeCount,
-						comment: commentCount,
-						icon: user.photo.urls.square_75
-					};
-					articleList.push(articleData);
 				}				
 			}
 			e.articleList = articleList; 
@@ -1648,7 +1689,8 @@ exports.model = {
 					var articleData = {
 						id: review.id,
 						userId: user.id,
-						user: user.first_name + ' ' + user.last_name,
+//						user: user.first_name + ' ' + user.last_name,
+						user: user.username,
 						name: name,
 						text: review.content,
 						date: util.getFormattedDateTime(review.custom_fields.postDate),
@@ -1697,7 +1739,8 @@ exports.model = {
 					var user = e.users[i];
 					var userData = {
 						id: user.id,
-						user: user.first_name + ' ' + user.last_name,
+//						user: user.first_name + ' ' + user.last_name,
+						user: user.username,
 						photo: 0,
 						like: 0,
 						follow: 0,

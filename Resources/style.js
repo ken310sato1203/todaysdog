@@ -151,13 +151,125 @@ exports.style = {
 
 // winLogin -------------------------------------------------------
 	loginWin:{
-		backgroundColor: 'white',
+		backgroundColor: '#eeeeee',
+//		barImage: 'images/icon/titlebar.png',
+		barColor: '#e74c3c',
+//		backButtonTitleImage: 'images/icon/titlebar.png',
+		// タイトルバーを隠す
+		navBarHidden: false,
+		tabBarHidden: false,
 		// カスタムプロパティ
 		objectName : 'loginWin',
 	},
-
+	loginTitleLabel:{
+		textAlign: 'center',
+		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+		text: 'ログイン', 
+	},
 	loginFacebookButton:{
-		top : '100dp',
+//		top : '100dp',
+	},
+	loginListView:{
+		layout: 'vertical',
+//		top: '0dp',
+		height: Ti.UI.SIZE,
+	},
+	loginListItemView:{
+		layout: 'absolute',
+		top: '1dp',
+		width: '284dp',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+		bubbleParent : false,
+	},
+	loginListItemLabel:{
+		top: '0dp',
+		left: '15dp',
+		height: '40dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#808080',
+	},
+	loginListButtonItemLabel:{
+		height: '40dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue', fontWeight:'bold'},
+		color: '#000',
+	},
+	loginListValueField:{
+		top: '0dp',
+		left: '15dp',
+		right: '15dp',
+		height: '40dp',
+		textAlign:'left',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#000',
+//		hintText: '入力してください',
+        keyboardType:Ti.UI.KEYBOARD_DEFAULT,
+        returnKeyType:Ti.UI.RETURNKEY_DONE,
+        borderStyle:Ti.UI.INPUT_BORDERSTYLE_NONE,
+		bubbleParent : false,
+	},
+
+// winRegist -------------------------------------------------------
+	registWin:{
+		backgroundColor: '#eeeeee',
+//		barImage: 'images/icon/titlebar.png',
+		barColor: '#e74c3c',
+//		backButtonTitleImage: 'images/icon/titlebar.png',
+		// タイトルバーを隠す
+		navBarHidden: false,
+		tabBarHidden: false,
+		// カスタムプロパティ
+		objectName : 'registWin',
+	},
+	registTitleLabel:{
+		textAlign: 'center',
+		font: {fontSize:18, fontFamily:'Helvetica Neue', fontWeight:'bold'}, 
+		color: 'white', 
+		shadowOffset: {x:0,y:-1},
+		shadowColor: '#696969', 
+		text: 'ログイン', 
+	},
+	registListView:{
+		layout: 'vertical',
+//		top: '0dp',
+		height: Ti.UI.SIZE,
+	},
+	registListItemView:{
+		layout: 'absolute',
+		top: '1dp',
+		width: '284dp',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+		bubbleParent : false,
+	},
+	registListItemLabel:{
+		top: '0dp',
+		left: '15dp',
+		height: '40dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#808080',
+	},
+	registListButtonItemLabel:{
+		height: '40dp',
+		font: {fontSize:14, fontFamily:'Helvetica Neue', fontWeight:'bold'},
+		color: '#000',
+	},
+	registListValueField:{
+		top: '0dp',
+		left: '15dp',
+		right: '15dp',
+		height: '40dp',
+		textAlign:'left',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#000',
+//		hintText: '入力してください',
+        keyboardType:Ti.UI.KEYBOARD_DEFAULT,
+        returnKeyType:Ti.UI.RETURNKEY_DONE,
+        borderStyle:Ti.UI.INPUT_BORDERSTYLE_NONE,
+		bubbleParent : false,
 	},
 
 // winPhoto -------------------------------------------------------
@@ -894,7 +1006,7 @@ exports.style = {
 		hintText: '入力してください',
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
         returnKeyType:Ti.UI.RETURNKEY_DONE,
-//        touchEnabled: false,
+// 		touchEnabled: false,
 	},
 
 	profileEditListPickerView:{
@@ -2873,7 +2985,7 @@ exports.style = {
 		left: '10dp',
 		width: '50dp',
 		height: '50dp',
-//		borderRadius: '5dp',
+		borderRadius: '25dp',
 	},
 	friendsCommentArticleImage:{
 		width: '50dp',
@@ -3558,11 +3670,10 @@ exports.style = {
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
-	stampPostListPostItemLabel:{
+	stampPostListButtonItemLabel:{
 		height: '35dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue', fontWeight:'bold'},
 		color: 'white',
-		text: '記録',
 	},
 	stampPostListValueLabel:{
 		right: '15dp',

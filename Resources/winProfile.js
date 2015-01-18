@@ -398,12 +398,12 @@ exports.createWindow = function(_userData){
 				if (e.articleList.length > 0) {
 					// 取得した記事をテーブルに追加
 					profileTableView.appendRow(getPhotoListArticleTableRow(e.articleList), {animated:true});
-					var bottomRow = Ti.UI.createTableViewRow(style.profileInfoTableRow);
-					var bottomImage = Ti.UI.createImageView(style.profileBottomImage);
-					bottomRow.add(bottomImage);
-//					bottomRow.height = '44dp';
-					profileTableView.appendRow(bottomRow, {animated:false});
 				}
+				var bottomRow = Ti.UI.createTableViewRow(style.profileInfoTableRow);
+				var bottomImage = Ti.UI.createImageView(style.profileBottomImage);
+				bottomRow.add(bottomImage);
+//					bottomRow.height = '44dp';
+				profileTableView.appendRow(bottomRow, {animated:false});
 	
 			} else {
 				util.errorDialog(e);

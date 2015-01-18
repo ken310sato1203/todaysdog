@@ -1,5 +1,7 @@
 //ウィンドウ
 
+var loginWin = require('winLogin');
+var registWin = require('winRegist');
 var mydogWin = require('winMydog');
 var calendarWin = require('winCalendar');
 var cameraWin = require('winCamera');
@@ -27,6 +29,16 @@ var clickEnable = true;
 // ---------------------------------------------------------------------
 exports.win = {
 
+	createLoginWindow:function(){
+		Ti.API.debug('[func]createLoginWindow:');
+		var win = loginWin.createWindow();
+		return win;
+	},
+	createRegistWindow:function(){
+		Ti.API.debug('[func]createRegistWindow:');
+		var win = registWin.createWindow();
+		return win;
+	},
 	createFriendsWindow:function(_userData){
 		Ti.API.debug('[func]createFriendsWindow:');
 		var win = friendsWin.createWindow("follow", _userData, null, null);

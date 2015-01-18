@@ -15,8 +15,8 @@ var sqlite = new sqliter("todaysdog");
 var tabGroup = null;
 var customTab = null;
 
-// facebook側で登録したアプリID
-Facebook.appid = '159833880868916';
+// facebook側で登録したアプリID tiapp.xmlから取得
+Facebook.appid = Ti.App.Properties.getString('ti.facebook.appid');
 Facebook.permissions = ['offline_access', 'publish_stream'];
 // iOS6以降、facebookのシングルサインオンに対応するためforceDialogAuthはfalseにすべきとあるが
 // authorizeがGET系のみとなり、reauthorizeで再度POST系の認証をする必要があるため、trueとしシングルサインオンには対応しない
@@ -75,6 +75,9 @@ var openMainWindow = function(_userData) {
 	
 	// diaryWinの更新でtimeWinを表示させておく
 	win3.fireEvent('refresh');
+
+	// バッジの初期化
+	Ti.UI.iPhone.appBadge = null;
 
 /*	
 	// アプリを閉じた時
@@ -315,18 +318,13 @@ var loginFacebook = function() {
 
 // ---------------------------------------------------------------------
 
-var loginWin = Ti.UI.createWindow(style.loginWin);
-var loginFbButton = Facebook.createLoginButton(style.loginFacebookButton);
-loginFbButton.style = Facebook.BUTTON_STYLE_WIDE;
-loginFbButton.hide();
-loginWin.add(loginFbButton);
-loginWin.open();	
+var loginWin = win.createLoginWindow();
 
 if ( Facebook.loggedIn ) {
 	loginFlag = true;
 	loginFacebook();
 } else {
-	loginFbButton.show();
+	loginWin.open();
 }
 
 /* バックグラウンド処理がうまくいかない場合があるのでやめる。
@@ -366,7 +364,7 @@ var service = Ti.App.iOS.registerBackgroundService({url:'background.js'});
 Facebook.addEventListener('login', function(e) {
 	Ti.API.debug('[event]Facebook.login:');
 	if (e.success) {
-		loginFbButton.hide();
+		loginWin.close();
 		if (! loginFlag) {
 			loginFacebook();
 		}
@@ -384,7 +382,7 @@ Facebook.addEventListener('logout', function(e) {
 	tabGroup.close();
 	customTab.close();
 	loginFlag = false;
-	loginFbButton.show();
+	loginWin.open();
 });
 
 

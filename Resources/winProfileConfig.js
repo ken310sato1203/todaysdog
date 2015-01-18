@@ -3,9 +3,7 @@
 exports.createWindow = function(_userData){
 	Ti.API.debug('[func]winProfileConfig.createWindow:');
 
-	// 選択ビュー表示用アニメーション
-	var slideIn =  Titanium.UI.createAnimation({bottom:0});
-	var slideOut =  Titanium.UI.createAnimation({bottom:-259});
+// ---------------------------------------------------------------------
 
 	var profileConfigWin = Ti.UI.createWindow(style.profileConfigWin);
 	// タイトルの表示
@@ -153,6 +151,10 @@ exports.createWindow = function(_userData){
 
 	// フィールドを設定
 	profileConfigTableView.data = profileConfigRowList;
+
+	// 選択ビュー表示用アニメーション
+	var slideIn =  Titanium.UI.createAnimation({bottom:0});
+	var slideOut =  Titanium.UI.createAnimation({bottom:-259});
 
 // ---------------------------------------------------------------------
 	// 戻るボタンをクリック

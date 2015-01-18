@@ -133,7 +133,9 @@ exports.createWindow = function(_type, _articleData){
 			if (user.custom_fields && user.custom_fields.name != null) {
 				nameValue = user.custom_fields.name + ' ';
 			}
-			userValue = user.first_name + ' ' + user.last_name;
+//			userValue = user.first_name + ' ' + user.last_name;
+			userValue = (user.username.indexOf('@') > 0) ? user.username.substring(0,user.username.indexOf('@')) : user.username;
+
 			if (review.custom_fields && review.custom_fields.postDate != null) {
 //				time = util.getFormattedDateTime(util.getDate(review.custom_fields.postDate));
 				var date = util.getDateElement(review.custom_fields.postDate);

@@ -97,7 +97,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		var noDataItem = [{
 			template: 'nodata',
 			friendsCommentNoDataLabel: {
-				text: 'コメントはありませんでした',
+				text: 'コメントはありません',
 			},
 		}];
 

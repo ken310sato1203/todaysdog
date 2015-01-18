@@ -101,7 +101,8 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 		postView.backgroundColor = '#e74c3c';
 		postRow.add(postView);
 
-		var postLabel = Ti.UI.createLabel(style.stampPostListPostItemLabel);
+		var postLabel = Ti.UI.createLabel(style.stampPostListButtonItemLabel);
+		postLabel.text = '記録';
 		postView.add(postLabel);
 
 		postTableView.setData(rowList);
@@ -221,9 +222,6 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 
 	// 選択したフィールド名を保管
 	var selectedName = null;
-	// 選択ビュー表示用アニメーション
-	var slideIn =  Titanium.UI.createAnimation({bottom:0});
-	var slideOut =  Titanium.UI.createAnimation({bottom:-259});
 
 	var postScrollView = Ti.UI.createScrollView(style.stampPostScrollView);
 	postWin.add(postScrollView);
@@ -335,6 +333,10 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	// ロード用画面
 	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
 	var actBackView = Titanium.UI.createView(style.commonActivityBackView);
+
+	// 選択ビュー表示用アニメーション
+	var slideIn =  Titanium.UI.createAnimation({bottom:0});
+	var slideOut =  Titanium.UI.createAnimation({bottom:-259});
 
 // ---------------------------------------------------------------------
 	// 戻るボタンをクリック

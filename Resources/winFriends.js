@@ -88,7 +88,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 					text: nameValue,
 				},
 				friendsUserLabel: {
-					text: _articleList[i].user,
+					text: (_articleList[i].user.indexOf('@') > 0) ? _articleList[i].user.substring(0,_articleList[i].user.indexOf('@')) : _articleList[i].user,
 				},
 				friendsTextLabel: {
 					text: _articleList[i].text,
@@ -121,7 +121,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		var noDataItem = [{
 			template: 'nodata',
 			friendsNoDataLabel: {
-				text: '投稿された記事はありませんでした',
+				text: '投稿された記事はありません',
 			},
 		}];
 
