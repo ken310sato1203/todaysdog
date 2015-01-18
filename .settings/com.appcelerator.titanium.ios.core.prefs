@@ -1,4 +1,11 @@
 eclipse.preferences.version=1
+iosLaunchConfigurationAttributes/ATTR_MINIFY=true
+iosLaunchConfigurationAttributes/ATTR_PROJECT_NAME=todaysdog
+iosLaunchConfigurationAttributes/appid=com.sakura.todaysdog
+iosLaunchConfigurationAttributes/certificate=Ken Sato (27947V9Y7G)
+iosLaunchConfigurationAttributes/keychain=/Users/ken/Library/Keychains/login.keychain
+iosLaunchConfigurationAttributes/sdk_version=7.0.3
+iosLaunchConfigurationAttributes/uuid=55e10c75-1674-4031-84a3-eda961e788fe
 provisioning_profiles/development/037686F9-D7DD-4984-9BB3-43E226F9F65A/appid=com.sakura.todaysdog
 provisioning_profiles/development/037686F9-D7DD-4984-9BB3-43E226F9F65A/name=TodaysDogProfile
 provisioning_profiles/development/037686F9-D7DD-4984-9BB3-43E226F9F65A/uuid=037686F9-D7DD-4984-9BB3-43E226F9F65A

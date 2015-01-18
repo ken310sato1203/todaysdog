@@ -17,11 +17,11 @@
     <sdk-version>3.3.0.GA</sdk-version>
     <id>com.sakura.todaysdog</id>
     <name>todaysdog</name>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <publisher>ken</publisher>
     <url>http://com.sakura.todaysdog</url>
     <description>not specified</description>
-    <copyright>2014 by ken</copyright>
+    <copyright>2015 by ken</copyright>
     <icon>appicon.png</icon>
     <persistent-wifi>false</persistent-wifi>
     <prerendered-icon>false</prerendered-icon>
