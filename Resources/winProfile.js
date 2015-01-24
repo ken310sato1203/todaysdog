@@ -31,8 +31,7 @@ exports.createWindow = function(_userData){
 			Ti.API.debug('[event]countPhotoView.click:');
 			if (_userData.photo > 0) {
 				countPhotoView.backgroundColor = '#dedede';
-				var type = "user";
-				var photoListWin = win.createPhotoListWindow(type, _userData);
+				var photoListWin = win.createPhotoListWindow('user', _userData);
 				win.openTabWindow(photoListWin, {animated:true});
 				countPhotoView.backgroundColor = 'white';
 			}
@@ -79,8 +78,7 @@ exports.createWindow = function(_userData){
 			if (_userData.user == loginUser.user) {
 				if (_userData.follower > 0) {
 					countFollowerView.backgroundColor = '#dedede';
-					var type = "follower";
-					var userListWin = win.createUserListWindow(type, _userData);
+					var userListWin = win.createUserListWindow('follower', _userData);
 					userListWin.prevWin = profileWin;
 					win.openTabWindow(userListWin, {animated:true});
 					countFollowerView.backgroundColor = 'white';
@@ -105,8 +103,7 @@ exports.createWindow = function(_userData){
 			if (_userData.user == loginUser.user) {
 				if (_userData.follow > 0) {
 					countFollowView.backgroundColor = '#dedede';
-					var type = "follow";
-					var userListWin = win.createUserListWindow(type, _userData);
+					var userListWin = win.createUserListWindow('follow', _userData);
 					userListWin.prevWin = profileWin;
 					win.openTabWindow(userListWin, {animated:true});
 					countFollowView.backgroundColor = 'white';
@@ -398,12 +395,12 @@ exports.createWindow = function(_userData){
 				if (e.articleList.length > 0) {
 					// 取得した記事をテーブルに追加
 					profileTableView.appendRow(getPhotoListArticleTableRow(e.articleList), {animated:true});
+					var bottomRow = Ti.UI.createTableViewRow(style.profileInfoTableRow);
+					var bottomImage = Ti.UI.createImageView(style.profileBottomImage);
+					bottomRow.add(bottomImage);
+	//					bottomRow.height = '44dp';
+					profileTableView.appendRow(bottomRow, {animated:false});
 				}
-				var bottomRow = Ti.UI.createTableViewRow(style.profileInfoTableRow);
-				var bottomImage = Ti.UI.createImageView(style.profileBottomImage);
-				bottomRow.add(bottomImage);
-//					bottomRow.height = '44dp';
-				profileTableView.appendRow(bottomRow, {animated:false});
 	
 			} else {
 				util.errorDialog(e);

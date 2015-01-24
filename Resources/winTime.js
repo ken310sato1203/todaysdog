@@ -97,8 +97,7 @@ exports.createWindow = function(_userData, _diaryData){
 			if (clickEnable) {
 				if (e.source.objectName == 'timeStampView') {
 					clickEnable = false;
-					var type = "time";
-					var postWin = win.createStampPostWindow(type, _userData, [e.row.stampData]);
+					var postWin = win.createStampPostWindow('time', _userData, [e.row.stampData]);
 					postWin.addEventListener('open', function(){
 						// スライド前にopenイベントが発火するので1秒後にセット
 				        setTimeout(function(){
@@ -163,7 +162,6 @@ exports.createWindow = function(_userData, _diaryData){
 	// ビューの更新
 	var updateTableView = function(updateData) {
 		Ti.API.debug('[func]updateTableView:');
-		var type = "time";
 		var position = null;
 
 		// スタンプデータの取得 登録時は追加分も含む
@@ -204,7 +202,7 @@ exports.createWindow = function(_userData, _diaryData){
 		if(timeTableView) {
 			timeWin.remove(timeTableView);
 		}
-		timeTableView = getTimeTableView(type);
+		timeTableView = getTimeTableView('time');
 		if(position != null) {
 			timeTableView.scrollToIndex(position, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 		}
@@ -270,8 +268,7 @@ exports.createWindow = function(_userData, _diaryData){
 						report: null,
 						date: null,
 					};
-					var type = "time";
-					var postWin = win.createStampPostWindow(type, _userData, [stampData]);
+					var postWin = win.createStampPostWindow('time', _userData, [stampData]);
 					postWin.prevWin = timeWin;
 					win.openTabWindow(postWin, {animated:true});
 

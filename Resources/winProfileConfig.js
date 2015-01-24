@@ -219,10 +219,22 @@ exports.createWindow = function(_userData){
 			alertDialog.show();
 	
 			alertDialog.addEventListener('click',function(alert){
-				Ti.API.debug('[event]alertDialog.click:');						
+				Ti.API.debug('[event]alertDialog.click:');
 				// OKの場合
 				if(alert.index == 1){
-					Facebook.logout();
+					if (fbLoginFlag) {
+						Facebook.logout();					
+					} else {
+						model.logoutCloudUser(function(e) {
+							Ti.API.debug('[func]logoutCloudUser.callback:');
+						    if (e.success) {
+								Ti.App.Properties.removeProperty('session');
+								win.openLoginWin();
+						    } else {
+								util.errorDialog(e);
+						    }
+						});						
+					}
 				}
 			});
 		}

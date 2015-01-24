@@ -34,9 +34,9 @@ exports.win = {
 		var win = loginWin.createWindow();
 		return win;
 	},
-	createRegistWindow:function(){
+	createRegistWindow:function(_type){
 		Ti.API.debug('[func]createRegistWindow:');
-		var win = registWin.createWindow();
+		var win = registWin.createWindow(_type);
 		return win;
 	},
 	createFriendsWindow:function(_userData){
@@ -56,14 +56,12 @@ exports.win = {
 	},
 	createMydogWindow:function(_userData){
 		Ti.API.debug('[func]createMydogWindow:');
-		var type = "random";
-		var win = mydogWin.createWindow(type, _userData, null);
+		var win = mydogWin.createWindow('random', _userData, null);
 		return win;
 	},
 	createCalendarPhotoWindow:function(_userData, _articleData){
 		Ti.API.debug('[func]createCalendarPhotoWindow:');
-		var type = "date";
-		var win = mydogWin.createWindow(type, _userData, _articleData);
+		var win = mydogWin.createWindow('date', _userData, _articleData);
 		return win;
 	},
 	createCalendarWindow:function(_articleData){
@@ -153,7 +151,15 @@ exports.win = {
 		// ウィンドウの表示
 		tabGroup.activeTab.open(_win, _animated);
 	},
-
+	
+	// loginWinを開く
+	openLoginWin:function() {
+		Ti.API.debug('[func]openLoginWin:');
+		tabGroup.close();
+		customTab.close();
+		loginWindow.show();
+	},
+	
 	// 指定したobjectNameのタブを取得
 	getTab:function(_objectName) {
 		Ti.API.debug('[func]getTab:');

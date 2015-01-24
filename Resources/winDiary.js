@@ -275,12 +275,7 @@ exports.createWindow = function(_userData){
 		diaryWin.add(thisDiaryView);
 		// 今日の日にスクロール
 		thisDiaryView.scrollToIndex(_day-3 > 0 ? _day-3 : 0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-		offset = _day-3 > 0 ? (_day-3) * 45: 0;
-		
-		// 初回起動時はtimeWinをオープンするため表示しない
-//		if (initDiaryFlag == false) {
-//			thisDiaryView.visible = true;
-//		}
+		offset = _day-3 > 0 ? (_day-3) * 45: 0;		
 	};
 
 // ---------------------------------------------------------------------

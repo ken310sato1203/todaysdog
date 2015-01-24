@@ -181,7 +181,7 @@ exports.util = {
 	// アラート表示
 	alertDialog:function(message){
 		var dialog = Titanium.UI.createAlertDialog({
-			title: 'アラート',
+//			title: 'アラート',
 			message: message,
 			buttonNames: ['OK'],
 		});

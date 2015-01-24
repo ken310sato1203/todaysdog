@@ -87,7 +87,7 @@ exports.model = {
 	        callback(e);
 		});
 	},
-
+/*
 	// ユーザー登録確認
 	confirmCloudUser:function(params, callback){
 		Ti.API.debug('[func]confirmCloudUser:');
@@ -98,59 +98,72 @@ exports.model = {
 	        callback(e);
 		});
 	},
+*/
+	// パスワードリセット
+	resetCloudPassword:function(params, callback){
+		Ti.API.debug('[func]resetCloudUser:');
+		Cloud.Users.requestResetPassword({
+		    email: params.email,
+		    template: 'reset_password'
+		}, function (e) {
+	        callback(e);
+		});
+	},
+
+	// ログインセッションのチェック
+	loginSessionCheck:function(callback){
+		Ti.API.debug('[func]loginSessionCheck:');
+		Cloud.Users.showMe(function (e) {
+			callback(e);
+		});		
+	},
 
 	// ログイン
-	loginCloudUser:function(_type, _token, callback){
+	loginCloudUser:function(params, callback){
 		Ti.API.debug('[func]loginCloudUser:');
-		var accessToken = {
-			type: _type, 
-			token: _token
-		};
-
-		Cloud.SocialIntegrations.externalAccountLogin({
-			type: _type, 
-			token: _token
-		}, function (e) {
-			if (e.success) {
-				Ti.API.debug('success:');
-				var user = e.users[0];
-				var userData = {
-					id: user.id,
-					user: user.first_name + ' ' + user.last_name,
-					photo: 0,
-					like: 0,
-					follow: 0,
-					follower: 0, 
-					name: '',
-					breed: '',
-					sex: '',
-					birth: '', 
-					memo: '',
-					post: null,
-					like: null,
-					icon: null,
-//					icon: 'http://graph.facebook.com/' + custom_fields.external_accounts[0].external_id + '/picture?type=normal',
-//					icon: 'http://graph.facebook.com/maki.oshika.9/picture?type=normal',
-				};
-				if (user.custom_fields) {
-					if (user.custom_fields.name != null)  { userData.name = user.custom_fields.name; }
-					if (user.custom_fields.breed != null) { userData.breed = user.custom_fields.breed; }
-					if (user.custom_fields.sex != null)   { userData.sex = user.custom_fields.sex; }
-					if (user.custom_fields.birth != null) { userData.birth = user.custom_fields.birth; }
-					if (user.custom_fields.memo != null)  { userData.memo = user.custom_fields.memo; }
-					if (user.custom_fields.post != null)  { userData.post = user.custom_fields.post; }
-					if (user.custom_fields.like != null)  { userData.like = user.custom_fields.like; }
+		if (params.type == 'email') {
+			Cloud.Users.login({
+				login: params.email,
+				password: params.pass
+			}, function (e) {
+				if (e.success) {
+					Ti.API.debug('success:');
 				}
-				if (user.photo) {
-					userData.icon = user.photo.urls.small_240;
-				}
-				e.userData = userData;
+				e.type = 'email';
 				callback(e);
+			});			
 
-			} else {
-				e.accessToken = accessToken;
+		} else if (params.type == 'session') {
+			Cloud.Users.showMe(function (e) {
+				if (e.success) {
+					Ti.API.debug('success:');
+				}
+				e.type = 'session';
 				callback(e);
-			}
+			});			
+
+		} else {
+			Cloud.SocialIntegrations.externalAccountLogin({
+				type: params.type, 
+				token: params.token
+			}, function (e) {
+				if (e.success) {
+					Ti.API.debug('success:');
+					if (e.users[0].username == '') {
+						e.users[0].username = e.users[0].first_name + ' ' + e.users[0].last_name;
+					}
+				}
+				e.type = 'external';
+				callback(e);
+			});
+		}
+	},
+
+	// ログアウト
+	logoutCloudUser:function(callback){
+		Ti.API.debug('[func]logoutCloudUser:');
+		Cloud.Users.logout(function (e) {
+			callback(e);
 		});
 	},
 

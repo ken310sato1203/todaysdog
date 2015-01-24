@@ -246,8 +246,7 @@ exports.createWindow = function(_userData){
 							date: null,
 						};
 			
-						var type = "time";
-						var postWin = win.createStampPostWindow(type, _userData, [stampData]);
+						var postWin = win.createStampPostWindow('time', _userData, [stampData]);
 						postWin.prevWin = todayWin;
 						win.openTabWindow(postWin, {animated:true});
 	
