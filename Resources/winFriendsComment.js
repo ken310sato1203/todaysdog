@@ -97,7 +97,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		var noDataItem = [{
 			template: 'nodata',
 			friendsCommentNoDataLabel: {
-				text: 'コメントはありません',
+				text: 'わんともからのコメントは\nありませんでした',
 			},
 		}];
 
@@ -271,9 +271,18 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	var noDataListTemplate = {
 		properties: style.friendsCommentNoDataList,
 		childTemplates: [{
-			type: 'Ti.UI.Label',
-			bindId: 'friendsCommentNoDataLabel',
-			properties: style.friendsCommentNoDataLabel,
+			type: 'Ti.UI.View',
+			bindId: 'friendsCommentNoDataView',
+			properties: style.friendsCommentNoDataView,
+			childTemplates: [{
+				type: 'Ti.UI.Label',
+				bindId: 'friendsCommentNoDataLabel',
+				properties: style.friendsCommentNoDataLabel,
+			},{
+				type: 'Ti.UI.ImageView',
+				bindId: 'friendsCommentNoDataImage',
+				properties: style.friendsCommentNoDataImage,
+			}]
 		}]
 	};	
 	var listView = Ti.UI.createListView(style.friendsCommentTableListView);

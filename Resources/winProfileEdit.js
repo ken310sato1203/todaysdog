@@ -293,7 +293,7 @@ exports.createWindow = function(_userData){
 	// 「保存」ボタン
 	saveButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]saveButton.click:');
-		saveButton.enabled = false;
+		saveButton.touchEnabled = false;
 		actInd.show();
 		tabGroup.add(actInd);
 		
@@ -323,11 +323,11 @@ exports.createWindow = function(_userData){
 					profileEditWin.prevWin.close({animated:false});
 				}
 				profileEditWin.close({animated:true});
-				saveButton.enabled = true;
+				saveButton.touchEnabled = true;
 
 			} else {
 				actInd.hide();
-				saveButton.enabled = true;
+				saveButton.touchEnabled = true;
 				util.errorDialog(e);
 			}
 		});

@@ -298,12 +298,16 @@ exports.createWindow = function(){
 				initStamp(userData);
 	
 				// 通知設定の初期化
-				if(! Ti.App.Properties.getString(userData.id + '_' + 'notice')) {
+				if(Ti.App.Properties.hasProperty(userData.id + '_' + 'notice') == false) {
 					Ti.App.Properties.setString(userData.id + '_' + 'notice', '18:00');
 				}
 				// 未読設定の初期化
-				if(! Ti.App.Properties.getString(userData.id + '_' + 'lastCommentDate')) {
+				if(Ti.App.Properties.hasProperty(userData.id + '_' + 'lastCommentDate') == false) {
 					Ti.App.Properties.setString(userData.id + '_' + 'lastCommentDate', '2014/01/01 00:00');
+				}
+				// 最新記事日時の初期化
+				if(Ti.App.Properties.hasProperty(userData.id + '_' + 'lastArticleDate') == false) {
+					Ti.App.Properties.setString(userData.id + '_' + 'lastArticleDate', '2014/01/01 00:00');
 				}
 
 				// 自動ログイン用のセッション
@@ -510,7 +514,8 @@ exports.createWindow = function(){
 			registWin.open({
 				modal: true,
 			    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
-			    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_PARTIAL_CURL,
+//			    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_PARTIAL_CURL,
+			    modalTransitionStyle: Ti.UI.iPhone.MODAL_TRANSITION_STYLE_COVER_VERTICAL,
 			});
 
 			target.opacity = 1.0;

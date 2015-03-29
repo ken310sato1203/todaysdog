@@ -273,6 +273,7 @@ exports.createWindow = function(_userData){
 		dayPhotoView.add(noDataView);
 		todayWin.noDataView = noDataView;		
 		var noDataLabel = Ti.UI.createLabel(style.todayNoDataLabel);
+		noDataLabel.text = '１日１枚、写真を投稿して\nわんこの日記をつけよう';
 		noDataView.add(noDataLabel);
 		var noDataImage = Ti.UI.createImageView(style.todayNoDataImage);
 		noDataView.add(noDataImage);

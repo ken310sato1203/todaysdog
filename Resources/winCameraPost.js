@@ -118,6 +118,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 	// 投稿ボタンをクリック
 	postButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]postButton.click:');
+		postButton.touchEnabled = false;
 
 		if (_type == 'photo_camera' || _type == 'photo_select') {
 
@@ -129,6 +130,8 @@ exports.createWindow = function(_type, _userData, _photoImage){
 					buttonNames: ['OK'],
 				});
 				commentDialog.show();
+				postButton.touchEnabled = true;
+
 			} else {
 				var alertDialog = Titanium.UI.createAlertDialog({
 					title: '投稿しますか？',
@@ -140,7 +143,6 @@ exports.createWindow = function(_type, _userData, _photoImage){
 				alertDialog.addEventListener('click',function(alert){
 					// OKの場合
 					if(alert.index == 1){
-						postButton.enabled = false;
 						cameraPostWin.add(actBackView);
 						actInd.show();
 						tabGroup.add(actInd);
@@ -152,6 +154,8 @@ exports.createWindow = function(_type, _userData, _photoImage){
 							},
 							error : function(e) {
 								Ti.API.debug('error:');
+								postButton.touchEnabled = true;
+								util.errorDialog(e);
 							}
 						});
 		
@@ -195,7 +199,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 									cameraPostWin.close({animated:true});
 									actInd.hide();
 									actBackView.hide();
-									postButton.enabled = true;
+									postButton.touchEnabled = true;
 							    });
 /*							    
 							    var friendsWin = win.getTab("friendsTab").window;
@@ -208,7 +212,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 							} else {
 								actInd.hide();
 								actBackView.hide();
-								postButton.enabled = true;
+								postButton.touchEnabled = true;
 								util.errorDialog(e);
 							}
 						});
@@ -227,7 +231,6 @@ exports.createWindow = function(_type, _userData, _photoImage){
 			alertDialog.addEventListener('click',function(alert){
 				// OKの場合
 				if(alert.index == 1){
-					postButton.enabled = false;
 					cameraPostWin.add(actBackView);
 					actInd.show();
 					tabGroup.add(actInd);
@@ -256,14 +259,14 @@ exports.createWindow = function(_type, _userData, _photoImage){
 								cameraPostWin.close({animated:true});
 								actInd.hide();
 								actBackView.hide();
-								postButton.enabled = true;
+								postButton.touchEnabled = true;
 						    });
 							profileWin.fireEvent('refresh');
 
 						} else {
 							actInd.hide();
 							actBackView.hide();
-							postButton.enabled = true;
+							postButton.touchEnabled = true;
 							util.errorDialog(e);
 						}
 					});

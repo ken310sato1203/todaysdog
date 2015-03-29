@@ -23,37 +23,45 @@ exports.util = {
 	// 現在日を日時フォーマットに変換
 	getFormattedNowDate:function(){
 	    var now = new Date();
-	    var year = now.getFullYear();
-	    var month = now.getMonth() + 1;
-	    var day = now.getDate();
-	    return String.format("%04.0f-%02.0f-%02.0f", year, month, day);
+	    var year = ("000" + now.getFullYear()).substr(-4);
+	    var month = ("0" + (now.getMonth()+1)).substr(-2);
+	    var day = ("0" + now.getDate()).substr(-2);
+	    // 0埋めをformatでやっていたがバージョンアップで正しく処理されなくなったのでsubstrで対応
+	    return year + "-" + month + "-" + day;
+//	    return String.format("%04.0f-%02.0f-%02.0f", year, month, day);
 	},
 	// 現在日時を日時フォーマットに変換
 	getFormattedNowDateHour:function(){
 	    var now = new Date();
-	    var year = now.getFullYear();
-	    var month = now.getMonth() + 1;
-	    var day = now.getDate();
-	    var hour = now.getHours();
-	    return String.format("%04.0f-%02.0f-%02.0f %02.0f", year, month, day, hour);
+	    var year = ("000" + now.getFullYear()).substr(-4);
+	    var month = ("0" + (now.getMonth()+1)).substr(-2);
+	    var day = ("0" + now.getDate()).substr(-2);
+	    var hour = ("0" + now.getHours()).substr(-2);
+	    // 0埋めをformatでやっていたがバージョンアップで正しく処理されなくなったのでsubstrで対応
+	    return year + "-" + month + "-" + day + " " + hour;
+//	    return String.format("%04.0f-%02.0f-%02.0f %02.0f", year, month, day, hour);
 	},
 	// 現在日時を日時フォーマットに変換
 	getFormattedNowDateTime:function(){
 	    var now = new Date();
-	    var year = now.getFullYear();
-	    var month = now.getMonth() + 1;
-	    var day = now.getDate();
-	    var hour = now.getHours();
-	    var minute = now.getMinutes();
-	    return String.format("%04.0f-%02.0f-%02.0f %02.0f:%02.0f", year, month, day, hour, minute);
+	    var year = ("000" + now.getFullYear()).substr(-4);
+	    var month = ("0" + (now.getMonth()+1)).substr(-2);
+	    var day = ("0" + now.getDate()).substr(-2);
+	    var hour = ("0" + now.getHours()).substr(-2);
+	    var minute = ("0" + now.getMinutes()).substr(-2);
+	    // 0埋めをformatでやっていたがバージョンアップで正しく処理されなくなったのでsubstrで対応
+	    return year + "-" + month + "-" + day + " " + hour + ":" + minute;
+//	    return String.format("%04.0f-%02.0f-%02.0f %02.0f:%02.0f", year, month, day, hour, minute);
 	},
 
 	// Date型を日付フォーマットに変換
 	getFormattedDate:function(_date){
-	    var year = _date.getFullYear();
-	    var month = _date.getMonth() + 1;
-	    var day = _date.getDate();
-	    return String.format("%04.0f-%02.0f-%02.0f", year, month, day);
+	    var year = ("000" + _date.getFullYear()).substr(-4);
+	    var month = ("0" + (_date.getMonth()+1)).substr(-2);
+	    var day = ("0" + _date.getDate()).substr(-2);
+	    // 0埋めをformatでやっていたがバージョンアップで正しく処理されなくなったのでsubstrで対応
+	    return year + "-" + month + "-" + day;
+//	    return String.format("%04.0f-%02.0f-%02.0f", year, month, day);
 	},
 	// Date型を日付フォーマットに変換
 	getFormattedYMD:function(_date){
@@ -86,13 +94,15 @@ exports.util = {
 	// Date型を日時フォーマットに変換
 	getFormattedDateTime:function(_date){
 		if (_date instanceof Date) {
-		    var year = _date.getFullYear();
-		    var month = _date.getMonth() + 1;
-		    var day = _date.getDate();
-		    var hour = _date.getHours();
-		    var minute = _date.getMinutes();
-		    var second = _date.getSeconds();
-		    return String.format("%04.0f-%02.0f-%02.0f %02.0f:%02.0f:%02.0f", year, month, day, hour, minute, second);
+		    var year = ("000" + _date.getFullYear()).substr(-4);
+		    var month = ("0" + (_date.getMonth()+1)).substr(-2);
+		    var day = ("0" + _date.getDate()).substr(-2);
+		    var hour = ("0" + _date.getHours()).substr(-2);
+		    var minute = ("0" + _date.getMinutes()).substr(-2);
+		    var second = ("0" + _date.getSeconds()).substr(-2);
+		    // 0埋めをformatでやっていたがバージョンアップで正しく処理されなくなったのでsubstrで対応
+		    return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+//		    return String.format("%04.0f-%02.0f-%02.0f %02.0f:%02.0f:%02.0f", year, month, day, hour, minute, second);
 		} else {
 			var year = _date.substr(0,4);
 			var month = _date.substr(5,2);
@@ -100,19 +110,22 @@ exports.util = {
 			var hour = _date.substr(11,2);
 			var minute = _date.substr(14,2);
 			var second = _date.substr(17,2);
-			return String.format("%s-%s-%s %s:%s:%s", year, month, day, hour, minute, second);
+		    return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+//			return String.format("%s-%s-%s %s:%s:%s", year, month, day, hour, minute, second);
 		}
 	},
 	// Date型を日時フォーマットに変換
 	getCloudFormattedDateTime:function(_date){
 		if (_date instanceof Date) {
-		    var year = _date.getFullYear();
-		    var month = _date.getMonth() + 1;
-		    var day = _date.getDate();
-		    var hour = _date.getHours();
-		    var minute = _date.getMinutes();
-		    var second = _date.getSeconds();
-		    return String.format("%04.0f-%02.0f-%02.0f %02.0f:%02.0f:%02.0f +0000", year, month, day, hour, minute, second);
+		    var year = ("000" + _date.getFullYear()).substr(-4);
+		    var month = ("0" + (_date.getMonth()+1)).substr(-2);
+		    var day = ("0" + _date.getDate()).substr(-2);
+		    var hour = ("0" + _date.getHours()).substr(-2);
+		    var minute = ("0" + _date.getMinutes()).substr(-2);
+		    var second = ("0" + _date.getSeconds()).substr(-2);
+		    // 0埋めをformatでやっていたがバージョンアップで正しく処理されなくなったのでsubstrで対応
+		    return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second + " +0000";
+//		    return String.format("%04.0f-%02.0f-%02.0f %02.0f:%02.0f:%02.0f +0000", year, month, day, hour, minute, second);
 		} else {
 			var year = _date.substr(0,4);
 			var month = _date.substr(5,2);
@@ -120,7 +133,8 @@ exports.util = {
 			var hour = _date.substr(11,2);
 			var minute = _date.substr(14,2);
 			var second = _date.substr(17,2);
-		    return String.format("%s-%s-%s %s:%s:%s +0000", year, month, day, hour, minute, second);
+		    return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second + " +0000";
+//		    return String.format("%s-%s-%s %s:%s:%s +0000", year, month, day, hour, minute, second);
 		}
 	},
 	// フォーマットされた日付をDate型に変換
@@ -136,7 +150,9 @@ exports.util = {
 
 	// 時間フォーマットに変換
 	getFormattedHour:function(_hour){
-	    return String.format("%02.0f:00", _hour);
+	    // 0埋めをformatでやっていたがバージョンアップで正しく処理されなくなったのでsubstrで対応
+		return ("0" + _hour).substr(-2) + ":00";
+//	    return String.format("%02.0f:00", _hour);
 	},
 	// フォーマットされた時間を数値型に変換
 	getHour:function(_formatedHour){

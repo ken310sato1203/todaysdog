@@ -117,9 +117,9 @@ exports.createWindow = function(_type, _userData, _stampData){
 					}
 	
 					if (selectedCount > 0) {
-						nextButton.enabled = true;
+						nextButton.touchEnabled = true;
 					} else {
-						nextButton.enabled = false;
+						nextButton.touchEnabled = false;
 					}
 	
 					if (alertFlag) {
@@ -151,7 +151,7 @@ exports.createWindow = function(_type, _userData, _stampData){
 	stampWin.leftNavButton = backButton;
 	// 次へボタンの表示
 	var nextButton = Titanium.UI.createButton(style.stampButton);
-	nextButton.enabled = false;
+	nextButton.touchEnabled = false;
 	stampWin.rightNavButton = nextButton;
 
 	var stampScrollView = getStampScrollView();

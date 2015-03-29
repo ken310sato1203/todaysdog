@@ -209,7 +209,7 @@ exports.createWindow = function(_type, _userData){
 //		frameView.top = '50dp';
 		// iOS7の場合
 		frameView.top = '88dp';
-		frameView.borderRadius = (Ti.Platform.displayCaps.platformWidth / 2) + 'dp';
+//		frameView.borderRadius = (Ti.Platform.displayCaps.platformWidth / 2) + 'dp';
 		overlayView.add(frameView);
 
 	} else if (_type == 'photo_select') {
@@ -257,7 +257,7 @@ exports.createWindow = function(_type, _userData){
 			openCameraPostWindow(postImage);
 
 		} else if (_type == 'icon_select') {
-			selectButton.enabled = false;
+			selectButton.touchEnabled = false;
 			cameraWin.add(actBackView);
 			actInd.show();
 			tabGroup.add(actInd);
@@ -279,14 +279,14 @@ exports.createWindow = function(_type, _userData){
 					profileWin.addEventListener('refresh', function(){
 						actInd.hide();
 						actBackView.hide();
-						selectButton.enabled = true;
+						selectButton.touchEnabled = true;
 				    });
 					profileWin.fireEvent('refresh', {icon:_userData.icon});
 
 				} else {
 					actInd.hide();
 					actBackView.hide();
-					selectButton.enabled = true;
+					selectButton.touchEnabled = true;
 					util.errorDialog(e);
 				}
 			});

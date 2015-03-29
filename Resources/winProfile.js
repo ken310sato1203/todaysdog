@@ -273,12 +273,21 @@ exports.createWindow = function(_userData){
  		infoRowView.add(nameView);
 
 		if (loginUser.id == _userData.id) {
-		 		followButton.title = '編集する';
+		 		followButton.type = 'edit';
+		 		followButton.backgroundColor = 'white';
+		 		followButtonLabel.text = '編集する';
+		 		followButtonLabel.color = '#e74c3c';
 		} else {
 			if (model.checkLocalFriendsList(loginUser.id, _userData.id)) {
-		 		followButton.title = 'フォロー中';
+		 		followButton.type = 'unfollow';
+		 		followButton.backgroundColor = '#dedede';
+		 		followButtonLabel.text = 'フォロー中';
+		 		followButtonLabel.color = '#000';
 			} else {
-		 		followButton.title = 'フォローする';
+		 		followButton.type = 'follow';
+		 		followButton.backgroundColor = 'white';
+		 		followButtonLabel.text = 'フォローする';
+		 		followButtonLabel.color = '#e74c3c';
 			}
 		}
 		infoRowView.add(followButton);
@@ -439,6 +448,9 @@ exports.createWindow = function(_userData){
 	var editButton = Titanium.UI.createButton(style.profileEditButton);
 	// フォローボタン
 	var followButton = Titanium.UI.createButton(style.profileFollowButton);
+	var followButtonLabel = Titanium.UI.createLabel(style.profileFollowButtonLabel);
+	followButton.add(followButtonLabel);
+
 	// 設定ボタン
 	var configButton = Titanium.UI.createButton(style.profileConfigButton);
 	if (loginUser.id == _userData.id) {
@@ -492,29 +504,32 @@ exports.createWindow = function(_userData){
 	// フォローボタン
 	followButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]followButton.click:');
-		followButton.enabled = false;
+		followButton.touchEnabled = false;
 
-		if (followButton.title == '編集する') {
+		if (followButton.type == 'edit') {
 			var profileEditWin = win.createProfileEditWindow(_userData);
 			profileEditWin.prevWin = null;
 			win.openTabWindow(profileEditWin, {animated:true});
-			followButton.enabled = true;
+			followButton.touchEnabled = true;
 		
 		} else {
 			actInd.show();
 			tabGroup.add(actInd);
-			if (followButton.title == 'フォローする') {
+			if (followButton.type == 'follow') {
 				// 友人の追加
 				model.addCloudFriends(_userData.id, function(e) {
 					Ti.API.debug('[func]addCloudFriends.callback:');
 					if (e.success) {
 						model.addLocalFriendsList(loginUser.id, [_userData]);
-				 		followButton.title = 'フォロー中';
+				 		followButton.type = 'unfollow';
+				 		followButton.backgroundColor = '#dedede';
+				 		followButtonLabel.text = 'フォロー中';
+				 		followButtonLabel.color = '#000';
 						actInd.hide();
-						followButton.enabled = true;
+						followButton.touchEnabled = true;
 					} else {
 						actInd.hide();
-						followButton.enabled = true;
+						followButton.touchEnabled = true;
 						util.errorDialog(e);
 					}
 				});
@@ -537,18 +552,21 @@ exports.createWindow = function(_userData){
 							Ti.API.debug('[func]removeCloudFriends.callback:');
 							if (e.success) {
 								model.removeLocalFriendsList(loginUser.id, _userData.id);
-						 		followButton.title = 'フォローする';
+						 		followButton.type = 'follow';
+						 		followButton.backgroundColor = 'white';
+						 		followButtonLabel.text = 'フォローする';
+						 		followButtonLabel.color = '#e74c3c';
 								actInd.hide();
-								followButton.enabled = true;
+								followButton.touchEnabled = true;
 							} else {
 								actInd.hide();
-								followButton.enabled = true;
+								followButton.touchEnabled = true;
 								util.errorDialog(e);
 							}
 						});
 					} else {
 						actInd.hide();
-						followButton.enabled = true;
+						followButton.touchEnabled = true;
 					}
 				});
 			}

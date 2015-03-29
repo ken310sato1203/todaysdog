@@ -17,15 +17,20 @@ var customTab = null;
 
 // facebook側で登録したアプリID tiapp.xmlから取得
 Facebook.appid = Ti.App.Properties.getString('ti.facebook.appid');
-Facebook.permissions = ['offline_access', 'publish_stream'];
+//Facebook.permissions = ['offline_access', 'publish_stream'];
+Facebook.permissions = ['publish_stream'];
 // iOS6以降、facebookのシングルサインオンに対応するためforceDialogAuthはfalseにすべきとあるが
 // authorizeがGET系のみとなり、reauthorizeで再度POST系の認証をする必要があるため、trueとしシングルサインオンには対応しない
 Facebook.forceDialogAuth = true;
-
 // ログイン状態の時に、facebook側でログアウトした場合
 // Facebook.loggedInはtureなのに、loginイベントが発火してしまうため、
 // fbLoginFlagで制御する
 var fbLoginFlag = false;
+
+// 起動時の背景が黒いので白のウィンドウで埋める
+var backWindow = Ti.UI.createWindow({backgroundColor: 'white'});
+backWindow.open();
+
 var loginWindow = win.createLoginWindow();
 loginWindow.hide();
 loginWindow.open();

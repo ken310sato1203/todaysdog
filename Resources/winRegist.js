@@ -124,7 +124,7 @@ exports.createWindow = function(_type){
 					if (_type == 'regist') {
 						model.registCloudUser({
 							email: nameField.value,
-							username: nameField.value,
+							username: nameField.value.substring(0,nameField.value.indexOf('@')),
 							pass: passField.value
 						}, function(e) {
 							Ti.API.debug('[func]confirmCloudUser.callback:');

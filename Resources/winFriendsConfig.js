@@ -19,6 +19,24 @@ exports.createWindow = function(_userData){
 
 	var friendsConfigRowList = [];
 
+	// 検索を表示
+	var friendsRow = Titanium.UI.createTableViewRow(style.friendsConfigListTableRow);
+	friendsConfigRowList.push(friendsRow);
+	var friendsView = Ti.UI.createView(style.friendsConfigListTitleView);
+	friendsRow.add(friendsView);
+	var friendsLabel = Ti.UI.createLabel(style.friendsConfigListTitleLabel);
+	friendsLabel.text = '検索';
+	friendsView.add(friendsLabel);
+
+	// 検索欄を表示
+	var searchRow = Titanium.UI.createTableViewRow(style.friendsConfigListTableRow);
+	friendsConfigRowList.push(searchRow);
+	searchRow.objectName = 'search';
+	var searchView = Ti.UI.createView(style.friendsConfigListItemView);
+	searchRow.add(searchView);
+	var searchField = Ti.UI.createTextField(style.friendsConfigListValueField);
+	searchView.add(searchField);
+
 	// わんともを表示
 	var friendsRow = Titanium.UI.createTableViewRow(style.friendsConfigListTableRow);
 	friendsConfigRowList.push(friendsRow);
@@ -47,25 +65,6 @@ exports.createWindow = function(_userData){
 	var followerLabel = Ti.UI.createLabel(style.friendsConfigListItemLabel);
 	followerLabel.text = 'フォロワー';
 	followerView.add(followerLabel);
-
-	// 検索を表示
-	var friendsRow = Titanium.UI.createTableViewRow(style.friendsConfigListTableRow);
-	friendsConfigRowList.push(friendsRow);
-	var friendsView = Ti.UI.createView(style.friendsConfigListTitleView);
-	friendsRow.add(friendsView);
-	var friendsLabel = Ti.UI.createLabel(style.friendsConfigListTitleLabel);
-	friendsLabel.text = '検索';
-	friendsView.add(friendsLabel);
-
-	// 探すを表示
-	var searchRow = Titanium.UI.createTableViewRow(style.friendsConfigListTableRow);
-	friendsConfigRowList.push(searchRow);
-	searchRow.objectName = 'search';
-	var searchView = Ti.UI.createView(style.friendsConfigListItemView);
-	searchRow.add(searchView);
-	var searchField = Ti.UI.createTextField(style.friendsConfigListValueField);
-	searchView.add(searchField);
-
 	
 	// フィールドを設定
 	friendsConfigTableView.data = friendsConfigRowList;

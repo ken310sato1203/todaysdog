@@ -81,6 +81,7 @@ exports.createWindow = function(_userData, _diaryData){
 			var noDataRow = Ti.UI.createTableViewRow(style.timeTableRow);
 			var noDataView = Ti.UI.createView(style.timeNoDataView);
 			var noDataLabel = Ti.UI.createLabel(style.timeNoDataLabel);
+			noDataLabel.text = 'スタンプを選んで\nわんこの記録をつけよう';
 			noDataView.add(noDataLabel);
 			var noDataImage = Ti.UI.createImageView(style.timeNoDataImage);
 			noDataView.add(noDataImage);

@@ -322,7 +322,7 @@ exports.style = {
 		top: '0dp',
 		left: '0dp',
 		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
+		height: '16dp',
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
 		color: 'white',
@@ -332,7 +332,7 @@ exports.style = {
 		top: '0dp',
 		left: '0dp',
 		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
+		height: '16dp',
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: 'white',
@@ -751,6 +751,7 @@ exports.style = {
 		top: '15dp',
 		width: '90dp',
 		height: '90dp',
+		backgroundColor: 'white',
 //		borderRadius: '45dp',
 		borderRadius: '8dp',
 	},
@@ -782,6 +783,7 @@ exports.style = {
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#696969',
 	},
+/*
 	profileFollowButton:{
 		top: '0dp',
 		bottom: '15dp',
@@ -793,7 +795,27 @@ exports.style = {
 		// ヘッダのボタンのテキストの色が反映できない
 		color: '#e74c3c',
 	},
-
+*/
+	profileFollowButton:{
+		top: '0dp',
+		bottom: '15dp',
+		width: '95dp',
+		height: '25dp',
+		style: Ti.UI.iPhone.SystemButtonStyle.PLAIN,
+		borderColor: '#dedede',
+		borderWidth: 1,
+//		borderRadius: 5,
+		// カスタムプロパティ
+		user: null,
+		followFlag: false,
+	},
+	profileFollowButtonLabel:{
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
+		color: '#000',
+		text: 'フォローする',
+	},
 	profileInfoBreedLabel:{
 		top: '5dp',
 //		left: '15dp',
@@ -1433,32 +1455,16 @@ exports.style = {
 		shadowColor: '#696969', 
 	},
 
-	userListTableView:{ 
+	userListTableListView:{
 		top: '0dp',
-		// 下のタブで表示されない余白分
+		left: '0dp',
 		bottom: '44dp',
-		backgroundColor: 'white',
-		separatorColor: 'transparent',
-		data: [],
+		backgroundColor: '#eeeeee',
+		separatorStyle: Titanium.UI.iPhone.ListViewSeparatorStyle.NONE,
 	},
-	userListUserTableRow:{ 
-		width: Ti.UI.SIZE,
+	userListUserList:{
 		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		touchEnabled: false,
-	},
-	userListNextTableRow:{ 
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
-		touchEnabled: false,
-	},
-	userListUserListView:{
-		layout: 'vertical',
-		top: '0dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
 	},
 	userListUserView:{
 		layout: 'horizontal',
@@ -1475,7 +1481,8 @@ exports.style = {
 		left: '10dp',
 		width: '54dp',
 		height: '54dp',
-		borderRadius: '27dp',
+//		borderRadius: '27dp',
+		borderRadius: '10dp',
 		// カスタムプロパティ
 		userData: null,
 	},
@@ -1483,53 +1490,86 @@ exports.style = {
 		width: '54dp',
 		height: '54dp',
 		defaultImage: '',
-		touchEnabled: false,
 	},
-	userListTextLabel:{
-		top: '10dp',
+	userListNameView:{
+		layout: 'vertical',
 		left: '10dp',
-		width: '140dp',
+		right: '10dp',
+		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+	},
+	userListNameLabel:{
+		left: '0dp',
+		height: '16dp',
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
-	userListNextView:{
-		top: '0dp',
+	userListUserLabel:{
 		left: '0dp',
-		width: '100%',
-		height: '40dp',
-		backgroundColor: '#dedede',
-	},
-	userListNextButton:{
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		backgroundColor: '#dedede',
-		textAlign: 'center',
+		height: '16dp',
+		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-		title: '続きを読む',
+		color: '#696969',
 	},
 
-	userListNoDataTableRow:{ 
-		width: Ti.UI.SIZE,
+	userListSeparateView:{
+		bottom: '0dp',
+		width: '100%',
+		height: '1dp',
+		backgroundColor: '#dedede',
+	},
+
+	userListNextList:{
 		height: Ti.UI.SIZE,
-		selectionStyle: Ti.UI.iPhone.TableViewCellSelectionStyle.NONE,
-		touchEnabled: false,
+		backgroundColor: '#eeeeee',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
+	},
+	userListNextLabel:{
+		top: '0dp',
+		width: '100%',
+		height: '50dp',
+		textAlign: 'center',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+
+	userListNoDataList:{
+		height: Ti.UI.SIZE,
+		backgroundColor: '#eeeeee',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
 	},
 	userListNoDataView:{
+		layout: 'vertical',
+		top: '80dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
+	userListNoDataLabel:{
+		textAlign: 'center',
+		font : {fontSize:12, fontWeight:'bold'},
+		color: '#3a4756',
+	},
+	userListNoDataImage:{
+		top: '10dp',
+		width : '54dp',
+		height : '54dp',
+		image : 'images/icon/i_circle.png',
+	},
+
+	userListSearchNoDataView:{
 		top: '0dp',
 		left: '0dp',
 		width: '100%',
 		height: '100%',
 	},
-	userListNoDataLabel:{
+	userListSearchNoDataLabel:{
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
 		text: '検索結果はありませんでした'
 	},
 
-	userFollowButton:{
+	userListFollowButton:{
 		right: '10dp',
 		width: '95dp',
 		height: '25dp',
@@ -1539,12 +1579,12 @@ exports.style = {
 //		borderRadius: 5,
 		// カスタムプロパティ
 		user: null,
-		clickFlag: false,
+		followFlag: false,
 	},
-	userFollowButtonLabel:{
+	userListFollowButtonLabel:{
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		font: {fontSize:12, fontFamily:'Helvetica Neue', fontWeight:'bold'},
 		color: '#000',
 		text: 'フォローする',
 	},
@@ -2525,6 +2565,7 @@ exports.style = {
 
 	timeNoDataView:{
 		layout: 'vertical',
+		top: '80dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
@@ -2532,7 +2573,6 @@ exports.style = {
 		textAlign: 'center',
 		font : {fontSize:12, fontWeight:'bold'},
 		color: '#3a4756',
-		text: 'スタンプを選んで\nわんこの記録をつけよう', 
 	},
 	timeNoDataImage:{
 		top: '10dp',
@@ -2660,7 +2700,8 @@ exports.style = {
 	friendsSearchButton:{
 		width: '28dp',
 		height: '28dp',
-		backgroundImage:'images/icon/w_friends_search.png',
+//		backgroundImage:'images/icon/w_friends_search.png',
+		backgroundImage:'images/icon/w_friends_plus.png',
 	},
 	friendsCommentButtonView:{
 		layout: 'horizontal',
@@ -2691,6 +2732,7 @@ exports.style = {
 		top: '0dp',
 		left: '0dp',
 		bottom: '44dp',
+		backgroundColor: '#eeeeee',
 		separatorStyle: Titanium.UI.iPhone.ListViewSeparatorStyle.NONE,
 	},
 
@@ -2836,17 +2878,26 @@ exports.style = {
 	},
 
 	friendsNoDataList:{
-		height: '50dp',
+		height: Ti.UI.SIZE,
 		backgroundColor: '#eeeeee',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
 	},
+	friendsNoDataView:{
+		layout: 'vertical',
+		top: '80dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
 	friendsNoDataLabel:{
-		top: '0dp',
-		width: '100%',
-		height: '100%',
 		textAlign: 'center',
-		font: {fontSize:14, fontFamily:'Helvetica Neue'},
-		color: '#696969',
+		font : {fontSize:12, fontWeight:'bold'},
+		color: '#3a4756',
+	},
+	friendsNoDataImage:{
+		top: '10dp',
+		width : '54dp',
+		height : '54dp',
+		image : 'images/icon/i_circle.png',
 	},
 
 	friendsPreloadImage:{
@@ -2877,6 +2928,7 @@ exports.style = {
 		top: '0dp',
 		left: '0dp',
 		bottom: '44dp',
+		backgroundColor: '#eeeeee',
 		separatorStyle: Titanium.UI.iPhone.ListViewSeparatorStyle.NONE,
 	},
 
@@ -3007,17 +3059,26 @@ exports.style = {
 	},
 
 	friendsCommentNoDataList:{
-		height: '50dp',
+		height: Ti.UI.SIZE,
 		backgroundColor: '#eeeeee',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
 	},
+	friendsCommentNoDataView:{
+		layout: 'vertical',
+		top: '80dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+	},
 	friendsCommentNoDataLabel:{
-		top: '0dp',
-		width: '100%',
-		height: '100%',
 		textAlign: 'center',
-		font: {fontSize:14, fontFamily:'Helvetica Neue'},
-		color: '#696969',
+		font : {fontSize:12, fontWeight:'bold'},
+		color: '#3a4756',
+	},
+	friendsCommentNoDataImage:{
+		top: '10dp',
+		width : '54dp',
+		height : '54dp',
+		image : 'images/icon/i_circle.png',
 	},
 
 	friendsCommentPreloadImage:{
@@ -3046,7 +3107,7 @@ exports.style = {
 		color: 'white', 
 		shadowOffset: {x:0,y:-1},
 		shadowColor: '#696969', 
-		text: 'わんとも設定', 
+		text: 'わんとも検索', 
 	},
 
 	friendsConfigTableView:{ 
@@ -3193,6 +3254,7 @@ exports.style = {
 	},
 	todayNoDataView:{
 		layout: 'vertical',
+		top: '80dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		visible: false,
@@ -3201,7 +3263,6 @@ exports.style = {
 		textAlign: 'center',
 		font : {fontSize:12, fontWeight:'bold'},
 		color: '#3a4756',
-		text: '１日１枚、写真を撮って\nわんこの日記をつけよう', 
 	},
 	todayNoDataImage:{
 		top: '10dp',

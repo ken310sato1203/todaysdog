@@ -183,7 +183,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 			Ti.API.debug('[event]postWin.prevWin.refresh:');
 			actInd.hide();
 			actBackView.hide();
-			postButton.enabled = true;
+			postButton.touchEnabled = true;
 			postWin.close({animated:true});
 		});
 	};
@@ -427,7 +427,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	// 投稿ボタンをクリック
 	postButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]postButton.click:');
-		postButton.enabled = false;
+		postButton.touchEnabled = false;
 		postWin.add(actBackView);
 		actInd.show();
 		tabGroup.add(actInd);
@@ -459,7 +459,7 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 			} else {
 				actInd.hide();
 				actBackView.hide();
-				postButton.enabled = true;
+				postButton.touchEnabled = true;
 				util.errorDialog(e);
 			}
 		});

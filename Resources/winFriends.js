@@ -88,7 +88,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 					text: nameValue,
 				},
 				friendsUserLabel: {
-					text: (_articleList[i].user.indexOf('@') > 0) ? _articleList[i].user.substring(0,_articleList[i].user.indexOf('@')) : _articleList[i].user,
+					text: _articleList[i].user,
+//					text: (_articleList[i].user.indexOf('@') > 0) ? _articleList[i].user.substring(0,_articleList[i].user.indexOf('@')) : _articleList[i].user,
 				},
 				friendsTextLabel: {
 					text: _articleList[i].text,
@@ -121,7 +122,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		var noDataItem = [{
 			template: 'nodata',
 			friendsNoDataLabel: {
-				text: '投稿された記事はありません',
+				text: 'わんこ写真の投稿は\nありませんでした', 
 			},
 		}];
 
@@ -261,8 +262,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	commentButtonView.add(commentCountLabel);
 
 	// 友人を検索するボタン
-	var configButton = Titanium.UI.createButton(style.friendsConfigButton);
-	friendsWin.rightNavButton = configButton;
+	var searchButton = Titanium.UI.createButton(style.friendsSearchButton);
+	friendsWin.rightNavButton = searchButton;
 
 	var dateListTemplate = {
 		properties: style.friendsDataList,
@@ -348,9 +349,18 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	var noDataListTemplate = {
 		properties: style.friendsNoDataList,
 		childTemplates: [{
-			type: 'Ti.UI.Label',
-			bindId: 'friendsNoDataLabel',
-			properties: style.friendsNoDataLabel,
+			type: 'Ti.UI.View',
+			bindId: 'friendsNoDataView',
+			properties: style.friendsNoDataView,
+			childTemplates: [{
+				type: 'Ti.UI.Label',
+				bindId: 'friendsNoDataLabel',
+				properties: style.friendsNoDataLabel,
+			},{
+				type: 'Ti.UI.ImageView',
+				bindId: 'friendsNoDataImage',
+				properties: style.friendsNoDataImage,
+			}]
 		}]
 	};	
 	var listView = Ti.UI.createListView(style.friendsTableListView);
@@ -447,8 +457,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	});
 
 	// 設定ボタン
-	configButton.addEventListener('click', function(e){
-		Ti.API.debug('[event]configButton.click:');
+	searchButton.addEventListener('click', function(e){
+		Ti.API.debug('[event]searchButton.click:');
 		var friendsConfigWin = win.createFriendsConfigWindow(_userData);
 		friendsConfigWin.prevWin = friendsWin;
 		win.openTabWindow(friendsConfigWin, {animated:true});

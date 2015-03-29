@@ -355,8 +355,7 @@ exports.model = {
 						if (user.custom_fields.like != null)  { userData.like = user.custom_fields.like; }
 					}
 					if (user.photo) {
-						userData.icon = user.photo.urls.getCloudUser
-						;
+						userData.icon = user.photo.urls.square_75;
 					}
 					userList.push(userData);
 				}				

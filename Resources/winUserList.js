@@ -6,210 +6,157 @@ exports.createWindow = function(_type, _userData){
 
 	var loginUser = model.getLoginUser();
 
-	// ユーザ一覧の表示件数
-	var userCount = 9;
-	// 前回更新時に読み込んだ記事の最終インデックス
-	var prevUserIndex = null;
-	// 次回更新時に読み込むべきユーザ一覧があるかどうかのフラグ
-	var nextUserFlag = false;
-
 	// 記事データの取得ページ
-	var searchPage = 1;
+	var articlePage = 1;
 	// 記事データの取得件数
-	var searchCount = 6;
-	// 更新時に読み込むフラグ
-	var nextSearchFlag = true;
-	
-	// ユーザ一覧の行の追加
-	var getUserTableRow = function(_userList) {
-		Ti.API.debug('[func]getUserTableRow:');
-		var userRow = Ti.UI.createTableViewRow(style.userListUserTableRow);
-		var userListView = Ti.UI.createView(style.userListUserListView);
-		userRow.add(userListView);
-		
+	var articleCount = 10;
+	// 続きを読むフラグ
+	var nextArticleFlag = false;
+	var nextTarget = null;
+
+	// ユーザの追加
+	var appendUserList = function(_userList) {
+		Ti.API.debug('[func]appendUserList:');
+
 		for (var i=0; i<_userList.length; i++) {	
-			Ti.API.debug('_userList[i].user:' + _userList[i].user);
-			var userView = Ti.UI.createView(style.userListUserView);
-			userListView.add(userView);
-			var iconView = Ti.UI.createView(style.userListIconView);
-			// カスタムプロパティにユーザデータを格納
-			iconView.userData = _userList[i];
-//			iconView.backgroundImage = _userList[i].icon;
-			userView.add(iconView);
-			var iconImage = Ti.UI.createImageView(style.userListIconImage);
-			iconImage.image = _userList[i].icon;
-			iconView.add(iconImage);
 
-			var textLabel = Ti.UI.createLabel(style.userListTextLabel);
-			if (_userList[i].name != '') {
-				textLabel.text = _userList[i].name + '\n' + _userList[i].user;
-			} else {
-				textLabel.text = _userList[i].user;				
-			}
-			
-			userView.add(textLabel);
-
-			// 各ユーザ一覧のタップでプロフィール画面へ遷移
-			iconView.addEventListener('click',function(e){
-				Ti.API.debug('[event]iconView.click:');
-				if (e.source.userData.id != loginUser.id) {
-					e.source.opacity = 0.5;
-					var profileWin = win.createProfileWindow(e.source.userData);
-					win.openTabWindow(profileWin, {animated:true});
-					e.source.opacity = 1.0;
-				}
-			});
-
-			if (_userList[i].id != loginUser.id) {
-				// 「フォローする」未フォローユーザをフォローするボタン
-				var followButton = Titanium.UI.createButton(style.userFollowButton);
-				userView.add(followButton);
-				followButton.id = _userList[i].id;
-				var followButtonLabel = Ti.UI.createLabel(style.userFollowButtonLabel);
-				followButton.add(followButtonLabel);
-	
+			if (_userList[i].id != loginUser.id) {	
+				var followText = 'フォローする';
+				var followTextColor = '#e74c3c';
+				var followColor = 'white';
+				var followType = 'follow';
 				if (model.checkLocalFriendsList(loginUser.id, _userList[i].id)) {
-					followButton.backgroundColor = '#dedede';
-					followButton.clickFlag = true;
-					followButtonLabel.text = 'フォロー中';
-				} else {
-					followButtonLabel.text = 'フォローする';
+					followText = 'フォロー中';
+					followTextColor = '#000';
+					followColor = '#dedede';
+					followType = 'unfollow';
 				}
-
-				// 「フォロー中」「フォローする」ボタン
-				followButton.addEventListener('click', function(e){
-					Ti.API.debug('[event]followButton.click:');
-					e.source.enabled = false;
-
-					if (e.source.clickFlag) {
-						var alertDialog = Titanium.UI.createAlertDialog({
-						    title: 'フォローを解除しますか？',
-				//		    message: 'フォローを解除しますか？',
-							buttonNames: ['キャンセル','OK'],
-						    cancel: 1,
-						});
-						alertDialog.addEventListener('click',function(alert){
-							// OKの場合
-							if(alert.index == 1){
-								actInd.show();
-								tabGroup.add(actInd);
-
-								var source = e.source;
-								// 友人の削除
-								model.removeCloudFriends(source.id, function(e) {
-									Ti.API.debug('[func]removeCloudFriends.callback:');
-									if (e.success) {
-										model.removeLocalFriendsList(loginUser.id, source.id);
-										source.backgroundColor = 'white';
-										source.getChildren()[0].text = 'フォローする';
-										actInd.hide();
-										source.clickFlag = false;
-									} else {
-										actInd.hide();
-										source.clickFlag = false;
-										util.errorDialog(e);
-									}
-								});
-							}
-						});
-						alertDialog.show();	
 	
-					} else {
-						actInd.show();
-						tabGroup.add(actInd);
-						
-						var source = e.source;
-						// 友人の追加
-						model.addCloudFriends(source.id, function(e) {
-							Ti.API.debug('[func]addCloudFriends.callback:');
-							if (e.success) {
-								model.addLocalFriendsList(loginUser.id, [source]);
-								source.backgroundColor = '#dedede';
-								source.getChildren()[0].text = 'フォロー中';
-								actInd.hide();
-								source.clickFlag = true;
-							} else {
-								actInd.hide();
-								source.clickFlag = true;
-								util.errorDialog(e);
-							}
-						});
-					}
-
-					e.source.enabled = true;
-				});
+				var userItem = [{
+					template: 'user',
+					userData: _userList[i],
+					userListIconImage: {
+						image: _userList[i].icon,
+					},
+					userListNameView: {
+						top: (_userList[i].name != '') ? '16dp' : '8dp',
+						width: (style.commonSize.screenWidth - (54+95+40)) + 'dp',
+					},
+					userListNameLabel: {
+						text: _userList[i].name,
+					},
+					userListUserLabel: {
+						text: _userList[i].user,
+					},
+					userListFollowButton: {
+						backgroundColor: followColor,
+						type: followType,
+					},
+					userListFollowButtonLabel: {
+						text: followText,
+						color: followTextColor,
+					},
+				}];
+	
+				listSection.appendItems(userItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
 			}
 		}
-		
-		return userRow;
 	};
-
-	// 「続きを読む」ボタンの追加
-	var appendNextButton = function() {
-		Ti.API.debug('[func]appendNextButton:');
-		var nextRow = Ti.UI.createTableViewRow(style.userListNextTableRow);
-		userListTableView.appendRow(nextRow);
 	
-		var nextView = Ti.UI.createView(style.userListNextView);
-		nextRow.add(nextView);
-	
-		// 「続きを読む」ボタンをテーブルに追加	
-		var nextButton = Ti.UI.createButton(style.userListNextButton);
-		nextView.add(nextButton);
-		
-		// 「続きを読む」ボタンをタップした場合、続きのユーザ一覧を追加してからボタンを削除
-		nextButton.addEventListener('click', function(e) {
-			updateUserList();
-		});		
-	};
-
-	// データなしラベルの追加	
+	// ユーザがない場合の追加
 	var appendNoDataLabel = function() {
 		Ti.API.debug('[func]appendNoDataLabel:');
-		var noDataTableRow = Ti.UI.createTableViewRow(style.userListNoDataTableRow);
-		var noDataView = Ti.UI.createView(style.userListNoDataView);
-		noDataTableRow.add(noDataView);	
-		var noDataLabel = Ti.UI.createLabel(style.userListNoDataLabel);
-		noDataView.add(noDataLabel);
-		userListTableView.appendRow(noDataTableRow);
-	};
 
-	// ユーザ一覧の追加
-	var appendUser = function(_userList) {
-		Ti.API.debug('[func]appendUser:');
-		// 「続きを読む」ボタンを押した場合、削除するボタンのインデックスを取得
-		var deleteRowIndex = null;
-		if (nextUserFlag) {
-			deleteRowIndex = userListTableView.data[0].rowCount - 1;
+		var nodataText = '';
+		if (_type == "search") {
+			nodataText = 'この名前で始まるわんともは\n見つかりませんでした';
+		} else if (_type == "follower") {
+			nodataText = 'フォローされているわんともは\n見つかりませんでした';
+		} else if (_type == "follow") {
+			nodataText = 'フォローしているわんともは\n見つかりませんでした';
 		}
-
-		// 取得したユーザ一覧が表示件数以下の場合
-		if (_userList.length < userCount + 1) {
-			// 取得したユーザ一覧をテーブルに追加
-			userListTableView.appendRow(getUserTableRow(_userList));
-			// 「続きを読む」ボタンをタップした場合、ボタンを削除
-			if (nextUserFlag) {
-				userListTableView.deleteRow(deleteRowIndex);
+		var noDataItem = [{
+			template: 'nodata',
+			userListNoDataLabel: {
+				text: nodataText,
 			}
-			// 次回更新用に続きのユーザ一覧がないフラグを設定
-			nextUserFlag = false;
+		}];
 
-		// 取得したユーザ一覧が表示件数より1件多い場合、「続きを読む」ボタンを表示
+		listSection.appendItems(noDataItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
+	};	
+
+	// フォロー処理
+	var changeFollow = function(e) {
+		Ti.API.debug('[func]changeFollow:');
+		var item = e.section.getItemAt(e.itemIndex);
+		item.index = e.itemIndex;
+		item.userListFollowButton.touchEnabled = false;
+		listView.touchEnabled = false;
+
+		if (item.userListFollowButton.type == 'unfollow') {
+			var alertDialog = Titanium.UI.createAlertDialog({
+			    title: 'フォローを解除しますか？',
+	//		    message: 'フォローを解除しますか？',
+				buttonNames: ['キャンセル','OK'],
+			    cancel: 1,
+			});
+			alertDialog.addEventListener('click',function(alert){
+				// OKの場合
+				if(alert.index == 1){
+					actInd.show();
+					tabGroup.add(actInd);
+
+					// 友人の削除
+					model.removeCloudFriends(item.userData.id, function(e) {
+						Ti.API.debug('[func]removeCloudFriends.callback:');
+						if (e.success) {
+							model.removeLocalFriendsList(loginUser.id, item.userData.id);
+							item.userListFollowButton.backgroundColor = 'white';
+							item.userListFollowButtonLabel.text = 'フォローする';
+							item.userListFollowButtonLabel.color = '#e74c3c';
+							item.userListFollowButton.type = 'follow';
+							item.userListFollowButton.touchEnabled = true;
+							listView.touchEnabled = true;
+							listSection.updateItemAt(item.index, item);
+							actInd.hide();
+						} else {
+							item.userListFollowButton.touchEnabled = true;
+							listView.touchEnabled = true;
+							actInd.hide();
+							util.errorDialog(e);
+						}
+					});
+				}
+			});
+			alertDialog.show();	
+
 		} else {
-			// 多く取得した1件のデータを削除
-			_userList.pop();
-			// 取得したユーザ一覧をテーブルに追加
-			userListTableView.appendRow(getUserTableRow(_userList), {animated:true});
-			// 「続きを読む」ボタンを追加
-			appendNextButton();
-			// 「続きを読む」ボタンをタップした場合、ボタンを削除
-			if (nextUserFlag) {
-				userListTableView.deleteRow(deleteRowIndex);
-			}
-			// 次回更新用に続きのユーザ一覧があるフラグを設定
-			nextUserFlag = true;
+			actInd.show();
+			tabGroup.add(actInd);
+			
+			// 友人の追加
+			model.addCloudFriends(item.userData.id, function(e) {
+				Ti.API.debug('[func]addCloudFriends.callback:');
+				if (e.success) {
+					model.addLocalFriendsList(loginUser.id, [item.userData]);
+					item.userListFollowButton.backgroundColor = '#dedede';
+					item.userListFollowButtonLabel.text = 'フォロー中';
+					item.userListFollowButtonLabel.color = '#000';
+					item.userListFollowButton.type = 'unfollow';
+					item.userListFollowButton.touchEnabled = true;
+					listView.touchEnabled = true;
+					listSection.updateItemAt(item.index, item);
+					actInd.hide();
+				} else {
+					item.userListFollowButton.touchEnabled = true;
+					listView.touchEnabled = true;
+					actInd.hide();
+					util.errorDialog(e);
+				}
+			});
 		}
-	};
+	};	
+
 
 	// ユーザ一覧の更新
 	var updateUserList = function() {
@@ -220,19 +167,37 @@ exports.createWindow = function(_type, _userData){
 			if (searchField.value != '') {
 				model.searchCloudFriends({
 					name: searchField.value,
-					page: searchPage,
-					count: searchCount
+					page: articlePage,
+					count: articleCount
 				}, function(e) {
 					Ti.API.debug('[func]searchCloudFriends.callback:');
 					if (e.success) {
 						if (e.userList.length > 0) {
-							appendUser(e.userList);
-							searchPage++;
+							appendUserList(e.userList);
+							if (nextTarget != null) {
+								// 続きを読むの行をdeleteだとうまくいかないのでupdateで高さを0にし、追加後に反映
+								listSection.updateItemAt(nextTarget.index, nextTarget.item);
+								nextTarget = null;
+							};
+	
+							if (e.meta.total_pages == articlePage) {
+								nextArticleFlag = false;
+							} else if (e.meta.total_pages > articlePage) {
+								articlePage++;
+								nextArticleFlag = true;
+								var nextItem = [{
+									template: 'next',
+									userListNextLabel: {
+										text: '続きを読む',
+									},
+								}];
+								listSection.appendItems(nextItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
+	
+							}
 						} else {
-							if (searchPage == 1) {
+							if (articlePage == 1) {
 								appendNoDataLabel();
 							}
-							nextSearchFlag = false;							
 						}
 			
 					} else {
@@ -246,19 +211,37 @@ exports.createWindow = function(_type, _userData){
 			if (_type == "follower") {
 				model.getCloudFollower({
 					userId: _userData.id,
-					page: searchPage,
-					count: searchCount
+					page: articlePage,
+					count: articleCount
 				}, function(e) {
 					Ti.API.debug('[func]getCloudFollower.callback:');
 					if (e.success) {
 						if (e.userList.length > 0) {
-							appendUser(e.userList);
-							searchPage++;
+							appendUserList(e.userList);
+							if (nextTarget != null) {
+								// 続きを読むの行をdeleteだとうまくいかないのでupdateで高さを0にし、追加後に反映
+								listSection.updateItemAt(nextTarget.index, nextTarget.item);
+								nextTarget = null;
+							};
+	
+							if (e.meta.total_pages == articlePage) {
+								nextArticleFlag = false;
+							} else if (e.meta.total_pages > articlePage) {
+								articlePage++;
+								nextArticleFlag = true;
+								var nextItem = [{
+									template: 'next',
+									userListNextLabel: {
+										text: '続きを読む',
+									},
+								}];
+								listSection.appendItems(nextItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
+	
+							}
 						} else {
-							if (searchPage == 1) {
+							if (articlePage == 1) {
 								appendNoDataLabel();
 							}
-							nextSearchFlag = false;							
 						}
 			
 					} else {
@@ -270,19 +253,37 @@ exports.createWindow = function(_type, _userData){
 			} else if (_type == "follow") {
 				model.getCloudFollow({
 					userId: _userData.id,
-					page: searchPage,
-					count: searchCount
+					page: articlePage,
+					count: articleCount
 				}, function(e) {
 					Ti.API.debug('[func]getCloudFollow.callback:');
 					if (e.success) {
 						if (e.userList.length > 0) {
-							appendUser(e.userList);
-							searchPage++;
+							appendUserList(e.userList);
+							if (nextTarget != null) {
+								// 続きを読むの行をdeleteだとうまくいかないのでupdateで高さを0にし、追加後に反映
+								listSection.updateItemAt(nextTarget.index, nextTarget.item);
+								nextTarget = null;
+							};
+	
+							if (e.meta.total_pages == articlePage) {
+								nextArticleFlag = false;
+							} else if (e.meta.total_pages > articlePage) {
+								articlePage++;
+								nextArticleFlag = true;
+								var nextItem = [{
+									template: 'next',
+									userListNextLabel: {
+										text: '続きを読む',
+									},
+								}];
+								listSection.appendItems(nextItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
+	
+							}
 						} else {
-							if (searchPage == 1) {
+							if (articlePage == 1) {
 								appendNoDataLabel();
 							}
-							nextSearchFlag = false;							
 						}
 			
 					} else {
@@ -293,7 +294,34 @@ exports.createWindow = function(_type, _userData){
 
 		}
 	};
-	
+
+/*	
+	// 最上部から下スクロールで最新データを更新する用のヘッダを作成
+	var getTableHeader = function() {
+		Ti.API.debug('[func]getTableHeader:');
+
+		var tableHeader = Ti.UI.createView(style.commonTableHeader);
+		var headerBorder = Ti.UI.createView(style.commonHeaderBorder);
+		tableHeader.add(headerBorder);
+		var updateArrowImage = Ti.UI.createImageView(style.commonUpdateArrowImage);
+		tableHeader.add(updateArrowImage);
+		var pullLabel = Ti.UI.createLabel(style.commonPullLabel);
+		tableHeader.add(pullLabel);
+		var lastUpdatedLabel = Ti.UI.createLabel(style.commonLastUpdatedLabel);
+		lastUpdatedLabel.text = 'Last Updated: ' + util.getFormattedNowDateTime();
+		tableHeader.add(lastUpdatedLabel);
+		var updateIndicator = Ti.UI.createActivityIndicator(style.commonUpdateIndicator);
+		tableHeader.add(updateIndicator);
+
+		// 参照用
+		tableHeader.updateArrowImage = updateArrowImage;
+		tableHeader.pullLabel = pullLabel;
+		tableHeader.lastUpdatedLabel = lastUpdatedLabel;
+		tableHeader.updateIndicator = updateIndicator;
+		
+		return tableHeader;
+	};
+*/	
 // ---------------------------------------------------------------------
 	var userListWin = Ti.UI.createWindow(style.userListWin);
 	// ロード用画面
@@ -335,13 +363,161 @@ exports.createWindow = function(_type, _userData){
 	var backButton = Titanium.UI.createButton(style.commonBackButton);
 	userListWin.leftNavButton = backButton;
 
-	var userListTableView = Ti.UI.createTableView(style.userListTableView);
-	userListWin.add(userListTableView);
+	var userListTemplate = {
+		properties: style.userListUserList,
+		childTemplates: [{
+			type: 'Ti.UI.View',
+			bindId: 'userListUserView',
+			properties: style.userListUserView,
+			childTemplates: [{
+				type: 'Ti.UI.View',
+				bindId: 'userListIconView',
+				properties: style.userListIconView,
+				childTemplates: [{
+					type: 'Ti.UI.ImageView',
+					bindId: 'userListIconImage',
+					properties: style.userListIconImage
+				}]
+			},{
+				type: 'Ti.UI.View',
+				bindId: 'userListNameView',
+				properties: style.userListNameView,
+				childTemplates: [{
+					type: 'Ti.UI.Label',
+					bindId: 'userListNameLabel',
+					properties: style.userListNameLabel,
+				},{
+					type: 'Ti.UI.Label',
+					bindId: 'userListUserLabel',
+					properties: style.userListUserLabel,
+				}]
+			},{
+				type: 'Ti.UI.Button',
+				bindId: 'userListFollowButton',
+				properties: style.userListFollowButton,
+				events: {
+					click: function(e) {
+						Ti.API.debug('[event]userListFollowButton.click:');
+						changeFollow(e);
+					},
+				},
+				childTemplates: [{
+					type: 'Ti.UI.Label',
+					bindId: 'userListFollowButtonLabel',
+					properties: style.userListFollowButtonLabel
+				}],
+			}]
+		},{
+			type: 'Ti.UI.View',
+			bindId: 'userListSeparateView',
+			properties: style.userListSeparateView,
+		}]
+	};
 
-	// 初回読み込み時に、ユーザ一覧を更新
+	var nextListTemplate = {
+		properties: style.userListNextList,
+		childTemplates: [{
+			type: 'Ti.UI.Label',
+			bindId: 'userListNextLabel',
+			properties: style.userListNextLabel,
+		}]
+	};
+	var noDataListTemplate = {
+		properties: style.userListNoDataList,
+		childTemplates: [{
+			type: 'Ti.UI.View',
+			bindId: 'userListNoDataView',
+			properties: style.userListNoDataView,
+			childTemplates: [{
+				type: 'Ti.UI.Label',
+				bindId: 'userListNoDataLabel',
+				properties: style.userListNoDataLabel,
+			},{
+				type: 'Ti.UI.ImageView',
+				bindId: 'userListNoDataImage',
+				properties: style.userListNoDataImage,
+			}]
+		}]
+	};		
+	var listView = Ti.UI.createListView(style.userListTableListView);
+	listView.templates = {
+		'user': userListTemplate,
+		'next': nextListTemplate,
+		'nodata': noDataListTemplate
+   };
+	
+	var listSection = Ti.UI.createListSection();
+	listView.setSections([listSection]);
+	userListWin.add(listView);
+
+	// ビューの更新
 	updateUserList();
+	
+//	listView.pullView = getTableHeader();
 
 // ---------------------------------------------------------------------
+/*	
+	function resetPullView(){
+		listView.pullView.updateIndicator.hide();    
+		listView.pullView.updateArrowImage.show();
+		listView.pullView.pullLabel.text = 'Pull down to refresh...';
+		listView.pullView.lastUpdatedLabel.text = 'Last Updated: ' + util.getFormattedNowDateTime();
+		listView.setContentInsets({top:0}, {animated:true});
+	}
+	
+	listView.addEventListener('pull', function(e){
+		if (e.active == false) {
+			listView.pullView.pullLabel.text = 'Pull down to refresh...';
+		} else {
+			listView.pullView.pullLabel.text = 'Release to refresh...';
+		}
+	});
+	listView.addEventListener('pullend', function(e){
+		listView.pullView.pullLabel.text = 'Updating...';
+		listView.pullView.updateArrowImage.hide();
+		listView.pullView.updateIndicator.show();
+		listView.setContentInsets({top:80}, {animated:true});
+		setTimeout(function(){
+			articlePage = 1;
+			nextArticleFlag = false;
+			listSection.setItems([], {animated:false});
+
+			updateUserList();
+			resetPullView();
+		}, 2000);
+	});
+*/
+	
+// ---------------------------------------------------------------------
+	// ユーザをクリック
+	listView.addEventListener('itemclick', function(e){
+		Ti.API.debug('[event]listView.itemclick:');
+		listView.touchEnabled = false;
+		var item = e.section.getItemAt(e.itemIndex);
+
+		if (item.template == 'user') {
+//			if (e.bindId == 'userListUserView') {
+				if (item.userData.id != loginUser.id) {
+//					item.userListIconView.opacity = 0.5;
+					var profileWin = win.createProfileWindow(item.userData);
+					win.openTabWindow(profileWin, {animated:true});
+//					item.userListIconView.opacity = 1.0;
+				}
+//			}
+			listView.touchEnabled = true;
+
+		} else if (item.template == 'next') {
+			// 続きを読むの行をdeleteだとうまくいかないのでupdateで高さを0にし、追加後に反映
+			item.userListNextLabel.text = '';
+			item.userListNextLabel.height = '0dp';
+			nextTarget = {index:e.itemIndex, item:item};
+			updateUserList();
+			listView.touchEnabled = true;
+		} else {
+			listView.touchEnabled = true;
+		}
+	});
+
 	// 戻るボタンをクリック
 	backButton.addEventListener('click', function(e){
 		Ti.API.debug('[event]backButton.click:');
@@ -367,18 +543,10 @@ exports.createWindow = function(_type, _userData){
 	// 検索入力の送信ボタンをクリック
 	searchField.addEventListener('return',function(e){
 		Ti.API.debug('[event]searchField.return:');
-		userListTableView.data = [];
-    	searchPage = 1;
-    	nextSearchFlag = true;
+		articlePage = 1;
+		nextArticleFlag = false;
+		listSection.setItems([], {animated:false});
 		updateUserList();
-	});
-
-	// スクロールの一番下で発生するイベント
-	userListTableView.addEventListener('scrollEnd',function(){
-        Ti.API.debug('[event]userListTableView.scrollEnd:');
-		if (nextSearchFlag) {
-			updateUserList();
-		}
 	});
 
 	return userListWin;
