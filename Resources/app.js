@@ -29,6 +29,11 @@ var fbLoginFlag = false;
 
 // 起動時の背景が黒いので白のウィンドウで埋める
 var backWindow = Ti.UI.createWindow({backgroundColor: 'white'});
+
+// ロード用画面
+var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
+actInd.show();
+backWindow.add(actInd);
 backWindow.open();
 
 var loginWindow = win.createLoginWindow();

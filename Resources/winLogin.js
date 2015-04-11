@@ -49,7 +49,7 @@ exports.createWindow = function(){
 		win3.fireEvent('refresh');
 	
 		// バッジの初期化
-		Ti.UI.iPhone.appBadge = null;
+//		Titanium.UI.iPhone.setAppBadge('0');
 	
 	/*	
 		// アプリを閉じた時

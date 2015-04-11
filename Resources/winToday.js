@@ -168,7 +168,7 @@ exports.createWindow = function(_userData){
 		var dayView = Ti.UI.createView(style.todayDayView);
 		dayView.add(dayLabelView);
 		menuListView.add(dayView);
-	
+
 		// カレンダーボタンの表示
 		var calendarView = Ti.UI.createView(style.todayCalendarView);
 		menuListView.add(calendarView);
@@ -278,13 +278,14 @@ exports.createWindow = function(_userData){
 		var noDataImage = Ti.UI.createImageView(style.todayNoDataImage);
 		noDataView.add(noDataImage);
 
+/*
 		// 日付
 		var dayLWeekView = Ti.UI.createView(style.todayDayWeekView);
 		var dayWeekLabel = Ti.UI.createLabel(style.todayDayWeekLabel);
 		dayLWeekView.add(dayWeekLabel);
 		dayWeekLabel.text = now.month + '/' + now.day + '(' + now.weekday.text + ')';
 		dayPhotoView.add(dayLWeekView);
-		
+*/		
 		return dayPhotoView;
 	};
 
@@ -560,6 +561,9 @@ exports.createWindow = function(_userData){
 				// 今日のフォト・スタンプリストの表示
 				todayTableView.data = [];
 				todayTableView.setData(getTodayRowList());
+				if (todayWin.photoImage.visible == false) {
+					todayWin.noDataView.visible = true;					
+				}
 			}
 		}
 

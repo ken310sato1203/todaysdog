@@ -305,6 +305,9 @@ exports.createWindow = function(_type, _articleData){
 	var backButton = Titanium.UI.createButton(style.commonBackButton);
 	photoWin.leftNavButton = backButton;
 
+	// ロード用画面
+	var actInd = Ti.UI.createActivityIndicator(style.commonActivityIndicator);
+
 	// ライクボタンの表示
 	var likeStampImage = {};
 	if (_type == "friends") {

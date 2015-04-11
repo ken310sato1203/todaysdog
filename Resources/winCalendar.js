@@ -222,51 +222,59 @@ exports.createWindow = function(_userData){
 
 	// スライド用アニメーション
 	var slideView = Ti.UI.createAnimation({
-		duration : 500,
 		left : style.commonSize.screenWidth + 'dp',
+		duration : 500
 	});
 
 	// 前月カレンダーの表示
 	var prevCalView = function() {
 		Ti.API.debug('[func]prevCalView:');
+		// 多重クリック防止
 		if (slideEnable) {
 			slideView.left = style.commonSize.screenWidth + 'dp';
-			thisDiaryView.animate(slideView);
-			if (month == 1) {
-				month = 12;
-				year--;
-			} else {
-				month--;
-			}
-	
-			// タイトルの年月
-			monthTitle.text = year + '年' + month + '月';
-			// カレンダーの表示
-			var articleList = getArticleList(year, month);
-			thisDiaryView = getCalView(articleList, year, month);
-			calendarWin.add(thisDiaryView);
+			thisDiaryView.borderColor = '#dedede';
+			thisDiaryView.animate(slideView, function(e){
+				if (month == 1) {
+					month = 12;
+					year--;
+				} else {
+					month--;
+				}
+		
+				// タイトルの年月
+				monthTitle.text = year + '年' + month + '月';
+				// 当月データの取得
+				var articleList = getArticleList(year, month);
+				// カレンダーの表示
+				thisDiaryView = getCalView(articleList, year, month);
+				calendarWin.add(thisDiaryView);
+			});
 		}
 	};
 
 	// 翌月カレンダーの表示
 	var nextCalView = function() {
 		Ti.API.debug('[func]nextCalView:');
+		// 多重クリック防止
 		if (slideEnable) {
 			slideView.left = (style.commonSize.screenWidth * -1) + 'dp';
-			thisDiaryView.animate(slideView);
-			if (month == 12) {
-				month = 1;
-				year++;
-			} else {
-				month++;
-			}
-	
-			// タイトルの年月
-			monthTitle.text = year + '年' + month + '月';
-			// カレンダーの表示
-			var articleList = getArticleList(year, month);
-			thisDiaryView = getCalView(articleList, year, month);
-			calendarWin.add(thisDiaryView);
+			thisDiaryView.borderColor = '#dedede';
+			thisDiaryView.animate(slideView, function(e){
+				if (month == 12) {
+					month = 1;
+					year++;
+				} else {
+					month++;
+				}
+		
+				// タイトルの年月
+				monthTitle.text = year + '年' + month + '月';
+				// 当月データの取得
+				var articleList = getArticleList(year, month);
+				// カレンダーの表示
+				thisDiaryView = getCalView(articleList, year, month);
+				calendarWin.add(thisDiaryView);
+			});
 		}
 	};
 
@@ -362,6 +370,9 @@ exports.createWindow = function(_userData){
 			prevCalView();
 		} else if (e.direction == 'left') {
 			nextCalView();
+		} else if (e.direction == 'down') {
+			// NavigationWindowを使用しているため、navWinを閉じる。
+			calendarWin.nav.close();
 		}
 	});
 

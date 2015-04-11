@@ -186,34 +186,34 @@ exports.createWindow = function(_userData){
 	// 前月カレンダーの表示
 	var prevCalView = function() {
 		Ti.API.debug('[func]prevCalView:');
-
 		// 多重クリック防止
 		if (slideEnable) {
 			slideView.left = style.commonSize.screenWidth + 'dp';
-			thisDiaryView.animate(slideView);
-			if (month == 1) {
-				month = 12;
-				year--;
-			} else {
-				month--;
-			}
-	
-			// タイトルの年月
-			monthTitle.text = year + '年' + month + '月';
-			// 当月のスタンプデータ取得
-			var stampList = model.getLocalStampList({
-				userId: _userData.id,
-				year: year,
-				month: month,
-				day: null
+			thisDiaryView.borderColor = '#dedede';
+			thisDiaryView.animate(slideView, function(e){
+				if (month == 1) {
+					month = 12;
+					year--;
+				} else {
+					month--;
+				}
+		
+				// タイトルの年月
+				monthTitle.text = year + '年' + month + '月';
+				// 当月データの取得
+				var stampList = model.getLocalStampList({
+					userId: _userData.id,
+					year: year,
+					month: month,
+					day: null
+				});
+				// カレンダーの表示
+				thisDiaryView = getCalView(stampList, year, month);
+				// 前のポジションに移動
+				var dayPosi = Math.round(offset / 45);
+				thisDiaryView.scrollToIndex(dayPosi, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
+				diaryWin.add(thisDiaryView);
 			});
-			// カレンダーの表示
-			thisDiaryView = getCalView(stampList, year, month);
-			// 前のポジションに移動
-			var dayPosi = Math.round(offset / 45);
-			thisDiaryView.scrollToIndex(dayPosi, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
-//			thisDiaryView.visible = true;
-			diaryWin.add(thisDiaryView);
 		}
 	};
 
@@ -223,30 +223,31 @@ exports.createWindow = function(_userData){
 		// 多重クリック防止
 		if (slideEnable) {
 			slideView.left = (style.commonSize.screenWidth * -1) + 'dp';
-			thisDiaryView.animate(slideView);
-			if (month == 12) {
-				month = 1;
-				year++;
-			} else {
-				month++;
-			}
-	
-			// タイトルの年月
-			monthTitle.text = year + '年' + month + '月';
-			// 当月のスタンプデータ取得
-			var stampList = model.getLocalStampList({
-				userId: _userData.id,
-				year: year,
-				month: month,
-				day: null
+			thisDiaryView.borderColor = '#dedede';
+			thisDiaryView.animate(slideView, function(e){
+				if (month == 12) {
+					month = 1;
+					year++;
+				} else {
+					month++;
+				}
+		
+				// タイトルの年月
+				monthTitle.text = year + '年' + month + '月';
+				// 当月データの取得
+				var stampList = model.getLocalStampList({
+					userId: _userData.id,
+					year: year,
+					month: month,
+					day: null
+				});
+				// カレンダーの表示
+				thisDiaryView = getCalView(stampList, year, month);
+				// 前のポジションに移動
+				var dayPosi = Math.round(offset / 45);
+				thisDiaryView.scrollToIndex(dayPosi, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
+				diaryWin.add(thisDiaryView);
 			});
-			// カレンダーの表示
-			thisDiaryView = getCalView(stampList, year, month);
-			// 前のポジションに移動
-			var dayPosi = Math.round(offset / 45);
-			thisDiaryView.scrollToIndex(dayPosi, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});	
-//			thisDiaryView.visible = true;
-			diaryWin.add(thisDiaryView);
 		}
 	};
 
@@ -272,10 +273,10 @@ exports.createWindow = function(_userData){
 		});
 		// カレンダーの表示
 		thisDiaryView = getCalView(stampList, year, month);
-		diaryWin.add(thisDiaryView);
 		// 今日の日にスクロール
 		thisDiaryView.scrollToIndex(_day-3 > 0 ? _day-3 : 0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
 		offset = _day-3 > 0 ? (_day-3) * 45: 0;		
+		diaryWin.add(thisDiaryView);
 	};
 
 // ---------------------------------------------------------------------
@@ -394,12 +395,13 @@ exports.createWindow = function(_userData){
 		// timeWinの更新
 		if (e.timeWinUpdateFlag == true) {
 			if (diaryWin.nextWin == null) {
+/*
 				// timeWinを新規オープン
 				var timeWin = win.createTimeWindow(_userData, diaryData);
 				timeWin.prevWin = diaryWin;
 				diaryWin.nextWin = timeWin;
 				win.getTab("diaryTab").open(timeWin, {animated:false});
-	
+*/	
 			} else {
 				var currentDate = {
 					year: diaryWin.nextWin.diaryData.year, 

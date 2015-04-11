@@ -1973,8 +1973,8 @@ exports.style = {
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
 		data: [],
+		scrollable: false,
 //		visible: false,
-//		scrollable: false,
 	},
 	calendarTableRow:{ 
 		width: Ti.UI.SIZE,
@@ -2233,7 +2233,7 @@ exports.style = {
 		height : '90dp',
 		backgroundColor: 'white',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
-		color: '#000',
+		color: 'gray',
 		// hintTextはiOSで対応されていないので、focus/blur時に処理
 		hintText: 'コメントを入力する',
 		value: 'コメントを入力する',
@@ -2303,7 +2303,7 @@ exports.style = {
 	
 // winDiary -------------------------------------------------------
 	diaryWin:{
-		backgroundColor: '#dedede',
+		backgroundColor: 'white',
 //		barImage: 'images/icon/titlebar.png',
 		barColor: '#e74c3c',
 		tabBarHidden: true,
@@ -3223,7 +3223,7 @@ exports.style = {
 		bottom: '44dp',
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
-		scrollable: true,
+		scrollable: false,
 		data: [],
 		backgroundColor: 'transparent',
 	},
