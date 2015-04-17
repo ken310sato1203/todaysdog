@@ -223,7 +223,7 @@ exports.createWindow = function(_userData){
 	// スライド用アニメーション
 	var slideView = Ti.UI.createAnimation({
 		left : style.commonSize.screenWidth + 'dp',
-		duration : 500
+		duration : 300
 	});
 
 	// 前月カレンダーの表示

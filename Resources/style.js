@@ -2552,6 +2552,14 @@ exports.style = {
 		color: '#000',
 		touchEnabled: false,
 	},
+	timeMinusView:{
+		top: '0dp',
+		right: '0dp',
+		width: '44dp',
+		height: '44dp',
+		// カスタムプロパティ
+		objectName : 'timeMinusView',
+	},
 	timeMinusImage:{
 		top: '8dp',
 		right: '8dp',
@@ -2559,8 +2567,7 @@ exports.style = {
 		height : '28dp',
 		defaultImage: '',
 		image : 'images/icon/diary_minus.png',
-		// カスタムプロパティ
-		objectName : 'timeMinusImage',
+		touchEnabled: false,
 	},
 
 	timeNoDataView:{
@@ -2623,7 +2630,7 @@ exports.style = {
 		objectName : 'timeGroupView',
 	},
 
-	timeStampMenuScrollView:{
+	timeMenuScrollView:{
 		layout: 'horizontal',
 		// 下のタブで表示されない余白分
 		bottom: '44dp',
@@ -2632,13 +2639,30 @@ exports.style = {
 		contentHeight:'auto',
 		showVerticalScrollIndicator:true,
 		showHorizontalScrollIndicator:true,
-//		backgroundColor: '#eeeeee',
+		scrollingEnabled: false,
+		// timeWinのswipeイベントが発火しないように
+		bubbleParent : false,
+	},
+	timeMenuFrameView:{
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+		height: '100%',
 		backgroundColor: '#dedede',
+		// カスタムプロパティ
+		objectName : 'timeMenuFrameView',
+	},
+	timeMenuListView:{
+		layout: 'horizontal',
+//		top: '0dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		// カスタムプロパティ
+		objectName : 'timeMenuListView',
 	},
 	timeStampSelectView:{
 		top: '10dp',
 		bottom: '10dp',
-		left: '20dp',
+		left: '15dp',
+		right: '15dp',
 		width: '54dp',
 		height: '54dp',
 		borderRadius: '27dp',
@@ -2655,30 +2679,7 @@ exports.style = {
 		// カスタムプロパティ
 		objectName : 'timeStampSelectImage',
 	},
-	timeStampEditView:{
-		top: '10dp',
-		bottom: '10dp',
-		left: '20dp',
-		width: '54dp',
-		height: '54dp',
-		borderRadius: '27dp',
-		backgroundColor: 'white',
-		// カスタムプロパティ
-		objectName : 'timeStampEditView',
-	},
-	timeStampEditImage:{
-		width: '54dp',
-		height: '54dp',
-		defaultImage: '',
-		image : 'images/icon/b_edit_w.png',
-		touchEnabled: false,
-	},
-	timeSpaceView:{
-		top: '0dp',
-		width: '20dp',
-		height: Ti.UI.SIZE,
-	},
-
+	
 // winFriends -------------------------------------------------------
 	friendsWin:{
 		backgroundColor: '#dedede',
@@ -3317,8 +3318,6 @@ exports.style = {
 		showVerticalScrollIndicator:true,
 		showHorizontalScrollIndicator:true,
 		scrollingEnabled: false,
-//		backgroundColor: '#eeeeee',
-//		backgroundColor: '#dedede',
 	},
 	todayMenuFrameView:{
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
@@ -3688,14 +3687,14 @@ exports.style = {
 		stampData : null,
 	},
 	stampPostImage:{
-		left: '10dp',
+		left: '15dp',
 		width : '32dp',
 		height : '32dp',
 		defaultImage: '',
 		image : null,
 	},
 	stampPostTextLabel:{
-		left: '48dp',
+		left: '55dp',
 		rigth: '15dp',
 		height: Ti.UI.SIZE,
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},

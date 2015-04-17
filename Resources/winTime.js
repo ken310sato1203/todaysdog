@@ -11,6 +11,12 @@ exports.createWindow = function(_userData, _diaryData){
 
 	// 多重クリック防止
 	var clickEnable = true;
+	// メニューに表示するスタンプリスト
+	var selectStampList = model.getStampTimeSelectList();
+	// メニューに表示するページ
+	var timeMenuPage = 0;
+
+// ---------------------------------------------------------------------
 	
 	// StampViewの取得
 	var getStampView = function(_rowStamp) {
@@ -69,8 +75,10 @@ exports.createWindow = function(_userData, _diaryData){
 					var stampView = getStampView(_diaryData.stampList[i]);
 					stampListView.add(stampView);	
 			
+					var minusView = Ti.UI.createView(style.timeMinusView);
+					hourView.add(minusView);
 					var minusImage = Ti.UI.createImageView(style.timeMinusImage);
-					hourView.add(minusImage);
+					minusView.add(minusImage);
 	
 					rowList.push(row);
 				}
@@ -79,6 +87,8 @@ exports.createWindow = function(_userData, _diaryData){
 
 		} else {
 			var noDataRow = Ti.UI.createTableViewRow(style.timeTableRow);
+			noDataRow.touchEnabled = false;
+			noDataRow.selectionStyle = Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE;
 			var noDataView = Ti.UI.createView(style.timeNoDataView);
 			var noDataLabel = Ti.UI.createLabel(style.timeNoDataLabel);
 			noDataLabel.text = 'スタンプを選んで\nわんこの記録をつけよう';
@@ -109,7 +119,7 @@ exports.createWindow = function(_userData, _diaryData){
 					postWin.prevWin = timeWin;
 					win.openTabWindow(postWin, {animated:true});
 
-				} else if (e.source.objectName == 'timeMinusImage') {
+				} else if (e.source.objectName == 'timeMinusView') {
 
 					var alertDialog = Titanium.UI.createAlertDialog({
 						title: '削除しますか？',
@@ -215,71 +225,69 @@ exports.createWindow = function(_userData, _diaryData){
 
 	};
 
-	// StampViewの取得
-	var getTimeStampView = function(_stampList) {
-		Ti.API.debug('[func]getTimeStampView:');
-		// スタンプの表示
-		var stampMenuView = Ti.UI.createScrollView(style.timeStampMenuScrollView);
-/*
-		// 複数登録スタンプ
-		var editView = Ti.UI.createView(style.timeStampEditView);
-		stampMenuView.add(editView);
-		var editImage = Ti.UI.createImageView(style.timeStampEditImage);
-		editView.add(editImage);
-*/
-		for (var i=0; i<_stampList.length; i++) {
-			var stampView = Ti.UI.createView(style.timeStampSelectView);
-			stampMenuView.add(stampView);
-			var stampImage = Ti.UI.createImageView(style.timeStampSelectImage);
-			stampView.add(stampImage);
-			stampImage.image = 'images/icon/' + _stampList[i].stamp + '.png';
-			stampView.stamp = _stampList[i].stamp;
+	// menuViewの取得
+	var getTimeMenuView = function() {
+		Ti.API.debug('[func]getTimeMenuView:');
+
+		var menuScrollView = Ti.UI.createScrollView(style.timeMenuScrollView);
+
+		for (var i=0; i<selectStampList.length; i++) {
+			var menuStampView = Ti.UI.createView(style.timeMenuFrameView);
+			menuScrollView.add(menuStampView);
+			var menuStampListView = Ti.UI.createView(style.timeMenuListView);
+			menuStampView.add(menuStampListView);
+			// 選択するスタンプ
+			for (var j=0; j<selectStampList[i].stampList.length; j++) {
+				var stampView = Ti.UI.createView(style.timeStampSelectView);
+				stampView.stamp = selectStampList[i].stampList[j];
+				menuStampListView.add(stampView);
+				var stampImage = Ti.UI.createImageView(style.timeStampSelectImage);
+				stampView.add(stampImage);
+				stampImage.image = 'images/icon/' + selectStampList[i].stampList[j] + '.png';
+			}
+
+			// スタンプボタンをクリック
+			menuStampListView.addEventListener('click',function(e){
+				Ti.API.debug('[event]menuStampListView.click:');
+				Ti.API.debug('[event]e.source.objectName:' + e.source.objectName);
+				var target = e.source;
+				if (target.objectName == 'timeStampSelectView') {
+					// 多重クリック防止
+					if (clickEnable) {
+						clickEnable = false;
+						target.opacity = 0.5;
+						// 日時の更新
+						var nowDate = new Date();
+						now = util.getDateElement(nowDate);
+						now.weekday = util.diary.weekday[nowDate.getDay()];
+						now.today = util.getFormattedDate(nowDate);
+
+						var stampData = {
+							no: null,
+							event: null,
+							user: _userData.id,
+							stamp: target.stamp,
+							textList: null,
+							year: _diaryData.year,
+							month: _diaryData.month,
+							day: _diaryData.day,
+							hour: now.hour,
+							all: null,
+							report: null,
+							date: null,
+						};			
+						var postWin = win.createStampPostWindow('time', _userData, [stampData]);
+						postWin.prevWin = timeWin;
+						win.openTabWindow(postWin, {animated:true});
+	
+						clickEnable = true;
+						target.opacity = 1.0;
+					}
+				}
+			});
 		}
 
-		// 余白分
-		var spaceView = Ti.UI.createView(style.timeSpaceView);
-		stampMenuView.add(spaceView);
-
-		// スタンプボタンをクリック
-		stampMenuView.addEventListener('click',function(e){
-			Ti.API.debug('[event]stampMenuView.click:');
-			var target = e.source;
-			if (target.objectName == 'timeStampSelectView') {
-				// 多重クリック防止
-				if (clickEnable) {
-					clickEnable = false;
-					target.opacity = 0.5;
-					// 日時の更新
-					var nowDate = new Date();
-					now = util.getDateElement(nowDate);
-					now.weekday = util.diary.weekday[nowDate.getDay()];
-					now.today = util.getFormattedDate(nowDate);
-		
-					var stampData = {
-						no: null,
-						event: null,
-						user: _userData.id,
-						stamp: target.stamp,
-						textList: null,
-						year: _diaryData.year,
-						month: _diaryData.month,
-						day: _diaryData.day,
-						hour: now.hour,
-						all: null,
-						report: null,
-						date: null,
-					};
-					var postWin = win.createStampPostWindow('time', _userData, [stampData]);
-					postWin.prevWin = timeWin;
-					win.openTabWindow(postWin, {animated:true});
-
-					clickEnable = true;
-					target.opacity = 1.0;
-				}
-			}
-		});
-
-		return stampMenuView;
+		return menuScrollView;
 	};
 	
 // ---------------------------------------------------------------------
@@ -306,8 +314,13 @@ exports.createWindow = function(_userData, _diaryData){
 	}
 */
 	// スタンプの表示
-	var timeStampList = model.getTimeStampList();
-	timeWin.add(getTimeStampView(timeStampList));
+//	var timeStampList = model.getTimeStampList();
+//	timeWin.add(getTimeStampView(timeStampList));
+
+	// メニューの表示
+	var timeMenuView = getTimeMenuView();
+	timeWin.add(timeMenuView);
+
 
 // ---------------------------------------------------------------------
 	// 戻るボタンをクリック
@@ -343,6 +356,16 @@ exports.createWindow = function(_userData, _diaryData){
 		}
 	});
 */
+	// メニューのスワイプでスタンプ切り替え
+	timeMenuView.addEventListener('swipe',function(e){
+		Ti.API.debug('[event]timeMenuView.swipe:');
+		if (e.direction == 'right' && timeMenuPage > 0) {
+			timeMenuPage--;
+		} else if (e.direction == 'left' && timeMenuPage < selectStampList.length - 1) {
+			timeMenuPage++;
+		}
+		timeMenuView.scrollTo(style.commonSize.screenWidth * timeMenuPage, 0);	
+	});
 
 	// 右スワイプで前の画面に戻る
 	timeWin.addEventListener('swipe',function(e){
@@ -359,7 +382,8 @@ exports.createWindow = function(_userData, _diaryData){
 		// 今日の日付の取得
 		now = util.getDateElement(new Date());
 		updateTableView(e.diaryData);
-		
+		// メニューをトップに戻す
+//		timeMenuView.scrollTo(0, 0);		
 	});
 
 	return timeWin;

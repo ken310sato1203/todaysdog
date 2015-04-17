@@ -16,9 +16,9 @@ exports.createWindow = function(_userData){
 	var photoHeight = (style.commonSize.screenWidth - spaceHeight > 0) ? spaceHeight : style.commonSize.screenWidth;
 	var addHeight = style.commonSize.screenWidth - photoHeight;
 	// メニューに表示するスタンプリスト
-	var stampSelectList = null;
+	var selectStampList = model.getStampTimeSelectList();
 	// メニューに表示するページ
-	var currentMenu = 0;
+	var todayMenuPage = 0;
 
 // ---------------------------------------------------------------------
 
@@ -200,7 +200,6 @@ exports.createWindow = function(_userData){
 			}
 		});
 
-		var selectStampList = model.getStampSelectList();
 		for (var i=0; i<selectStampList.length; i++) {
 			var menuStampView = Ti.UI.createView(style.todayMenuFrameView);
 			menuScrollView.add(menuStampView);
@@ -255,8 +254,6 @@ exports.createWindow = function(_userData){
 					}
 				}
 			});
-
-
 		}
 
 		return menuScrollView;
@@ -400,6 +397,10 @@ exports.createWindow = function(_userData){
 					}
 					clickEnable = true;
 				}
+			} else {
+				// メニューをトップに戻す
+				todayMenuView.scrollTo(0, 0);
+				todayMenuPage = 0;				
 			}
 		});
 		
@@ -413,13 +414,13 @@ exports.createWindow = function(_userData){
 
 //		if (stampList.length > 0) {
 			var stampGroupView = null;
-			stampSelectList = model.getStampSelectList();
+			var stampSelectList = model.getStampSelectList();
 			for (var i=0; i<stampSelectList.length; i++) {
 				var groupListView = Ti.UI.createView(style.todayStampListView);
 				var groupLabel = Ti.UI.createLabel(style.todayStampLabel);
 				groupLabel.text = stampSelectList[i].title;
 				groupListView.add(groupLabel);
-				groupListView.listNo = i+1;
+				groupListView.listNo = stampSelectList[i].no;
 
 				var countStamp = 0;
 				for (var j=0; j<stampList.length; j++) {
@@ -462,7 +463,7 @@ exports.createWindow = function(_userData){
 						clickEnable = false;
 						target.opacity = 0.5;
 						todayMenuView.scrollTo(style.commonSize.screenWidth * target.listNo, 0);
-						currentMenu = target.listNo;
+						todayMenuPage = target.listNo;
 						// opacityの表示を見せるため
 				        setTimeout(function(){
 							target.opacity = 1.0;
@@ -550,6 +551,8 @@ exports.createWindow = function(_userData){
 		} else {
 			// メニューをトップに戻す
 			todayMenuView.scrollTo(0, 0);
+			todayMenuPage = 0;
+
 			if (e.articleData) {
 				// フォトの差し替え
 				todayWin.noDataView.visible = false;
@@ -576,12 +579,13 @@ exports.createWindow = function(_userData){
 	// 右スワイプでメニュートップに戻す
 	todayMenuView.addEventListener('swipe',function(e){
 		Ti.API.debug('[event]todayMenuView.swipe:');
-		if (e.direction == 'right' && currentMenu > 0) {
-			currentMenu--;
-		} else if (e.direction == 'left' && currentMenu < stampSelectList.length) {
-			currentMenu++;
+		if (e.direction == 'right' && todayMenuPage > 0) {
+			todayMenuPage--;
+		} else if (e.direction == 'left' && todayMenuPage < selectStampList.length) {
+			todayMenuPage++;
 		}
-		todayMenuView.scrollTo(style.commonSize.screenWidth * currentMenu, 0);	
+		
+		todayMenuView.scrollTo(style.commonSize.screenWidth * todayMenuPage, 0);	
 	});
 
 /*

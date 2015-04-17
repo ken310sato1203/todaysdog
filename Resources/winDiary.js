@@ -179,7 +179,7 @@ exports.createWindow = function(_userData){
 
 	// スライド用アニメーション
 	var slideView = Ti.UI.createAnimation({
-		duration : 500,
+		duration : 300,
 		left : style.commonSize.screenWidth + 'dp',
 	});
 

@@ -33,14 +33,25 @@ photoTodayList = [
 ];
 
 stampSelectList = [
-//	{type:"one", title:"お天気", stampList:["stamp_sun","stamp_cloud","stamp_rain"]},
-	{type:"one", title:"さんぽ", stampList:["stamp_walking1","stamp_walking2","stamp_walking3"]},
-	{type:"all", title:"くすり\n病院", stampList:["stamp_medicine","stamp_injection","stamp_clinic"]},
-	{type:"one", title:"うんち", stampList:["stamp_favorite1","stamp_favorite2","stamp_favorite3"]},
-	{type:"all", title:"シャンプ\nホテル", stampList:["stamp_wash","stamp_cut","stamp_cottage"]},
-	{type:"one", title:"ごはん", stampList:["stamp_restaurant1","stamp_restaurant2","stamp_restaurant3"]},
-//	{type:"one", title:"体調", stampList:["stamp_barking1","stamp_barking2","stamp_barking3"]},
-	{type:"all", title:"おでかけ\nイベント", stampList:["stamp_car","stamp_flag","stamp_birthday"]},
+//	{no:"0", type:"one", title:"お天気", stampList:["stamp_sun","stamp_cloud","stamp_rain"]},
+	{no:"1", type:"one", title:"さんぽ", stampList:["stamp_walking1","stamp_walking2","stamp_walking3"]},
+	{no:"4", type:"all", title:"くすり\n病院", stampList:["stamp_medicine","stamp_injection","stamp_clinic"]},
+	{no:"2", type:"one", title:"うんち", stampList:["stamp_favorite1","stamp_favorite2","stamp_favorite3"]},
+	{no:"5", type:"all", title:"シャンプ\nホテル", stampList:["stamp_wash","stamp_cut","stamp_cottage"]},
+	{no:"3", type:"one", title:"ごはん", stampList:["stamp_restaurant1","stamp_restaurant2","stamp_restaurant3"]},
+//	{no:"0", type:"one", title:"体調", stampList:["stamp_barking1","stamp_barking2","stamp_barking3"]},
+	{no:"6", type:"all", title:"おでかけ\nイベント", stampList:["stamp_car","stamp_flag","stamp_birthday"]},
+];
+
+stampTimeSelectList = [
+//	{no:"0", type:"one", title:"お天気", stampList:["stamp_sun","stamp_cloud","stamp_rain"]},
+	{no:"1", type:"one", title:"さんぽ", stampList:["stamp_walking1","stamp_walking2","stamp_walking3"]},
+	{no:"2", type:"one", title:"うんち", stampList:["stamp_favorite1","stamp_favorite2","stamp_favorite3"]},
+	{no:"3", type:"one", title:"ごはん", stampList:["stamp_restaurant1","stamp_restaurant2","stamp_restaurant3"]},
+	{no:"4", type:"all", title:"くすり\n病院", stampList:["stamp_medicine","stamp_injection","stamp_clinic"]},
+	{no:"5", type:"all", title:"シャンプ\nホテル", stampList:["stamp_wash","stamp_cut","stamp_cottage"]},
+//	{no:"0", type:"one", title:"体調", stampList:["stamp_barking1","stamp_barking2","stamp_barking3"]},
+	{no:"6", type:"all", title:"おでかけ\nイベント", stampList:["stamp_car","stamp_flag","stamp_birthday"]},
 ];
 
 stampHistoryList = [
@@ -1448,6 +1459,12 @@ exports.model = {
 	getStampSelectList:function(){
 		Ti.API.debug('[func]getStampSelectList:');
 		return stampSelectList;
+	},
+
+	// 選択スタンプのリストを取得
+	getStampTimeSelectList:function(){
+		Ti.API.debug('[func]getStampTimeSelectList:');
+		return stampTimeSelectList;
 	},
 
 	// 指定スタンプの履歴データを取得
