@@ -267,6 +267,8 @@ exports.createWindow = function(_userData){
 		dayPhotoView.height = photoHeight;
 
 		var noDataView = Ti.UI.createView(style.todayNoDataView);
+		// ( 全体の高さ - ステータスバー(20) - ヘッダ(44) - スタンプメニュー(54x3) - メニュー(74) - フッタ(44) )
+		noDataView.top = ( (style.commonSize.screenHeight - 344) / 2 - 40 ) + 'dp';
 		dayPhotoView.add(noDataView);
 		todayWin.noDataView = noDataView;		
 		var noDataLabel = Ti.UI.createLabel(style.todayNoDataLabel);
@@ -417,6 +419,7 @@ exports.createWindow = function(_userData){
 			var stampSelectList = model.getStampSelectList();
 			for (var i=0; i<stampSelectList.length; i++) {
 				var groupListView = Ti.UI.createView(style.todayStampListView);
+				groupListView.width = (style.commonSize.screenWidth / 2) + 'dp';
 				var groupLabel = Ti.UI.createLabel(style.todayStampLabel);
 				groupLabel.text = stampSelectList[i].title;
 				groupListView.add(groupLabel);

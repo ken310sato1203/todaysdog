@@ -125,7 +125,7 @@ exports.style = {
 //		layout: 'vertical',
 		top: '0dp',
 		left: '0dp',
-		width: '80dp',
+//		width: '80dp',
 		height: '44dp',
 		// カスタムプロパティ
 		objectName: null,
@@ -2885,7 +2885,7 @@ exports.style = {
 	},
 	friendsNoDataView:{
 		layout: 'vertical',
-		top: '80dp',
+//		top: '80dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 	},
@@ -3255,7 +3255,7 @@ exports.style = {
 	},
 	todayNoDataView:{
 		layout: 'vertical',
-		top: '80dp',
+//		top: '80dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		visible: false,
@@ -3507,7 +3507,7 @@ exports.style = {
 		layout: 'horizontal',
 		top: '1dp',
 		bottom: '0dp',
-		width: '50%',
+//		width: '50%',
 		height: Ti.UI.SIZE,
 		backgroundColor : 'white',
 	},

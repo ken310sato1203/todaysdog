@@ -189,6 +189,7 @@ exports.win = {
 
 		for (var i=0; i<tabData.length; i++) {
 			var tabView = Ti.UI.createView(style.tabView);
+			tabView.width = (style.commonSize.screenWidth / tabData.length) + 'dp';
 			tabView.tabIndex = i;
 			tabView.objectName = tabData[i].objectName;
 			tabGroupView.add(tabView);

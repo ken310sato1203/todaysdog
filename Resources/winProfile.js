@@ -431,6 +431,32 @@ exports.createWindow = function(_userData){
 */
 		return rowList;
 	};	
+
+	// 最上部から下スクロールで最新データを更新する用のヘッダを作成
+	var getTableHeader = function() {
+		Ti.API.debug('[func]getTableHeader:');
+
+		var tableHeader = Ti.UI.createView(style.commonTableHeader);
+		var headerBorder = Ti.UI.createView(style.commonHeaderBorder);
+		tableHeader.add(headerBorder);
+		var updateArrowImage = Ti.UI.createImageView(style.commonUpdateArrowImage);
+		tableHeader.add(updateArrowImage);
+		var pullLabel = Ti.UI.createLabel(style.commonPullLabel);
+		tableHeader.add(pullLabel);
+		var lastUpdatedLabel = Ti.UI.createLabel(style.commonLastUpdatedLabel);
+		lastUpdatedLabel.text = 'Last Updated: ' + util.getFormattedNowDateTime();
+		tableHeader.add(lastUpdatedLabel);
+		var updateIndicator = Ti.UI.createActivityIndicator(style.commonUpdateIndicator);
+		tableHeader.add(updateIndicator);
+
+		// 参照用
+		tableHeader.updateArrowImage = updateArrowImage;
+		tableHeader.pullLabel = pullLabel;
+		tableHeader.lastUpdatedLabel = lastUpdatedLabel;
+		tableHeader.updateIndicator = updateIndicator;
+		
+		return tableHeader;
+	};
 	
 // ---------------------------------------------------------------------
 
@@ -464,6 +490,7 @@ exports.createWindow = function(_userData){
 	
 	// プロフィールの表示
 	var profileTableView = Ti.UI.createTableView(style.profileTableView);
+	profileTableView.headerPullView = getTableHeader();
 	profileTableView.setData(getProfileRowList());
 	profileWin.add(profileTableView);
 
@@ -584,12 +611,73 @@ exports.createWindow = function(_userData){
 		if (e.icon) {
 			profileWin.iconImage.image = e.icon;
 		} else {
+			profileTableView.data = [];
 			profileTableView.setData(getProfileRowList());
 		}
 
 		if (profileWin.prevWin != null) {
 			profileWin.prevWin.fireEvent('refresh');
 		}
+	});
+
+	// 下スクロールで上部ヘッダがすべて表示するまでひっぱったかどうかのフラグ
+	var pulling = false;
+	// スクロール終了時に更新をしてよいかどうかのフラグ
+	var reloading = false;
+	// 表示部分の最上位置からのオフセット
+	var offset = 0;
+
+	// ヘッダの表示をもとに戻す
+	var resetPullHeader = function(_tableView){
+        Ti.API.debug('[func]resetPullHeader:');
+	    reloading = false;
+	    _tableView.headerPullView.lastUpdatedLabel.text = 'Last Updated: ' + util.getFormattedNowDateTime();
+	    _tableView.headerPullView.updateIndicator.hide();
+	    _tableView.headerPullView.updateArrowImage.transform=Ti.UI.create2DMatrix();
+	    _tableView.headerPullView.updateArrowImage.show();
+	    _tableView.headerPullView.pullLabel.text = 'Pull down to refresh...';
+	    _tableView.setContentInsets({top:0}, {animated:true});
+	};
+	 
+	// スクロールで発生するイベント
+	profileTableView.addEventListener('scroll',function(e){
+		// 表示部分の最上位置からのオフセット
+	    offset = e.contentOffset.y;
+		// 下スクロールで、上部のヘッダが一部表示している場合
+	    if (pulling && !reloading && offset > -80 && offset < 0){
+	        pulling = false;
+	        var unrotate = Ti.UI.create2DMatrix();
+	        e.source.headerPullView.updateArrowImage.animate({transform:unrotate, duration:180});
+	        e.source.headerPullView.pullLabel.text = 'Pull down to refresh...';
+
+		// 下スクロールで、上部のヘッダがすべて表示している場合
+	    } else if (!pulling && !reloading && offset < -80){
+	        pulling = true;
+	        var rotate = Ti.UI.create2DMatrix().rotate(180);
+	        e.source.headerPullView.updateArrowImage.animate({transform:rotate, duration:180});
+	        e.source.headerPullView.pullLabel.text = 'Release to refresh...';
+	    }
+	});
+		
+	// スクロールの終了時に発生するイベント
+	profileTableView.addEventListener('dragEnd',function(e){
+		// 下スクロールで、上部のヘッダがすべて表示されたらを最新データを更新
+	    if (pulling && !reloading && offset < -80){
+	        pulling = false;
+	        reloading = true;
+	        e.source.headerPullView.pullLabel.text = 'Updating...';
+	        e.source.headerPullView.updateArrowImage.hide();
+	        e.source.headerPullView.updateIndicator.show();
+	        e.source.setContentInsets({top:80}, {animated:true});
+	        setTimeout(function(){
+	        	resetPullHeader(e.source);
+				// 投稿写真の更新
+				while (profileTableView.data[0].rowCount > 1) {
+					profileTableView.deleteRow(profileTableView.data[0].rowCount-1, {animated:false});
+				}
+				updatePhoto();
+	        }, 2000);
+	    }
 	});
 
 	// 右スワイプで前の画面に戻る

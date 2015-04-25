@@ -77,6 +77,10 @@ exports.createWindow = function(_type, _userData){
 		}
 		var noDataItem = [{
 			template: 'nodata',
+			// ( 全体の高さ - ステータスバー(20) - ヘッダ(44) - フッタ(44) )
+			userListNoDataView: {
+				top: ( (style.commonSize.screenHeight - 108) / 2 - 70 ) + 'dp',
+			},
 			userListNoDataLabel: {
 				text: nodataText,
 			}

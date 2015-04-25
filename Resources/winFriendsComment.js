@@ -96,6 +96,10 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 		var noDataItem = [{
 			template: 'nodata',
+			// ( 全体の高さ - ステータスバー(20) - ヘッダ(44) - フッタ(44) )
+			friendsCommentNoDataView: {
+				top: ( (style.commonSize.screenHeight - 108) / 2 - 70 ) + 'dp',
+			},
 			friendsCommentNoDataLabel: {
 				text: 'わんともからのコメントは\nありませんでした',
 			},

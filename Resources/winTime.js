@@ -90,6 +90,8 @@ exports.createWindow = function(_userData, _diaryData){
 			noDataRow.touchEnabled = false;
 			noDataRow.selectionStyle = Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE;
 			var noDataView = Ti.UI.createView(style.timeNoDataView);
+			// ( 全体の高さ - ステータスバー(20) - ヘッダ(44) - メニュー(74) - フッタ(44) )
+			noDataView.top = ( (style.commonSize.screenHeight - 182) / 2 - 70 ) + 'dp';
 			var noDataLabel = Ti.UI.createLabel(style.timeNoDataLabel);
 			noDataLabel.text = 'スタンプを選んで\nわんこの記録をつけよう';
 			noDataView.add(noDataLabel);

@@ -121,6 +121,10 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 		var noDataItem = [{
 			template: 'nodata',
+			// ( 全体の高さ - ステータスバー(20) - ヘッダ(44) - フッタ(44) )
+			friendsNoDataView: {
+				top: ( (style.commonSize.screenHeight - 108) / 2 - 70 ) + 'dp',
+			},
 			friendsNoDataLabel: {
 				text: 'わんこ写真の投稿は\nありませんでした', 
 			},
