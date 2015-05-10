@@ -216,6 +216,9 @@ exports.createWindow = function(_type, _userData, _photoImage){
 								util.errorDialog(e);
 							}
 						});
+
+					} else {
+						postButton.touchEnabled = true;
 					}
 				});
 			}
@@ -270,6 +273,8 @@ exports.createWindow = function(_type, _userData, _photoImage){
 							util.errorDialog(e);
 						}
 					});
+				} else {
+					postButton.touchEnabled = true;
 				}
 			});
 		}

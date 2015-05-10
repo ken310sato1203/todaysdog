@@ -334,12 +334,17 @@ exports.createWindow = function(_userData){
 		var articleListView = Ti.UI.createView(style.profileArticleListView);
 		articleRow.add(articleListView);
 		
-		var rowNum = (_articleList.length < 4) ? _articleList.length : 4;
+		var rowNum = 4;
+		var remainder = _articleList.length % rowNum;
 		for (var i=0; i<_articleList.length; i++) {	
 			var articleView = Ti.UI.createView(style.profileArticleView);
 			articleListView.add(articleView);
 			var photoImage = Ti.UI.createImageView(style.profilePhotoImage);
-			photoImage.width = ( (Ti.Platform.displayCaps.platformWidth) / rowNum ) + 'dp',
+			if ( _articleList.length - i >  remainder ) {
+				photoImage.width = ( (Ti.Platform.displayCaps.platformWidth) / rowNum ) + 'dp';
+			} else {
+				photoImage.width = ( (Ti.Platform.displayCaps.platformWidth) / remainder ) + 'dp';
+			}
 			photoImage.image = _articleList[i].photo;
 
 			// カスタムプロパティに記事データを格納

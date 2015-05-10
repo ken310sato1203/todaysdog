@@ -20,16 +20,23 @@ exports.createWindow = function(_type, _userData){
 
 		for (var i=0; i<_userList.length; i++) {	
 
-			if (_userList[i].id != loginUser.id) {	
+//			if (_userList[i].id != loginUser.id) {	
 				var followText = 'フォローする';
 				var followTextColor = '#e74c3c';
 				var followColor = 'white';
 				var followType = 'follow';
-				if (model.checkLocalFriendsList(loginUser.id, _userList[i].id)) {
-					followText = 'フォロー中';
-					followTextColor = '#000';
-					followColor = '#dedede';
-					followType = 'unfollow';
+				var followVisible = true;
+
+				if (_userList[i].id == loginUser.id) {
+						followVisible = false;
+
+				} else {
+					if (model.checkLocalFriendsList(loginUser.id, _userList[i].id)) {
+						followText = 'フォロー中';
+						followTextColor = '#000';
+						followColor = '#dedede';
+						followType = 'unfollow';
+					}
 				}
 	
 				var userItem = [{
@@ -51,15 +58,16 @@ exports.createWindow = function(_type, _userData){
 					userListFollowButton: {
 						backgroundColor: followColor,
 						type: followType,
+						visible: followVisible,
 					},
 					userListFollowButtonLabel: {
 						text: followText,
 						color: followTextColor,
 					},
 				}];
-	
+
 				listSection.appendItems(userItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
-			}
+//			}
 		}
 	};
 	
@@ -130,6 +138,8 @@ exports.createWindow = function(_type, _userData){
 							util.errorDialog(e);
 						}
 					});
+				} else {
+					listView.touchEnabled = true;
 				}
 			});
 			alertDialog.show();	
@@ -344,6 +354,12 @@ exports.createWindow = function(_type, _userData){
 	searchRow.add(searchView);
 	var searchField = Ti.UI.createTextField(style.userListSearchField);
 	searchView.add(searchField);
+
+	// フィールドをクリック
+	searchView.addEventListener('click', function(e){
+		Ti.API.debug('[event]searchView.click:');
+		searchField.focus();
+	});
 
 	// フォロワのユーザ一覧
 	if (_type == "follower") {

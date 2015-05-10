@@ -22,43 +22,6 @@ exports.createWindow = function(_userData){
 
 // ---------------------------------------------------------------------
 
-	// dayLabelViewの取得
-	var getDayLabelView = function() {
-		Ti.API.debug('[func]getDayLabelView:');
-
-		// 日付
-		var dayLabelView = Ti.UI.createView(style.todayDayLabelView);
-//		var dayLabelView = Ti.UI.createView(style.todayDayView);
-		var dayLabel = Ti.UI.createLabel(style.todayDayLabel);
-		dayLabelView.add(dayLabel);
-		dayLabel.text = now.month + '/' + now.day;
-//		dayLabel.text = now.month + '/' + now.day + '(' + now.weekday.text + ')';
-//		dayLabel.text = Math.floor(Math.random() * 10);
-
-		var weekdayLabel = Ti.UI.createLabel(style.todayWeekdayLabel);
-		dayLabelView.add(weekdayLabel);
-		weekdayLabel.text = now.weekday.text;
-		weekdayLabel.color = now.weekday.color;
-
-/*
-		// 天気取得
-		var http = Titanium.Network.createHTTPClient();
-		http.open("GET", "http://rss.weather.yahoo.co.jp/rss/days/4410.xml");
-		http.onload = function() {
-			var doc = this.responseXML.documentElement;
-			var descriptions = doc.getElementsByTagName("description");
-			var weather = descriptions.item(1).text;
-			var weatherLabel = Ti.UI.createLabel(style.todayDayLabel);
-			weatherLabel.text = weather.substring(0, weather.indexOf(' - '));
-			dayLabelView.add(weatherLabel);
-		};
-		http.send();
-*/
-
-		return dayLabelView;
-	};
-
-
 	// 今日の記事を取得
 	var getTodayArticle = function() {
 		Ti.API.debug('[func]getTodayArticle:');
@@ -105,13 +68,9 @@ exports.createWindow = function(_userData){
 			if (clickEnable) {
 				clickEnable = false;
 				target.opacity = 0.5;
-
 				// 日時の更新
-				var nowDate = new Date();
-				now = util.getDateElement(nowDate);
-				now.weekday = util.diary.weekday[nowDate.getDay()];
-				now.today = util.getFormattedDate(nowDate);
-	
+				updateTodayDay();
+
 				if ( getTodayArticle() ) {
 					var alertDialog = Titanium.UI.createAlertDialog({
 						title: '写真の投稿は１日１枚です。\nまた明日。',
@@ -160,11 +119,13 @@ exports.createWindow = function(_userData){
 		var dayLabelView = Ti.UI.createView(style.todayDayLabelView);
 		var dayLabel = Ti.UI.createLabel(style.todayDayLabel);
 		dayLabelView.add(dayLabel);
-		dayLabel.text = now.month + '/' + now.day;
+//		dayLabel.text = now.month + '/' + now.day;
+		menuScrollView.dayLabel = dayLabel;
 		var weekdayLabel = Ti.UI.createLabel(style.todayWeekdayLabel);
 		dayLabelView.add(weekdayLabel);
-		weekdayLabel.text = now.weekday.text;
-		weekdayLabel.color = now.weekday.color;
+//		weekdayLabel.text = now.weekday.text;
+//		weekdayLabel.color = now.weekday.color;
+		menuScrollView.weekdayLabel = weekdayLabel;
 		var dayView = Ti.UI.createView(style.todayDayView);
 		dayView.add(dayLabelView);
 		menuListView.add(dayView);
@@ -225,10 +186,7 @@ exports.createWindow = function(_userData){
 						clickEnable = false;
 						target.opacity = 0.5;
 						// 日時の更新
-						var nowDate = new Date();
-						now = util.getDateElement(nowDate);
-						now.weekday = util.diary.weekday[nowDate.getDay()];
-						now.today = util.getFormattedDate(nowDate);
+						updateTodayDay();
 			
 						var stampData = {
 							no: null,
@@ -292,11 +250,10 @@ exports.createWindow = function(_userData){
 	var getTodayPhotoImage = function(_articleData) {
 		Ti.API.debug('[func]getTodayPhotoImage:');
 
-		var photoImage = null;
 		var fileName = _userData.id + "_" + _articleData.date.substring(0,10);
 		// ローカルに投稿写真が保存されてる場合
 		if (model.checkLocalImage(util.local.photoPath, fileName)) {
-			photoImage = util.local.photoPath + fileName + '.png';
+			return util.local.photoPath + fileName + '.png';
 		} else {
 			if (_articleData.photo == '') {
 				// 記事の取得
@@ -305,21 +262,21 @@ exports.createWindow = function(_userData){
 				}, function(e) {
 					Ti.API.debug('[func]getCloudArticlePost.callback:');
 					if (e.success) {
-						photoImage = e.photo;
 						model.updateLocalArticlePhoto({
 							postId: _articleData.id,
 							photo: e.photo
 						});
+						return e.photo;
 					} else {
 						util.errorDialog(e);
+						return null;
 					}
 				});
+
 			} else {
-				photoImage = _articleData.photo;			
+				return _articleData.photo;			
 			}
 		}
-		
-		return photoImage;
 	};
 
 	// 写真の更新
@@ -335,10 +292,47 @@ exports.createWindow = function(_userData){
 			todayWin.photoImage.image = getTodayPhotoImage(todayArticle);
 
 		} else {
-			todayWin.noDataView.visible = true;
-			todayWin.photoRow.backgroundColor = '#eeeeee';
-			todayWin.photoImage.visible = false;
+			// 写真の取得
+			var todayDate = new Date(now.year, now.month-1, now.day);
+			model.getCloudTodayArticle({
+				idList: [_userData.id],
+				date: todayDate,
+				page: 1,
+				count: 1
+			}, function(e) {
+				Ti.API.debug('[func]getCloudTodayArticle.callback:');
+				if (e.success) {
+					if (e.articleList.length > 0) {
+						// ローカルDBに登録
+						model.addLocalArticleList(e.articleList);
+						todayWin.noDataView.visible = false;
+						todayWin.photoRow.backgroundColor = 'transparent';
+						todayWin.photoImage.visible = true;
+						todayWin.photoImage.image = e.articleList[0].photo;
+
+					} else {
+						todayWin.noDataView.visible = true;
+						todayWin.photoRow.backgroundColor = '#eeeeee';
+						todayWin.photoImage.visible = false;
+					}
+		
+				} else {
+					util.errorDialog(e);
+				}
+			});
 		}
+	};
+
+	// 日付の更新
+	var updateTodayDay = function() {
+		Ti.API.debug('[func]updateTodayDay:');
+		var nowDate = new Date();
+		now = util.getDateElement(nowDate);
+		now.weekday = util.diary.weekday[nowDate.getDay()];
+		now.today = util.getFormattedDate(nowDate);
+		todayMenuView.dayLabel.text = now.month + '/' + now.day;
+		todayMenuView.weekdayLabel.text = now.weekday.text;
+		todayMenuView.weekdayLabel.color = now.weekday.color;
 	};
 
 	// groupViewの取得
@@ -484,10 +478,7 @@ exports.createWindow = function(_userData){
 	var updateTodayTable = function() {
 		Ti.API.debug('[func]updateTodayTable:');
 		// 日付の更新
-		var nowDate = new Date();
-		now = util.getDateElement(nowDate);
-		now.weekday = util.diary.weekday[nowDate.getDay()];
-		now.today = util.getFormattedDate(nowDate);
+		updateTodayDay();
 		// 今日のフォト・スタンプリストの表示
 		todayTableView.setData(getTodayRowList());
 		// 写真の更新
@@ -533,10 +524,11 @@ exports.createWindow = function(_userData){
 	var todayTableView = Ti.UI.createTableView(style.todayTableView);
 //	todayTableView.headerPullView = getTableHeader();
 	todayWin.add(todayTableView);
-	updateTodayTable();
 	// メニューの表示
 	var todayMenuView = getTodayMenuView();
 	todayWin.add(todayMenuView);
+	// 今日の内容を更新
+	updateTodayTable();
 
 // ---------------------------------------------------------------------
 	// 更新用イベント
@@ -546,10 +538,10 @@ exports.createWindow = function(_userData){
 		var nowDate = new Date();
 		if (nowDate.getFullYear() != now.year || nowDate.getMonth() != now.month-1 || nowDate.getDate() != now.day) {
 			todayTableView.data = [];
-			updateTodayTable();
 			todayWin.remove(todayMenuView);
 			todayMenuView = getTodayMenuView();
 			todayWin.add(todayMenuView);
+			updateTodayTable();
 
 		} else {
 			// メニューをトップに戻す

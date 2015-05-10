@@ -879,7 +879,7 @@ exports.style = {
 		top: '0dp',
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
 		height: Ti.UI.SIZE,
-		backgroundColor: 'white',
+//		backgroundColor: 'white',
 	},
 	profileArticleView:{
 		layout: 'vertical',
@@ -1464,7 +1464,7 @@ exports.style = {
 	},
 	userListUserList:{
 		height: Ti.UI.SIZE,
-		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
 	},
 	userListUserView:{
 		layout: 'horizontal',

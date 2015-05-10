@@ -136,6 +136,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	// 記事の更新
 	var updateArticle = function() {
 		Ti.API.debug('[func]updateArticle:');
+
 		// 日時の更新
 		now = util.getDateElement(new Date());
 
@@ -144,6 +145,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		var followList = [];
 
 		if (idList) {
+			listView.touchEnabled = false;
 			for (var i=0; i<idList.length; i++) {
 				followList.push({userId: _userData.id, follow: idList[i]});
 			}
@@ -189,8 +191,10 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 							appendNoDataLabel();
 						}
 					}
+					listView.touchEnabled = true;
 		
 				} else {
+					listView.touchEnabled = true;
 					util.errorDialog(e);
 				}
 			});			
