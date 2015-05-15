@@ -376,9 +376,6 @@ exports.createWindow = function(_type, _articleData){
 					type: 'Ti.UI.ImageView',
 					bindId: 'photoPhotoImage',
 					properties: style.photoPhotoImage,
-					events: {
-						click: blurCommentField
-					},
 				}]
 			},{
 				type: 'Ti.UI.View',
@@ -388,9 +385,6 @@ exports.createWindow = function(_type, _articleData){
 					type: 'Ti.UI.View',
 					bindId: 'photoTextView',
 					properties: style.photoTextView,
-					events: {
-						click: blurCommentField
-					},
 					childTemplates: [{
 						type: 'Ti.UI.Label',
 						bindId: 'photoTimeLabel',
@@ -616,7 +610,20 @@ exports.createWindow = function(_type, _articleData){
 	listView.addEventListener('itemclick', function(e){
 		Ti.API.debug('[event]listView.itemclick:');
 		var item = e.section.getItemAt(e.itemIndex);
-		if (item.template == 'comment' && e.bindId == 'photoCommentUserIconImage') {
+
+		if (item.template == 'article') {
+			if( e.bindId == 'photoPhotoImage'
+				|| e.bindId == 'photoArticleTextView'
+				|| e.bindId == 'photoTextView'
+				|| e.bindId == 'photoTimeLabel'
+				|| e.bindId == 'photoTextLabel') {
+				// テキストフィールド入力中でないかチェック
+				if ( blurCommentField() == false ) {
+					photoWin.close({animated:true});
+				}
+			}
+
+		} else if (item.template == 'comment' && e.bindId == 'photoCommentUserIconImage') {
 			if (item.commentUserId != loginUser.id) {
 				listView.touchEnabled = false;
 				// ユーザデータの取得

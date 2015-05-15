@@ -70,10 +70,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			}
 			var nameValue = '';
 			if (_articleList[i].name != '') {
-//				nameValue = _articleList[i].name + ' ';
-				nameValue = _articleList[i].name;
-			} else {
-				nameValue = _articleList[i].user;
+				nameValue = _articleList[i].name + ' ';
 			}
 			var articleItem = [{
 				template: 'article',
@@ -90,7 +87,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				friendsNameLabel: {
 					text: nameValue,
 				},
-/*				
 				friendsUserLabel: {
 					text: _articleList[i].user,
 //					text: (_articleList[i].user.indexOf('@') > 0) ? _articleList[i].user.substring(0,_articleList[i].user.indexOf('@')) : _articleList[i].user,
@@ -101,7 +97,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				friendsTimeLabel: {
 					text: date.hour + ":" + date.minute,
 				},
-*/
 				friendsLikeLabel: {
 					text: _articleList[i].like,
 				},

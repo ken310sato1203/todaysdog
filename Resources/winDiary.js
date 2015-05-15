@@ -359,8 +359,14 @@ exports.createWindow = function(_userData){
 		e.source.opacity = 0.5;
 		// 今日の日付の取得
 		now = util.getDateElement(new Date());
-		// カレンダー更新
-		updateCalView(now.year, now.month, now.day);
+		if(now.year == year && now.month == month) {
+			// 今日の日にスクロール
+			thisDiaryView.scrollToIndex(now.day-3 > 0 ? now.day-3 : 0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
+			offset = now.day-3 > 0 ? (now.day-3) * 45: 0;
+		} else {
+			// カレンダー更新
+			updateCalView(now.year, now.month, now.day);
+		}
 		e.source.opacity = 1.0;
 	});
 
