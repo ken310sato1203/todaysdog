@@ -85,9 +85,10 @@ exports.util = {
 		    var day = _date.getDate();
 		    return month + '月' + day + '日';
 		} else {
+			// 先頭０を外すため１をかける
 			var year = _date.substr(0,4);
-			var month = _date.substr(5,2);
-			var day = _date.substr(8,2);
+			var month = _date.substr(5,2) * 1;
+			var day = _date.substr(8,2) * 1;
 		    return month + '月' + day + '日';
 	   }
 	},
@@ -182,6 +183,23 @@ exports.util = {
 			var second = _date.substr(17,2);
 			return {year:year, month:month, day:day, hour:hour, minute:minute, second:second};
 		}
+	},
+
+	// 誕生日から年齢を算出
+	calculateAge:function(_date){
+		var today = new Date();
+		var birthday = null;
+		if (_date instanceof Date) {
+			birthday = _date;
+		} else {
+			var year = _date.substr(0,4);
+			var month = _date.substr(5,2) - 1;
+			var day = _date.substr(8,2);
+			birthday = new Date(year, month, day);			
+		}
+		var b = new Date(birthday.getTime()).setFullYear(2000);
+		var w = new Date(today.getTime()).setFullYear(2000);
+		return today.getFullYear() - birthday.getFullYear() - (w >= b ? 0: 1);
 	},
 
 	// エラー表示

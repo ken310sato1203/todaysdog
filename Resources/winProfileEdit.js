@@ -65,7 +65,7 @@ exports.createWindow = function(_userData){
 	var nameLabel = Ti.UI.createLabel(style.profileEditListItemLabel);
 	nameLabel.text = '名前';
 	var nameField = Ti.UI.createTextField(style.profileEditListValueField);
-	nameField.maxLength = 12;
+	nameField.maxLength = 14;
 	nameField.value = _userData.name;
 	nameField.objectName = 'name';
 	nameView.add(nameLabel);
@@ -93,7 +93,7 @@ exports.createWindow = function(_userData){
 	var breedLabel = Ti.UI.createLabel(style.profileEditListItemLabel);
 	breedLabel.text = '犬種';
 	var breedField = Ti.UI.createTextField(style.profileEditListValueField);
-	breedField.maxLength = 20;
+	breedField.maxLength = 14;
 	breedField.value = _userData.breed;
 	breedField.objectName = 'breed';
 	breedView.add(breedLabel);

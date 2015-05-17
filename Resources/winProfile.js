@@ -313,7 +313,8 @@ exports.createWindow = function(_userData){
 			} else if (_userData.birth == '') {
 				birthLabel.text = _userData.sex;
 			} else {
-				birthLabel.text = util.getFormattedYMD(_userData.birth) + '生まれの' + _userData.sex;
+//				birthLabel.text = util.getFormattedYMD(_userData.birth) + '生まれの' + _userData.sex;
+				birthLabel.text = util.calculateAge(_userData.birth) + '歳の' + _userData.sex;
 			}
 			nameView.add(birthLabel);
 		}

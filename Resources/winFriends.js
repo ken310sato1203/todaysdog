@@ -54,7 +54,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 					template: 'date',
 					friendsDateLabel: {
 //						text: date.year + '/' + date.month + '/' + date.day,
-						text: date.month + '月' + date.day + '日',
+						// 先頭０を外すため１をかける
+						text: (date.month * 1) + '月' + (date.day * 1) + '日',
 					},
 				}];
 				listSection.appendItems(dateItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
@@ -75,12 +76,40 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			} else {
 				nameValue = _articleList[i].user;
 			}
+			
+			var photoHeight = ( style.commonSize.screenWidth - 40 ) / 2;
+			var photoTop = ( style.commonSize.screenWidth - 40 - photoHeight) / 2 * -1;
+			
 			var articleItem = [{
 				template: 'article',
 				articleData: _articleList[i],
 				friendsUnreadView: {
 					visible: unreadFlag,
 				},
+				friendsPhotoView: {
+					height: photoHeight + 'dp',
+				},
+				friendsPhotoImage: {
+					top: photoTop + 'dp',
+					image: _articleList[i].photo,
+				},
+				friendsUserIconImage: {
+					image: _articleList[i].icon,
+				},
+				friendsNameLabel: {
+					text: nameValue,
+				},
+				friendsTextLabel: {
+					text: _articleList[i].text,
+				},
+				friendsLikeLabel: {
+					text: (_articleList[i].like < 100) ? _articleList[i].like : 99,
+				},
+				friendsCommentLabel: {
+					text: (_articleList[i].comment < 100) ? _articleList[i].comment : 99,
+				},
+
+/*
 				friendsUserIconView: {
 //					backgroundImage: _articleList[i].photo,
 				},
@@ -90,6 +119,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				friendsNameLabel: {
 					text: nameValue,
 				},
+*/
 /*				
 				friendsUserLabel: {
 					text: _articleList[i].user,
@@ -102,12 +132,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 					text: date.hour + ":" + date.minute,
 				},
 */
-				friendsLikeLabel: {
-					text: _articleList[i].like,
-				},
-				friendsCommentLabel: {
-					text: _articleList[i].comment,
-				},
 			}];
 			listSection.appendItems(articleItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
 
@@ -295,6 +319,81 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			properties: style.friendsUnreadView
 		},{
 			type: 'Ti.UI.View',
+			bindId: 'friendsArticleView',
+			properties: style.friendsArticleView,
+			childTemplates: [{
+				type: 'Ti.UI.View',
+				bindId: 'friendsPhotoView',
+				properties: style.friendsPhotoView,
+				childTemplates: [{
+					type: 'Ti.UI.ImageView',
+					bindId: 'friendsPhotoImage',
+					properties: style.friendsPhotoImage,
+				}]
+			},{
+				type: 'Ti.UI.View',
+				bindId: 'friendsArticleTextView',
+				properties: style.friendsArticleTextView,
+				childTemplates: [{
+					type: 'Ti.UI.View',
+					bindId: 'friendsUserIconView',
+					properties: style.friendsUserIconView,
+					childTemplates: [{
+						type: 'Ti.UI.ImageView',
+						bindId: 'friendsUserIconImage',
+						properties: style.friendsUserIconImage
+					}]
+				},{
+					type: 'Ti.UI.View',
+					bindId: 'friendsTextView',
+					properties: style.friendsTextView,
+					childTemplates: [{
+						type: 'Ti.UI.Label',
+						bindId: 'friendsNameLabel',
+						properties: style.friendsNameLabel,
+					},{
+						type: 'Ti.UI.Label',
+						bindId: 'friendsTextLabel',
+						properties: style.friendsTextLabel,
+					}]
+				},{
+					type: 'Ti.UI.View',
+					bindId: 'friendsCountView',
+					properties: style.friendsCountView,
+					childTemplates: [{
+						type: 'Ti.UI.ImageView',
+						bindId: 'friendsLikeIconImage',
+						properties: style.friendsLikeIconImage
+					},{
+						type: 'Ti.UI.Label',
+						bindId: 'friendsLikeLabel',
+						properties: style.friendsLikeLabel
+					},{
+						type: 'Ti.UI.ImageView',
+						bindId: 'friendsCommentIconImage',
+						properties: style.friendsCommentIconImage
+					},{
+						type: 'Ti.UI.Label',
+						bindId: 'friendsCommentLabel',
+						properties: style.friendsCommentLabel
+					}]
+				}]
+			}]
+/*
+		},{
+			type: 'Ti.UI.View',
+			bindId: 'friendsSeparateView',
+			properties: style.friendsSeparateView,
+*/
+		}]
+
+/*
+		childTemplates: [{
+			type: 'Ti.UI.View',
+			bindId: 'friendsUnreadView',
+			properties: style.friendsUnreadView
+		},{
+			type: 'Ti.UI.View',
 			bindId: 'friendsUserIconView',
 			properties: style.friendsUserIconView,
 			childTemplates: [{
@@ -324,31 +423,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			bindId: 'friendsTimeLabel',
 			properties: style.friendsTimeLabel
 		},{
-			type: 'Ti.UI.View',
-			bindId: 'friendsCountView',
-			properties: style.friendsCountView,
-			childTemplates: [{
-				type: 'Ti.UI.ImageView',
-				bindId: 'friendsLikeIconImage',
-				properties: style.friendsLikeIconImage
-			},{
-				type: 'Ti.UI.Label',
-				bindId: 'friendsLikeLabel',
-				properties: style.friendsLikeLabel
-			},{
-				type: 'Ti.UI.ImageView',
-				bindId: 'friendsCommentIconImage',
-				properties: style.friendsCommentIconImage
-			},{
-				type: 'Ti.UI.Label',
-				bindId: 'friendsCommentLabel',
-				properties: style.friendsCommentLabel
-			}]
-		},{
-			type: 'Ti.UI.View',
-			bindId: 'friendsSeparateView',
-			properties: style.friendsSeparateView,
 		}]
+*/
 	};
 
 	var nextListTemplate = {
