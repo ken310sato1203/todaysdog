@@ -573,15 +573,6 @@ exports.style = {
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
 	},
-	photoCommentUserLabel:{
-		top: '0dp',
-		left: '0dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		textAlign: 'left',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#696969',
-	},
 	photoCommentTextLabel:{
 		top: '5dp',
 		left: '0dp',
@@ -2765,7 +2756,6 @@ exports.style = {
 		top: '0dp',
 		left: '0dp',
 		width: '7dp',
-		height: '78dp',
 		backgroundColor : '#87CEFA',
 	},
 
@@ -2785,14 +2775,14 @@ exports.style = {
 		width: Ti.Platform.displayCaps.platformWidth + 'dp',
 //		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
 		height: Ti.UI.SIZE,
-		backgroundColor: 'blue',
+		backgroundColor: 'white',
 	},
 	friendsPhotoImage:{
 //		top: '-100dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		defaultImage: '',
-		backgroundColor: 'black',
+		backgroundColor: 'white',
 		// カスタムプロパティ
 		articleData: null,
 	},
@@ -2806,8 +2796,8 @@ exports.style = {
 		backgroundColor: 'white',
 	},
 	friendsUserIconView:{
-		top: '10dp',
-		bottom: '10dp',
+		top: '8dp',
+		bottom: '8dp',
 		left: '15dp',
 		width: '36dp',
 		height: '36dp',
@@ -2820,8 +2810,7 @@ exports.style = {
 	},
 	friendsTextView:{
 		layout: 'vertical',
-		top: '12dp',
-		bottom: '10dp',
+		top: '10dp',
 		left: '60dp',
 		right: '60dp',
 		width: Ti.UI.SIZE,
@@ -2848,8 +2837,7 @@ exports.style = {
 	},	
 
 	friendsCountView:{
-		top: '10dp',
-		bottom: '10dp',
+		top: '8dp',
 		right: '10dp',
 		width: '40dp',
 		height: Ti.UI.SIZE,
@@ -2940,7 +2928,8 @@ exports.style = {
 
 	friendsNextList:{
 		height: Ti.UI.SIZE,
-		backgroundColor: '#eeeeee',
+//		backgroundColor: '#eeeeee',
+		backgroundColor: 'white',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
 	},
 	friendsNextLabel:{
@@ -3038,7 +3027,7 @@ exports.style = {
 		top: '0dp',
 		left: '0dp',
 		width: '7dp',
-		height: '70dp',
+		height: '64dp',
 		backgroundColor : '#87CEFA',
 	},
 	friendsCommentUserIconView:{
@@ -3077,22 +3066,13 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-	},
-	friendsCommentUserLabel:{
-		top: '0dp',
-		left: '0dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		textAlign: 'left',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#696969',
 	},
 	friendsCommentTextLabel:{
 		top: '5dp',
 		left: '0dp',
 		width: Ti.UI.SIZE,
-		height: '15dp',
+		height: '13dp',
 		verticalAlign: Titanium.UI.TEXT_VERTICAL_ALIGNMENT_TOP,
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
@@ -3108,11 +3088,10 @@ exports.style = {
 		color: '#696969',
 	},
 	friendsCommentArticleView:{
-		top: '10dp',
+		top: '7dp',
 		left: '10dp',
 		width: '50dp',
 		height: '50dp',
-		borderRadius: '25dp',
 	},
 	friendsCommentArticleImage:{
 		width: '50dp',

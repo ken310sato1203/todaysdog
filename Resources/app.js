@@ -17,8 +17,7 @@ var customTab = null;
 
 // facebook側で登録したアプリID tiapp.xmlから取得
 Facebook.appid = Ti.App.Properties.getString('ti.facebook.appid');
-//Facebook.permissions = ['offline_access', 'publish_stream'];
-Facebook.permissions = ['publish_stream'];
+Facebook.permissions = ['public_profile'];
 // iOS6以降、facebookのシングルサインオンに対応するためforceDialogAuthはfalseにすべきとあるが
 // authorizeがGET系のみとなり、reauthorizeで再度POST系の認証をする必要があるため、trueとしシングルサインオンには対応しない
 Facebook.forceDialogAuth = true;

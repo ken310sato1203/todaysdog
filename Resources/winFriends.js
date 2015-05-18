@@ -71,19 +71,20 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			}
 			var nameValue = '';
 			if (_articleList[i].name != '') {
-//				nameValue = _articleList[i].name + ' ';
 				nameValue = _articleList[i].name;
 			} else {
 				nameValue = _articleList[i].user;
 			}
 			
-			var photoHeight = ( style.commonSize.screenWidth - 40 ) / 2;
-			var photoTop = ( style.commonSize.screenWidth - 40 - photoHeight) / 2 * -1;
+			var photoWidth = style.commonSize.screenWidth - 40;
+			var photoHeight = photoWidth / 2;
+			var photoTop = ( photoWidth - photoHeight) / 2 * -1;
 			
 			var articleItem = [{
 				template: 'article',
 				articleData: _articleList[i],
 				friendsUnreadView: {
+					height: (photoHeight + 52) + 'dp',
 					visible: unreadFlag,
 				},
 				friendsPhotoView: {
@@ -91,6 +92,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				},
 				friendsPhotoImage: {
 					top: photoTop + 'dp',
+					width: photoWidth + 'dp',
 					image: _articleList[i].photo,
 				},
 				friendsUserIconImage: {

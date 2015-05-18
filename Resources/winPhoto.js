@@ -131,10 +131,11 @@ exports.createWindow = function(_type, _articleData){
 				icon = user.photo.urls.square_75; 
 			}	
 			if (user.custom_fields && user.custom_fields.name != null) {
-				nameValue = user.custom_fields.name + ' ';
+				nameValue = user.custom_fields.name;
+			} else {
+//				nameValue = user.first_name + ' ' + user.last_name;
+				nameValue = (user.username.indexOf('@') > 0) ? user.username.substring(0,user.username.indexOf('@')) : user.username;
 			}
-//			userValue = user.first_name + ' ' + user.last_name;
-			userValue = (user.username.indexOf('@') > 0) ? user.username.substring(0,user.username.indexOf('@')) : user.username;
 
 			if (review.custom_fields && review.custom_fields.postDate != null) {
 //				time = util.getFormattedDateTime(util.getDate(review.custom_fields.postDate));
@@ -147,9 +148,10 @@ exports.createWindow = function(_type, _articleData){
 			// コメント追加時
 			icon = loginUser.icon;
 			if (loginUser.name != '') {
-				nameValue = loginUser.name + ' ';
+				nameValue = loginUser.name;
+			} else {
+				nameValue = loginUser.user;
 			}
-			userValue = loginUser.user;
 			time = review.time;
 			commentUserId = loginUser.id;
 		}
@@ -165,9 +167,6 @@ exports.createWindow = function(_type, _articleData){
 			},
 			photoCommentNameLabel: {
 				text: nameValue,
-			},
-			photoCommentUserLabel: {
-				text: userValue,
 			},
 			photoCommentTextLabel: {
 				text: review.content,
@@ -494,10 +493,6 @@ exports.createWindow = function(_type, _articleData){
 						type: 'Ti.UI.Label',
 						bindId: 'photoCommentNameLabel',
 						properties: style.photoCommentNameLabel,
-					},{
-						type: 'Ti.UI.Label',
-						bindId: 'photoCommentUserLabel',
-						properties: style.photoCommentUserLabel
 					}]
 				},{
 					type: 'Ti.UI.Label',

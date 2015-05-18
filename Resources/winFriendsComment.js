@@ -47,13 +47,16 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			var date = util.getDateElement(_articleList[i].date);
 			var nameValue = '';
 			if (_articleList[i].name != '') {
-				nameValue = _articleList[i].name + ' ';
+				nameValue = _articleList[i].name;
+			} else {
+				nameValue = _articleList[i].user;
 			}
 			var articleItem = [{
 				template: 'article',
 				articleData: _articleList[i],
 				friendsCommentUnreadView: {
-					visible: unreadFlag,
+//					visible: unreadFlag,
+					visible: true,
 				},
 				friendsCommentUserIconView: {
 //					backgroundImage: _articleList[i].icon,
@@ -63,9 +66,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				},
 				friendsCommentNameLabel: {
 					text: nameValue,
-				},
-				friendsCommentUserLabel: {
-					text: _articleList[i].user,
 				},
 				friendsCommentTextLabel: {
 					text: _articleList[i].text,
@@ -237,10 +237,6 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 						type: 'Ti.UI.Label',
 						bindId: 'friendsCommentNameLabel',
 						properties: style.friendsCommentNameLabel,
-					},{
-						type: 'Ti.UI.Label',
-						bindId: 'friendsCommentUserLabel',
-						properties: style.friendsCommentUserLabel
 					}]
 				},{
 					type: 'Ti.UI.Label',

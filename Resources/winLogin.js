@@ -452,7 +452,7 @@ exports.createWindow = function(){
 	listView.add(loginView);
 	var loginLabel = Ti.UI.createLabel(style.loginListButtonItemLabel);
 	loginLabel.color = 'white';
-	loginLabel.text = 'ログイン';
+	loginLabel.text = 'メールアドレスでログイン';
 	loginView.add(loginLabel);
 
 	loginView.addEventListener('click',function(e){
@@ -465,34 +465,6 @@ exports.createWindow = function(){
 			pass: passField.value
 		});
 		passField.value = '';
-	});
-
-	// 新規ボタンのフィールドを表示
-	var newView = Ti.UI.createView(style.loginListItemView);
-	newView.top = '9dp';
-//	newView.backgroundColor = '#e74c3c';
-	newView.objectName = 'new';
-	listView.add(newView);
-	var newLabel = Ti.UI.createLabel(style.loginListButtonItemLabel);
-	newLabel.text = '新規登録';
-	newView.add(newLabel);
-
-	newView.addEventListener('click',function(e){
-		Ti.API.debug('[event]newView.click:');
-		if (clickEnable) {
-			clickEnable = false;
-			var target = e.source;
-			target.opacity = 0.5;
-			var registWin = win.createRegistWindow('regist');
-			registWin.open({
-				modal: true,
-			    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
-			    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_PARTIAL_CURL,
-			});
-
-			target.opacity = 1.0;
-			clickEnable = true;
-		}
 	});
 
 	// パスワードリセット
@@ -511,6 +483,35 @@ exports.createWindow = function(){
 			var target = e.source;
 			target.opacity = 0.5;
 			var registWin = win.createRegistWindow('reset');
+			registWin.open({
+				modal: true,
+			    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
+//			    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_PARTIAL_CURL,
+			    modalTransitionStyle: Ti.UI.iPhone.MODAL_TRANSITION_STYLE_COVER_VERTICAL,
+			});
+
+			target.opacity = 1.0;
+			clickEnable = true;
+		}
+	});
+
+	// 新規ボタンのフィールドを表示
+	var newView = Ti.UI.createView(style.loginListItemView);
+	newView.top = '9dp';
+//	newView.backgroundColor = '#e74c3c';
+	newView.objectName = 'new';
+	listView.add(newView);
+	var newLabel = Ti.UI.createLabel(style.loginListButtonItemLabel);
+	newLabel.text = 'メールアドレスで新規登録';
+	newView.add(newLabel);
+
+	newView.addEventListener('click',function(e){
+		Ti.API.debug('[event]newView.click:');
+		if (clickEnable) {
+			clickEnable = false;
+			var target = e.source;
+			target.opacity = 0.5;
+			var registWin = win.createRegistWindow('regist');
 			registWin.open({
 				modal: true,
 			    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
