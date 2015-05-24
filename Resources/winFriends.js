@@ -104,10 +104,18 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				friendsTextLabel: {
 					text: _articleList[i].text,
 				},
+				friendsLikeIconImage: {
+					visible: (_articleList[i].like > 0) ? true : false,
+				},
 				friendsLikeLabel: {
+					visible: (_articleList[i].like > 0) ? true : false,
 					text: (_articleList[i].like < 100) ? _articleList[i].like : 99,
 				},
+				friendsCommentIconImage: {
+					visible: (_articleList[i].comment > 0) ? true : false,
+				},
 				friendsCommentLabel: {
+					visible: (_articleList[i].comment > 0) ? true : false,
 					text: (_articleList[i].comment < 100) ? _articleList[i].comment : 99,
 				},
 
@@ -562,6 +570,20 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			var item = listSection.getItemAt(e.index);
 			item.friendsLikeLabel.text += e.like;
 			item.friendsCommentLabel.text += e.comment;
+			if (item.friendsLikeLabel.text > 0) {
+				item.friendsLikeLabel.visible = true;
+				item.friendsLikeIconImage.visible = true;
+			} else {
+				item.friendsLikeLabel.visible = false;
+				item.friendsLikeIconImage.visible = false;
+			}
+			if (item.friendsCommentLabel.text > 0) {
+				item.friendsCommentLabel.visible = true;
+				item.friendsCommentIconImage.visible = true;
+			} else {
+				item.friendsCommentLabel.visible = false;
+				item.friendsCommentIconImage.visible = false;
+			}
 			listSection.updateItemAt(e.index, item);
 
 		} else {

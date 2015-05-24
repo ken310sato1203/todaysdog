@@ -166,25 +166,18 @@ exports.createWindow = function(_userData){
 					Ti.API.debug('target.day:' + target.day);
 	
 					target.dayImage.opacity = 0.5;
-
-/*
-					var type = "photoList";
-					var photoWin = win.createPhotoWindow(type, target.articleData);
-					photoWin.prevWin = calendarWin;
-					win.openTabWindow(photoWin, {animated:true});
-*/
 					var photoWin = Ti.UI.createWindow(style.calendarFullPhotoWin);
 					var photoView = Ti.UI.createView(style.calendarFullPhotoView);
 					photoWin.add(photoView);
 					var photoImage = Ti.UI.createImageView(style.calendarFullPhotoImage);
 					photoImage.image = target.articleData.photo;
+					photoView.add(photoImage);
+					var photoTimeLabel = Ti.UI.createLabel(style.calendarFullPhotoTimeLabel);
+					photoTimeLabel.text = util.getFormattedMD(target.articleData.date);
+					photoView.add(photoTimeLabel);
 					var photoTextLabel = Ti.UI.createLabel(style.calendarFullPhotoTextLabel);
 					photoTextLabel.text = target.articleData.text;
-					var photoTimeLabel = Ti.UI.createLabel(style.calendarFullPhotoTimeLabel);
-					photoTimeLabel.text = target.articleData.date;
-					photoView.add(photoImage);
 					photoView.add(photoTextLabel);
-					photoView.add(photoTimeLabel);
 					photoWin.open({
 						modal: true,
 					    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,

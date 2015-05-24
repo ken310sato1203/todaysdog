@@ -55,8 +55,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				template: 'article',
 				articleData: _articleList[i],
 				friendsCommentUnreadView: {
-//					visible: unreadFlag,
-					visible: true,
+					visible: unreadFlag,
 				},
 				friendsCommentUserIconView: {
 //					backgroundImage: _articleList[i].icon,

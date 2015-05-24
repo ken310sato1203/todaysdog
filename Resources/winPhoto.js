@@ -130,7 +130,7 @@ exports.createWindow = function(_type, _articleData){
 			if (user.photo != null && user.photo.urls != null) {
 				icon = user.photo.urls.square_75; 
 			}	
-			if (user.custom_fields && user.custom_fields.name != null) {
+			if (user.custom_fields && user.custom_fields.name != null && user.custom_fields.name != '') {
 				nameValue = user.custom_fields.name;
 			} else {
 //				nameValue = user.first_name + ' ' + user.last_name;
@@ -291,13 +291,14 @@ exports.createWindow = function(_type, _articleData){
 
 	var nameView = Ti.UI.createView(style.photoTitleNameView);
 	titleView.add(nameView);
+	var titleUserLabel = Ti.UI.createLabel(style.photoTitleUserLabel);
+	titleUserLabel.text = _articleData.user;
 	if (_articleData.name != '') {
 		var titleNameLabel = Ti.UI.createLabel(style.photoTitleNameLabel);
 		titleNameLabel.text = _articleData.name;
 		nameView.add(titleNameLabel);
+		titleUserLabel.height = '16dp';
 	}
-	var titleUserLabel = Ti.UI.createLabel(style.photoTitleUserLabel);
-	titleUserLabel.text = _articleData.user;
 	nameView.add(titleUserLabel);
 
 	// 戻るボタンの表示

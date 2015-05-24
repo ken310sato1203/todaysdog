@@ -319,7 +319,7 @@ exports.style = {
 		objectName : 'photoTitleNameView',
 	},
 	photoTitleNameLabel:{
-		top: '0dp',
+//		top: '0dp',
 		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: '16dp',
@@ -329,10 +329,11 @@ exports.style = {
 		touchEnabled: false,
 	},
 	photoTitleUserLabel:{
-		top: '0dp',
+//		top: '0dp',
 		left: '0dp',
 		width: Ti.UI.SIZE,
-		height: '16dp',
+//		height: '16dp',
+		height: '100%',
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: 'white',
@@ -606,6 +607,7 @@ exports.style = {
 		height: '30dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
+		maxLength: '64',
 		hintText: 'コメントを入力する',
 		keyboardToolbarColor: '#f5f5f5',
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
@@ -2068,8 +2070,18 @@ exports.style = {
 		defaultImage: '',
 		touchEnabled: false,
 	},
+	calendarFullPhotoTimeLabel:{
+		top: '10dp',
+		left: '10dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'left',
+		font: {fontSize:12, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
 	calendarFullPhotoTextLabel:{
 		top: '5dp',
+		bottom: '15dp',
 		left: '10dp',
 		right: '10dp',
 		width: Ti.UI.SIZE,
@@ -2079,16 +2091,7 @@ exports.style = {
 		color: '#000',
 		touchEnabled: false,
 	},
-	calendarFullPhotoTimeLabel:{
-		top: '5dp',
-		bottom: '5dp',
-		left: '10dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
-		textAlign: 'left',
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#696969',
-	},
+
 
 // winCamera -------------------------------------------------------
 	cameraWin:{
@@ -2823,17 +2826,20 @@ exports.style = {
 		height: '16dp',
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#696969',
+//		color: '#696969',
+		color: '#000',
 	},
 	friendsTextLabel:{
 		top: '0dp',
 		bottom: '5dp',
 		left: '0dp',
-		width: Ti.UI.SIZE,
+//		width: Ti.UI.SIZE,
+		width: '100%',
 		height: '16dp',
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
+//		backgroundColor: 'yellow',
 	},	
 
 	friendsCountView:{
@@ -3066,7 +3072,8 @@ exports.style = {
 		height: Ti.UI.SIZE,
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#696969',
+//		color: '#696969',
+		color: '#000',
 	},
 	friendsCommentTextLabel:{
 		top: '5dp',
