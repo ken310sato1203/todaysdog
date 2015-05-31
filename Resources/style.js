@@ -607,7 +607,7 @@ exports.style = {
 		height: '30dp',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: '#000',
-		maxLength: '64',
+		maxLength: '60',
 		hintText: 'コメントを入力する',
 		keyboardToolbarColor: '#f5f5f5',
         keyboardType:Ti.UI.KEYBOARD_DEFAULT,
@@ -2934,8 +2934,8 @@ exports.style = {
 
 	friendsNextList:{
 		height: Ti.UI.SIZE,
-//		backgroundColor: '#eeeeee',
-		backgroundColor: 'white',
+		backgroundColor: '#eeeeee',
+//		backgroundColor: 'white',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
 	},
 	friendsNextLabel:{

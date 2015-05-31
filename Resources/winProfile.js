@@ -411,9 +411,9 @@ exports.createWindow = function(_userData){
 					// 取得した記事をテーブルに追加
 					profileTableView.appendRow(getPhotoListArticleTableRow(e.articleList), {animated:true});
 					var bottomRow = Ti.UI.createTableViewRow(style.profileInfoTableRow);
-					var bottomImage = Ti.UI.createImageView(style.profileBottomImage);
-					bottomRow.add(bottomImage);
-	//					bottomRow.height = '44dp';
+					bottomRow.height = '44dp';
+//					var bottomImage = Ti.UI.createImageView(style.profileBottomImage);
+//					bottomRow.add(bottomImage);
 					profileTableView.appendRow(bottomRow, {animated:false});
 				}
 	
