@@ -363,6 +363,16 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	
 			if (e.rowData.objectName != null){
 				var targetName = e.rowData.objectName;
+
+				if (selectedName != null && selectedName != targetName){
+					if (selectedName == "date"){
+						datePickerView.animate(slideOut);
+	
+					} else if (selectedName == "hour"){
+						hourPickerView.animate(slideOut);
+					}
+				}				
+
 				if (targetName == "stamp"){
 	/*
 					// マイナスボタンを押すと削除
@@ -394,9 +404,9 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 	//					if(allSwitch.value == false) {
 						hourPicker.setSelectedRow(0, util.getHour(hourValue.source));
 						// アニメーションがうまく動かないので時間遅らせて表示
-						setTimeout(function() {
+//						setTimeout(function() {
 							hourPickerView.animate(slideIn);
-						}, 100);
+//						}, 100);
 	//					}
 	
 				} else if (targetName == "all"){
@@ -410,14 +420,6 @@ exports.createWindow = function(_type, _userData, _stampDataList){
 					postButton.fireEvent('click');
 				}
 	
-				if (selectedName != targetName){
-					if (selectedName == "date"){
-						datePickerView.animate(slideOut);
-	
-					} else if (targetName == "hour"){
-						hourPickerView.animate(slideOut);
-					}
-				}				
 				selectedName = targetName;
 			}
 		}

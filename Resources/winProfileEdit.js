@@ -222,6 +222,7 @@ exports.createWindow = function(_userData){
 	var memoLabel = Ti.UI.createLabel(style.profileEditListItemLabel);
 	memoLabel.text = '自己紹介';
 	var memoField = Ti.UI.createTextArea(style.profileEditListTextArea);
+	memoField.maxLength = 100;
 	memoField.objectName = 'memo';
 	memoField.value = _userData.memo;
 	memoView.add(memoLabel);

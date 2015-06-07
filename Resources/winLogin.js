@@ -36,9 +36,6 @@ exports.createWindow = function(){
 		tabGroup.addTab(tab2);
 		tabGroup.addTab(tab3);
 		tabGroup.addTab(tab4);
-		
-		// 初期表示のウィンドウを設定
-		tabGroup.setActiveTab(tab2);
 		tabGroup.open();
 	
 		// カスタムタブを上から表示

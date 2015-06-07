@@ -177,15 +177,23 @@ exports.win = {
 	getCustomTabWin:function() {
 		Ti.API.debug('[func]getCustomTabWin:');
 		var tabData = [
-			{image:"images/icon/light_chat.png", text:"friends", objectName:"friendsTab"},
-			{image:"images/icon/light_plus.png", text:"today", objectName:"todayTab"},
-			{image:"images/icon/light_diary.png", text:"diary", objectName:"diaryTab"},
-			{image:"images/icon/light_pegman.png", text:"profile", objectName:"profileTab"},
+			{image:"images/icon/w_friend.png", text:"friends", objectName:"friendsTab"},
+			{image:"images/icon/w_home2.png", text:"today", objectName:"todayTab"},
+			{image:"images/icon/w_diary.png", text:"diary", objectName:"diaryTab"},
+			{image:"images/icon/w_profile.png", text:"profile", objectName:"profileTab"},			
+//			{image:"images/icon/light_chat.png", text:"friends", objectName:"friendsTab"},
+//			{image:"images/icon/light_plus.png", text:"today", objectName:"todayTab"},
+//			{image:"images/icon/light_diary.png", text:"diary", objectName:"diaryTab"},
+//			{image:"images/icon/light_pegman.png", text:"profile", objectName:"profileTab"},
 		];
 		var tabWin = Ti.UI.createWindow(style.tabWin);
 		tabWin.tabData = tabData;
 		var tabGroupView = Ti.UI.createView(style.tabGroupView);
 		tabWin.add(tabGroupView);
+		var selectedTab = null;
+		// 初期表示のタブを設定
+		var selectedIndex = 1;
+		tabGroup.activeTab = tabGroup.tabs[selectedIndex];
 
 		for (var i=0; i<tabData.length; i++) {
 			var tabView = Ti.UI.createView(style.tabView);
@@ -198,22 +206,36 @@ exports.win = {
 			tabView.add(tabImage);
 			tabView.tabImage = tabImage;
 
+			// 初期表示のタブを設定
+			if (i == selectedIndex) {
+				selectedTab = tabView;
+				tabImage.opacity = 1.0;
+			} else {
+				tabImage.opacity = 0.7;
+			} 
 			// tabViewをクリック
 			tabView.addEventListener('click',function(e){
 				Ti.API.debug('[event]tabView.click:');
 				// 多重クリック防止
 				if (clickEnable) {
 					clickEnable = false;
-					e.source.tabImage.opacity = 0.5;
+					var targetITab = e.source;
+					if (selectedTab != null) {
+						selectedTab.tabImage.opacity = 0.7;
+					}
+					selectedTab = targetITab;
+					targetITab.tabImage.opacity = 1.0;
+
+//					targetITab.tabImage.opacity = 0.5;
 					// diaryWinのrefresh後に入れると、diaryWinはクローズされないのでイベントが追加されてしまう。
 					setTimeout(function(){
-						e.source.tabImage.opacity = 1.0;
+//						targetITab.tabImage.opacity = 1.0;
 						clickEnable = true;
 			        }, 200);
-	
-					if (e.source.tabIndex == 0) {
+			        
+					if (targetITab.tabIndex == 0) {
 						if (tabGroup.activeTab.window.objectName != 'friendsWin') {
-							tabGroup.activeTab = tabGroup.tabs[e.source.tabIndex];
+							tabGroup.activeTab = tabGroup.tabs[targetITab.tabIndex];
 							// 未読記事の更新
 							if (tabGroup.articleUpdateFlag) {
 								tabGroup.articleUpdateFlag = false;
@@ -222,24 +244,24 @@ exports.win = {
 							}
 						}
 						
-					} else if (e.source.tabIndex == 1) {
+					} else if (targetITab.tabIndex == 1) {
 						var todayWin = win.getTab("todayTab").window;
 						if (tabGroup.activeTab.window.objectName != 'todayWin') {
-							todayWin.fireEvent('refresh', {activeTab:tabGroup.tabs[e.source.tabIndex]});
+							todayWin.fireEvent('refresh', {activeTab:tabGroup.tabs[targetITab.tabIndex]});
 						} else {
 							todayWin.fireEvent('refresh');
 						}
 
-					} else if (e.source.tabIndex == 2) {
+					} else if (targetITab.tabIndex == 2) {
 						var diaryWin = win.getTab("diaryTab").window;
 						if (tabGroup.activeTab.window.objectName != 'diaryWin') {
-							diaryWin.fireEvent('refresh', {timeWinUpdateFlag:true, activeTab:tabGroup.tabs[e.source.tabIndex]});
+							diaryWin.fireEvent('refresh', {timeWinUpdateFlag:true, activeTab:tabGroup.tabs[targetITab.tabIndex]});
 						} else {
 							diaryWin.fireEvent('refresh', {timeWinUpdateFlag:true});
 						}
 
 					} else {
-						tabGroup.activeTab = tabGroup.tabs[e.source.tabIndex];
+						tabGroup.activeTab = tabGroup.tabs[targetITab.tabIndex];
 					}
 				}
 			});

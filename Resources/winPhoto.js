@@ -609,10 +609,11 @@ exports.createWindow = function(_type, _articleData){
 
 		if (item.template == 'article') {
 			if( e.bindId == 'photoPhotoImage'
-				|| e.bindId == 'photoArticleTextView'
-				|| e.bindId == 'photoTextView'
-				|| e.bindId == 'photoTimeLabel'
-				|| e.bindId == 'photoTextLabel') {
+//				|| e.bindId == 'photoArticleTextView'
+//				|| e.bindId == 'photoTextView'
+//				|| e.bindId == 'photoTimeLabel'
+//				|| e.bindId == 'photoTextLabel'
+				) {
 				// テキストフィールド入力中でないかチェック
 				if ( blurCommentField() == false ) {
 					photoWin.close({animated:true});
