@@ -1674,6 +1674,17 @@ exports.model = {
 			callback(e);
 		});
 	},
+	// コメントリストから削除
+	removeCloudCommentList:function(params, callback){
+		Ti.API.debug('[func]removeCloudCommentList:');
+		Cloud.Reviews.remove({
+			post_id: params.postId,
+			review_id: params.reviewId
+		}, function (e) {
+			callback(e);
+		});
+	},
+
 	// コメントリストの取得
 	getCloudCommentList:function(params, callback){
 		Ti.API.debug('[func]getCloudCommentList:');
@@ -1681,9 +1692,11 @@ exports.model = {
 			user_id: params.userId,
 			post_id: params.postId,
 			where: {content: {'$exists': true}},
-			order: 'created_at',
-			page : 1,
-			per_page : 10
+			order: '-created_at',
+//			page : 1,
+//			per_page : 10
+			page : params.page,
+			per_page : params.count
 		}, function (e) {
 			callback(e);
 		});

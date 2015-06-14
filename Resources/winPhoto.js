@@ -15,6 +15,14 @@ exports.createWindow = function(_type, _articleData){
 	// blur用
 	var commentField = null;
 
+	// 記事データの取得ページ
+	var articlePage = 1;
+	// 記事データの取得件数ß
+	var articleCount = 10;
+	// 続きを読むフラグ
+	var nextArticleFlag = false;
+	var nextTarget = null;
+
 	// テキストフィールドのblurの処理
 	var blurCommentField = function() {
 		Ti.API.debug('[func]blurCommentField:');
@@ -158,7 +166,8 @@ exports.createWindow = function(_type, _articleData){
 
 		var commentItem = [{
 			template: 'comment',
-			commentUserId: commentUserId,
+			userId: commentUserId,
+			reviewId: review.id,
 			photoCommentUserIconView: {
 //				backgroundImage: icon,
 			},
@@ -183,6 +192,7 @@ exports.createWindow = function(_type, _articleData){
 	// コメントリストの更新
 	var updateComment = function() {
 		Ti.API.debug('[func]updateComment:');
+/*
 		// 初回のみコメントの読み込み中を表示
 		if (initFlag) {
 			var loadItem = [{
@@ -194,11 +204,13 @@ exports.createWindow = function(_type, _articleData){
 			}];
 			listSection.appendItems(loadItem);
 		}
-
+*/
 		// コメントリストの取得
 		model.getCloudCommentList({
 			userId: loginUser.id,
-			postId: _articleData.id
+			postId: _articleData.id,
+			page: articlePage,
+			count: articleCount
 		}, function(e) {
 			if (e.success) {
 				Ti.API.debug('[func]getCloudCommentList.callback:');
@@ -207,6 +219,29 @@ exports.createWindow = function(_type, _articleData){
 						listSection.appendItems(getCommentItem(e.reviews[i]));					
 					}
 				}
+
+				if (nextTarget != null) {
+					// 続きを読むの行をdeleteだとうまくいかないのでupdateで高さを0にし、追加後に反映
+					listSection.updateItemAt(nextTarget.index, nextTarget.item);
+					nextTarget = null;
+				};
+
+				if (e.meta.total_pages == articlePage) {
+					nextArticleFlag = false;
+				} else if (e.meta.total_pages > articlePage) {
+					articlePage++;
+					nextArticleFlag = true;
+					var nextItem = [{
+						template: 'next',
+						photoCommentNextLabel: {
+							text: '続きを読む',
+						},
+					}];
+					listSection.appendItems(nextItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
+
+				}
+
+/*
 				var bottomItem = [{
 					template: 'bottom',
 				}];
@@ -221,7 +256,7 @@ exports.createWindow = function(_type, _articleData){
 					listSection.updateItemAt(2, item);
 					initFlag = false;
 				}
-	
+*/	
 			} else {
 				util.errorDialog(e);
 			}
@@ -256,9 +291,10 @@ exports.createWindow = function(_type, _articleData){
 				var review = {user:null, content:null};
 				review.content = text;
 				review.time = util.getFormattedNowDateTime();
-				// bottomの前に追加
-				listSection.insertItemsAt(listSection.items.length - 1, getCommentItem(review));
-				listView.scrollToItem(listView.sections.length - 1, listSection.items.length - 1);
+				// コメント入力の直下に追加
+				listSection.insertItemsAt(3, getCommentItem(review), {animated: true});
+//				listSection.insertItemsAt(listSection.items.length, getCommentItem(review), {animated: true});
+//				listView.scrollToItem(0, listSection.items.length, {animated: true});
 
 				actInd.hide();
 				text = '';
@@ -376,7 +412,16 @@ exports.createWindow = function(_type, _articleData){
 					type: 'Ti.UI.ImageView',
 					bindId: 'photoPhotoImage',
 					properties: style.photoPhotoImage,
-				}]
+				}],
+				events: {
+					'click': function (e) {
+						Ti.API.debug('[event]photoPhotoView.click:');
+						if ( blurCommentField() == false ) {
+							photoWin.close({animated:true});
+						}
+					}
+				}
+
 			},{
 				type: 'Ti.UI.View',
 				bindId: 'photoArticleTextView',
@@ -399,13 +444,13 @@ exports.createWindow = function(_type, _articleData){
 					bindId: 'photoLikeStampImage',
 					properties: style.photoLikeStampImage,
 					events: {
-						click: function(e) {
+						'click': function(e) {
 							// テキストフィールド入力中でないかチェック
 							if ( blurCommentField() == false ) {
 								clickLikeStampImage(e);
 							}
-						},
-					},
+						}
+					}
 				}]
 			}]
 		}]
@@ -429,18 +474,18 @@ exports.createWindow = function(_type, _articleData){
 					bindId: 'photoCommentField',
 					properties: style.photoCommentField,
 					events: {
-						focus: function(e) {
+						'focus': function(e) {
 							commentField = e.source;
 							commentField.focusFlag = true;
 						},
-						return: function(e) {
+						'return': function(e) {
 							if (e.source.value != '') {
 								addComment(e.source.value);
 								e.source.value = '';
 								blurCommentField();
 							}
 						}
-					},
+					}
 				}]
 /*			},{
 				type: 'Ti.UI.View',
@@ -481,7 +526,34 @@ exports.createWindow = function(_type, _articleData){
 					type: 'Ti.UI.ImageView',
 					bindId: 'photoCommentUserIconImage',
 					properties: style.photoCommentUserIconImage,
-				}]
+				}],
+				events: {
+					'click': function (e) {
+						Ti.API.debug('[event]photoCommentUserIconView.click:');
+						var item = e.section.getItemAt(e.itemIndex);
+						if (item.userId != loginUser.id) {
+							listView.touchEnabled = false;
+							// ユーザデータの取得
+							model.getCloudUser(item.userId, function(e) {
+								Ti.API.debug('[func]getCloudUser.callback:');
+								if (e.success) {
+									if (e.userList[0]) {
+										item.photoCommentUserIconView.opacity = 0.5;
+										var profileWin = win.createProfileWindow(e.userList[0]);
+										win.openTabWindow(profileWin, {animated:true});
+										item.photoCommentUserIconView.opacity = 1.0;
+										listView.touchEnabled = true;
+									}
+				
+								} else {
+									util.errorDialog(e);
+									listView.touchEnabled = true;
+								}
+							});
+						}
+					}
+				}
+
             },{
 				type: 'Ti.UI.View',
 				bindId: 'photoCommentTextView',
@@ -505,8 +577,79 @@ exports.createWindow = function(_type, _articleData){
 					properties: style.photoCommentTimeLabel,
 				}]
 			}]
-		}]
+		}],
+		events: {
+			'longpress': function (e) {
+				Ti.API.debug('[event]photoCommentView.longpress:');
+				var item = e.section.getItemAt(e.itemIndex);
+	
+				if (_articleData.userId == loginUser.id || item.userId == loginUser.id) {
+					listView.touchEnabled = false;
+					var targetView = e.source;
+					targetView.backgroundColor = '#dedede';
+					var deleteIndex = e.itemIndex;
+	
+					var alertDialog = Titanium.UI.createAlertDialog({
+						title: 'コメントを削除しますか？',
+						buttonNames: ['キャンセル','OK'],
+						cancel: 1
+					});
+					alertDialog.show();
+			
+					alertDialog.addEventListener('click',function(alert){
+						// OKの場合
+						if(alert.index == 1){
+							model.removeCloudCommentList({
+								postId: _articleData.id,
+								reviewId: item.reviewId
+							}, function(e) {
+								Ti.API.debug('[func]removeCloudCommentList.callback:');
+								if (e.success) {
+									Ti.API.debug('Success:');
+									listSection.deleteItemsAt(deleteIndex, 1, {animated:true});
+	
+									if (photoWin.prevWin != null) {
+										photoWin.prevWin.fireEvent('refresh', {index:_articleData.index, like:0, comment:-1});
+									}
+				
+								} else {
+									util.errorDialog(e);
+								}
+								targetView.backgroundColor = 'white';
+								listView.touchEnabled = true;
+							});
+	
+						} else {
+								targetView.backgroundColor = 'white';
+								listView.touchEnabled = true;
+						}
+					});
+				}
+			}
+		}
 	};
+	var nextListTemplate = {
+		properties: style.photoCommentNextList,
+		childTemplates: [{
+			type: 'Ti.UI.Label',
+			bindId: 'photoCommentNextLabel',
+			properties: style.photoCommentNextLabel,
+		}],
+		events: {
+			'click': function (e) {
+				Ti.API.debug('[event]photoCommentNextList.click:');
+				listView.touchEnabled = false;
+				var item = e.section.getItemAt(e.itemIndex);
+				// 続きを読むの行をdeleteだとうまくいかないのでupdateで高さを0にし、追加後に反映
+				item.photoCommentNextLabel.text = '';
+				item.photoCommentNextLabel.height = '0dp';
+				nextTarget = {index:e.itemIndex, item:item};
+				updateComment();
+				listView.touchEnabled = true;
+			}
+		}		
+	};
+/*
 	var bottomListTemplate = {
 		properties: style.photoBottomList,
 		childTemplates: [{
@@ -515,14 +658,15 @@ exports.createWindow = function(_type, _articleData){
 			properties: style.photoCommentBottomView,
 		}]
 	};
-	
+*/	
 	var listView = Ti.UI.createListView(style.photoTableListView);
 	listView.templates = {
 		'article': articleListTemplate,
 		'action': actionListTemplate,
 		'load': loadListTemplate,
 		'comment': commentListTemplate,
-		'bottom': bottomListTemplate
+		'next': nextListTemplate,
+//		'bottom': bottomListTemplate
    };
 	
 	var listSection = Ti.UI.createListSection();
@@ -603,6 +747,7 @@ exports.createWindow = function(_type, _articleData){
 		}
 	});
 
+/*
 	listView.addEventListener('itemclick', function(e){
 		Ti.API.debug('[event]listView.itemclick:');
 		var item = e.section.getItemAt(e.itemIndex);
@@ -621,10 +766,11 @@ exports.createWindow = function(_type, _articleData){
 			}
 
 		} else if (item.template == 'comment' && e.bindId == 'photoCommentUserIconImage') {
-			if (item.commentUserId != loginUser.id) {
+
+			if (item.userId != loginUser.id) {
 				listView.touchEnabled = false;
 				// ユーザデータの取得
-				model.getCloudUser(item.commentUserId, function(e) {
+				model.getCloudUser(item.userId, function(e) {
 					Ti.API.debug('[func]getCloudUser.callback:');
 					if (e.success) {
 						if (e.userList[0]) {
@@ -641,8 +787,59 @@ exports.createWindow = function(_type, _articleData){
 					}
 				});
 			}
+
+		} else if (item.template == 'next') {
+			listView.touchEnabled = false;
+			// 続きを読むの行をdeleteだとうまくいかないのでupdateで高さを0にし、追加後に反映
+			item.photoCommentNextLabel.text = '';
+			item.photoCommentNextLabel.height = '0dp';
+			nextTarget = {index:e.itemIndex, item:item};
+			updateComment();
+			listView.touchEnabled = true;
 		}
 	});
 
+	listView.addEventListener('longpress', function(e){
+		Ti.API.debug('[event]listView.longpress:');
+		var item = e.section.getItemAt(e.itemIndex);
+
+		if (item.template == 'comment') {
+			if (_articleData.userId != loginUser.id) {
+				var alertDialog = Titanium.UI.createAlertDialog({
+					title: 'コメントを削除しますか？',
+					buttonNames: ['キャンセル','OK'],
+					cancel: 1
+				});
+				alertDialog.show();
+		
+				alertDialog.addEventListener('click',function(alert){
+					// OKの場合
+					if(alert.index == 1){
+						listView.touchEnabled = false;
+
+						model.removeCloudCommentList({
+							postId: _articleData.id,
+							reviewId: item.reviewId
+						}, function(e) {
+							Ti.API.debug('[func]removeCloudCommentList.callback:');
+							if (e.success) {
+								Ti.API.debug('Success:');
+								listSection.deleteItemsAt(e.itemIndex, 1);
+
+								if (photoWin.prevWin != null) {
+									photoWin.prevWin.fireEvent('refresh', {index:_articleData.index, like:0, comment:-1});
+								}
+			
+							} else {
+								util.errorDialog(e);
+							}
+							listView.touchEnabled = true;
+						});
+					}
+				});
+			}
+		}
+	});
+*/
 	return photoWin;
 };

@@ -564,6 +564,7 @@ exports.style = {
 		left: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+		touchEnabled: false,
 	},
 	photoCommentNameLabel:{
 		top: '0dp',
@@ -573,6 +574,7 @@ exports.style = {
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
+		touchEnabled: false,
 	},
 	photoCommentTextLabel:{
 		top: '5dp',
@@ -582,6 +584,7 @@ exports.style = {
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#000',
+		touchEnabled: false,
 	},
 	photoCommentTimeLabel:{
 		top: '5dp',
@@ -591,6 +594,7 @@ exports.style = {
 		textAlign: 'left',
 		font: {fontSize:12, fontFamily:'Helvetica Neue'},
 		color: '#696969',
+		touchEnabled: false,
 	},
 	photoCommentBottomView:{
 		top: '0dp',
@@ -661,12 +665,27 @@ exports.style = {
 		backgroundColor: '#eeeeee',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
 	},
+	photoCommentNextList:{
+		height: Ti.UI.SIZE,
+		backgroundColor: '#eeeeee',
+		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.GRAY,
+	},
+	photoCommentNextLabel:{
+		top: '0dp',
+		width: '100%',
+		height: '50dp',
+		textAlign: 'center',
+		font: {fontSize:14, fontFamily:'Helvetica Neue'},
+		color: '#696969',
+	},
+
+/*
 	photoBottomList:{
 		height: Ti.UI.SIZE,
 		backgroundColor: '#eeeeee',
 		selectionStyle: Titanium.UI.iPhone.ListViewCellSelectionStyle.NONE,
 	},
-
+*/
 	photoCommentLoadList:{
 		height: Ti.UI.SIZE,
 //		backgroundColor: '#eeeeee',
@@ -3284,7 +3303,7 @@ exports.style = {
 		bottom: '44dp',
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
-		scrollable: false,
+//		scrollable: false,
 		data: [],
 		backgroundColor: 'transparent',
 	},
@@ -3318,7 +3337,7 @@ exports.style = {
 //		top: '80dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
-		visible: false,
+//		visible: false,
 	},
 	todayNoDataLabel:{
 		textAlign: 'center',

@@ -522,7 +522,7 @@ exports.createWindow = function(_userData){
 	todayWin.photoImage = photoImage;
 	// 写真・スタンプの表示
 	var todayTableView = Ti.UI.createTableView(style.todayTableView);
-//	todayTableView.headerPullView = getTableHeader();
+	todayTableView.headerPullView = getTableHeader();
 	todayWin.add(todayTableView);
 	// メニューの表示
 	var todayMenuView = getTodayMenuView();
@@ -583,7 +583,6 @@ exports.createWindow = function(_userData){
 		todayMenuView.scrollTo(style.commonSize.screenWidth * todayMenuPage, 0);	
 	});
 
-/*
 	// 下スクロールで上部ヘッダがすべて表示するまでひっぱったかどうかのフラグ
 	var pulling = false;
 	// スクロール終了時に更新をしてよいかどうかのフラグ
@@ -639,7 +638,6 @@ exports.createWindow = function(_userData){
 	        }, 2000);
 	    }
 	});
-*/
 
 	return todayWin;
 };
