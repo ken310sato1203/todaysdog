@@ -295,28 +295,6 @@ exports.createWindow = function(_userData){
 
 	updateCalView(now.year, now.month, now.day);
 
-/*
-	// 当月のスタンプデータ取得
-	model.getCloudStampList({
-		userId: _userData.id,
-		year: year,
-		month: month,
-		day: null
-	}, function(e) {
-		if (e.success) {
-			Ti.API.debug('[func]getCloudStampList.callback:');
-			// カレンダーの表示
-			thisDiaryView = getCalView(e.stampList, year, month);
-			diaryWin.add(thisDiaryView);
-			// 今日の日にスクロール
-			thisDiaryView.scrollToIndex(now.day-3>0?now.day-3:0, {animated:false, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-			thisDiaryView.visible = true;
-		} else {
-			util.errorDialog(e);
-		}
-	});
-*/
-
 // ---------------------------------------------------------------------
 	// 前月ボタンをクリック
 	prevImage.addEventListener('click', function(e){

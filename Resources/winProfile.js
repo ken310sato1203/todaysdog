@@ -123,27 +123,6 @@ exports.createWindow = function(_userData){
 						// フォト数の更新
 						_userData.photo = collection.counts.total_photos;
 						countPhotoLabel.text = _userData.photo;
-
-/*	
-						// カバー写真の更新
-						if (_userData.photo > 0) {
-							var coverIndex = Math.floor(Math.random() * _userData.photo);
-							model.getCloudPhoto({
-								collection: collection.id,
-								page: coverIndex+1,
-								count: 1
-							}, function(e) {
-								Ti.API.debug('[func]getCloudPhoto.callback:');
-								if (e.success) {
-									if (e.photos) {
-										photoImage.image = e.photos[0].urls.original;
-									}
-								} else {
-									util.errorDialog(e);
-								}
-							});
-						}
-*/
 					}
 				}
 			} else {
@@ -355,12 +334,6 @@ exports.createWindow = function(_userData){
 			// 各記事のタップでフォト画面へ遷移
 			photoImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]photoImage.click:');
-/*
-				var type = "photoList";
-				var photoWin = win.createPhotoWindow(type, e.source.articleData);
-				photoWin.prevWin = photoListWin;
-				win.openTabWindow(photoWin, {animated:true});
-*/
 				var target = e.source;
 				target.opacity = 0.5;
 				var photoWin = Ti.UI.createWindow(style.photoListFullPhotoWin);

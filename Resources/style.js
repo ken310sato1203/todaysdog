@@ -461,7 +461,7 @@ exports.style = {
 	photoCommentActionImage:{
 		top: '5dp',
 		bottom: '5dp',
-		left: '10dp',
+		left: '17dp',
 		width: '28dp',
 		height: '28dp',
 		defaultImage: '',
@@ -526,10 +526,20 @@ exports.style = {
 		backgroundColor: '#dedede',
 	},
 */
+	photoCommentFrameView:{
+		top: '0dp',
+	    bottom: '1dp',
+		width: '100%',
+		height: Ti.UI.SIZE,
+		backgroundColor: 'white',
+//		backgroundColor : '#87CEFA',
+	},
 	photoCommentView:{
 		layout: 'horizontal',
 		top: '0dp',
-	    bottom: '1dp',
+	    bottom: '0dp',
+		left: '7dp',
+		right: '0dp',
 		width: '100%',
 		height: Ti.UI.SIZE,
 		backgroundColor: 'white',
@@ -537,15 +547,16 @@ exports.style = {
 	photoCommentUserIconView:{
 		top: '5dp',
 		bottom: '5dp',
+//		left: '17dp',
 		left: '10dp',
 		width: '36dp',
 		height: '36dp',
 //		borderRadius: '5dp',
-		borderRadius: '18dp',
+		borderRadius: '20dp',
 	},
 	photoCommentUserIconImage:{
-		width: '36dp',
-		height: '36dp',
+		width: '40dp',
+		height: '40dp',
 		defaultImage: '',
 	},
 	photoCommentTextView:{
@@ -554,8 +565,8 @@ exports.style = {
 		bottom: '5dp',
 		left: '10dp',
 		right: '10dp',
-		// photoCommentUserIconImage(10+36)と余白（10+10）を除いたサイズ
-		width: (Ti.Platform.displayCaps.platformWidth - 66) + 'dp',
+		// photoCommentUserIconImage(10+36)と余白（17+10）を除いたサイズ
+		width: (Ti.Platform.displayCaps.platformWidth - 73) + 'dp',
 		height: Ti.UI.SIZE,
 	},
 	photoCommentNameView:{
@@ -2249,6 +2260,7 @@ exports.style = {
 		backgroundColor: 'white',
 		font: {fontSize:14, fontFamily:'Helvetica Neue'},
 		color: 'gray',
+		maxLength: '140',
 		// hintTextはiOSで対応されていないので、focus/blur時に処理
 		hintText: 'コメントを入力する',
 		value: 'コメントを入力する',
@@ -3351,25 +3363,29 @@ exports.style = {
 		image : 'images/icon/i_circle.png',
 	},
 	todayDayWeekView:{
-//		layout: 'absolute',
-//		top: '10dp',
-		bottom: '0dp',
-		right: '0dp',
+//		layout: 'vertical',
+		top: '5dp',
+		left: '10dp',
 //		width: '54dp',
 //		height: '54dp',
-		width: '100%',
+		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 //		borderRadius: '27dp',
 	},
-	todayDayWeekLabel:{
-//		top: '13dp',
-		bottom: '2dp',
-		right: '5dp',
+	todayWeekDayLabel:{
+		top: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 		textAlign: 'center',
-		font : {fontSize:18, fontWeight:'bold'},
-//		color: '#3a4756',
+		font : {fontSize:36, fontFamily:'Adobe Gothic Std'},
+		color: 'white',
+	},
+	todayWeekLabel:{
+		top: '40dp',
+		width: Ti.UI.SIZE,
+		height: Ti.UI.SIZE,
+		textAlign: 'center',
+		font : {fontSize:24, fontFamily:'Adobe Gothic Std'},
 		color: 'white',
 	},
 /*
@@ -3517,6 +3533,13 @@ exports.style = {
 		width: Ti.UI.SIZE,
 //		height: (Ti.Platform.displayCaps.platformWidth * 3 / 4) + 'dp',
 		height: Ti.UI.SIZE,
+	},
+	todayPhotoCoverView:{
+		top: '0dp',
+		width: '100%',
+		height: Ti.Platform.displayCaps.platformWidth + 'dp',
+		backgroundColor: 'black',
+		opacity: 0.1,
 	},
 	todayPhotoImage:{
 		top: '0dp',

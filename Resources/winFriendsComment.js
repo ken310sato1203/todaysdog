@@ -11,8 +11,9 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 	// 記事データの取得ページ
 	var articlePage = 1;
-	// 記事データの取得件数ß
+	// 記事データの取得件数
 	var articleCount = 10;
+	var articleLastId = null;
 	// 記事データの取得開始日（n日前）
 	var articleDay = 60;
 	// 続きを読むフラグ
@@ -116,10 +117,10 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 		// コメントの取得
 		model.getCloudAllCommentList({
+			lastId: articleLastId,
 			userId: _userData.id,
 			date: startDate,
-			page: articlePage,
-			count: articleCount
+			count: articleCount,
 		}, function(e) {
 			Ti.API.debug('[func]getCloudAllCommentList.callback:');
 
@@ -133,9 +134,9 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 						nextTarget = null;
 					};
 
-					if (e.meta.total_pages == articlePage) {
+					if (e.meta.total_results <= articleCount) {
 						nextArticleFlag = false;
-					} else if (e.meta.total_pages > articlePage) {
+					} else {
 						articlePage++;
 						nextArticleFlag = true;
 						var nextItem = [{
@@ -145,7 +146,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 							},
 						}];
 						listSection.appendItems(nextItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
-
+						// 最後の記事のIDを保管
+						articleLastId = e.reviews[e.reviews.length-1].id;
 					}
 				} else {
 					if (articlePage == 1) {

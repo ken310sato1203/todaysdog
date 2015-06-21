@@ -235,14 +235,17 @@ exports.createWindow = function(_userData){
 		var noDataImage = Ti.UI.createImageView(style.todayNoDataImage);
 		noDataView.add(noDataImage);
 
-/*
 		// 日付
 		var dayLWeekView = Ti.UI.createView(style.todayDayWeekView);
-		var dayWeekLabel = Ti.UI.createLabel(style.todayDayWeekLabel);
-		dayLWeekView.add(dayWeekLabel);
-		dayWeekLabel.text = now.month + '/' + now.day + '(' + now.weekday.text + ')';
 		dayPhotoView.add(dayLWeekView);
-*/		
+		var weekDayLabel = Ti.UI.createLabel(style.todayWeekDayLabel);
+		weekDayLabel.text = now.month + '/' + now.day;
+		dayLWeekView.add(weekDayLabel);
+		var weekLabel = Ti.UI.createLabel(style.todayWeekLabel);
+//		dayWeekLabel.text = now.month + '/' + now.day + '(' + now.weekday.text + ')';
+		weekLabel.text = now.weekday.text + '曜日';
+		dayLWeekView.add(weekLabel);
+		
 		return dayPhotoView;
 	};
 
@@ -290,6 +293,7 @@ exports.createWindow = function(_userData){
 			todayWin.photoRow.backgroundColor = 'transparent';
 			todayWin.photoImage.visible = true;
 			todayWin.photoImage.image = getTodayPhotoImage(todayArticle);
+			todayWin.article = todayArticle;
 
 		} else {
 			// 写真の取得
@@ -309,6 +313,7 @@ exports.createWindow = function(_userData){
 						todayWin.photoRow.backgroundColor = 'transparent';
 						todayWin.photoImage.visible = true;
 						todayWin.photoImage.image = e.articleList[0].photo;
+						todayWin.article = e.articleList[0];
 
 					} else {
 						todayWin.noDataView.visible = true;
@@ -360,7 +365,7 @@ exports.createWindow = function(_userData){
 		rowList.push(photoRow);
 		photoRow.add(getDayPhotoView());
 		todayWin.photoRow = photoRow;
-
+/*
 		// フォトをクリック
 		photoRow.addEventListener('click',function(e){
 			Ti.API.debug('[event]photoRow.click:');
@@ -398,6 +403,38 @@ exports.createWindow = function(_userData){
 				todayMenuView.scrollTo(0, 0);
 				todayMenuPage = 0;				
 			}
+		});
+*/
+		// フォトをクリック
+		photoRow.addEventListener('click',function(e){
+			Ti.API.debug('[event]photoRow.click:');
+			var target = e.source;
+			target.opacity = 0.5;
+			var photoWin = Ti.UI.createWindow(style.photoListFullPhotoWin);
+			var photoView = Ti.UI.createView(style.photoListFullPhotoView);
+			photoWin.add(photoView);
+			var photoImage = Ti.UI.createImageView(style.photoListFullPhotoImage);
+			photoImage.image = todayWin.photoImage;
+			photoView.add(photoImage);
+			var photoTimeLabel = Ti.UI.createLabel(style.photoListFullPhotoTimeLabel);
+			photoTimeLabel.text = util.getFormattedMD(todayWin.articleData.date);
+			photoView.add(photoTimeLabel);
+			var photoTextLabel = Ti.UI.createLabel(style.photoListFullPhotoTextLabel);
+			photoTextLabel.text = todayWin.articleData.text;
+			photoView.add(photoTextLabel);
+			photoWin.open({
+				modal: true,
+			    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
+			    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_CROSS_DISSOLVE
+			});
+
+			// フォト拡大画面にタップで戻る
+			photoWin.addEventListener('click',function(e){
+				Ti.API.debug('[event]photoWin.click:');
+				photoWin.close();				
+			});
+
+			target.opacity = 1.0;
 		});
 		
 		// スタンプの取得
@@ -520,6 +557,9 @@ exports.createWindow = function(_userData){
 	var photoImage = Ti.UI.createImageView(style.todayPhotoImage);		
 	todayWin.add(photoImage);
 	todayWin.photoImage = photoImage;
+	// 日付用
+	var photoCoverView = Ti.UI.createView(style.todayPhotoCoverView);		
+	todayWin.add(photoCoverView);
 	// 写真・スタンプの表示
 	var todayTableView = Ti.UI.createTableView(style.todayTableView);
 	todayTableView.headerPullView = getTableHeader();

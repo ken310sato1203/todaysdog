@@ -257,20 +257,6 @@ exports.model = {
 		});
 	},
 
-	// フォトの取得
-	getCloudPhoto:function(params, callback){
-		Ti.API.debug('[func]getCloudPhoto:');
-
-		Cloud.PhotoCollections.showPhotos({
-			collection_id: params.collection,
-			order: '-created_at',
-			page : params.page,
-			per_page : params.count
-		}, function (e) {
-			callback(e);
-		});
-	},
-
 	// 記事の投稿
 	addCloudArticle:function(params, callback){
 		Ti.API.debug('[func]addCloudArticle:');		
@@ -380,57 +366,112 @@ exports.model = {
 	searchCloudFriends:function(params, callback){
 		Ti.API.debug('[func]searchCloudFriends:');
 		// 文字列含む検索はできないため、先頭から検索
-		Cloud.Users.query({
-			where:{ '$or': [
-				{ username: {'$regex': '^' + params.name} }, 
-				{ first_name: {'$regex': '^' + params.name} }, 
-				{ last_name: {'$regex': '^' + params.name} },
-				{ 'name': {'$regex': '^' + params.name} } 
-			] },
-			page: params.page,
-			per_page: params.count
-		}, function (e) {
-			if (e.success) {
-				Ti.API.debug('success:');
-				var userList = [];
-				for (var i = 0; i < e.users.length; i++) {
-					var user = e.users[i];
-					var userData = {
-						id: user.id,
-//						user: user.first_name + ' ' + user.last_name,
-						user: user.username,
-						photo: 0,
-						like: 0,
-						follow: 0,
-						follower: 0,
-						name: '',
-						breed: '',
-						sex: '',
-						birth: '', 
-						memo: '',
-						post: null,
-						like: null,
-						icon: null
-					};
-	
-					if (user.custom_fields) {
-						if (user.custom_fields.name != null)  { userData.name = user.custom_fields.name; }
-						if (user.custom_fields.breed != null) { userData.breed = user.custom_fields.breed; }
-						if (user.custom_fields.sex != null)   { userData.sex = user.custom_fields.sex; }
-						if (user.custom_fields.birth != null) { userData.birth = user.custom_fields.birth; }
-						if (user.custom_fields.memo != null)  { userData.memo = user.custom_fields.memo; }
-						if (user.custom_fields.post != null)  { userData.post = user.custom_fields.post; }
-						if (user.custom_fields.like != null)  { userData.like = user.custom_fields.like; }
+		if (params.lastId == null) {
+			Cloud.Users.query({
+				where:{ '$or': [
+					{ username: {'$regex': '^' + params.name} }, 
+					{ first_name: {'$regex': '^' + params.name} }, 
+					{ last_name: {'$regex': '^' + params.name} },
+					{ 'name': {'$regex': '^' + params.name} } 
+				] },
+				limit : params.count
+			}, function (e) {
+				if (e.success) {
+					Ti.API.debug('success:');
+					var userList = [];
+					for (var i = 0; i < e.users.length; i++) {
+						var user = e.users[i];
+						var userData = {
+							id: user.id,
+	//						user: user.first_name + ' ' + user.last_name,
+							user: user.username,
+							photo: 0,
+							like: 0,
+							follow: 0,
+							follower: 0,
+							name: '',
+							breed: '',
+							sex: '',
+							birth: '', 
+							memo: '',
+							post: null,
+							like: null,
+							icon: null
+						};
+		
+						if (user.custom_fields) {
+							if (user.custom_fields.name != null)  { userData.name = user.custom_fields.name; }
+							if (user.custom_fields.breed != null) { userData.breed = user.custom_fields.breed; }
+							if (user.custom_fields.sex != null)   { userData.sex = user.custom_fields.sex; }
+							if (user.custom_fields.birth != null) { userData.birth = user.custom_fields.birth; }
+							if (user.custom_fields.memo != null)  { userData.memo = user.custom_fields.memo; }
+							if (user.custom_fields.post != null)  { userData.post = user.custom_fields.post; }
+							if (user.custom_fields.like != null)  { userData.like = user.custom_fields.like; }
+						}
+						if (user.photo) {
+							userData.icon = user.photo.urls.small_240;
+						}
+						userList.push(userData);
 					}
-					if (user.photo) {
-						userData.icon = user.photo.urls.small_240;
-					}
-					userList.push(userData);
 				}
-			}
-			e.userList = userList;
-			callback(e);
-		});
+				e.userList = userList;
+				callback(e);
+			});
+
+		} else {
+			Cloud.Users.query({
+				where:{ 
+					id: { '$lt': params.lastId },
+					'$or': [
+					{ username: {'$regex': '^' + params.name} }, 
+					{ first_name: {'$regex': '^' + params.name} }, 
+					{ last_name: {'$regex': '^' + params.name} },
+					{ 'name': {'$regex': '^' + params.name} } 
+				] },
+				limit : params.count
+			}, function (e) {
+				if (e.success) {
+					Ti.API.debug('success:');
+					var userList = [];
+					for (var i = 0; i < e.users.length; i++) {
+						var user = e.users[i];
+						var userData = {
+							id: user.id,
+	//						user: user.first_name + ' ' + user.last_name,
+							user: user.username,
+							photo: 0,
+							like: 0,
+							follow: 0,
+							follower: 0,
+							name: '',
+							breed: '',
+							sex: '',
+							birth: '', 
+							memo: '',
+							post: null,
+							like: null,
+							icon: null
+						};
+		
+						if (user.custom_fields) {
+							if (user.custom_fields.name != null)  { userData.name = user.custom_fields.name; }
+							if (user.custom_fields.breed != null) { userData.breed = user.custom_fields.breed; }
+							if (user.custom_fields.sex != null)   { userData.sex = user.custom_fields.sex; }
+							if (user.custom_fields.birth != null) { userData.birth = user.custom_fields.birth; }
+							if (user.custom_fields.memo != null)  { userData.memo = user.custom_fields.memo; }
+							if (user.custom_fields.post != null)  { userData.post = user.custom_fields.post; }
+							if (user.custom_fields.like != null)  { userData.like = user.custom_fields.like; }
+						}
+						if (user.photo) {
+							userData.icon = user.photo.urls.small_240;
+						}
+						userList.push(userData);
+					}
+				}
+				e.userList = userList;
+				callback(e);
+			});
+		}
 	},
 
 	// フォローの取得
@@ -613,59 +654,115 @@ exports.model = {
 	getCloudTodayArticle:function(params, callback){
 		Ti.API.debug('[func]getCloudTodayArticle:');
 
-		Cloud.Posts.query({
-			where: {
-				user_id: { '$in': params.idList },
-				'postDate': {
-					'$gte': util.getCloudFormattedDateTime(params.date)
-				}
-			},
-			order: '-created_at',
-			page : params.page,
-			per_page : params.count
-		}, function (e) {
-			var articleList = [];
-			if (e.success) {
-				Ti.API.debug('success:');
-				for (var i = 0; i < e.posts.length; i++) {
-					var post = e.posts[i];
-					if (post.user && post.photo.urls) {
-						var user = post.user;
-						var name = '';
-						if (user.custom_fields && user.custom_fields.name) {
-							name = user.custom_fields.name;
-						}
-						var likeCount = 0;
-						var commentCount = 0;
-						if (post.reviews_count && post.reviews_count > 0) {
-							commentCount = post.reviews_count;
-						}
-						if (post.ratings_count && post.ratings_count > 0) {
-							commentCount = commentCount - post.ratings_count;
-							likeCount = post.ratings_count;
-						}
-						// バッジ更新で、RESTAPIではcustom_fieldsが取得できなかったのでcreated_atを使用
-						var articleData = {
-							id: post.id,
-							userId: user.id,
-//							user: user.first_name + ' ' + user.last_name,
-							user: user.username,
-							name: name,
-							text: post.content,
-							date: util.getFormattedDateTime(post.custom_fields.postDate),
-							created_at: util.getFormattedDateTime(post.created_at),
-							photo: post.photo.urls.original,
-							like: likeCount,
-							comment: commentCount,
-							icon: user.photo.urls.square_75
-						};
-						articleList.push(articleData);
+		if (params.lastId == null) {
+			Cloud.Posts.query({
+				where: {
+					user_id: { '$in': params.idList },
+					'postDate': {
+						'$gte': util.getCloudFormattedDateTime(params.date)
 					}
-				}				
-			}
-			e.articleList = articleList; 
-			callback(e);
-		});
+				},
+				order: '-created_at',
+				limit : params.count
+			}, function (e) {
+				var articleList = [];
+				if (e.success) {
+					Ti.API.debug('success:');
+					for (var i = 0; i < e.posts.length; i++) {
+						var post = e.posts[i];
+						if (post.user && post.photo.urls) {
+							var user = post.user;
+							var name = '';
+							if (user.custom_fields && user.custom_fields.name) {
+								name = user.custom_fields.name;
+							}
+							var likeCount = 0;
+							var commentCount = 0;
+							if (post.reviews_count && post.reviews_count > 0) {
+								commentCount = post.reviews_count;
+							}
+							if (post.ratings_count && post.ratings_count > 0) {
+								commentCount = commentCount - post.ratings_count;
+								likeCount = post.ratings_count;
+							}
+							// バッジ更新で、RESTAPIではcustom_fieldsが取得できなかったのでcreated_atを使用
+							var articleData = {
+								id: post.id,
+								userId: user.id,
+	//							user: user.first_name + ' ' + user.last_name,
+								user: user.username,
+								name: name,
+								text: post.content,
+								date: util.getFormattedDateTime(post.custom_fields.postDate),
+								created_at: util.getFormattedDateTime(post.created_at),
+								photo: post.photo.urls.original,
+								like: likeCount,
+								comment: commentCount,
+								icon: user.photo.urls.square_75
+							};
+							articleList.push(articleData);
+						}
+					}				
+				}
+				e.articleList = articleList; 
+				callback(e);
+			});
+
+		} else {
+			Cloud.Posts.query({
+				where: {
+					id: { '$lt': params.lastId },
+					user_id: { '$in': params.idList },
+					'postDate': {
+						'$gte': util.getCloudFormattedDateTime(params.date)
+					}
+				},
+				order: '-created_at',
+				limit : params.count
+			}, function (e) {
+				var articleList = [];
+				if (e.success) {
+					Ti.API.debug('success:');
+					for (var i = 0; i < e.posts.length; i++) {
+						var post = e.posts[i];
+						if (post.user && post.photo.urls) {
+							var user = post.user;
+							var name = '';
+							if (user.custom_fields && user.custom_fields.name) {
+								name = user.custom_fields.name;
+							}
+							var likeCount = 0;
+							var commentCount = 0;
+							if (post.reviews_count && post.reviews_count > 0) {
+								commentCount = post.reviews_count;
+							}
+							if (post.ratings_count && post.ratings_count > 0) {
+								commentCount = commentCount - post.ratings_count;
+								likeCount = post.ratings_count;
+							}
+							// バッジ更新で、RESTAPIではcustom_fieldsが取得できなかったのでcreated_atを使用
+							var articleData = {
+								id: post.id,
+								userId: user.id,
+	//							user: user.first_name + ' ' + user.last_name,
+								user: user.username,
+								name: name,
+								text: post.content,
+								date: util.getFormattedDateTime(post.custom_fields.postDate),
+								created_at: util.getFormattedDateTime(post.created_at),
+								photo: post.photo.urls.original,
+								like: likeCount,
+								comment: commentCount,
+								icon: user.photo.urls.square_75
+							};
+							articleList.push(articleData);
+						}
+					}				
+				}
+				e.articleList = articleList; 
+				callback(e);
+			});
+		}
 	},
 
 	// 最新記事件数の更新
@@ -746,7 +843,7 @@ exports.model = {
 		Ti.API.debug('[func]getLoginUser:');
 		return loginUser;
 	},
-
+/*
 	// 指定ユーザの記事リストから指定月の記事を取得
 	getCloudArticleList:function(params, callback){
 		Ti.API.debug('[func]getCloudArticleList:');
@@ -813,7 +910,7 @@ exports.model = {
 			callback(e);
 		});
 	},
-
+*/
 	// 記事データテーブルの作成
 	createLocalArticleList:function(){
 		Ti.API.debug('[func]createLocalArticleList:');
@@ -885,8 +982,7 @@ exports.model = {
 				}
 			},
 			order: 'created_at',
-			page : 1,
-			per_page : 5000
+			limit : 200
 		}, function (e) {
 			var articleList = [];
 			if (e.success) {
@@ -1041,7 +1137,7 @@ exports.model = {
 		});		
 		return articleList;
 	},
-
+/*
 	// 指定ユーザのスタンプリストから指定月のデータを取得
 	initCloudStampList:function(params, callback){
 		Ti.API.debug('[func]initCloudStampList:');
@@ -1062,7 +1158,7 @@ exports.model = {
 			}
 		});
 	},
-
+*/
 	// 指定ユーザのスタンプリストから全データを取得
 	getCloudAllStampList:function(params, callback){
 		Ti.API.debug('[func]getCloudAllStampList:');
@@ -1078,8 +1174,7 @@ exports.model = {
 				}
 			},
 			order: 'created_at',
-			page : 1,
-			per_page : 5000
+			limit : 1000
 		}, function (e) {
 			var stampList = [];
 			if (e.success) {
@@ -1111,7 +1206,7 @@ exports.model = {
 			callback(e);
 		});
 	},
-
+/*
 	// 指定ユーザのスタンプリストから指定月のデータを取得
 	getCloudStampList:function(params, callback){
 		Ti.API.debug('[func]getCloudStampList:');
@@ -1167,7 +1262,7 @@ exports.model = {
 			callback(e);
 		});
 	},
-
+*/
 	// スタンプデータテーブルの作成
 	createLocalStampList:function(){
 		Ti.API.debug('[func]createLocalStampList:');
@@ -1563,8 +1658,7 @@ exports.model = {
 				}
 			},
 			order: '-created_at',
-			page : 1,
-			per_page : 5000
+			limit : 1000
 		}, function (e) {
 			var likeList = [];
 			if (e.success) {
@@ -1641,6 +1735,7 @@ exports.model = {
 			callback(e);
 		});
 	},
+/*	
 	// ライクリストの取得
 	getCloudLikeList:function(params, callback){
 		Ti.API.debug('[func]getCloudLikeList:');
@@ -1656,7 +1751,7 @@ exports.model = {
 			callback(e);
 		});
 	},
-
+*/
 	// コメントリストに追加
 	addCloudCommentList:function(params, callback){
 		Ti.API.debug('[func]addCloudCommentList:');
@@ -1688,64 +1783,124 @@ exports.model = {
 	// コメントリストの取得
 	getCloudCommentList:function(params, callback){
 		Ti.API.debug('[func]getCloudCommentList:');
-		Cloud.Reviews.query({
-			user_id: params.userId,
-			post_id: params.postId,
-			where: {content: {'$exists': true}},
-			order: '-created_at',
-//			page : 1,
-//			per_page : 10
-			page : params.page,
-			per_page : params.count
-		}, function (e) {
-			callback(e);
-		});
+
+		if (params.lastId == null) {
+			Cloud.Reviews.query({
+				user_id: params.userId,
+				post_id: params.postId,
+				where: {
+					content: {'$exists': true}
+				},
+				order: '-created_at',
+				limit : params.count
+			}, function (e) {
+				callback(e);
+			});
+
+		} else {
+			Cloud.Reviews.query({
+				user_id: params.userId,
+				post_id: params.postId,
+				where: {
+					id: { '$lt': params.lastId },
+					content: {'$exists': true}
+				},
+				order: '-created_at',
+				limit : params.count
+			}, function (e) {
+				callback(e);
+			});			
+		}
 	},
 	// 指定ユーザの全コメントデータを取得
 	getCloudAllCommentList:function(params, callback){
 		Ti.API.debug('[func]getCloudAllCommentList:');
 
-		Cloud.Reviews.query({
-			where: {
-				user_id: {'$nin': [params.userId]},
-				content: {'$exists': true},
-				'ownerId': params.userId,
-				'postDate': {
-					'$gte': util.getCloudFormattedDateTime(params.date)
-				}
-			},
-			order: '-created_at',
-			page : params.page,
-			per_page : params.count
-
-		}, function (e) {
-			var articleList = [];
-			if (e.success) {
-				for (var i = 0; i < e.reviews.length; i++) {
-					var review = e.reviews[i];
-					var user = review.user;
-					var name = '';
-					if (user.custom_fields && user.custom_fields.name) {
-						name = user.custom_fields.name;
+		if (params.lastId == null) {
+			Cloud.Reviews.query({
+				where: {
+					user_id: {'$nin': [params.userId]},
+					content: {'$exists': true},
+					'ownerId': params.userId,
+					'postDate': {
+						'$gte': util.getCloudFormattedDateTime(params.date)
 					}
-					var articleData = {
-						id: review.id,
-						userId: user.id,
-//						user: user.first_name + ' ' + user.last_name,
-						user: user.username,
-						name: name,
-						text: review.content,
-						date: util.getFormattedDateTime(review.custom_fields.postDate),
-						icon: user.photo.urls.square_75,
-						reviewedId: review.reviewed_object.id,
-						reviewedPhoto: review.custom_fields.reviewedPhoto
-					};
-					articleList.push(articleData);
-				}				
-			}
-			e.articleList = articleList; 
-			callback(e);
-		});
+				},
+				order: '-created_at',
+				limit : params.count
+	
+			}, function (e) {
+				var articleList = [];
+				if (e.success) {
+					for (var i = 0; i < e.reviews.length; i++) {
+						var review = e.reviews[i];
+						var user = review.user;
+						var name = '';
+						if (user.custom_fields && user.custom_fields.name) {
+							name = user.custom_fields.name;
+						}
+						var articleData = {
+							id: review.id,
+							userId: user.id,
+	//						user: user.first_name + ' ' + user.last_name,
+							user: user.username,
+							name: name,
+							text: review.content,
+							date: util.getFormattedDateTime(review.custom_fields.postDate),
+							icon: user.photo.urls.square_75,
+							reviewedId: review.reviewed_object.id,
+							reviewedPhoto: review.custom_fields.reviewedPhoto
+						};
+						articleList.push(articleData);
+					}				
+				}
+				e.articleList = articleList; 
+				callback(e);
+			});
+
+		} else {
+			Cloud.Reviews.query({
+				where: {
+					id: { '$lt': params.lastId },
+					user_id: {'$nin': [params.userId]},
+					content: {'$exists': true},
+					'ownerId': params.userId,
+					'postDate': {
+						'$gte': util.getCloudFormattedDateTime(params.date)
+					}
+				},
+				order: '-created_at',
+				limit : params.count
+	
+			}, function (e) {
+				var articleList = [];
+				if (e.success) {
+					for (var i = 0; i < e.reviews.length; i++) {
+						var review = e.reviews[i];
+						var user = review.user;
+						var name = '';
+						if (user.custom_fields && user.custom_fields.name) {
+							name = user.custom_fields.name;
+						}
+						var articleData = {
+							id: review.id,
+							userId: user.id,
+	//						user: user.first_name + ' ' + user.last_name,
+							user: user.username,
+							name: name,
+							text: review.content,
+							date: util.getFormattedDateTime(review.custom_fields.postDate),
+							icon: user.photo.urls.square_75,
+							reviewedId: review.reviewed_object.id,
+							reviewedPhoto: review.custom_fields.reviewedPhoto
+						};
+						articleList.push(articleData);
+					}				
+				}
+				e.articleList = articleList; 
+				callback(e);
+			});
+		}
 	},
 	// 指定日以降の全コメントデータの件数を取得
 	getCloudAllCommentListCount:function(params, callback){

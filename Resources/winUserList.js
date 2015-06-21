@@ -9,7 +9,8 @@ exports.createWindow = function(_type, _userData){
 	// 記事データの取得ページ
 	var articlePage = 1;
 	// 記事データの取得件数
-	var articleCount = 10;
+	var articleCount = 1;
+	var articleLastId = null;
 	// 続きを読むフラグ
 	var nextArticleFlag = false;
 	var nextTarget = null;
@@ -180,8 +181,8 @@ exports.createWindow = function(_type, _userData){
 		if (_type == "search") {
 			if (searchField.value != '') {
 				model.searchCloudFriends({
+					lastId: articleLastId,
 					name: searchField.value,
-					page: articlePage,
 					count: articleCount
 				}, function(e) {
 					Ti.API.debug('[func]searchCloudFriends.callback:');
@@ -194,9 +195,9 @@ exports.createWindow = function(_type, _userData){
 								nextTarget = null;
 							};
 	
-							if (e.meta.total_pages == articlePage) {
+							if (e.meta.total_results <= articleCount) {
 								nextArticleFlag = false;
-							} else if (e.meta.total_pages > articlePage) {
+							} else {
 								articlePage++;
 								nextArticleFlag = true;
 								var nextItem = [{
@@ -206,7 +207,9 @@ exports.createWindow = function(_type, _userData){
 									},
 								}];
 								listSection.appendItems(nextItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
-	
+								// 最後の記事のIDを保管
+								articleLastId = e.users[e.users.length-1].id;
+
 							}
 						} else {
 							if (articlePage == 1) {
@@ -250,7 +253,6 @@ exports.createWindow = function(_type, _userData){
 									},
 								}];
 								listSection.appendItems(nextItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
-	
 							}
 						} else {
 							if (articlePage == 1) {
@@ -292,7 +294,6 @@ exports.createWindow = function(_type, _userData){
 									},
 								}];
 								listSection.appendItems(nextItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
-	
 							}
 						} else {
 							if (articlePage == 1) {
@@ -563,6 +564,7 @@ exports.createWindow = function(_type, _userData){
 	// 検索入力の送信ボタンをクリック
 	searchField.addEventListener('return',function(e){
 		Ti.API.debug('[event]searchField.return:');
+		articleLastId = null;
 		articlePage = 1;
 		nextArticleFlag = false;
 		listSection.setItems([], {animated:false});

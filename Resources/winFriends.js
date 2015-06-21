@@ -13,6 +13,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 	var articlePage = 1;
 	// 記事データの取得件数
 	var articleCount = 10;
+	var articleLastId = null;
 	// 記事データの取得開始日（n日前）
 	var articleDay = 60;
 	// 続きを読むフラグ
@@ -194,9 +195,9 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			var startDate = new Date(now.year, now.month-1, now.day - articleDay);
 			// 記事データの取得
 			model.getCloudTodayArticle({
+				lastId: articleLastId,
 				idList: idList,
 				date: startDate,
-				page: articlePage,
 				count: articleCount
 			}, function(e) {
 				Ti.API.debug('[func]getCloudTodayArticle.callback:');
@@ -211,9 +212,9 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 							nextTarget = null;
 						};
 
-						if (e.meta.total_pages == articlePage) {
+						if (e.meta.total_results <= articleCount) {
 							nextArticleFlag = false;
-						} else if (e.meta.total_pages > articlePage) {
+						} else {
 							articlePage++;
 							nextArticleFlag = true;
 							var nextItem = [{
@@ -223,6 +224,8 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 								},
 							}];
 							listSection.appendItems(nextItem, {animationStyle: Titanium.UI.iPhone.RowAnimationStyle.FADE});
+							// 最後の記事のIDを保管
+							articleLastId = e.posts[e.posts.length-1].id;
 
 						}
 					} else {
