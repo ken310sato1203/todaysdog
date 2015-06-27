@@ -1068,31 +1068,64 @@ exports.model = {
 			return articleList;
 
 		} else {
-	
-			var articleList = sqlite.open(function(db){
-				var rows = db.select().from("DogArticleTB")
-					.where("user","=",params.userId)
-					.order_by("created_at desc")
-					.limit(params.limit)
-					.execute().getResult();
-				var result = [];
-				while (rows.isValidRow()){
-					result.push({
-						user: params.user,
-						name: params.name,
-						icon: params.icon,
-						id: rows.fieldByName('post'),
-						userId: rows.fieldByName('user'),
-	//					post: rows.fieldByName('post'),
-						text: rows.fieldByName('text'),
-						photo: rows.fieldByName('photo'),
-						date: util.getFormattedDateTime(rows.fieldByName('date'))
-					});
-					rows.next();
-				}
-				return result;
-			});		
-			return articleList;
+
+			if (params.lastDate == null) {			
+				var articleList = sqlite.open(function(db){
+					var rows = db.select().from("DogArticleTB")
+						.where("user","=",params.userId)
+//						.order_by("created_at desc")
+						.order_by("date desc")
+						.limit(params.limit)
+						.execute().getResult();
+					var result = [];
+					while (rows.isValidRow()){
+						result.push({
+							user: params.user,
+							name: params.name,
+							icon: params.icon,
+							id: rows.fieldByName('post'),
+							userId: rows.fieldByName('user'),
+		//					post: rows.fieldByName('post'),
+							text: rows.fieldByName('text'),
+							photo: rows.fieldByName('photo'),
+							date: util.getFormattedDateTime(rows.fieldByName('date'))
+						});
+						rows.next();
+					}
+					return result;
+				});		
+				return articleList;
+
+			} else {
+				var articleList = sqlite.open(function(db){
+					// idはサーバ上のデータをローカルに反映させた時に順番が変わるためdateを条件に使う、同じdateのものは後で除く
+					// created_atはサーバ上のデータをローカルに反映させた時に順番が変わるためdateを並び順に使用
+					var rows = db.select().from("DogArticleTB")
+						.where("user","=",params.userId)
+						.and_where("date","<=",params.lastDate)
+//						.order_by("created_at desc")
+						.order_by("date desc")
+						.limit(params.limit)
+						.execute().getResult();
+					var result = [];
+					while (rows.isValidRow()){
+						result.push({
+							user: params.user,
+							name: params.name,
+							icon: params.icon,
+							id: rows.fieldByName('post'),
+							userId: rows.fieldByName('user'),
+		//					post: rows.fieldByName('post'),
+							text: rows.fieldByName('text'),
+							photo: rows.fieldByName('photo'),
+							date: util.getFormattedDateTime(rows.fieldByName('date'))
+						});
+						rows.next();
+					}
+					return result;
+				});		
+				return articleList;				
+			}
 		}
 	},
 	

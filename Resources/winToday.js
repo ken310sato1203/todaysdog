@@ -8,6 +8,8 @@ exports.createWindow = function(_userData){
 	var tmpDate = null;
 	// 多重クリック防止
 	var clickEnable = true;
+	var slideEnable = true;
+
 	// フォト用追加フラグ
 	var addRowFlag = false;
 	// フォト用追加サイズ
@@ -46,17 +48,31 @@ exports.createWindow = function(_userData){
 	};
 
 	// 最新の記事を取得
-	var getArticleList = function() {
+	var getArticleList = function(lastDate) {
 		Ti.API.debug('[func]getArticleList:');
-		// 最新の記事データ取得
-		var articleList = model.getLocalArticle({
-			userId:_userData.id, 
-			user:_userData.user, 
-			name:_userData.name, 
-			icon:_userData.icon, 
-			limit: 30
-		});
-
+		var articleList = null;
+		var articleLimit = 3;
+		if (lastDate == null) {
+			// 最新の記事データ取得
+			articleList = model.getLocalArticle({
+				userId:_userData.id, 
+				user:_userData.user, 
+				name:_userData.name, 
+				icon:_userData.icon, 
+				limit: articleLimit
+			});
+			
+		} else {
+			// 最新の記事データ取得
+			articleList = model.getLocalArticle({
+				userId:_userData.id, 
+				user:_userData.user, 
+				name:_userData.name, 
+				icon:_userData.icon, 
+				limit: articleLimit,
+				lastDate: lastDate
+			});
+		}
 		return articleList;
 	};
 
@@ -199,6 +215,86 @@ exports.createWindow = function(_userData){
 		var noDataImage = Ti.UI.createImageView(style.todayNoDataImage);
 		noDataView.add(noDataImage);
 
+		// 写真をクリック
+		dayPhotoView.addEventListener('click',function(e){
+			Ti.API.debug('[event]dayPhotoView.click:');
+			if (todayWin.noDataView.visible) {
+				var target = e.source;
+				// 多重クリック防止
+				if (clickEnable) {
+					clickEnable = false;
+					target.opacity = 0.5;
+					// 日時の更新
+					updateTodayDay();
+					
+					var dialog = Titanium.UI.createOptionDialog({
+						options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
+						cancel:2
+	//						title:'写真を添付'
+					});
+					dialog.show();
+		
+					dialog.addEventListener('click',function(e) {
+						Ti.API.debug('[event]dialog.click:');
+						switch( e.index ) {
+							case 0:
+								var cameraWin = win.createCameraWindow('photo_camera', _userData);
+								win.openTabWindow(cameraWin, {animated:true});
+								target.opacity = 1.0;
+								clickEnable = true;
+								break;
+							case 1:
+								var cameraWin = win.createCameraWindow('photo_select', _userData);
+								win.openTabWindow(cameraWin, {animated:true});
+								target.opacity = 1.0;
+								clickEnable = true;
+								break;
+							case 2:
+								target.opacity = 1.0;
+								clickEnable = true;
+								break;
+						}
+					});
+				}
+
+			} else {
+				// 多重クリック防止
+				if (clickEnable) {
+					clickEnable = false;
+					var target = e.source;
+					target.opacity = 0.5;
+					var photoWin = Ti.UI.createWindow(style.photoListFullPhotoWin);
+					var photoView = Ti.UI.createView(style.photoListFullPhotoView);
+					photoWin.add(photoView);
+					var photoImage = Ti.UI.createImageView(style.photoListFullPhotoImage);
+		//			photoImage.image = todayWin.photoImage;
+					photoImage.image = todayPhotoImage.image;
+					photoView.add(photoImage);
+					var photoTimeLabel = Ti.UI.createLabel(style.photoListFullPhotoTimeLabel);
+					photoTimeLabel.text = util.getFormattedMD(todayPhotoImage.articleData.date);
+					photoView.add(photoTimeLabel);
+					var photoTextLabel = Ti.UI.createLabel(style.photoListFullPhotoTextLabel);
+					photoTextLabel.text = todayPhotoImage.articleData.text;
+					photoView.add(photoTextLabel);
+					photoWin.open({
+						modal: true,
+					    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
+					    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_CROSS_DISSOLVE
+					});
+		
+					// フォト拡大画面にタップで戻る
+					photoWin.addEventListener('click',function(e){
+						Ti.API.debug('[event]photoWin.click:');
+						photoWin.close();
+					});
+		
+					target.opacity = 1.0;
+					clickEnable = true;
+				}
+			}
+		});
+
+
 		// 日付
 		var dayLWeekView = Ti.UI.createView(style.todayDayWeekView);
 		dayPhotoView.add(dayLWeekView);
@@ -323,15 +419,22 @@ exports.createWindow = function(_userData){
 	var updateTodayDay = function(date) {
 		Ti.API.debug('[func]updateTodayDay:');
 		var todayDate = null;
-		if (date == null) {
+		if (now == null) {
 			todayDate = new Date();
 			now = util.getDateElement(todayDate);
 			now.weekday = util.diary.weekday[todayDate.getDay()];
 		} else {
-			todayDate = new Date(date.year, date.month - 1, date.day);
+			if (date == null) {
+				todayDate = new Date();
+				now = util.getDateElement(todayDate);
+				now.weekday = util.diary.weekday[todayDate.getDay()];
+			} else {
+				var 
+				todayDate = util.getDate(date);
+			}
+			todayWin.dayLabel.text = (todayDate.getMonth() + 1) + '/' + todayDate.getDate();
+			todayWin.weekLabel.text = util.diary.weekday[todayDate.getDay()].text + '曜日';
 		}
-		todayWin.dayLabel = (todayDate.getMonth() + 1) + '/' + todayDate.getDate();
-		todayWin.weekLabel = util.diary.weekday[todayDate.getDay()].text + '曜日';
 
 /*
 		now.today = util.getFormattedDate(nowDate);
@@ -366,180 +469,71 @@ exports.createWindow = function(_userData){
 		rowList.push(photoRow);
 		photoRow.add(getDayPhotoView());
 		todayWin.photoRow = photoRow;
-/*
-		// フォトをクリック
-		photoRow.addEventListener('click',function(e){
-			Ti.API.debug('[event]photoRow.click:');
-			// 写真が表示されている場合
-			if (todayWin.photoImage.visible) {
-				// 多重クリック防止
-				if (clickEnable) {
-					clickEnable = false;
-					if (addRowFlag) {
-						addRowFlag = false;
-						todayTableView.deleteRow(0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-	
-					} else {
-						if (addHeight > 0) {
-							addRowFlag = true;
-							var photoAddRow = Ti.UI.createTableViewRow(style.todayPhotoAddTableRow);
-							photoAddRow.height = addHeight;
-							todayTableView.insertRowBefore(0, photoAddRow, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-			
-							// 写真をクリック
-							photoAddRow.addEventListener('click',function(e){
-								Ti.API.debug('[event]photoAddRow.click:');
-								if (addRowFlag) {
-									addRowFlag = false;
-									todayTableView.deleteRow(0, {animated:true, position:Titanium.UI.iPhone.TableViewScrollPosition.TOP});
-								}
-							});
-						}
-
-					}
-					clickEnable = true;
-				}
-			} else {
-				// メニューをトップに戻す
-				todayMenuView.scrollTo(0, 0);
-				todayMenuPage = 0;				
-			}
-		});
-*/
-		// フォトをクリック
-		photoRow.addEventListener('click',function(e){
-			Ti.API.debug('[event]photoRow.click:');
-			if (todayPhotoImage.visible) {
-				var target = e.source;
-				target.opacity = 0.5;
-				var photoWin = Ti.UI.createWindow(style.photoListFullPhotoWin);
-				var photoView = Ti.UI.createView(style.photoListFullPhotoView);
-				photoWin.add(photoView);
-				var photoImage = Ti.UI.createImageView(style.photoListFullPhotoImage);
-	//			photoImage.image = todayWin.photoImage;
-				photoImage.image = todayPhotoImage.image;
-				photoView.add(photoImage);
-				var photoTimeLabel = Ti.UI.createLabel(style.photoListFullPhotoTimeLabel);
-				photoTimeLabel.text = util.getFormattedMD(todayPhotoImage.articleData.date);
-				photoView.add(photoTimeLabel);
-				var photoTextLabel = Ti.UI.createLabel(style.photoListFullPhotoTextLabel);
-				photoTextLabel.text = todayPhotoImage.articleData.text;
-				photoView.add(photoTextLabel);
-				photoWin.open({
-					modal: true,
-				    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
-				    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_CROSS_DISSOLVE
-				});
-	
-				// フォト拡大画面にタップで戻る
-				photoWin.addEventListener('click',function(e){
-					Ti.API.debug('[event]photoWin.click:');
-					photoWin.close();
-				});
-	
-				target.opacity = 1.0;
-
-			} else {
-				var target = e.source;
-				// 多重クリック防止
-				if (clickEnable) {
-					clickEnable = false;
-					target.opacity = 0.5;
-					// 日時の更新
-					updateTodayDay();
-					
-/*
-	
-					if ( getTodayArticle() ) {
-						var alertDialog = Titanium.UI.createAlertDialog({
-							title: '写真の投稿は１日１枚です。\nまた明日。',
-							buttonNames: ['OK'],
-						});
-						alertDialog.show();
-						alertDialog.addEventListener('click',function(alert){
-							clickEnable = true;
-							target.opacity = 1.0;
-						});
-		
-					} else {
-*/
-						var dialog = Titanium.UI.createOptionDialog({
-							options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
-							cancel:2
-		//						title:'写真を添付'
-						});
-						dialog.show();
-			
-						dialog.addEventListener('click',function(e) {
-							Ti.API.debug('[event]dialog.click:');
-							switch( e.index ) {
-								case 0:
-									var cameraWin = win.createCameraWindow('photo_camera', _userData);
-									win.openTabWindow(cameraWin, {animated:true});
-									target.opacity = 1.0;
-									clickEnable = true;
-									break;
-								case 1:
-									var cameraWin = win.createCameraWindow('photo_select', _userData);
-									win.openTabWindow(cameraWin, {animated:true});
-									target.opacity = 1.0;
-									clickEnable = true;
-									break;
-								case 2:
-									target.opacity = 1.0;
-									clickEnable = true;
-									break;
-							}
-						});
-//					}
-				}
-			}
-		});
 
 		// スワイプで前後の記事を表示
 		photoRow.addEventListener('swipe',function(e){
 			Ti.API.debug('[event]photoRow.swipe:');
-			if (todayArticleList.length > 0) {
-				if (todayIndex == null) {
-					if (e.direction == 'right') {
-						todayIndex = 0;
-						todayWin.noDataView.visible = false;
-						todayWin.photoRow.backgroundColor = 'transparent';
-						todayPhotoImage.visible = true;
-						todayPhotoImage.image = getTodayPhotoImage(todayArticleList[todayIndex]);
-						todayPhotoImage.articleData = todayArticleList[todayIndex];
-						updateTodayDay(todayArticleList[todayIndex].date);
-					}
-
-				} else {
-					if (e.direction == 'right') {
-						if (todayArticleList.length == todayIndex + 1) {
-
-						} else {
-							todayIndex++;
+			// 多重クリック防止
+			if (clickEnable) {
+				clickEnable = false;
+				if (todayArticleList.length > 0) {
+					if (todayIndex == null) {
+						if (e.direction == 'right') {
+							todayIndex = 0;
+							todayWin.noDataView.visible = false;
+							todayWin.photoRow.backgroundColor = 'transparent';
+							todayPhotoImage.visible = true;
 							todayPhotoImage.image = getTodayPhotoImage(todayArticleList[todayIndex]);
 							todayPhotoImage.articleData = todayArticleList[todayIndex];
 							updateTodayDay(todayArticleList[todayIndex].date);
 						}
 	
-					} else if (e.direction == 'left') {
-						if (todayIndex == 0) {
-							todayIndex = null;
-							todayWin.noDataView.visible = true;
-							todayWin.photoRow.backgroundColor = '#eeeeee';
-							todayPhotoImage.visible = false;
-							todayPhotoImage.articleData = null;
-							updateTodayDay();
+					} else {
+						if (e.direction == 'right') {
+							if (todayArticleList.length > todayIndex + 1) {
+								todayIndex++;
+								todayPhotoImage.image = getTodayPhotoImage(todayArticleList[todayIndex]);
+								todayPhotoImage.articleData = todayArticleList[todayIndex];
+								updateTodayDay(todayArticleList[todayIndex].date);
 
-						} else {
-							todayIndex--;
-							todayPhotoImage.image = getTodayPhotoImage(todayArticleList[todayIndex]);
-							todayPhotoImage.articleData = todayArticleList[todayIndex];
-							updateTodayDay(todayArticleList[todayIndex].date);
-						}
-
-					}					
-				}				
+							} else {
+								var lastDate = todayArticleList[todayArticleList.length-1].date;
+								var nextList = getArticleList(lastDate);
+								// 日付を条件にデータを取得する場合、同じ日付で重複する可能性があるためチェック
+								if (nextList[0].id == todayArticleList[todayArticleList.length-1].id) {
+									nextList[0].shift();
+								}
+								if (nextList.length > 0) {
+									for (var i=0; i<nextList.length; i++) {
+										todayArticleList.push(nextList[i]);
+									}
+									todayIndex++;
+									todayPhotoImage.image = getTodayPhotoImage(todayArticleList[todayIndex]);
+									todayPhotoImage.articleData = todayArticleList[todayIndex];
+									updateTodayDay(todayArticleList[todayIndex].date);
+								}
+							}
+		
+						} else if (e.direction == 'left') {
+							if (todayIndex == 0) {
+								todayIndex = null;
+								todayWin.noDataView.visible = true;
+								todayWin.photoRow.backgroundColor = '#eeeeee';
+								todayPhotoImage.visible = false;
+								todayPhotoImage.articleData = null;
+								updateTodayDay();
+	
+							} else {
+								todayIndex--;
+								todayPhotoImage.image = getTodayPhotoImage(todayArticleList[todayIndex]);
+								todayPhotoImage.articleData = todayArticleList[todayIndex];
+								updateTodayDay(todayArticleList[todayIndex].date);
+							}
+	
+						}					
+					}				
+				}
+				clickEnable = true;
 			}
 		});
 		
