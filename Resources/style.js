@@ -3315,7 +3315,7 @@ exports.style = {
 		bottom: '44dp',
 		separatorColor: 'transparent',
 		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
-//		scrollable: false,
+		scrollable: false,
 		data: [],
 		backgroundColor: 'transparent',
 	},
@@ -3346,7 +3346,7 @@ exports.style = {
 	},
 	todayNoDataView:{
 		layout: 'vertical',
-//		top: '80dp',
+		top: '90dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 //		visible: false,
@@ -3360,7 +3360,7 @@ exports.style = {
 		top: '10dp',
 		width : '54dp',
 		height : '54dp',
-		image : 'images/icon/i_circle.png',
+		image : 'images/icon/b_camera.png',
 	},
 	todayDayWeekView:{
 //		layout: 'vertical',
@@ -3372,7 +3372,7 @@ exports.style = {
 		height: Ti.UI.SIZE,
 //		borderRadius: '27dp',
 	},
-	todayWeekDayLabel:{
+	todayDayLabel:{
 		top: '0dp',
 		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
@@ -3429,6 +3429,7 @@ exports.style = {
 		// カスタムプロパティ
 		objectName : 'todayMenuListView',
 	},
+/*
 	todayCameraView:{
 		top: '10dp',
 		bottom: '10dp',
@@ -3468,7 +3469,7 @@ exports.style = {
 		width: '100%',
 		height: Ti.UI.SIZE,
 		textAlign: 'center',
-		font : {fontSize:16, fontWeight:'bold'},
+		font : {fontSize:14, fontWeight:'bold'},
 		color: '#3a4756',
 //		backgroundColor: 'yellow',
 	},
@@ -3477,7 +3478,7 @@ exports.style = {
 		width: '100%',
 		height: Ti.UI.SIZE,
 		textAlign: 'center',
-		font : {fontSize:14, fontWeight:'bold'},
+		font : {fontSize:12, fontWeight:'bold'},
 //		backgroundColor: 'blue',
 	},
 	todayCalendarView:{
@@ -3497,6 +3498,7 @@ exports.style = {
 		image : 'images/icon/b_calendar.png',
 		touchEnabled: false,
 	},
+*/
 	todayStampSelectView:{
 		top: '10dp',
 		bottom: '10dp',

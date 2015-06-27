@@ -1032,39 +1032,68 @@ exports.model = {
 		Ti.API.debug('[func]getLocalArticle:');
 		var startDate = null;
 		var endDate = null;
-		if (params.day == null) {
-			startDate = new Date(params.year, params.month-1, 1);
-			endDate = new Date(params.year, params.month, 1);
-		} else {
-			startDate = new Date(params.year, params.month-1, params.day);
-			endDate = new Date(params.year, params.month-1, params.day+1);
-		}
-
-		var articleList = sqlite.open(function(db){
-			var rows = db.select().from("DogArticleTB")
-				.where("user","=",params.userId)
-				.and_where("date",">=",util.getFormattedDate(startDate))
-				.and_where("date","<",util.getFormattedDate(endDate))
-				.order_by("created_at asc")
-				.execute().getResult();
-			var result = [];
-			while (rows.isValidRow()){
-				result.push({
-					user: params.user,
-					name: params.name,
-					icon: params.icon,
-					id: rows.fieldByName('post'),
-					userId: rows.fieldByName('user'),
-//					post: rows.fieldByName('post'),
-					text: rows.fieldByName('text'),
-					photo: rows.fieldByName('photo'),
-					date: util.getFormattedDateTime(rows.fieldByName('date'))
-				});
-				rows.next();
+		if (params.limit == null) {
+			if (params.day == null) {
+				startDate = new Date(params.year, params.month-1, 1);
+				endDate = new Date(params.year, params.month, 1);
+			} else {
+				startDate = new Date(params.year, params.month-1, params.day);
+				endDate = new Date(params.year, params.month-1, params.day+1);
 			}
-			return result;
-		});		
-		return articleList;
+	
+			var articleList = sqlite.open(function(db){
+				var rows = db.select().from("DogArticleTB")
+					.where("user","=",params.userId)
+					.and_where("date",">=",util.getFormattedDate(startDate))
+					.and_where("date","<",util.getFormattedDate(endDate))
+					.order_by("created_at asc")
+					.execute().getResult();
+				var result = [];
+				while (rows.isValidRow()){
+					result.push({
+						user: params.user,
+						name: params.name,
+						icon: params.icon,
+						id: rows.fieldByName('post'),
+						userId: rows.fieldByName('user'),
+	//					post: rows.fieldByName('post'),
+						text: rows.fieldByName('text'),
+						photo: rows.fieldByName('photo'),
+						date: util.getFormattedDateTime(rows.fieldByName('date'))
+					});
+					rows.next();
+				}
+				return result;
+			});		
+			return articleList;
+
+		} else {
+	
+			var articleList = sqlite.open(function(db){
+				var rows = db.select().from("DogArticleTB")
+					.where("user","=",params.userId)
+					.order_by("created_at desc")
+					.limit(params.limit)
+					.execute().getResult();
+				var result = [];
+				while (rows.isValidRow()){
+					result.push({
+						user: params.user,
+						name: params.name,
+						icon: params.icon,
+						id: rows.fieldByName('post'),
+						userId: rows.fieldByName('user'),
+	//					post: rows.fieldByName('post'),
+						text: rows.fieldByName('text'),
+						photo: rows.fieldByName('photo'),
+						date: util.getFormattedDateTime(rows.fieldByName('date'))
+					});
+					rows.next();
+				}
+				return result;
+			});		
+			return articleList;
+		}
 	},
 	
 	// 記事データテーブルの件数取得
