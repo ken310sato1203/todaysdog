@@ -3339,8 +3339,10 @@ exports.style = {
 	todayDayPhotoView:{
 //		layout: 'horizontal',
 		top: '0dp',
-		width: '100%',
+//		width: '100%',
+		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
+//		backgroundColor: 'transparent',
 		// カスタムプロパティ
 		objectName : 'todayDayPhotoView',
 	},
@@ -3361,6 +3363,8 @@ exports.style = {
 		width : '54dp',
 		height : '54dp',
 		image : 'images/icon/b_camera.png',
+		// カスタムプロパティ
+		objectName : 'todayNoDataImage',
 	},
 	todayDayWeekView:{
 //		layout: 'vertical',
@@ -3403,6 +3407,57 @@ exports.style = {
 		height: Ti.UI.SIZE,
 	},
 */
+
+	todayPrevView:{
+		top: '110dp',
+		left: '0dp',
+		width: '50dp',
+		height: '50dp',
+		// カスタムプロパティ
+		objectName : 'todayPrevView',
+	},
+	todayPrevImage:{
+		width: '28dp',
+		height: '28dp',
+		image:'images/icon/w_arrow_left.png',
+		visible: false,
+		touchEnabled: false,
+	},
+	todayNextView:{
+		top: '110dp',
+		right: '0dp',
+		width: '50dp',
+		height: '50dp',
+		// カスタムプロパティ
+		objectName : 'todayNextView',
+	},
+	todayNextImage:{
+		width: '28dp',
+		height: '28dp',
+		image:'images/icon/w_arrow_right.png',
+		visible: false,
+		touchEnabled: false,
+	},
+
+	todayPhotoScrollView:{
+		layout: 'horizontal',
+		// 下のタブで表示されない余白分
+		top: '0dp',
+		height: Ti.UI.SIZE,
+		contentWidth:'auto',
+		contentHeight:'auto',
+		showVerticalScrollIndicator:true,
+		showHorizontalScrollIndicator:true,
+		scrollingEnabled: false,
+	},
+	todayPhotoFrameView:{
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+		height: '100%',
+		backgroundColor: '#dedede',
+		// カスタムプロパティ
+		objectName : 'todayMenuFrameView',
+	},
+
 	todayMenuScrollView:{
 		layout: 'horizontal',
 		// 下のタブで表示されない余白分

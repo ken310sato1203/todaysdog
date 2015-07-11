@@ -6,7 +6,7 @@ exports.createWindow = function(_userData){
 	var loginUser = model.getLoginUser();
 	// 多重クリック防止
 	var clickEnable = true;
-
+/*
 	// countRowの取得
 	var getProfileCountRow = function() {
 		Ti.API.debug('[func]getProfileCountRow:');
@@ -37,7 +37,6 @@ exports.createWindow = function(_userData){
 			}
 		});
 
-/*	
 		// ライクの記事情報がreviewから１回では取得できないので表示しないことに
 		// ライク数の表示
 		var countLikeView = Ti.UI.createView(style.profileCountLikeView);
@@ -59,7 +58,6 @@ exports.createWindow = function(_userData){
 				countLikeView.backgroundColor = 'white';
 			}
 		});
-*/
 	
 		// フォロワー数の表示
 		var countFollowerView = Ti.UI.createView(style.profileCountDataView);
@@ -130,7 +128,6 @@ exports.createWindow = function(_userData){
 			}
 		});
 
-/*
 		// ライク数の取得
 		model.getCloudLikeCollection({
 			userId: _userData.id
@@ -144,7 +141,6 @@ exports.createWindow = function(_userData){
 				util.errorDialog(e);
 			}
 		});
-*/
 
 		// ユーザデータの取得
 		model.getCloudUser(_userData.id, function(e) {
@@ -159,6 +155,7 @@ exports.createWindow = function(_userData){
 				util.errorDialog(e);
 			}
 		});
+*/
 
 /*
 		// フォロワー数の取得
@@ -185,10 +182,10 @@ exports.createWindow = function(_userData){
 				util.errorDialog(e);
 			}
 		});
-*/
 
 		return countRow;
 	};
+*/
 
 	// infoRowの取得
 	var getProfileInfoRow = function() {
@@ -334,33 +331,38 @@ exports.createWindow = function(_userData){
 			// 各記事のタップでフォト画面へ遷移
 			photoImage.addEventListener('click',function(e){
 				Ti.API.debug('[event]photoImage.click:');
-				var target = e.source;
-				target.opacity = 0.5;
-				var photoWin = Ti.UI.createWindow(style.photoListFullPhotoWin);
-				var photoView = Ti.UI.createView(style.photoListFullPhotoView);
-				photoWin.add(photoView);
-				var photoImage = Ti.UI.createImageView(style.photoListFullPhotoImage);
-				photoImage.image = target.articleData.photo;
-				photoView.add(photoImage);
-				var photoTimeLabel = Ti.UI.createLabel(style.photoListFullPhotoTimeLabel);
-				photoTimeLabel.text = util.getFormattedMD(target.articleData.date);
-				photoView.add(photoTimeLabel);
-				var photoTextLabel = Ti.UI.createLabel(style.photoListFullPhotoTextLabel);
-				photoTextLabel.text = target.articleData.text;
-				photoView.add(photoTextLabel);
-				photoWin.open({
-					modal: true,
-				    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
-				    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_CROSS_DISSOLVE
-				});
-
-				// フォト拡大画面にタップで戻る
-				photoWin.addEventListener('click',function(e){
-					Ti.API.debug('[event]photoWin.click:');
-					photoWin.close();				
-				});
-
-				target.opacity = 1.0;
+				// 多重クリック防止
+				if (clickEnable) {
+					clickEnable = false;
+					var target = e.source;
+					target.opacity = 0.5;
+					var photoWin = Ti.UI.createWindow(style.photoListFullPhotoWin);
+					var photoView = Ti.UI.createView(style.photoListFullPhotoView);
+					photoWin.add(photoView);
+					var photoImage = Ti.UI.createImageView(style.photoListFullPhotoImage);
+					photoImage.image = target.articleData.photo;
+					photoView.add(photoImage);
+					var photoTimeLabel = Ti.UI.createLabel(style.photoListFullPhotoTimeLabel);
+					photoTimeLabel.text = util.getFormattedMD(target.articleData.date);
+					photoView.add(photoTimeLabel);
+					var photoTextLabel = Ti.UI.createLabel(style.photoListFullPhotoTextLabel);
+					photoTextLabel.text = target.articleData.text;
+					photoView.add(photoTextLabel);
+					photoWin.open({
+						modal: true,
+					    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
+					    modalTransitionStyle: Titanium.UI.iPhone.MODAL_TRANSITION_STYLE_CROSS_DISSOLVE
+					});
+	
+					// フォト拡大画面にタップで戻る
+					photoWin.addEventListener('click',function(e){
+						Ti.API.debug('[event]photoWin.click:');
+						photoWin.close();				
+					});
+	
+					target.opacity = 1.0;
+					clickEnable = true;
+				}
 			});
 		}
 
@@ -370,13 +372,13 @@ exports.createWindow = function(_userData){
 	// 記事の更新
 	var updatePhoto = function() {
 		Ti.API.debug('[func]updatePhoto:');
-		var startDate = new Date(2014, 1-1, 1);
+//		var startDate = new Date(2014, 1-1, 1);
 		// 今日の記事データ取得
 		model.getCloudTodayArticle({
 			idList: [_userData.id],
-			date: startDate,
-			page: 1,
-			count: 16
+//			date: startDate,
+//			page: 1,
+			limit: 16
 		}, function(e) {
 			Ti.API.debug('[func]getCloudTodayArticle.callback:');
 			if (e.success) {

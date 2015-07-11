@@ -120,7 +120,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			lastId: articleLastId,
 			userId: _userData.id,
 			date: startDate,
-			count: articleCount,
+			limit: articleCount,
 		}, function(e) {
 			Ti.API.debug('[func]getCloudAllCommentList.callback:');
 

@@ -183,7 +183,7 @@ exports.createWindow = function(_type, _userData){
 				model.searchCloudFriends({
 					lastId: articleLastId,
 					name: searchField.value,
-					count: articleCount
+					limit: articleCount
 				}, function(e) {
 					Ti.API.debug('[func]searchCloudFriends.callback:');
 					if (e.success) {

@@ -374,7 +374,7 @@ exports.model = {
 					{ last_name: {'$regex': '^' + params.name} },
 					{ 'name': {'$regex': '^' + params.name} } 
 				] },
-				limit : params.count
+				limit : params.limit
 			}, function (e) {
 				if (e.success) {
 					Ti.API.debug('success:');
@@ -428,7 +428,7 @@ exports.model = {
 					{ last_name: {'$regex': '^' + params.name} },
 					{ 'name': {'$regex': '^' + params.name} } 
 				] },
-				limit : params.count
+				limit : params.limit
 			}, function (e) {
 				if (e.success) {
 					Ti.API.debug('success:');
@@ -654,7 +654,7 @@ exports.model = {
 	getCloudTodayArticle:function(params, callback){
 		Ti.API.debug('[func]getCloudTodayArticle:');
 
-		if (params.lastId == null) {
+		if (params.limit == null) {
 			Cloud.Posts.query({
 				where: {
 					user_id: { '$in': params.idList },
@@ -662,8 +662,7 @@ exports.model = {
 						'$gte': util.getCloudFormattedDateTime(params.date)
 					}
 				},
-				order: '-created_at',
-				limit : params.count
+				order: '-created_at'
 			}, function (e) {
 				var articleList = [];
 				if (e.success) {
@@ -709,59 +708,109 @@ exports.model = {
 			});
 
 		} else {
-			Cloud.Posts.query({
-				where: {
-					id: { '$lt': params.lastId },
-					user_id: { '$in': params.idList },
-					'postDate': {
-						'$gte': util.getCloudFormattedDateTime(params.date)
+			if (params.lastId == null) {
+				Cloud.Posts.query({
+					where: {
+						user_id: { '$in': params.idList },
+					},
+					order: '-created_at',
+					limit : params.limit
+				}, function (e) {
+					var articleList = [];
+					if (e.success) {
+						Ti.API.debug('success:');
+						for (var i = 0; i < e.posts.length; i++) {
+							var post = e.posts[i];
+							if (post.user && post.photo.urls) {
+								var user = post.user;
+								var name = '';
+								if (user.custom_fields && user.custom_fields.name) {
+									name = user.custom_fields.name;
+								}
+								var likeCount = 0;
+								var commentCount = 0;
+								if (post.reviews_count && post.reviews_count > 0) {
+									commentCount = post.reviews_count;
+								}
+								if (post.ratings_count && post.ratings_count > 0) {
+									commentCount = commentCount - post.ratings_count;
+									likeCount = post.ratings_count;
+								}
+								// バッジ更新で、RESTAPIではcustom_fieldsが取得できなかったのでcreated_atを使用
+								var articleData = {
+									id: post.id,
+									userId: user.id,
+		//							user: user.first_name + ' ' + user.last_name,
+									user: user.username,
+									name: name,
+									text: post.content,
+									date: util.getFormattedDateTime(post.custom_fields.postDate),
+									created_at: util.getFormattedDateTime(post.created_at),
+									photo: post.photo.urls.original,
+									like: likeCount,
+									comment: commentCount,
+									icon: user.photo.urls.square_75
+								};
+								articleList.push(articleData);
+							}
+						}				
 					}
-				},
-				order: '-created_at',
-				limit : params.count
-			}, function (e) {
-				var articleList = [];
-				if (e.success) {
-					Ti.API.debug('success:');
-					for (var i = 0; i < e.posts.length; i++) {
-						var post = e.posts[i];
-						if (post.user && post.photo.urls) {
-							var user = post.user;
-							var name = '';
-							if (user.custom_fields && user.custom_fields.name) {
-								name = user.custom_fields.name;
+					e.articleList = articleList; 
+					callback(e);
+				});
+	
+			} else {
+				Cloud.Posts.query({
+					where: {
+						id: { '$lt': params.lastId },
+						user_id: { '$in': params.idList }
+					},
+					order: '-created_at',
+					limit : params.limit
+				}, function (e) {
+					var articleList = [];
+					if (e.success) {
+						Ti.API.debug('success:');
+						for (var i = 0; i < e.posts.length; i++) {
+							var post = e.posts[i];
+							if (post.user && post.photo.urls) {
+								var user = post.user;
+								var name = '';
+								if (user.custom_fields && user.custom_fields.name) {
+									name = user.custom_fields.name;
+								}
+								var likeCount = 0;
+								var commentCount = 0;
+								if (post.reviews_count && post.reviews_count > 0) {
+									commentCount = post.reviews_count;
+								}
+								if (post.ratings_count && post.ratings_count > 0) {
+									commentCount = commentCount - post.ratings_count;
+									likeCount = post.ratings_count;
+								}
+								// バッジ更新で、RESTAPIではcustom_fieldsが取得できなかったのでcreated_atを使用
+								var articleData = {
+									id: post.id,
+									userId: user.id,
+		//							user: user.first_name + ' ' + user.last_name,
+									user: user.username,
+									name: name,
+									text: post.content,
+									date: util.getFormattedDateTime(post.custom_fields.postDate),
+									created_at: util.getFormattedDateTime(post.created_at),
+									photo: post.photo.urls.original,
+									like: likeCount,
+									comment: commentCount,
+									icon: user.photo.urls.square_75
+								};
+								articleList.push(articleData);
 							}
-							var likeCount = 0;
-							var commentCount = 0;
-							if (post.reviews_count && post.reviews_count > 0) {
-								commentCount = post.reviews_count;
-							}
-							if (post.ratings_count && post.ratings_count > 0) {
-								commentCount = commentCount - post.ratings_count;
-								likeCount = post.ratings_count;
-							}
-							// バッジ更新で、RESTAPIではcustom_fieldsが取得できなかったのでcreated_atを使用
-							var articleData = {
-								id: post.id,
-								userId: user.id,
-	//							user: user.first_name + ' ' + user.last_name,
-								user: user.username,
-								name: name,
-								text: post.content,
-								date: util.getFormattedDateTime(post.custom_fields.postDate),
-								created_at: util.getFormattedDateTime(post.created_at),
-								photo: post.photo.urls.original,
-								like: likeCount,
-								comment: commentCount,
-								icon: user.photo.urls.square_75
-							};
-							articleList.push(articleData);
-						}
-					}				
-				}
-				e.articleList = articleList; 
-				callback(e);
-			});
+						}				
+					}
+					e.articleList = articleList; 
+					callback(e);
+				});
+			}
 		}
 	},
 
@@ -1102,6 +1151,7 @@ exports.model = {
 					// created_atはサーバ上のデータをローカルに反映させた時に順番が変わるためdateを並び順に使用
 					var rows = db.select().from("DogArticleTB")
 						.where("user","=",params.userId)
+						.and_where("post","<>",params.lastId)
 						.and_where("date","<=",params.lastDate)
 //						.order_by("created_at desc")
 						.order_by("date desc")
@@ -1854,7 +1904,7 @@ exports.model = {
 					content: {'$exists': true}
 				},
 				order: '-created_at',
-				limit : params.count
+				limit : params.limit
 			}, function (e) {
 				callback(e);
 			});
@@ -1868,7 +1918,7 @@ exports.model = {
 					content: {'$exists': true}
 				},
 				order: '-created_at',
-				limit : params.count
+				limit : params.limit
 			}, function (e) {
 				callback(e);
 			});			
@@ -1889,7 +1939,7 @@ exports.model = {
 					}
 				},
 				order: '-created_at',
-				limit : params.count
+				limit : params.limit
 	
 			}, function (e) {
 				var articleList = [];
@@ -1932,7 +1982,7 @@ exports.model = {
 					}
 				},
 				order: '-created_at',
-				limit : params.count
+				limit : params.limit
 	
 			}, function (e) {
 				var articleList = [];

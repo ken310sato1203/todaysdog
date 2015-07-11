@@ -216,7 +216,7 @@ exports.createWindow = function(_type, _articleData){
 			lastId: articleLastId,
 			userId: loginUser.id,
 			postId: _articleData.id,
-			count: articleCount,
+			limit: articleCount,
 		}, function(e) {
 			if (e.success) {
 				Ti.API.debug('[func]getCloudCommentList.callback:');

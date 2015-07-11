@@ -11,11 +11,12 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 	// 記事データの取得ページ
 	var articlePage = 1;
+	var articlePageMax = 3;
 	// 記事データの取得件数
 	var articleCount = 10;
 	var articleLastId = null;
 	// 記事データの取得開始日（n日前）
-	var articleDay = 60;
+//	var articleDay = 60;
 	// 続きを読むフラグ
 	var nextArticleFlag = false;
 	var nextTarget = null;
@@ -192,13 +193,13 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 			_userData.follow = followList.length;
 			// 自分を追加
 			idList.push(_userData.id);
-			var startDate = new Date(now.year, now.month-1, now.day - articleDay);
+//			var startDate = new Date(now.year, now.month-1, now.day - articleDay);
 			// 記事データの取得
 			model.getCloudTodayArticle({
 				lastId: articleLastId,
 				idList: idList,
-				date: startDate,
-				count: articleCount
+//				date: startDate,
+				limit: articleCount
 			}, function(e) {
 				Ti.API.debug('[func]getCloudTodayArticle.callback:');
 
@@ -212,7 +213,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 							nextTarget = null;
 						};
 
-						if (e.meta.total_results <= articleCount) {
+						if (e.meta.total_results <= articleCount || articlePage == articlePageMax) {
 							nextArticleFlag = false;
 						} else {
 							articlePage++;

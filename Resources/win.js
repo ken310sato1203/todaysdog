@@ -134,11 +134,13 @@ exports.win = {
 		var win = photoWin.createWindow(_type, _articleData);
 		return win;
 	},
+/*
 	createPhotoListWindow:function(_type, _userData){
 		Ti.API.debug('[func]createPhotoListWindow:');
 		var win = photoListWin.createWindow(_type, _userData, null, null);
 		return win;
 	},
+*/
 	createUserListWindow:function(_type, _userData){
 		Ti.API.debug('[func]createUserListWindow:');
 		var win = userListWin.createWindow(_type, _userData);
