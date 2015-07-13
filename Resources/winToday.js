@@ -5,37 +5,35 @@ exports.createWindow = function(_userData){
 
 	// 日時の更新
 	var now = null;
-	var tmpDate = null;
 	// 多重クリック防止
 	var clickEnable = true;
-	// swipe時にclickイベントが発生するためtouchStartとtouchEndの差で判定
-	var swipeOffset = null;
-
-	// フォト用追加フラグ
-	var addRowFlag = false;
-	// フォト用追加サイズ
-	// 全体の幅（写真のサイズ）ー全体の高さーステータスバー(20)ータイトルバー(44)ースタンプリスト(45*3)ーメニュー(74)ー下のタブ(44)
-	var spaceHeight = style.commonSize.screenHeight - 317;
-	var photoHeight = (style.commonSize.screenWidth - spaceHeight > 0) ? spaceHeight : style.commonSize.screenWidth;
-	var addHeight = style.commonSize.screenWidth - photoHeight;
-	// メニューに表示するスタンプリスト
-	var selectStampList = model.getStampTimeSelectList();
-	// メニューに表示するページ
-	var todayMenuPage = 0;
-	// 記事リスト
+	// スタンプメニューに表示位置
+	var stampMenuPage = 0;
+	// フォト一覧のリスト
 	var photoFrameList = [];
+	// フォト一覧の最大表示数
+	var photoFrameMax = 10;
+	// フォト一覧の初回表示位置
+	var photoFrameStartPage = 0;
+	// フォト一覧の表示位置
 	var photoFramePage = 0;
-	var todayArticleList = [];
-	var todayIndex = null;
+	// 記事の取得件数
 	var articleCount = 3;
-	var articlePage = 1;
-	var articlePageMax = 3;
 	// 続きを読むフラグ
 	var nextArticleFlag = false;
-	// 写真初期フラグ
-	var photoInitFlag = false;
 
 // ---------------------------------------------------------------------
+
+	// 日時チェック
+	var checkNewDay = function() {
+		Ti.API.debug('[func]checkNewDay:');
+		var nowDate = new Date();
+		if (nowDate.getFullYear() != now.year || nowDate.getMonth() != now.month-1 || nowDate.getDate() != now.day) {
+			return true;
+		} else {
+			return false;
+		}
+	};
 
 	// 今日の記事を取得
 	var getTodayArticle = function() {
@@ -56,45 +54,92 @@ exports.createWindow = function(_userData){
 			return null;			
 		}
 	};
-/*
-	// 最新の記事を取得
-	var getArticleList = function(params) {
-		Ti.API.debug('[func]getArticleList:');
-		var articleList = null;
-		if (params == null) {
-			// 最新の記事データ取得
-			articleList = model.getLocalArticle({
-				userId:_userData.id, 
-				user:_userData.user, 
-				name:_userData.name, 
-				icon:_userData.icon, 
-				limit: articleCount
-			});
+
+	// スタンプメニューの取得
+	var getStampMenuRowList = function() {
+		Ti.API.debug('[func]getStampMenuRowList:');
+		var rowList = [];
+
+		// スタンプの取得
+		var stampList = model.getLocalStampList({
+			userId: _userData.id,
+			year: now.year,
+			month: now.month,
+			day: now.day
+		});
+
+		var stampGroupView = null;
+		var stampSelectList = model.getStampSelectList();
+		for (var i=0; i<stampSelectList.length; i++) {
+			var groupListView = Ti.UI.createView(style.todayStampListView);
+			groupListView.width = (style.commonSize.screenWidth / 2) + 'dp';
+			var groupLabel = Ti.UI.createLabel(style.todayStampLabel);
+			groupLabel.text = stampSelectList[i].title;
+			groupListView.add(groupLabel);
+			groupListView.listNo = stampSelectList[i].no - 1;
+
+			var countStamp = 0;
+			for (var j=0; j<stampList.length; j++) {
+				if (stampSelectList[i].stampList.indexOf(stampList[j].stamp) != -1) {
+					stampList[j].opacity = 1.0;
+					var groupView = getGroupView(stampList[j]);
+					groupListView.add(groupView);
+					countStamp++;
+					// 表示最大件数
+					if (countStamp == 3) {
+						break;
+					}
+				}
+			}
+			if (countStamp == 0) {
+				var stampSpaceList = {
+					stamp: stampSelectList[i].stampList[0],
+					opacity: 0.2
+				};
+				var groupView = getGroupView(stampSpaceList);
+				groupListView.add(groupView);					
+			}
 			
-		} else {
-			// 最新の記事データ取得
-			articleList = model.getLocalArticle({
-				userId:_userData.id, 
-				user:_userData.user, 
-				name:_userData.name, 
-				icon:_userData.icon, 
-				limit: articleCount,
-				lastDate: params.lastDate,
-				lastId: params.lastId
+			if (i % 2 == 0) {
+				stampGroupView = Ti.UI.createView(style.todayStampGroupView);
+				stampGroupView.add(groupListView);
+			} else if (i % 2 == 1) {
+				stampGroupView.add(groupListView);
+				var stampRow = Ti.UI.createTableViewRow(style.todayStampListTableRow);
+				stampRow.add(stampGroupView);
+				rowList.push(stampRow);
+			}
+
+			// スタンプをクリック
+			groupListView.addEventListener('click',function(e){
+				Ti.API.debug('[event]groupListView.click:');
+				var target = e.source;
+				// 多重クリック防止
+				if (clickEnable) {
+					clickEnable = false;
+					target.opacity = 0.5;
+					// opacityの表示を見せるため
+			        setTimeout(function(){
+						clickEnable = true;
+						target.opacity = 1.0;
+			        }, 200);
+
+					stampScrollView.scrollTo(style.commonSize.screenWidth * target.listNo, 0);
+					stampMenuPage = target.listNo;
+				}
 			});
 		}
-		return articleList;
+
+		return rowList;
 	};
-*/
 
-	// menuViewの取得
-	var getTodayMenuView = function() {
-		Ti.API.debug('[func]getTodayMenuView:');
-		var menuScrollView = Ti.UI.createScrollView(style.todayMenuScrollView);
-
+	// スタンプメニューの取得
+	var getStampScrollView = function() {
+		Ti.API.debug('[func]getStampScrollView:');
+		var scrollView = Ti.UI.createScrollView(style.todayMenuScrollView);
 /*
 		var menuFrameView = Ti.UI.createView(style.todayMenuFrameView);
-		menuScrollView.add(menuFrameView);
+		stampScrollView.add(menuFrameView);
 		var menuListView = Ti.UI.createView(style.todayMenuListView);
 		menuFrameView.add(menuListView);
 
@@ -110,12 +155,12 @@ exports.createWindow = function(_userData){
 		var dayLabel = Ti.UI.createLabel(style.todayDayLabel);
 		dayLabelView.add(dayLabel);
 //		dayLabel.text = now.month + '/' + now.day;
-		menuScrollView.dayLabel = dayLabel;
+		stampScrollView.dayLabel = dayLabel;
 		var weekdayLabel = Ti.UI.createLabel(style.todayWeekdayLabel);
 		dayLabelView.add(weekdayLabel);
 //		weekdayLabel.text = now.weekday.text;
 //		weekdayLabel.color = now.weekday.color;
-		menuScrollView.weekdayLabel = weekdayLabel;
+		stampScrollView.weekdayLabel = weekdayLabel;
 		var dayView = Ti.UI.createView(style.todayDayView);
 		dayView.add(dayLabelView);
 		menuListView.add(dayView);
@@ -153,7 +198,7 @@ exports.createWindow = function(_userData){
 */
 		for (var i=0; i<selectStampList.length; i++) {
 			var menuStampView = Ti.UI.createView(style.todayMenuFrameView);
-			menuScrollView.add(menuStampView);
+			scrollView.add(menuStampView);
 			var menuStampListView = Ti.UI.createView(style.todayMenuListView);
 			menuStampView.add(menuStampListView);
 			// 選択するスタンプ
@@ -165,115 +210,11 @@ exports.createWindow = function(_userData){
 				stampView.add(stampImage);
 				stampImage.image = 'images/icon/' + selectStampList[i].stampList[j] + '.png';
 			}
-
-			// スタンプボタンをクリック
-			menuStampListView.addEventListener('click',function(e){
-				Ti.API.debug('[event]menuStampListView.click:');
-				var target = e.source;
-				if (target.objectName == 'todayStampSelectView') {
-					// 多重クリック防止
-					if (clickEnable) {
-						clickEnable = false;
-						target.opacity = 0.5;
-						// 日時の更新
-						updateTodayDay();
-			
-						var stampData = {
-							no: null,
-							event: null,
-							user: _userData.id,
-							stamp: target.stamp,
-							textList: null,
-							year: now.year,
-							month: now.month,
-							day: now.day,
-							hour: now.hour,
-							all: null,
-							report: null,
-							date: null,
-						};
-			
-						var postWin = win.createStampPostWindow('time', _userData, [stampData]);
-						postWin.prevWin = todayWin;
-						win.openTabWindow(postWin, {animated:true});
-	
-						clickEnable = true;
-						target.opacity = 1.0;
-					}
-				}
-			});
 		}
 
-		return menuScrollView;
+		return scrollView;
 	};
-
-	// 前の写真を表示
-	var updatePrevPhoto = function() {
-		Ti.API.debug('[func]updatePrevPhoto:');
-		if (todayIndex == null) {
-			todayIndex = 0;
-			todayWin.noDataView.visible = false;
-			todayWin.photoRow.backgroundColor = 'transparent';
-			todayPhotoImage.visible = true;
-			todayPhotoImage.image = getTodayPhotoImage(todayArticleList[todayIndex]);
-			todayPhotoImage.articleData = todayArticleList[todayIndex];
-			updateTodayDay(todayArticleList[todayIndex].date);
-			todayWin.nextImage.visible = true;
-			if (nextArticleFlag) {
-				todayWin.prevImage.visible = true;
-			} else if (todayArticleList.length > 1) {
-				todayWin.prevImage.visible = true;
-			} else {
-				todayWin.prevImage.visible = false;
-			}
-
-		} else {
-			if (todayArticleList.length > todayIndex + 1) {
-				todayIndex++;
-				todayPhotoImage.image = getTodayPhotoImage(todayArticleList[todayIndex]);
-				todayPhotoImage.articleData = todayArticleList[todayIndex];
-				updateTodayDay(todayArticleList[todayIndex].date);
-				todayWin.nextImage.visible = true;
-				if (nextArticleFlag) {
-					todayWin.prevImage.visible = true;
-				} else if (todayArticleList.length > todayIndex + 1) {
-					todayWin.prevImage.visible = true;
-				} else {
-					todayWin.prevImage.visible = false;
-				}
-
-			} else if (nextArticleFlag) {
-				var lastId = todayArticleList[todayArticleList.length-1].id;
-				updateTodayPhoto({lastId:lastId});
-			}
-		}
-	};
-
-	// 次の写真を表示
-	var updateNextPhoto = function() {
-		Ti.API.debug('[func]updateNextPhoto:');
-		if (todayIndex != null) {
-			if (todayIndex == 0) {
-				todayIndex = null;
-				todayWin.noDataView.visible = true;
-				todayWin.photoRow.backgroundColor = '#eeeeee';
-				todayPhotoImage.visible = false;
-				todayPhotoImage.articleData = null;
-				updateTodayDay();
-				todayWin.nextImage.visible = false;
-				todayWin.prevImage.visible = true;
-
-			} else {
-				todayIndex--;
-				todayPhotoImage.image = getTodayPhotoImage(todayArticleList[todayIndex]);
-				todayPhotoImage.articleData = todayArticleList[todayIndex];
-				updateTodayDay(todayArticleList[todayIndex].date);
-				todayWin.nextImage.visible = true;
-				todayWin.prevImage.visible = true;
-			}
-		}
-	};
-
+/*
 	// 写真の表示
 	var getDayPhotoView = function() {
 		Ti.API.debug('[func]getDayPhotoView:');
@@ -424,6 +365,7 @@ exports.createWindow = function(_userData){
 
 		return dayPhotoView;
 	};
+*/
 
 	// 写真の取得
 	var getTodayPhotoImage = function(_articleData) {
@@ -458,33 +400,158 @@ exports.createWindow = function(_userData){
 		}
 	};
 
-	// 写真の更新
-	var updateTodayPhoto = function(params) {
-		Ti.API.debug('[func]updateTodayPhoto:');
-		if (params == null) {
-			// 投稿ページの表示
-			var photoFrameView = Ti.UI.createView(style.todayPhotoFrameView);
-			
-			// 写真のスワイプ
-			photoFrameView.addEventListener('focus',function(e){
-				Ti.API.debug('[event]photoFrameView.focus:');
-			});
+	// 投稿済みページの取得
+	var insertPostFrameView = function(params) {
+		Ti.API.debug('[func]insertPostFrameView:');
 
-			
-			photoFrameList = [];
-			photoFrameList.push(photoFrameView);
-			var dayPhotoView = Ti.UI.createView(style.todayDayPhotoView);
-			dayPhotoView.width = style.commonSize.screenWidth + 'dp';
-			dayPhotoView.height = photoHeight + 'dp';
-			photoFrameView.add(dayPhotoView);
-			var noDataView = Ti.UI.createView(style.todayNoDataView);
-			dayPhotoView.add(noDataView);
-			todayWin.noDataView = noDataView;
-			var noDataLabel = Ti.UI.createLabel(style.todayNoDataLabel);
-			noDataLabel.text = '１日１枚、写真を投稿して\nわんこの日記をつけよう';
-			noDataView.add(noDataLabel);
+		var postFrameView = Ti.UI.createView(style.todayPhotoFrameView);
+		postFrameView.transform = rotateRow;
+		var dayPhotoView = Ti.UI.createView(style.todayDayPhotoView);
+		postFrameView.add(dayPhotoView);
+		var noDataView = Ti.UI.createView(style.todayNoDataView);
+		todayWin.noDataView = noDataView;
+		dayPhotoView.add(noDataView);
+		var noDataLabel = Ti.UI.createLabel(style.todayNoDataLabel);
+		noDataView.add(noDataLabel);
+
+		if (params.postedFlag) {
+			noDataLabel.text = '写真の投稿は１日１枚です。\nまた明日。';
 			var noDataImage = Ti.UI.createImageView(style.todayNoDataImage);
 			noDataView.add(noDataImage);
+
+		} else {
+			noDataLabel.text = '１日１枚、写真を投稿して\nわんこの日記をつけよう';
+			var cameraImage = Ti.UI.createImageView(style.todayCameraImage);
+			noDataView.add(cameraImage);
+
+			// カメラをクリック
+			cameraImage.addEventListener('click',function(e){
+				Ti.API.debug('[event]cameraImage.click:');
+				var target = e.source;
+				// 多重クリック防止
+				if (clickEnable) {
+					clickEnable = false;
+					target.opacity = 0.5;
+	
+					var dialog = Titanium.UI.createOptionDialog({
+						options:['撮影する', 'アルバムから選ぶ', 'キャンセル'],
+						cancel:2
+	//						title:'写真を添付'
+					});
+					dialog.show();
+		
+					dialog.addEventListener('click',function(e) {
+						Ti.API.debug('[event]dialog.click:');
+						switch( e.index ) {
+							case 0:
+								var cameraWin = win.createCameraWindow('photo_camera', _userData);
+								win.openTabWindow(cameraWin, {animated:true});
+								target.opacity = 1.0;
+								clickEnable = true;
+								break;
+							case 1:
+								var cameraWin = win.createCameraWindow('photo_select', _userData);
+								win.openTabWindow(cameraWin, {animated:true});
+								target.opacity = 1.0;
+								clickEnable = true;
+								break;
+							case 2:
+								target.opacity = 1.0;
+								clickEnable = true;
+								break;
+						}
+					});
+				}
+			});	
+		}
+
+		if (params.prevFlag) {
+			var prevView = Ti.UI.createImageView(style.todayPrevView);
+			dayPhotoView.add(prevView);
+			var prevImage = Ti.UI.createImageView(style.todayPrevImage);
+			prevView.add(prevImage);
+			todayWin.prevImage = prevImage;
+			
+			prevView.addEventListener('click', function(e) {
+				Ti.API.debug('[event]prevView.click:');
+				todayPhotoTableView.fireEvent('swipe', {direction:'right'});
+			});
+		}
+		var photoRow = Ti.UI.createTableViewRow(style.todayPhotoTableRow);
+		photoRow.add(postFrameView);
+		if (todayPhotoTableView.data.length == 0) {
+			todayPhotoTableView.appendRow(photoRow, {animated:false});
+		} else {
+			todayPhotoTableView.updateRow(0, photoRow, {animated:true});
+		}
+	};
+
+	// 写真の取得
+	var getPhotoFrameView = function(params) {
+		Ti.API.debug('[func]getPhotoFrameView:');
+		var photoFrameView = Ti.UI.createView(style.todayPhotoFrameView);
+		photoFrameView.transform = rotateRow;
+		photoFrameView.articleData = params.articleData;
+		var dayPhotoView = Ti.UI.createView(style.todayDayPhotoView);
+		photoFrameView.add(dayPhotoView);
+		var photoImage = Ti.UI.createImageView(style.todayPhotoImage);
+		photoImage.image = getTodayPhotoImage(params.articleData);
+		photoImage.articleData = params.articleData;
+		dayPhotoView.add(photoImage);
+
+		// 日付
+		var articleDate = util.getDateElement(params.articleData.date);
+		var dayLWeekView = Ti.UI.createView(style.todayDayWeekView);
+		dayPhotoView.add(dayLWeekView);
+		var dayLabel = Ti.UI.createLabel(style.todayDayLabel);
+		dayLabel.text = articleDate.month + '/' + articleDate.day;
+		dayLWeekView.add(dayLabel);
+		var weekLabel = Ti.UI.createLabel(style.todayWeekLabel);
+		var weekday = util.diary.weekday[new Date(articleDate.year, articleDate.month-1, articleDate.day).getDay()];
+		weekLabel.text = weekday.text + '曜日';
+		dayLWeekView.add(weekLabel);
+		todayWin.dayLabel = dayLabel;
+		todayWin.weekLabel = weekLabel;
+
+		if (params.prevFlag){
+			var prevView = Ti.UI.createImageView(style.todayPrevView);
+			dayPhotoView.add(prevView);
+			var prevImage = Ti.UI.createImageView(style.todayPrevImage);
+			prevView.add(prevImage);
+			todayWin.prevImage = prevImage;
+			
+			prevView.addEventListener('click', function(e) {
+				Ti.API.debug('[event]prevView.click:');
+				todayPhotoTableView.fireEvent('swipe', {direction:'right'});
+			});
+		}
+
+		var nextView = Ti.UI.createImageView(style.todayNextView);
+		dayPhotoView.add(nextView);
+		var nextImage = Ti.UI.createImageView(style.todayNextImage);
+		nextView.add(nextImage);
+		todayWin.nextImage = nextImage;
+
+		nextView.addEventListener('click', function(e) {
+			Ti.API.debug('[event]nextView.click:');
+			todayPhotoTableView.fireEvent('swipe', {direction:'left'});
+		});
+
+		var photoRow = Ti.UI.createTableViewRow(style.todayPhotoTableRow);
+		photoRow.add(photoFrameView);
+		if (params.insertFlag){
+			todayPhotoTableView.insertRowAfter(0, photoRow, {animated:false});
+		} else {
+			todayPhotoTableView.appendRow(photoRow, {animated:false});
+		}
+
+		return photoFrameView;
+	};
+
+	// 写真の更新
+	var updateTodayPhoto = function() {
+		Ti.API.debug('[func]updateTodayPhoto:');
+		if (photoFrameList.length == 0) {
 			// 写真の取得
 			model.getCloudTodayArticle({
 				idList: [_userData.id],
@@ -492,64 +559,77 @@ exports.createWindow = function(_userData){
 			}, function(e) {
 				Ti.API.debug('[func]getCloudTodayArticle.callback:');
 				if (e.success) {
-					// 写真の表示
-					for (var i=0; i<e.articleList.length; i++) {
-						var photoFrameView = Ti.UI.createView(style.todayPhotoFrameView);
-						photoFrameView.visible = false;
-						photoFrameList.unshift(photoFrameView);
-						var dayPhotoView = Ti.UI.createView(style.todayDayPhotoView);
-						dayPhotoView.width = style.commonSize.screenWidth + 'dp';
-						dayPhotoView.height = photoHeight + 'dp';
-						photoFrameView.add(dayPhotoView);
-						var photoImage = Ti.UI.createImageView(style.todayPhotoImage);
-						photoImage.width = style.commonSize.screenWidth + 'dp';
-						photoImage.height = style.commonSize.screenWidth + 'dp';
-						photoImage.image = getTodayPhotoImage(e.articleList[i]);
-						photoImage.articleData = e.articleList[i];
-						dayPhotoView.add(photoImage);
+					// 続きがあるかチェック
+					nextArticleFlag = (e.meta.total_results <= articleCount || photoFramePage + articleCount >= photoFrameMax) ? false : true;
+					// 今日の記事を投稿済みかチェック
+					var postedFlag = false;
+					if (e.articleList.length > 0) {
+						var latestDate = util.getDateElement(e.articleList[0].date);
+						if (latestDate.year == now.year && latestDate.month == now.month && latestDate.day == now.day) {
+							postedFlag = true;
+						}
 					}
-					// 読み込みページの表示
-					var photoFrameView = Ti.UI.createView(style.todayPhotoFrameView);
-					photoFrameView.visible = false;
-					photoFrameList.unshift(photoFrameView);
-					var dayPhotoView = Ti.UI.createView(style.todayDayPhotoView);
-					dayPhotoView.width = style.commonSize.screenWidth + 'dp';
-					dayPhotoView.height = photoHeight + 'dp';
-					photoFrameView.add(dayPhotoView);
-					var noDataView = Ti.UI.createView(style.todayNoDataView);
-					dayPhotoView.add(noDataView);
+					// 投稿ページ
+					insertPostFrameView({postedFlag:postedFlag, prevFlag:(e.articleList.length > 0)});
+					// todayPhotoTableViewに追加後にスクロールさせるためのタイムラグ
+					setTimeout(function(){
+						photoFrameStartPage = (postedFlag) ? 1 : 0;
+						photoFramePage = photoFrameStartPage;
+						todayPhotoTableView.scrollToIndex(photoFramePage, {animated:false});
+						todayWin.noDataView.visible = true;
+					}, 200);
 
-					for (var i=0; i<photoFrameList.length; i++) {
-						photoScrollView.add(photoFrameList[i]);
+					// 写真
+					for (var i=0; i<e.articleList.length; i++) {
+						var prevFlag = (nextArticleFlag || i < e.articleList.length - 1) ? true : false;
+						photoFrameList.push(getPhotoFrameView({articleData:e.articleList[i], prevFlag:prevFlag, insertFlag:false}));
 					}
-					photoFramePage = photoFrameList.length - 1;
-//					photoScrollView.scrollTo(style.commonSize.screenWidth * photoFramePage, 0);
-					photoScrollView.scrollToBottom();
-					photoInitFlag = true;
 
 				} else {
 					util.errorDialog(e);
 				}
 			});
 
+		// 投稿済みページを先頭に追加
+		} else if (photoFramePage == 0) {
+			// 日時の更新
+			now = util.getDateElement(new Date());
+			// 今日の記事を投稿済みかチェック
+			var postedFlag = false;
+			var latestDate = util.getDateElement(photoFrameList[photoFrameList.length-1].articleData.date);
+			if (latestDate.year == now.year && latestDate.month == now.month && latestDate.day == now.day) {
+				postedFlag = true;
+			}
+			insertPostFrameView({postedFlag:postedFlag, prevFlag:true});
+			// todayPhotoTableViewに追加後にスクロールさせるためのタイムラグ
+			setTimeout(function(){
+				todayPhotoTableView.scrollToIndex(photoFramePage, {animated:true});
+				todayWin.noDataView.visible = true;
+				photoFrameStartPage = (postedFlag) ? 1 : 0;
+			}, 200);
+
+		// 続きの写真を追加
 		} else {
+			var lastId = photoFrameList[photoFrameList.length-1].articleData.id;
 			// 写真の取得
 			model.getCloudTodayArticle({
 				idList: [_userData.id],
 				limit: articleCount,
-				lastId: params.lastId
+				lastId: lastId
 			}, function(e) {
 				Ti.API.debug('[func]getCloudTodayArticle.callback:');
 				if (e.success) {
+					nextArticleFlag = (e.meta.total_results <= articleCount || photoFramePage + articleCount >= photoFrameMax) ? false : true;
+					// 写真の表示
 					for (var i=0; i<e.articleList.length; i++) {
-						var photoFrameView = Ti.UI.createView(style.todayPhotoFrameView);
-						photoScrollView.add(photoFrameView);
-						var dayPhotoView = Ti.UI.createView(style.todayDayPhotoView);
-						var todayPhotoImage = Ti.UI.createImageView(style.todayPhotoImage);
-						dayPhotoView.add(todayPhotoImage);
-						todayPhotoImage.image = getTodayPhotoImage(todayArticle);
-						todayPhotoImage.articleData = e.articleList[i];
+						var prevFlag = (nextArticleFlag || i < e.articleList.length - 1) ? true : false;
+						photoFrameList.push(getPhotoFrameView({articleData:e.articleList[i], prevFlag:prevFlag, insertFlag:false}));
 					}
+					// todayPhotoTableViewに追加後にスクロールさせるためのタイムラグ
+					setTimeout(function(){
+						todayPhotoTableView.scrollToIndex(photoFramePage, {animated:true});
+					}, 200);
+
 				} else {
 					util.errorDialog(e);
 				}
@@ -660,34 +740,6 @@ exports.createWindow = function(_userData){
 		}
 	};
 */
-	// 日付の更新
-	var updateTodayDay = function(date) {
-		Ti.API.debug('[func]updateTodayDay:');
-		var todayDate = null;
-		if (now == null) {
-			todayDate = new Date();
-			now = util.getDateElement(todayDate);
-			now.weekday = util.diary.weekday[todayDate.getDay()];
-		} else {
-			if (date == null) {
-				todayDate = new Date();
-				now = util.getDateElement(todayDate);
-				now.weekday = util.diary.weekday[todayDate.getDay()];
-			} else {
-				var 
-				todayDate = util.getDate(date);
-			}
-			todayWin.dayLabel.text = (todayDate.getMonth() + 1) + '/' + todayDate.getDate();
-			todayWin.weekLabel.text = util.diary.weekday[todayDate.getDay()].text + '曜日';
-		}
-
-/*
-		now.today = util.getFormattedDate(nowDate);
-		todayMenuView.dayLabel.text = now.month + '/' + now.day;
-		todayMenuView.weekdayLabel.text = now.weekday.text;
-		todayMenuView.weekdayLabel.color = now.weekday.color;
-*/
-	};
 
 	// groupViewの取得
 	var getGroupView = function(_rowStamp) {
@@ -704,148 +756,14 @@ exports.createWindow = function(_userData){
 		return targetView;
 	};
 
-	// 今日のフォト・スタンプリストの表示
+	// 今日のわんこの取得
 	var getTodayRowList = function() {
 		Ti.API.debug('[func]getTodayRowList:');
-
 		// フォトの表示
 		var rowList = [];
 		var photoRow = Ti.UI.createTableViewRow(style.todayPhotoTableRow);
 		rowList.push(photoRow);
-//		photoRow.add(getDayPhotoView());
-		photoRow.add(photoScrollView);
-		todayWin.photoRow = photoRow;
-
-		// スワイプで前後の記事を表示
-		photoRow.addEventListener('swipe',function(e){
-			Ti.API.debug('[event]photoRow.swipe:');
-			// 多重クリック防止
-			if (clickEnable) {
-				clickEnable = false;
-
-				if (todayArticleList.length > 0) {
-
-					if (e.direction == 'right') {
-						updatePrevPhoto();
-/*
-						if (todayIndex == null) {
-							todayIndex = 0;
-							todayWin.noDataView.visible = false;
-							todayWin.photoRow.backgroundColor = 'transparent';
-							todayPhotoImage.visible = true;
-							todayPhotoImage.image = getTodayPhotoImage(todayArticleList[todayIndex]);
-							todayPhotoImage.articleData = todayArticleList[todayIndex];
-							updateTodayDay(todayArticleList[todayIndex].date);
-
-						} else {
-							if (todayArticleList.length > todayIndex + 1) {
-								todayIndex++;
-								todayPhotoImage.image = getTodayPhotoImage(todayArticleList[todayIndex]);
-								todayPhotoImage.articleData = todayArticleList[todayIndex];
-								updateTodayDay(todayArticleList[todayIndex].date);
-
-							} else {
-								var lastId = todayArticleList[todayArticleList.length-1].id;
-								updateTodayPhoto({lastId:lastId});
-							}
-						}
-*/
-					} else if (e.direction == 'left') {
-						updateNextPhoto();
-/*
-						if (todayIndex != null) {
-							if (todayIndex == 0) {
-								todayIndex = null;
-								todayWin.noDataView.visible = true;
-								todayWin.photoRow.backgroundColor = '#eeeeee';
-								todayPhotoImage.visible = false;
-								todayPhotoImage.articleData = null;
-								updateTodayDay();
-	
-							} else {
-								todayIndex--;
-								todayPhotoImage.image = getTodayPhotoImage(todayArticleList[todayIndex]);
-								todayPhotoImage.articleData = todayArticleList[todayIndex];
-								updateTodayDay(todayArticleList[todayIndex].date);
-							}
-						}
-*/
-					}	
-				}
-				clickEnable = true;
-			}
-		});
-		
-		// スタンプの取得
-		var stampList = model.getLocalStampList({
-			userId: _userData.id,
-			year: now.year,
-			month: now.month,
-			day: now.day
-		});
-
-//		if (stampList.length > 0) {
-			var stampGroupView = null;
-			var stampSelectList = model.getStampSelectList();
-			for (var i=0; i<stampSelectList.length; i++) {
-				var groupListView = Ti.UI.createView(style.todayStampListView);
-				groupListView.width = (style.commonSize.screenWidth / 2) + 'dp';
-				var groupLabel = Ti.UI.createLabel(style.todayStampLabel);
-				groupLabel.text = stampSelectList[i].title;
-				groupListView.add(groupLabel);
-				groupListView.listNo = stampSelectList[i].no - 1;
-
-				var countStamp = 0;
-				for (var j=0; j<stampList.length; j++) {
-					if (stampSelectList[i].stampList.indexOf(stampList[j].stamp) != -1) {
-						stampList[j].opacity = 1.0;
-						var groupView = getGroupView(stampList[j]);
-						groupListView.add(groupView);
-						countStamp++;
-						// 表示最大件数
-						if (countStamp == 3) {
-							break;
-						}
-					}
-				}
-				if (countStamp == 0) {
-					var stampSpaceList = {
-						stamp: stampSelectList[i].stampList[0],
-						opacity: 0.2
-					};
-					var groupView = getGroupView(stampSpaceList);
-					groupListView.add(groupView);					
-				}
-				
-				if (i % 2 == 0) {
-					stampGroupView = Ti.UI.createView(style.todayStampGroupView);
-					stampGroupView.add(groupListView);
-				} else if (i % 2 == 1) {
-					stampGroupView.add(groupListView);
-					var stampRow = Ti.UI.createTableViewRow(style.todayStampListTableRow);
-					stampRow.add(stampGroupView);
-					rowList.push(stampRow);
-				}
-
-				// スタンプをクリック
-				groupListView.addEventListener('click',function(e){
-					Ti.API.debug('[event]groupListView.click:');
-					var target = e.source;
-					// 多重クリック防止
-					if (clickEnable) {
-						clickEnable = false;
-						target.opacity = 0.5;
-						todayMenuView.scrollTo(style.commonSize.screenWidth * target.listNo, 0);
-						todayMenuPage = target.listNo;
-						// opacityの表示を見せるため
-				        setTimeout(function(){
-							target.opacity = 1.0;
-							clickEnable = true;
-				        }, 200);
-					}
-				});
-			}
-//		}
+		photoRow.add(todayPhotoTableView);
 
 		return rowList;
 	};
@@ -853,11 +771,14 @@ exports.createWindow = function(_userData){
 	// 今日のデータ更新
 	var updateTodayTable = function() {
 		Ti.API.debug('[func]updateTodayTable:');
-		// 日付の更新
-		updateTodayDay();
-		// 今日のフォト・スタンプリストの表示
-		todayTableView.setData(getTodayRowList());
+		// 日時の更新
+		now = util.getDateElement(new Date());
+		// スタンプメニューの更新
+		stampMenuTableView.data = [];
+		stampMenuTableView.setData(getStampMenuRowList());
 		// 写真の更新
+		todayTableView.data = [];
+		todayTableView.setData(getTodayRowList());
 		updateTodayPhoto();
 	};
 /*
@@ -899,19 +820,26 @@ exports.createWindow = function(_userData){
 	// 日付用
 	var photoCoverView = Ti.UI.createView(style.todayPhotoCoverView);		
 	todayWin.add(photoCoverView);
-	// 写真・スタンプの表示
+	// 写真の表示
 	var todayTableView = Ti.UI.createTableView(style.todayTableView);
 //	todayTableView.headerPullView = getTableHeader();
 	todayWin.add(todayTableView);
 
-	// 写真の表示
-	var photoScrollView = Ti.UI.createScrollView(style.todayPhotoScrollView);
-	photoScrollView.height = photoHeight;
-
-	// メニューの表示
-	var todayMenuView = getTodayMenuView();
-	todayWin.add(todayMenuView);
-
+	var todayPhotoTableView = Ti.UI.createTableView(style.todayPhotoTableView);
+	var rotateRow = Ti.UI.create2DMatrix();//tableView内の画像を回転させるMatrix
+	var rotateTable = Ti.UI.create2DMatrix();//tableView自体の画像を回転させるMatrix
+	rotateRow = rotateRow.rotate(270);//画像それぞれを270度回転
+	rotateTable = rotateTable.rotate(90);//tableViewそのものを90度回転
+	todayPhotoTableView.transform = rotateTable;
+	 
+	// メニューに表示するスタンプリスト
+	var selectStampList = model.getStampTimeSelectList();
+	// スタンプスクロールの表示
+	var stampScrollView = getStampScrollView();
+	todayWin.add(stampScrollView);
+	// スタンプメニューの表示
+	var stampMenuTableView = Ti.UI.createTableView(style.todayMenuTableView);
+	todayWin.add(stampMenuTableView);
 
 	// 今日の内容を更新
 	updateTodayTable();
@@ -930,37 +858,28 @@ exports.createWindow = function(_userData){
 	todayWin.addEventListener('refresh', function(e){
 		Ti.API.debug('[event]todayWin.refresh:');
 		// 日が変わった場合
-		var nowDate = new Date();
-		if (nowDate.getFullYear() != now.year || nowDate.getMonth() != now.month-1 || nowDate.getDate() != now.day) {
-			todayTableView.data = [];
-			todayWin.remove(todayMenuView);
-			todayMenuView = getTodayMenuView();
-			todayWin.add(todayMenuView);
+		if (checkNewDay()) {
 			updateTodayTable();
 
 		} else {
-			// メニューをトップに戻す
-			todayMenuView.scrollTo(0, 0);
-			todayMenuPage = 0;
+			photoFramePage = photoFrameStartPage;
+			todayPhotoTableView.scrollToIndex(photoFramePage, {animated:true});
+			stampMenuPage = 0;
+			stampScrollView.scrollTo(stampMenuPage, 0);
 
 			if (e.articleData) {
-				// フォトの差し替え
-				todayWin.noDataView.visible = false;
-				todayWin.photoRow.backgroundColor = 'transparent';
-//				todayWin.photoImage.visible = true;
-//				todayWin.photoImage.image = getTodayPhotomage(e.articleData);
-				todayPhotoImage.visible = true;
-				todayPhotoImage.image = getTodayPhotoImage(e.articleData);
-				todayPhotoImage.articleData = e.articleData;
+				var prevFlag = (photoFrameList.length > 0) ? true : false;
+				photoFrameList.unshift(getPhotoFrameView({articleData:e.articleData, prevFlag:prevFlag, insertFlag:true}));
+				setTimeout(function(){
+					photoFrameStartPage = 1;
+					photoFramePage = 1;
+					todayPhotoTableView.scrollToIndex(photoFramePage, {animated:true});
+				}, 200);
 	
 			} else if (e.diaryData) {
-				// 今日のフォト・スタンプリストの表示
-				todayTableView.data = [];
-				todayTableView.setData(getTodayRowList());
-//				if (todayWin.photoImage.visible == false) {
-				if (todayPhotoImage.visible == false) {
-					todayWin.noDataView.visible = true;					
-				}
+				// スタンプメニューの更新
+				stampMenuTableView.date = [];
+				stampMenuTableView.setData(getStampMenuRowList());
 			}
 		}
 
@@ -970,48 +889,92 @@ exports.createWindow = function(_userData){
 		}
 	});
 
-/*
-	photoScrollView.addEventListener('scrollEnd',function(e){
-		Ti.API.debug('[event]photoScrollView.scrollEnd:');
-		if (photoScrollView.visible == false) {
-			photoScrollView.visible = true;
-		}
-	});
-*/
 	// 写真のスワイプ
-	photoScrollView.addEventListener('swipe',function(e){
-		Ti.API.debug('[event]photoScrollView.swipe:');
+	todayPhotoTableView.addEventListener('swipe',function(e){
+		Ti.API.debug('[event]todayPhotoTableView.swipe:');
+		// 多重クリック防止
+		if (clickEnable) {
+			clickEnable = false;
+			setTimeout(function(){
+				clickEnable = true;
+			}, 500);
 		
-		if (photoInitFlag) {
-			photoInitFlag = false;
-			for (var i=0; i<photoFrameList.length; i++) {
-				photoFrameList[i].visible = true;
+			if (e.direction == 'right') {
+				if (photoFramePage < photoFrameList.length) {
+					photoFramePage++;
+					todayPhotoTableView.scrollToIndex(photoFramePage, {animated:true});
+	
+				} else {
+					if (nextArticleFlag) {
+						photoFramePage++;
+						updateTodayPhoto();
+					}	
+				}
+	
+			} else if (e.direction == 'left') {
+				if (photoFramePage == 1) {
+					photoFramePage--;
+					updateTodayPhoto();
+				} else {
+					photoFramePage--;
+					todayPhotoTableView.scrollToIndex(photoFramePage, {animated:true});
+				}
 			}
 		}
-		
-		if (e.direction == 'right' && photoFramePage > 0) {
-			photoFramePage--;
-			photoScrollView.scrollTo(style.commonSize.screenWidth * photoFramePage, 0);
+	});
 
-		} else if (e.direction == 'left' && photoFramePage < photoFrameList.length - 1) {
-			photoFramePage++;
-			photoScrollView.scrollTo(style.commonSize.screenWidth * photoFramePage, 0);
+	// スタンプのクリック
+	stampScrollView.addEventListener('click',function(e){
+		Ti.API.debug('[event]stampScrollView.click:');
+		var target = e.source;
+		if (target.objectName == 'todayStampSelectView') {
+			// 多重クリック防止
+			if (clickEnable) {
+				clickEnable = false;
+				target.opacity = 0.5;
+				setTimeout(function(){
+					clickEnable = true;
+					target.opacity = 1.0;
+				}, 500);
+
+				// 日時の更新
+				now = util.getDateElement(new Date());
+	
+				var stampData = {
+					no: null,
+					event: null,
+					user: _userData.id,
+					stamp: target.stamp,
+					textList: null,
+					year: now.year,
+					month: now.month,
+					day: now.day,
+					hour: now.hour,
+					all: null,
+					report: null,
+					date: null,
+				};
+	
+				var postWin = win.createStampPostWindow('time', _userData, [stampData]);
+				postWin.prevWin = todayWin;
+				win.openTabWindow(postWin, {animated:true});
+			}
 		}
-		
 	});
 
-	// メニューのスワイプ
-	todayMenuView.addEventListener('swipe',function(e){
-		Ti.API.debug('[event]todayMenuView.swipe:');
-		if (e.direction == 'right' && todayMenuPage > 0) {
-			todayMenuPage--;
-			todayMenuView.scrollTo(style.commonSize.screenWidth * todayMenuPage, 0);
+	// スタンプのスワイプ
+	stampScrollView.addEventListener('swipe',function(e){
+		Ti.API.debug('[event]stampScrollView.swipe:');
+		if (e.direction == 'right' && stampMenuPage > 0) {
+			stampMenuPage--;
+			stampScrollView.scrollTo(style.commonSize.screenWidth * stampMenuPage, 0);
 
-		} else if (e.direction == 'left' && todayMenuPage < selectStampList.length) {
-			todayMenuPage++;
-			todayMenuView.scrollTo(style.commonSize.screenWidth * todayMenuPage, 0);
-		}		
+		} else if (e.direction == 'left' && stampMenuPage < selectStampList.length - 1) {
+			stampMenuPage++;
+			stampScrollView.scrollTo(style.commonSize.screenWidth * stampMenuPage, 0);
+		}
 	});
+
 /*
 	// 下スクロールで上部ヘッダがすべて表示するまでひっぱったかどうかのフラグ
 	var pulling = false;

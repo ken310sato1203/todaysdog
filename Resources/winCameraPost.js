@@ -187,7 +187,7 @@ exports.createWindow = function(_type, _userData, _photoImage){
 							if (e.success) {
 								// ローカルに登録
 								model.addLocalArticleList([e.articleData]);
-								_userData.today = e.articleData;
+//								_userData.today = e.articleData;
 
 								// 遷移前の画面を閉じる
 								if (cameraPostWin.prevWin != null) {

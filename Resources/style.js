@@ -3321,7 +3321,7 @@ exports.style = {
 	},
 	todayPhotoTableRow:{ 
 		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
+		height: Ti.Platform.displayCaps.platformWidth + 'dp',
 //		backgroundColor: '#dedede',
 //		backgroundColor: '#eeeeee',
 //		backgroundColor: 'white',
@@ -3339,8 +3339,8 @@ exports.style = {
 	todayDayPhotoView:{
 //		layout: 'horizontal',
 		top: '0dp',
-//		width: '100%',
-		width: Ti.UI.SIZE,
+		width: '100%',
+//		width: Ti.UI.SIZE,
 		height: Ti.UI.SIZE,
 //		backgroundColor: 'transparent',
 		// カスタムプロパティ
@@ -3349,9 +3349,10 @@ exports.style = {
 	todayNoDataView:{
 		layout: 'vertical',
 		top: '90dp',
-		width: Ti.UI.SIZE,
+//		width: Ti.UI.SIZE,
+		width: '100%',
 		height: Ti.UI.SIZE,
-//		visible: false,
+		visible: false,
 	},
 	todayNoDataLabel:{
 		textAlign: 'center',
@@ -3362,9 +3363,17 @@ exports.style = {
 		top: '10dp',
 		width : '54dp',
 		height : '54dp',
-		image : 'images/icon/b_camera.png',
+		image : 'images/icon/i_circle.png',
 		// カスタムプロパティ
 		objectName : 'todayNoDataImage',
+	},
+	todayCameraImage:{
+		top: '10dp',
+		width : '54dp',
+		height : '54dp',
+		image : 'images/icon/b_camera.png',
+		// カスタムプロパティ
+		objectName : 'todayCameraImage',
 	},
 	todayDayWeekView:{
 //		layout: 'vertical',
@@ -3420,7 +3429,6 @@ exports.style = {
 		width: '28dp',
 		height: '28dp',
 		image:'images/icon/w_arrow_left.png',
-		visible: false,
 		touchEnabled: false,
 	},
 	todayNextView:{
@@ -3435,7 +3443,6 @@ exports.style = {
 		width: '28dp',
 		height: '28dp',
 		image:'images/icon/w_arrow_right.png',
-		visible: false,
 		touchEnabled: false,
 	},
 
@@ -3450,17 +3457,37 @@ exports.style = {
 		showHorizontalScrollIndicator:true,
 		scrollingEnabled: false,
 	},
-	todayPhotoFrameView:{
-		width: Ti.Platform.displayCaps.platformWidth + 'dp',
-		height: '100%',
-		backgroundColor: '#dedede',
-		// カスタムプロパティ
-		objectName : 'todayMenuFrameView',
+
+	todayPhotoTableView:{
+		top: '0dp',
+		height: Ti.UI.SIZE,
+		separatorColor: 'transparent',
+		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
+		scrollable: false,
+		data: [],
+		backgroundColor: 'transparent',
 	},
 
+	todayPhotoFrameView:{
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+//		height: '100%',
+		backgroundColor: '#dedede',
+		// カスタムプロパティ
+		objectName : 'todayPhotoFrameView',
+	},
+
+	todayMenuTableView:{
+		height: Ti.UI.SIZE,
+		// 下のタブで表示されない余白分(74+44)
+		bottom: '118dp',
+		separatorColor: 'transparent',
+		separatorStyle : Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
+		backgroundColor: 'transparent',
+		scrollable: false,
+		data: [],
+	},
 	todayMenuScrollView:{
 		layout: 'horizontal',
-		// 下のタブで表示されない余白分
 		bottom: '44dp',
 		height: '74dp',
 		contentWidth:'auto',
@@ -3600,8 +3627,8 @@ exports.style = {
 	},
 	todayPhotoImage:{
 		top: '0dp',
-		width: Ti.UI.SIZE,
-		height: Ti.UI.SIZE,
+		width: Ti.Platform.displayCaps.platformWidth + 'dp',
+		height: Ti.Platform.displayCaps.platformWidth + 'dp',
 		defaultImage: '',
 	},
 	todayFullPhotoWin:{
