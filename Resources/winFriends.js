@@ -535,6 +535,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 		listView.setContentInsets({top:80}, {animated:true});
 		setTimeout(function(){
 			articlePage = 1;
+			articleLastId = null;
 			nextArticleFlag = false;
 			listSection.setItems([], {animated:false});
 
@@ -592,6 +593,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 
 		} else {
 			articlePage = 1;
+			articleLastId = null;
 			nextArticleFlag = false;
 			listSection.setItems([], {animated:false});
 

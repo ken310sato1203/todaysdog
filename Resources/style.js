@@ -3352,7 +3352,7 @@ exports.style = {
 //		width: Ti.UI.SIZE,
 		width: '100%',
 		height: Ti.UI.SIZE,
-		visible: false,
+//		visible: false,
 	},
 	todayNoDataLabel:{
 		textAlign: 'center',
@@ -3623,7 +3623,7 @@ exports.style = {
 		width: '100%',
 		height: Ti.Platform.displayCaps.platformWidth + 'dp',
 		backgroundColor: 'black',
-		opacity: 0.1,
+		opacity: 0.05,
 	},
 	todayPhotoImage:{
 		top: '0dp',

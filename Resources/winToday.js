@@ -414,6 +414,17 @@ exports.createWindow = function(_userData){
 		var noDataLabel = Ti.UI.createLabel(style.todayNoDataLabel);
 		noDataView.add(noDataLabel);
 
+		// 日付
+		var dayLWeekView = Ti.UI.createView(style.todayDayWeekView);
+		dayPhotoView.add(dayLWeekView);
+		var dayLabel = Ti.UI.createLabel(style.todayDayLabel);
+		dayLabel.text = now.month + '/' + now.day;
+		dayLWeekView.add(dayLabel);
+		var weekLabel = Ti.UI.createLabel(style.todayWeekLabel);
+		var weekday = util.diary.weekday[new Date(now.year, now.month-1, now.day).getDay()];
+		weekLabel.text = weekday.text + '曜日';
+		dayLWeekView.add(weekLabel);
+
 		if (params.postedFlag) {
 			noDataLabel.text = '写真の投稿は１日１枚です。\nまた明日。';
 			var noDataImage = Ti.UI.createImageView(style.todayNoDataImage);
@@ -470,7 +481,6 @@ exports.createWindow = function(_userData){
 			dayPhotoView.add(prevView);
 			var prevImage = Ti.UI.createImageView(style.todayPrevImage);
 			prevView.add(prevImage);
-			todayWin.prevImage = prevImage;
 			
 			prevView.addEventListener('click', function(e) {
 				Ti.API.debug('[event]prevView.click:');
@@ -499,6 +509,10 @@ exports.createWindow = function(_userData){
 		photoImage.articleData = params.articleData;
 		dayPhotoView.add(photoImage);
 
+		// 白地で見えるように
+		var photoCoverView = Ti.UI.createView(style.todayPhotoCoverView);
+		dayPhotoView.add(photoCoverView);
+
 		// 日付
 		var articleDate = util.getDateElement(params.articleData.date);
 		var dayLWeekView = Ti.UI.createView(style.todayDayWeekView);
@@ -510,15 +524,12 @@ exports.createWindow = function(_userData){
 		var weekday = util.diary.weekday[new Date(articleDate.year, articleDate.month-1, articleDate.day).getDay()];
 		weekLabel.text = weekday.text + '曜日';
 		dayLWeekView.add(weekLabel);
-		todayWin.dayLabel = dayLabel;
-		todayWin.weekLabel = weekLabel;
 
 		if (params.prevFlag){
 			var prevView = Ti.UI.createImageView(style.todayPrevView);
 			dayPhotoView.add(prevView);
 			var prevImage = Ti.UI.createImageView(style.todayPrevImage);
 			prevView.add(prevImage);
-			todayWin.prevImage = prevImage;
 			
 			prevView.addEventListener('click', function(e) {
 				Ti.API.debug('[event]prevView.click:');
@@ -530,7 +541,6 @@ exports.createWindow = function(_userData){
 		dayPhotoView.add(nextView);
 		var nextImage = Ti.UI.createImageView(style.todayNextImage);
 		nextView.add(nextImage);
-		todayWin.nextImage = nextImage;
 
 		nextView.addEventListener('click', function(e) {
 			Ti.API.debug('[event]nextView.click:');
@@ -541,6 +551,7 @@ exports.createWindow = function(_userData){
 		photoRow.add(photoFrameView);
 		if (params.insertFlag){
 			todayPhotoTableView.insertRowAfter(0, photoRow, {animated:false});
+			todayPhotoTableView.deleteRow(0, {animated:false});
 		} else {
 			todayPhotoTableView.appendRow(photoRow, {animated:false});
 		}
@@ -576,7 +587,6 @@ exports.createWindow = function(_userData){
 						photoFrameStartPage = (postedFlag) ? 1 : 0;
 						photoFramePage = photoFrameStartPage;
 						todayPhotoTableView.scrollToIndex(photoFramePage, {animated:false});
-						todayWin.noDataView.visible = true;
 					}, 200);
 
 					// 写真
@@ -604,7 +614,6 @@ exports.createWindow = function(_userData){
 			// todayPhotoTableViewに追加後にスクロールさせるためのタイムラグ
 			setTimeout(function(){
 				todayPhotoTableView.scrollToIndex(photoFramePage, {animated:true});
-				todayWin.noDataView.visible = true;
 				photoFrameStartPage = (postedFlag) ? 1 : 0;
 			}, 200);
 
@@ -817,9 +826,6 @@ exports.createWindow = function(_userData){
 	var todayPhotoImage = Ti.UI.createImageView(style.todayPhotoImage);		
 	todayWin.add(todayPhotoImage);
 //	todayWin.photoImage = photoImage;
-	// 日付用
-	var photoCoverView = Ti.UI.createView(style.todayPhotoCoverView);		
-	todayWin.add(photoCoverView);
 	// 写真の表示
 	var todayTableView = Ti.UI.createTableView(style.todayTableView);
 //	todayTableView.headerPullView = getTableHeader();
@@ -870,12 +876,13 @@ exports.createWindow = function(_userData){
 			if (e.articleData) {
 				var prevFlag = (photoFrameList.length > 0) ? true : false;
 				photoFrameList.unshift(getPhotoFrameView({articleData:e.articleData, prevFlag:prevFlag, insertFlag:true}));
+/*
 				setTimeout(function(){
 					photoFrameStartPage = 1;
 					photoFramePage = 1;
-					todayPhotoTableView.scrollToIndex(photoFramePage, {animated:true});
+					todayPhotoTableView.scrollToIndex(photoFramePage, {animated:false});
 				}, 200);
-	
+*/	
 			} else if (e.diaryData) {
 				// スタンプメニューの更新
 				stampMenuTableView.date = [];

@@ -48,6 +48,11 @@ exports.createWindow = function(){
 		// バッジの初期化
 //		Titanium.UI.iPhone.setAppBadge('0');
 	
+		// アプリを一度閉じ、再度開いた時
+		Ti.App.addEventListener('resume',function(e){
+			Ti.API.debug('[event]App.resume:');
+		});
+	
 	/*	
 		// アプリを閉じた時
 		Ti.App.addEventListener('pause',function(e){
@@ -55,13 +60,7 @@ exports.createWindow = function(){
 			var friendsWin = win.getTab("friendsTab").window;
 			friendsWin.fireEvent('refresh');
 		});
-	
-	
-		// アプリを一度閉じ、再度開いた時
-		Ti.App.addEventListener('resume',function(e){
-			Ti.API.debug('[event]App.resume:');
-		});
-	
+		
 		// 最新情報を表示
 		tab2.addEventListener('focus', function(e){
 			Ti.API.debug('[event]tab2.focus:');
