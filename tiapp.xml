@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ti:app xmlns:ti="http://ti.appcelerator.org">
-    <property name="acs-oauth-secret-production" type="string">UZdJcDaav6smGFwxzi5t2CJKaA2tKzAW</property>
-    <property name="acs-oauth-key-production" type="string">KqPOSArvFwE75NJ9YUGGGwyGjnrM2HAp</property>
-    <property name="acs-api-key-production" type="string">5NWjAalB43p8FqOj0Ue6aQYk5HXVncIZ</property>
-    <property name="acs-oauth-secret-development" type="string">QMlNvJUvAr7G5Qp4OggODq562X7dejLn</property>
-    <property name="acs-oauth-key-development" type="string">D6ZVPNHlBmBKj3UvIpFE3AK4lxG1oVma</property>
-    <property name="acs-api-key-development" type="string">wnadlSr51PBVdxx6HOAgnjbkLpAY4QuQ</property>
+    <property name="acs-oauth-secret-production" type="string">Wo1C0VoGr6N4AjphCVvbdJ8YkAVym4nq</property>
+    <property name="acs-oauth-key-production" type="string">Hg7uEpGhe9wimbOeaUOJ7Ar17QF2zn7P</property>
+    <property name="acs-api-key-production" type="string">Q4b0tTPsX7CMNXUE5inK7ziybX4XapLF</property>
+    <property name="acs-oauth-secret-development" type="string">4qT0Ja29FJeLdI9fatvMIQBTqpBJq6nq</property>
+    <property name="acs-oauth-key-development" type="string">nSaHTxaZvhlfBi6etEitdAQApThu1ICZ</property>
+    <property name="acs-api-key-development" type="string">mMe5n8gDQcJ9HNsbJ5ctjb3jsEQFh8QH</property>
     <deployment-targets>
-        <target device="tizen">false</target>
         <target device="mobileweb">false</target>
         <target device="iphone">true</target>
         <target device="ipad">false</target>
         <target device="android">false</target>
-        <target device="blackberry">false</target>
     </deployment-targets>
     <sdk-version>3.5.1.GA</sdk-version>
     <id>com.sakura.todaysdog</id>
@@ -30,7 +28,7 @@
     <fullscreen>false</fullscreen>
     <navbar-hidden>false</navbar-hidden>
     <analytics>true</analytics>
-    <guid>e69be307-9b6c-4a28-8264-ebe2b603b89e</guid>
+    <guid>cf22d077-1e09-41cc-9eee-776e302b30c6</guid>
     <property name="ti.ui.defaultunit">system</property>
     <iphone>
         <orientations device="iphone">
@@ -70,4 +68,15 @@
             </dict>
         </plist>
     </ios>
+    <property name="appc-app-id" type="string">55b2cd60754e31ca156fbab1</property>
+    <property name="acs-authbase-url-development" type="string">https://secure-identity.cloud.appcelerator.com</property>
+    <property name="acs-base-url-development" type="string">https://api.cloud.appcelerator.com</property>
+    <property name="acs-username-development" type="string">appc_app_user_dev</property>
+    <property name="acs-password-development" type="string">uVE2PhGyou8MsWasOa</property>
+    <property name="acs-authbase-url-production" type="string">https://secure-identity.cloud.appcelerator.com</property>
+    <property name="acs-base-url-production" type="string">https://api.cloud.appcelerator.com</property>
+    <property name="acs-username-production" type="string">appc_app_user</property>
+    <property name="acs-password-production" type="string">WnRieuj9dNVUL16vCF</property>
+    <property name="appc-org-id" type="string">100031273</property>
+    <property name="appc-creator-user-id" type="string">981db8c0-f9f3-4ffe-b18d-ab0b855b87a1</property>
 </ti:app>

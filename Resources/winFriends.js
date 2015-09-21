@@ -167,7 +167,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				top: ( (style.commonSize.screenHeight - 108) / 2 - 70 ) + 'dp',
 			},
 			friendsNoDataLabel: {
-				text: 'わんこ写真の投稿は\nありませんでした', 
+				text: 'わんこ写真の投稿は\n見つかりませんでした', 
 			},
 		}];
 

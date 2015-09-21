@@ -51,6 +51,8 @@ exports.createWindow = function(){
 		// アプリを一度閉じ、再度開いた時
 		Ti.App.addEventListener('resume',function(e){
 			Ti.API.debug('[event]App.resume:');
+			var todayWin = win.getTab("todayTab").window;
+			todayWin.fireEvent('refresh');
 		});
 	
 	/*	
@@ -204,7 +206,7 @@ exports.createWindow = function(){
 				var user = e.users[0];
 				var userData = {
 					id: user.id,
-					user: user.username,
+					user: (user.username) ? user.username : user.first_name,
 					photo: 0,
 					like: 0,
 					follow: 0,
@@ -479,6 +481,7 @@ exports.createWindow = function(){
 			var target = e.source;
 			target.opacity = 0.5;
 			var registWin = win.createRegistWindow('reset');
+			registWin.prevWin = loginWin;
 			registWin.open({
 				modal: true,
 			    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
@@ -508,6 +511,7 @@ exports.createWindow = function(){
 			var target = e.source;
 			target.opacity = 0.5;
 			var registWin = win.createRegistWindow('regist');
+			registWin.prevWin = loginWin;
 			registWin.open({
 				modal: true,
 			    modalStyle: Ti.UI.iPhone.MODAL_PRESENTATION_FULLSCREEN,
@@ -528,6 +532,13 @@ exports.createWindow = function(){
 
 
 // ---------------------------------------------------------------------
+
+	// 更新用イベント
+	loginWin.addEventListener('refresh', function(e){
+		Ti.API.debug('[event]loginWin.refresh:');
+		nameLabel.hide();
+		nameField.value = e.email;
+	});
 	
 	loginWin.addEventListener('email_login', function(e) {
 		Ti.API.debug('[event]loginWin.email_login:');

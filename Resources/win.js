@@ -20,7 +20,7 @@ var profileWin = require('winProfile');
 var profileEditWin = require('winProfileEdit');
 var profileConfigWin = require('winProfileConfig');
 var photoWin = require('winPhoto');
-var photoListWin = require('winPhotoList');
+// var photoListWin = require('winPhotoList');
 var userListWin = require('winUserList');
 
 // 多重クリック防止

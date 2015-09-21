@@ -101,7 +101,7 @@ exports.createWindow = function(_type, _userData, _year, _month) {
 				top: ( (style.commonSize.screenHeight - 108) / 2 - 70 ) + 'dp',
 			},
 			friendsCommentNoDataLabel: {
-				text: 'わんともからのコメントは\nありませんでした',
+				text: 'わんともからのコメントは\n見つかりませんでした',
 			},
 		}];
 

@@ -1582,18 +1582,6 @@ exports.style = {
 		image : 'images/icon/i_circle.png',
 	},
 
-	userListSearchNoDataView:{
-		top: '0dp',
-		left: '0dp',
-		width: '100%',
-		height: '100%',
-	},
-	userListSearchNoDataLabel:{
-		font: {fontSize:12, fontFamily:'Helvetica Neue'},
-		color: '#000',
-		text: '検索結果はありませんでした'
-	},
-
 	userListFollowButton:{
 		right: '10dp',
 		width: '95dp',

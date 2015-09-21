@@ -57,7 +57,7 @@ exports.createWindow = function(_type){
 		listView.add(passView);
 	}
 	var passLabel = Ti.UI.createLabel(style.registListItemLabel);
-	passLabel.text = 'パスワード';
+	passLabel.text = 'パスワード（6文字以上）';
 	var passField = Ti.UI.createTextField(style.registListValueField);
 	passField.maxLength = 50;
 	passField.objectName = 'pass';
@@ -103,25 +103,29 @@ exports.createWindow = function(_type){
 
 	registView.addEventListener('click',function(e){
 		Ti.API.debug('[event]registView.click:');
+			
 		if (nameField.value == '' || nameField.value.indexOf('@') == -1) {
 			util.alertDialog('メールアドレスを入力してください');
 		} else if (_type == 'regist' && passField.value.length < 6) {
 			util.alertDialog('パスワードは6文字以上入力してください');
 		} else {
 
-			var alertDialog = Titanium.UI.createAlertDialog({
+			var mailDialog = Titanium.UI.createAlertDialog({
 				title: 'このメールアドレスでよろしいですか？',
 				message: nameField.value,
 				buttonNames: ['キャンセル','OK'],
 				cancel: 1
 			});
-			alertDialog.show();
+			mailDialog.show();
 	
-			alertDialog.addEventListener('click',function(alert){
-				Ti.API.debug('[event]alertDialog.click:');						
+			mailDialog.addEventListener('click',function(alert){
+				Ti.API.debug('[event]mailDialog.click:');						
 				// OKの場合
 				if(alert.index == 1){
 					if (_type == 'regist') {
+						var httpClient = Titanium.Network.createHTTPClient();
+						httpClient.clearCookies('https://api.cloud.appcelerator.com');
+
 						model.registCloudUser({
 							email: nameField.value,
 							username: nameField.value.substring(0,nameField.value.indexOf('@')),
@@ -129,14 +133,28 @@ exports.createWindow = function(_type){
 						}, function(e) {
 							Ti.API.debug('[func]confirmCloudUser.callback:');
 						    if (e.success) {
-						        util.alertDialog('ユーザー登録の確認メールを送信しました');
+								var registCompleteDialog = Titanium.UI.createAlertDialog({
+									message: 'メールアドレスにユーザ登録用のメールを送信したので、確認してください',
+//									message: 'ユーザ登録が完了したので、ログインしてください',
+									buttonNames: ['OK']
+								});
+								registCompleteDialog.show();
+								registView.touchEnabled = false;
+								backLabel.touchEnabled = false;
+						
+								registCompleteDialog.addEventListener('click',function(alert){
+									Ti.API.debug('[event]registCompleteDialog.click:');
+									registWin.prevWin.fireEvent('refresh', {email: nameField.value});
+									registWin.close();
+								});
+
 						    } else {
 						    	if (e.code == 400) {
 							        util.alertDialog('このメールアドレスは既に登録済みです');
 						    	} else if (e.code == 401) {
 						    		// 同じセッションを使用しているためか、一度登録した後には、その登録の確認メールを処理するまでエラーになる
 						    		// アプリを再起動するとエラーにはならない
-							        util.alertDialog('ユーザー登録の確認メールが届いていない場合、一度このアプリを終了し、再度登録をお願いします');
+							        util.alertDialog('前回登録したメールアドレスの確認中です、再度登録を行う場合は、一度このアプリを終了してください');
 						    	} else {
 							        util.errorDialog();
 						    		
@@ -146,18 +164,32 @@ exports.createWindow = function(_type){
 
 					} else if (_type == 'reset') {
 						model.resetCloudPassword({
-							email: nameField.value
+							email: nameField.value,
+							username: nameField.value.substring(0,nameField.value.indexOf('@')),
 						}, function(e) {
 							Ti.API.debug('[func]resetCloudPassword.callback:');
 						    if (e.success) {
-						        util.alertDialog('パスワードリセットの確認メールを送信しました');
+								var resetCompleteDialog = Titanium.UI.createAlertDialog({
+									message: 'メールアドレスにパスワード変更用のメールを送信したので、確認してください',
+									buttonNames: ['OK']
+								});
+								resetCompleteDialog.show();
+								registView.touchEnabled = false;
+								backLabel.touchEnabled = false;
+						
+								resetCompleteDialog.addEventListener('click',function(alert){
+									Ti.API.debug('[event]resetCompleteDialog.click:');
+									registWin.prevWin.fireEvent('refresh', {email: nameField.value});
+									registWin.close();
+								});
+
 						    } else {
 						    	if (e.code == 400) {
 							        util.alertDialog('このメールアドレスは登録されていません');
 						    	} else if (e.code == 401) {
 						    		// 同じセッションを使用しているためか、一度登録した後には、その登録の確認メールを処理するまでエラーになる
 						    		// アプリを再起動するとエラーにはならない
-							        util.alertDialog('パスワードリセットの確認メールが届いていない場合、一度このアプリを終了し、再度登録をお願いします');
+							        util.alertDialog('前回登録したパスワードリセットの確認中です、再度リセットを行う場合は、一度このアプリを終了してください');
 						    	} else {
 							        util.errorDialog();
 						    		

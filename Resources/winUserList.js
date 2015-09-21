@@ -214,6 +214,11 @@ exports.createWindow = function(_type, _userData){
 						} else {
 							if (articlePage == 1) {
 								appendNoDataLabel();
+							} else {
+								// 続きを読むを表示した後でデータが削除された場合に表示を消す
+								// 続きを読むの行をdeleteだとうまくいかないのでupdateで高さを0にし、追加後に反映
+								listSection.updateItemAt(nextTarget.index, nextTarget.item);
+								nextTarget = null;
 							}
 						}
 			

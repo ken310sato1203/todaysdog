@@ -92,7 +92,6 @@ exports.model = {
 		    username: params.username,
 		    password: params.pass,
 		    password_confirmation: params.pass,
-//		    template: 'regist_complete',
 		    confirmation_template: 'regist_confirm'
 		}, function (e) {
 	        callback(e);
@@ -115,6 +114,7 @@ exports.model = {
 		Ti.API.debug('[func]resetCloudUser:');
 		Cloud.Users.requestResetPassword({
 		    email: params.email,
+		    username: params.username,
 		    template: 'reset_password'
 		}, function (e) {
 	        callback(e);
@@ -374,7 +374,9 @@ exports.model = {
 					{ last_name: {'$regex': '^' + params.name} },
 					{ 'name': {'$regex': '^' + params.name} } 
 				] },
-				limit : params.limit
+				limit : params.limit,
+				count : true,
+				total_results : true
 			}, function (e) {
 				if (e.success) {
 					Ti.API.debug('success:');
